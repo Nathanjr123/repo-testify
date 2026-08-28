@@ -1,0 +1,202 @@
+{
+ "case_id": "r07-newspaper3k",
+ "repo": "https://github.com/codelucas/newspaper",
+ "commit": "1618b547f31c2d1fd19ae3b6afd8f7542dd02074",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --quiet newspaper3k 2>&1 | tail -5; echo \"pip_rc=${PIPESTATUS[0]}\"",
+    "/tmp/v/bin/pip freeze | grep -iE '^(newspaper3k|lxml|lxml-html-clean|nltk|Pillow)=' || true"
+   ],
+   "commands": [
+    "/tmp/v/bin/python --version",
+    "/tmp/v/bin/python -c 'import newspaper; print(\"import newspaper OK\", newspaper.__version__)'",
+    "/tmp/v/bin/python -c 'from newspaper import Article; print(\"from newspaper import Article OK\")'",
+    "/tmp/v/bin/python -c 'from newspaper import Article; print(\"C1_OK\")' 2>&1 | grep -E 'C1_OK|ModuleNotFoundError|ImportError|lxml.html.clean'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null",
+    "curl -sf https://pypi.org/pypi/newspaper3k/json -o /tmp/n3k.json; echo \"newspaper3k_rc=$?\"",
+    "curl -sf https://pypi.org/pypi/newspaper/json -o /tmp/n2.json; echo \"newspaper_rc=$?\"",
+    "curl -sf -o /dev/null -w '%{http_code}\\n' https://api.github.com/repos/codelucas/newspaper/branches/python-2-head > /tmp/branch.txt"
+   ],
+   "commands": [
+    "python3 -c \"import json; d=json.load(open('/tmp/n3k.json'))['info']; print('newspaper3k', d['version'], 'requires_python=', d.get('requires_python')); cls=[c for c in d['classifiers'] if 'Python' in c]; print(cls); assert any(':: 3' in c for c in cls), 'no Python 3 classifier'; assert not any(':: 2' in c for c in cls), 'py2 classifier present'; print('C2_PY3_OK')\"",
+    "python3 -c \"import json; d=json.load(open('/tmp/n2.json'))['info']; print('newspaper', d['version'], 'requires_python=', d.get('requires_python')); print([c for c in d['classifiers'] if 'Python' in c]); print('pypi newspaper exists: C2_PY2PKG_OK')\"",
+    "echo \"python-2-head branch HTTP $(cat /tmp/branch.txt)\"; grep -q 200 /tmp/branch.txt && echo C2_BRANCH_OK"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null",
+    "curl -sIL -o /dev/null -w 'http=%{http_code} final_url=%{url_effective} type=%{content_type}\\n' https://travis-ci.org/codelucas/newspaper.svg > /tmp/c3_head.txt 2>&1; echo \"curl_rc=$?\" >> /tmp/c3_head.txt",
+    "curl -sL --max-time 30 https://travis-ci.org/codelucas/newspaper.svg -o /tmp/c3_badge.body || true",
+    "curl -sIL -o /dev/null -w 'target_http=%{http_code} target_final=%{url_effective}\\n' http://travis-ci.org/codelucas/newspaper/ > /tmp/c3_target.txt 2>&1 || true"
+   ],
+   "commands": [
+    "cat /tmp/c3_head.txt /tmp/c3_target.txt",
+    "echo \"badge body bytes: $(wc -c < /tmp/c3_badge.body)\"; head -c 400 /tmp/c3_badge.body; echo",
+    "grep -qi '<svg' /tmp/c3_badge.body && echo BADGE_IS_SVG || echo BADGE_NOT_SVG",
+    "grep -qiE 'passing' /tmp/c3_badge.body && echo BADGE_SAYS_PASSING || echo BADGE_NOT_PASSING",
+    "grep -qiE 'unknown|failing|error|not found' /tmp/c3_badge.body && echo BADGE_NEGATIVE_TEXT || true"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null",
+    "pip install --quiet newspaper3k 2>&1 | tail -3",
+    "echo 'NOTE: installing lxml[html_clean] so this probe tests the quickstart, not c1 import failure'; pip install --quiet 'lxml[html_clean]' 2>&1 | tail -2",
+    "curl -sIL -A 'Mozilla/5.0' --max-time 30 -o /dev/null -w 'http=%{http_code} final_url=%{url_effective}\\n' 'http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/' || true",
+    "python3 -c \"from newspaper import Article\nurl='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'\na=Article(url)\na.download()\nprint('download_state', a.download_state, 'exc', a.download_exception_msg, 'html_len', len(a.html or ''))\nopen('/tmp/fox.html','w').write(a.html or '')\""
+   ],
+   "commands": [
+    "python3 -c \"import datetime\nfrom newspaper import Article\nurl='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'\nhtml=open('/tmp/fox.html').read()\nprint('html_len', len(html))\nassert html, 'download returned empty html'\na=Article(url)\na.download(input_html=html)\na.parse()\nprint('title', repr(a.title))\nprint('authors', a.authors)\nprint('publish_date', repr(a.publish_date))\nprint('text_head', repr(a.text[:120]))\nassert a.authors==['Leigh Ann Caldwell','John Honway'], ('authors mismatch', a.authors)\nassert a.publish_date==datetime.datetime(2013,12,30,0,0), ('date mismatch', a.publish_date)\nprint('C4_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null",
+    "pip install --quiet newspaper3k 2>&1 | tail -3",
+    "echo 'NOTE: installing lxml[html_clean] so this probe tests nlp(), not c1 import failure'; pip install --quiet 'lxml[html_clean]' 2>&1 | tail -2",
+    "curl -s https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py | python3 2>&1 | tail -5; echo \"corpora_rc=${PIPESTATUS[1]}\"",
+    "pip freeze | grep -iE '^(nltk|newspaper3k)=' || true",
+    "python3 -c \"import textwrap\nparas=['Washington (CNN) -- Not everyone subscribes to a New Year resolution, but Americans will be required to follow new laws in 2014.','Some 40,000 measures taking effect range from sweeping, national mandates under Obamacare to marijuana legalization in Colorado.','Although many new laws are controversial, they made it through legislatures, indicating the will of the people.','Federal: Health care, of course, and vending machines will have to display calories.','The health care law mandates that most Americans have health insurance or pay a penalty next year.','Colorado is the first state to allow the sale of recreational marijuana to adults over twenty one.','Drones will be tested in six states as the Federal Aviation Administration selects sites for research.','Gun laws in several states change too, with new background check rules and magazine limits.','The minimum wage rises in thirteen states, affecting millions of workers at the start of the year.','Analysts say the changes reflect years of political debate and will be watched closely by voters.']\nhtml='<html><head><title>New Year, new laws: Obamacare, pot, guns and drones</title></head><body><article>'+''.join('<p>'+p+'</p>' for p in paras)+'</article></body></html>'\nopen('/tmp/sample.html','w').write(html)\nprint('sample html bytes', len(html))\""
+   ],
+   "commands": [
+    "python3 -c \"import nltk\nfor r in ['tokenizers/punkt','corpora/stopwords']:\n    try: print(r, '->', nltk.data.find(r))\n    except LookupError as e: print(r, 'MISSING')\"",
+    "python3 -c \"from newspaper import Article\na=Article('http://example.com/2013/12/30/new-year-new-laws/')\na.download(input_html=open('/tmp/sample.html').read())\na.parse()\nprint('text_len', len(a.text))\na.nlp()\nprint('keywords', a.keywords)\nprint('summary', repr(a.summary[:200]))\nassert isinstance(a.keywords, list) and a.keywords and all(isinstance(k,str) for k in a.keywords), ('keywords empty/invalid', a.keywords)\nassert isinstance(a.summary, str) and a.summary.strip(), ('summary empty', a.summary)\nprint('C5_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null",
+    "curl -sf https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py -o /tmp/download_corpora.py; echo \"script_fetch_rc=$?\"; wc -c /tmp/download_corpora.py",
+    "echo '--- README ordering: corpora step precedes pip3 install newspaper3k; run verbatim on a bare interpreter first ---'",
+    "curl https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py | python3 > /tmp/c6_bare.log 2>&1; echo \"bare_rc=${PIPESTATUS[1]}\" | tee -a /tmp/c6_bare.log",
+    "pip install --quiet newspaper3k 2>&1 | tail -3",
+    "curl https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py | python3 > /tmp/c6_after.log 2>&1; echo \"after_install_rc=${PIPESTATUS[1]}\" | tee -a /tmp/c6_after.log"
+   ],
+   "commands": [
+    "echo '== bare interpreter =='; tail -5 /tmp/c6_bare.log",
+    "echo '== after pip install newspaper3k =='; tail -8 /tmp/c6_after.log",
+    "grep -q 'after_install_rc=0' /tmp/c6_after.log && echo C6_SCRIPT_EXIT0 || echo C6_SCRIPT_FAILED",
+    "python3 -c \"import nltk\nmissing=[]\nfor r in ['corpora/brown','tokenizers/punkt','taggers/maxent_treebank_pos_tagger','corpora/movie_reviews','corpora/wordnet','corpora/stopwords']:\n    try: nltk.data.find(r); print('present', r)\n    except LookupError: print('MISSING', r); missing.append(r)\nassert not missing, missing\nprint('C6_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "cat /etc/os-release | grep -E '^(PRETTY_NAME|VERSION_CODENAME)='",
+    "apt-get update -qq > /tmp/c7_update.log 2>&1; echo \"update_rc=$?\"",
+    "apt-get install -y libjpeg-dev zlib1g-dev libpng12-dev > /tmp/c7_install.log 2>&1; echo $? > /tmp/c7_install.rc",
+    "apt-get install -y libjpeg-dev zlib1g-dev libpng-dev > /tmp/c7_fallback.log 2>&1; echo $? > /tmp/c7_fallback.rc"
+   ],
+   "commands": [
+    "echo \"verbatim install rc=$(cat /tmp/c7_install.rc)\"; tail -5 /tmp/c7_install.log",
+    "apt-cache policy libpng12-dev 2>&1 | head -5; apt-cache show libpng12-dev >/dev/null 2>&1 && echo LIBPNG12_DEV_AVAILABLE || echo LIBPNG12_DEV_NOT_IN_APT",
+    "echo \"README fallback (libpng-dev) rc=$(cat /tmp/c7_fallback.rc)\"; dpkg -s libpng-dev 2>/dev/null | grep -E '^(Package|Version):'",
+    "test \"$(cat /tmp/c7_install.rc)\" = 0 && echo C7_OK || echo C7_FAIL_AS_WRITTEN"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet newspaper3k 2>&1 | tail -3",
+    "echo 'NOTE: installing lxml[html_clean] so this probe tests languages(), not c1 import failure'; pip install --quiet 'lxml[html_clean]' 2>&1 | tail -2"
+   ],
+   "commands": [
+    "python3 -c 'import newspaper; newspaper.languages()' > /tmp/c8.txt 2>&1; echo \"rc=$?\"; cat /tmp/c8.txt",
+    "grep -q 'Your available languages are' /tmp/c8.txt && echo HEADER_OK",
+    "for code in ar be bg da de el en es; do grep -qE \"^\\s*${code}\\s+\" /tmp/c8.txt && echo \"has $code\" || echo \"MISSING $code\"; done",
+    "n=$(grep -cE '^\\s*[a-z]{2}\\s+[A-Z]' /tmp/c8.txt); echo \"language rows: $n\"; test \"$n\" -ge 10 && echo C8_OK"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet newspaper3k 2>&1 | tail -3",
+    "echo 'NOTE: installing lxml[html_clean] so this probe tests news_pool, not c1 import failure'; pip install --quiet 'lxml[html_clean]' 2>&1 | tail -2"
+   ],
+   "commands": [
+    "python3 -c \"from newspaper import news_pool\nprint(type(news_pool), news_pool.__class__.__module__)\nprint('methods', [m for m in dir(news_pool) if not m.startswith('_')])\nassert callable(getattr(news_pool,'set',None)), 'no set()'\nassert callable(getattr(news_pool,'join',None)), 'no join()'\nimport inspect, newspaper.mthreading as mt\nsrc=inspect.getsource(mt)\nassert 'Thread' in src, 'no threading in mthreading'\nprint('C9_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet newspaper3k 2>&1 | tail -3",
+    "echo 'NOTE: installing lxml[html_clean] so this probe tests build(), not c1 import failure'; pip install --quiet 'lxml[html_clean]' 2>&1 | tail -2",
+    "timeout 95 python3 -c \"import newspaper, json, time\nfrom newspaper import Config\nc=Config(); c.request_timeout=10; c.memoize_articles=False\nt=time.time()\ntry:\n    p=newspaper.build('http://cnn.com', config=c)\n    out={'ok':True,'type':type(p).__name__,'n':len(p.articles),'urls':[a.url for a in p.articles[:5]],'article_types':sorted({type(a).__name__ for a in p.articles}),'cats':p.category_urls()[:5],'secs':round(time.time()-t,1)}\nexcept Exception as e:\n    out={'ok':False,'err':repr(e),'secs':round(time.time()-t,1)}\njson.dump(out, open('/tmp/c10.json','w'))\nprint(out)\"; echo \"build_rc=$?\""
+   ],
+   "commands": [
+    "python3 -c \"import json\nd=json.load(open('/tmp/c10.json'))\nprint(d)\nassert d['ok'], d.get('err')\nassert d['type']=='Source', d['type']\nassert d['n']>0, 'articles list EMPTY'\nassert d['article_types']==['Article'], d['article_types']\nassert all(u.startswith('http') and 'cnn' in u for u in d['urls']), d['urls']\nprint('C10_OK', d['n'], 'articles')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null",
+    "curl -sf https://raw.githubusercontent.com/codelucas/newspaper/1618b547f31c2d1fd19ae3b6afd8f7542dd02074/README.rst -o /tmp/README.rst; echo \"readme_rc=$?\"",
+    "curl -sL -A 'Mozilla/5.0' --max-time 30 -o /tmp/swift.html -w 'vendor_http=%{http_code} final=%{url_effective}\\n' 'https://www.swiftproxy.net/' || echo vendor_fetch_failed"
+   ],
+   "commands": [
+    "echo '== claims of success rate in README at pinned commit =='; grep -noE '[0-9]+\\.[0-9]+% success rate|[0-9]+M\\+ residential IPs across [0-9]+\\+ countries' /tmp/README.rst",
+    "echo '== vendor page: is the number present, is any methodology present =='; echo \"bytes=$(wc -c < /tmp/swift.html)\"; echo \"mentions_99.89=$(grep -c '99\\.89' /tmp/swift.html)\"; echo \"mentions_80M=$(grep -ciE '80M\\+?|80 million' /tmp/swift.html)\"; echo \"methodology_words=$(grep -ciE 'methodolog|measured|benchmark|sample size|audit' /tmp/swift.html)\"",
+    "echo 'VERDICT_HINT: third-party marketing figure; README also quotes a different vendor at 99.99% \u2014 no artifact in the repo can substantiate either. Escalate as UNVERIFIABLE, do not score.'; echo C11_NO_EXECUTABLE_TRUTH"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
