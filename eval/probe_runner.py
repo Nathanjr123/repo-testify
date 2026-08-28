@@ -14,13 +14,29 @@ LIMITS = ["--memory=4g", "--cpus=2", "--pids-limit=256"]
 def sh(cmd, timeout=None, **kw):
     return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, **kw)
 
+SRC_CACHE = {}
+
+def host_checkout(repo, commit, workdir):
+    """Clone once per (repo, commit) on the HOST (has git); containers get a ro-mount.
+    Slim images ship without git — probe smoke-install failed exit 127 before this."""
+    key = (repo, commit)
+    if key in SRC_CACHE:
+        return SRC_CACHE[key]
+    dst = workdir / f"src-{abs(hash(key)) % 10**8}"
+    sh(["git", "clone", "--quiet", repo, str(dst)], timeout=300)
+    sh(["git", "-C", str(dst), "checkout", "--quiet", commit], timeout=60)
+    SRC_CACHE[key] = dst
+    return dst
+
 def run_probe(spec, repo, commit, out_root):
     pid = spec["id"]
     out = out_root / pid
     out.mkdir(parents=True, exist_ok=True)
     tag = f"probe-{pid.lower()}"
-    setup = [f"git clone --quiet {repo} /repo", f"cd /repo && git checkout --quiet {commit}"] + spec.get("setup", [])
-    a = sh(["docker", "run", "--name", tag, *LIMITS, spec["image"],
+    src = host_checkout(repo, commit, out_root.parent)
+    setup = ["cp -r /repo-src /repo", "cd /repo"] + spec.get("setup", [])
+    a = sh(["docker", "run", "--name", tag, *LIMITS,
+            "-v", f"{src.resolve()}:/repo-src:ro", spec["image"],
             "bash", "-lc", " && ".join(setup)], timeout=900)
     (out / "phase_a.log").write_text((a.stdout or "") + "\n--stderr--\n" + (a.stderr or ""))
     if a.returncode != 0:
