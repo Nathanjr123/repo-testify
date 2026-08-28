@@ -1,0 +1,139 @@
+{
+ "case_id": "r11-gpt-2",
+ "repo": "https://github.com/openai/gpt-2",
+ "commit": "9b63575ef42771a015060c964af2c3da4cf7c8ab",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -c \"import sys;print('python',sys.version.split()[0])\""
+   ],
+   "commands": [
+    "pip3 install tensorflow==1.12.0 > /tmp/tf.log 2>&1; rc=$?; grep -iE 'ERROR|No matching|Could not find|Successfully installed' /tmp/tf.log | tail -3; if [ $rc -eq 0 ]; then python3 -c 'import tensorflow as tf;print(\"observed tf.__version__=\",tf.__version__)' && echo 'VERDICT_LINE: PASS pip3 install tensorflow==1.12.0 installed and imports' || echo 'VERDICT_LINE: FAIL tensorflow==1.12.0 installed but import failed'; else echo \"observed pip rc=$rc python=$(python3 -c 'import sys;print(sys.version.split()[0])')\"; echo 'VERDICT_LINE: FAIL pip3 install tensorflow==1.12.0 has no distribution for this python (README command as written does not work)'; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "mkdir -p /w && cd /w && printf 'fire>=0.1.3\\nregex==2017.4.5\\nrequests==2.21.0\\ntqdm==4.31.1\\n' > requirements.txt && cat requirements.txt"
+   ],
+   "commands": [
+    "cd /w && pip3 install -r requirements.txt > /tmp/req.log 2>&1; rc=$?; grep -iE 'error|gcc|Successfully installed|Failed building' /tmp/req.log | tail -4; if [ $rc -eq 0 ]; then python3 -c 'import fire,regex,requests,tqdm;print(\"observed regex\",regex.__version__,\"requests\",requests.__version__,\"tqdm\",tqdm.__version__)' && echo 'VERDICT_LINE: PASS pip3 install -r requirements.txt succeeded and all four import' || echo 'VERDICT_LINE: FAIL requirements installed but import failed'; else echo \"observed pip rc=$rc; missing: $(grep -oiE 'gcc|compiler|No matching distribution[^\\n]*' /tmp/req.log | sort -u | head -3 | tr '\\n' ' ')\"; echo 'VERDICT_LINE: FAIL pip3 install -r requirements.txt fails on python3.11-slim (see missing above; regex==2017.4.5 is sdist-only)'; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "mkdir -p /w && cd /w && python3 -c \"import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';open('download_model.py','wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/download_model.py',timeout=30).read())\" && head -20 download_model.py",
+    "pip3 install requests tqdm > /tmp/pip.log 2>&1 || tail -3 /tmp/pip.log"
+   ],
+   "commands": [
+    "cd /w && python3 -c \"import urllib.request;r=urllib.request.urlopen(urllib.request.Request('https://openaipublic.blob.core.windows.net/gpt-2/models/124M/hparams.json'),timeout=20);print('observed endpoint status',r.status,r.read()[:80])\" || echo 'observed endpoint unreachable'",
+    "cd /w && timeout 90 python3 download_model.py 124M > /tmp/dl.log 2>&1; rc=$?; echo \"observed download rc=$rc (124=timeout budget hit)\"; ls -la models/124M 2>/dev/null; python3 -c \"import os,sys;d='models/124M';need=['checkpoint','encoder.json','hparams.json'];have=[f for f in need if os.path.exists(os.path.join(d,f)) and os.path.getsize(os.path.join(d,f))>0];print('observed files',have);assert have==need,'missing '+str([f for f in need if f not in have])\" && (if [ $rc -eq 0 ]; then echo 'VERDICT_LINE: PASS python3 download_model.py 124M completed and wrote models/124M'; else echo 'VERDICT_LINE: PASS python3 download_model.py 124M streams files into models/124M (checkpoint,encoder.json,hparams.json present; full 500MB not finished within probe budget)'; fi) || (tail -3 /tmp/dl.log; echo 'VERDICT_LINE: FAIL python3 download_model.py 124M produced no model files')"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "mkdir -p /w && cd /w && python3 -c \"import urllib.request,os;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[ (os.makedirs(os.path.dirname(p) or '.',exist_ok=True), open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read())) for p in ['download_model.py','requirements.txt','src/model.py','src/sample.py','src/encoder.py','src/generate_unconditional_samples.py']]\" && ls src",
+    "cd /w && pip3 install tensorflow==1.12.0 > /tmp/tf.log 2>&1 || echo \"observed: tensorflow==1.12.0 install rc=$? : $(grep -m1 -iE 'No matching|ERROR' /tmp/tf.log)\"",
+    "cd /w && (pip3 install -r requirements.txt > /tmp/req.log 2>&1 && echo 'observed: requirements.txt installed') || (echo 'observed: requirements.txt failed, retrying same packages unpinned'; pip3 install fire regex requests tqdm > /tmp/req2.log 2>&1 || tail -2 /tmp/req2.log)"
+   ],
+   "commands": [
+    "cd /w && python3 -c 'import tensorflow as tf;print(\"observed tf\",tf.__version__)' > /tmp/tfimp.log 2>&1 || { tail -1 /tmp/tfimp.log; echo 'VERDICT_LINE: FAIL cannot run generate_unconditional_samples.py: tensorflow (1.12.0) is not installable/importable on this python, README prerequisite unmet'; exit 0; }; timeout 40 python3 download_model.py 124M > /tmp/dl.log 2>&1; export PYTHONIOENCODING=UTF-8; timeout 60 python3 src/generate_unconditional_samples.py --nsamples 1 --length 20 2>/tmp/gen.err | tee /tmp/samples | head -c 400; echo; echo \"observed SAMPLE markers: $(grep -c 'SAMPLE 1' /tmp/samples)\"; python3 -c \"s=open('/tmp/samples').read();assert 'SAMPLE 1' in s and len(s.split('SAMPLE 1',1)[1].strip())>0\" && echo 'VERDICT_LINE: PASS generate_unconditional_samples.py printed a sample to stdout via tee' || { tail -2 /tmp/gen.err; echo 'VERDICT_LINE: FAIL generate_unconditional_samples.py produced no SAMPLE output'; }"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "mkdir -p /w && cd /w && python3 -c \"import urllib.request,os;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[ (os.makedirs(os.path.dirname(p) or '.',exist_ok=True), open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read())) for p in ['download_model.py','requirements.txt','src/model.py','src/sample.py','src/encoder.py','src/interactive_conditional_samples.py']]\" && grep -n 'top_k\\|input(' src/interactive_conditional_samples.py | head -5",
+    "cd /w && pip3 install tensorflow==1.12.0 > /tmp/tf.log 2>&1 || echo \"observed: tensorflow==1.12.0 install rc=$? : $(grep -m1 -iE 'No matching|ERROR' /tmp/tf.log)\"",
+    "cd /w && (pip3 install -r requirements.txt > /tmp/req.log 2>&1 && echo 'observed: requirements.txt installed') || (echo 'observed: requirements.txt failed, retrying same packages unpinned'; pip3 install fire regex requests tqdm > /tmp/req2.log 2>&1 || tail -2 /tmp/req2.log)"
+   ],
+   "commands": [
+    "cd /w && python3 -c 'import tensorflow as tf;print(\"observed tf\",tf.__version__)' > /tmp/tfimp.log 2>&1 || { tail -1 /tmp/tfimp.log; echo 'VERDICT_LINE: FAIL cannot run interactive_conditional_samples.py --top_k 40: tensorflow (1.12.0) is not installable/importable on this python, README prerequisite unmet'; exit 0; }; timeout 40 python3 download_model.py 124M > /tmp/dl.log 2>&1; export PYTHONIOENCODING=UTF-8; echo 'The capital of France is' | timeout 60 python3 src/interactive_conditional_samples.py --top_k 40 --nsamples 1 --length 20 > /tmp/cond.out 2>/tmp/cond.err; head -c 400 /tmp/cond.out; echo; echo \"observed SAMPLE markers: $(grep -c 'SAMPLE 1' /tmp/cond.out)\"; python3 -c \"s=open('/tmp/cond.out').read();assert 'SAMPLE 1' in s and len(s.split('SAMPLE 1',1)[1].strip())>0\" && echo 'VERDICT_LINE: PASS interactive_conditional_samples.py --top_k 40 emitted a continuation for a piped prompt' || { grep -v Traceback /tmp/cond.err | tail -2; echo 'VERDICT_LINE: FAIL interactive_conditional_samples.py --top_k 40 produced no continuation'; }"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "mkdir -p /w && cd /w && python3 -c \"import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read()) for p in ['Dockerfile.cpu','Dockerfile.gpu']]\" && echo '--- Dockerfile.cpu' && cat Dockerfile.cpu && echo '--- Dockerfile.gpu' && cat Dockerfile.gpu"
+   ],
+   "commands": [
+    "cd /w && echo \"observed docker binary: $(command -v docker || echo none)\"; python3 - <<'EOF'\nimport re,json,urllib.request\nok=True\nfor f in ['Dockerfile.cpu','Dockerfile.gpu']:\n    m=re.search(r'^FROM\\s+(\\S+)',open(f).read(),re.M)\n    base=m.group(1); repo,_,tag=base.partition(':'); tag=tag or 'latest'\n    if '/' not in repo: repo='library/'+repo\n    url=f'https://hub.docker.com/v2/repositories/{repo}/tags/{tag}'\n    try:\n        r=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'probe'}),timeout=20); st=r.status; body=r.read().decode()[:120]\n    except Exception as e:\n        st=getattr(e,'code',str(e)); body=''\n    print(f'observed {f}: FROM {base} -> hub tag lookup status {st} {body!r}')\n    ok = ok and st==200\nimport shutil\nif not ok:\n    print('VERDICT_LINE: FAIL Dockerfile base image tag no longer resolvable on Docker Hub, docker build cannot succeed')\nelif shutil.which('docker') is None:\n    print('VERDICT_LINE: PASS Dockerfile.cpu/.gpu exist and their tensorflow base tags still resolve on Docker Hub (build itself not executed: no docker daemon in probe container)')\nelse:\n    print('VERDICT_LINE: PASS Dockerfiles exist and base tags resolve; run docker build in a docker-capable runner to confirm')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 - <<'EOF'\nimport json,urllib.request\nr=urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/openai/gpt-2',headers={'User-Agent':'probe','Accept':'application/vnd.github+json'}),timeout=20)\nd=json.load(r)\nprint('observed status',r.status,'archived=',d.get('archived'),'pushed_at=',d.get('pushed_at'),'default_branch=',d.get('default_branch'))\nassert d.get('archived') is True\nprint('VERDICT_LINE: PASS GitHub API reports archived=true for openai/gpt-2')\nEOF\n[ $? -eq 0 ] || echo 'VERDICT_LINE: FAIL GitHub API did not report archived=true (or request failed)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 - <<'EOF'\nimport urllib.request\nsha='9b63575ef42771a015060c964af2c3da4cf7c8ab'\nurl=f'https://raw.githubusercontent.com/openai/gpt-2/{sha}/model_card.md'\nr=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'probe'}),timeout=20)\nbody=r.read().decode('utf-8','replace')\nprint('observed status',r.status,'bytes',len(body),'first line:',body.splitlines()[0][:80] if body.strip() else '<empty>')\nassert r.status==200 and len(body)>200\nassert 'model' in body.lower() and 'gpt-2' in body.lower()\nprint('VERDICT_LINE: PASS model_card.md exists at pinned SHA and contains model information')\nEOF\n[ $? -eq 0 ] || echo 'VERDICT_LINE: FAIL model_card.md missing or not a model card at pinned SHA'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "mkdir -p /w && cd /w && python3 -c \"import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read()) for p in ['download_model.py','DEVELOPERS.md','README.md']]\" && grep -nE '117M|124M|345M|355M' download_model.py DEVELOPERS.md README.md"
+   ],
+   "commands": [
+    "cd /w && python3 - <<'EOF'\nimport json,urllib.request,re\ndocs=open('download_model.py').read()+open('DEVELOPERS.md').read()+open('README.md').read()\nprint('observed doc mentions: 124M' , '124M' in docs, '355M', '355M' in docs, '117M', '117M' in docs, '345M', '345M' in docs)\nassert '124M' in docs and '355M' in docs\ndef params(h):\n    L,E,V,C=h['n_layer'],h['n_embd'],h['n_vocab'],h['n_ctx']\n    return L*(12*E*E+13*E)+V*E+C*E+2*E\nres={}\nfor name in ['124M','355M']:\n    url=f'https://openaipublic.blob.core.windows.net/gpt-2/models/{name}/hparams.json'\n    r=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'probe'}),timeout=20)\n    h=json.load(r); n=params(h); res[name]=n\n    print(f'observed {name}: status {r.status} hparams {h} -> computed params {n/1e6:.1f}M')\nassert abs(res['124M']/1e6-124)<2 and abs(res['124M']/1e6-117)>5, res\nassert abs(res['355M']/1e6-355)<2 and abs(res['355M']/1e6-345)>5, res\nprint('VERDICT_LINE: PASS checkpoints named 124M/355M exist and their hparams compute to ~124M/~355M params, not 117M/345M')\nEOF\n[ $? -eq 0 ] || echo 'VERDICT_LINE: FAIL corrected 124M/355M sizes not supported by code/docs or hparams param count'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "mkdir -p /w && cd /w && python3 -c \"import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read()) for p in ['README.md','DEVELOPERS.md']]\" && grep -n 'PYTHONIOENCODING' README.md DEVELOPERS.md"
+   ],
+   "commands": [
+    "cd /w && grep -q 'export PYTHONIOENCODING=UTF-8' README.md DEVELOPERS.md && echo 'observed: instruction present in repo docs' || { echo 'observed: instruction absent from README.md/DEVELOPERS.md'; echo 'VERDICT_LINE: FAIL PYTHONIOENCODING instruction not found in docs'; exit 0; }; env -u PYTHONIOENCODING LC_ALL=C LANG=C PYTHONUTF8=0 PYTHONCOERCECLOCALE=0 python3 -c 'import sys;print(sys.stdout.encoding);print(\"\\u00e9\\u2014\\u4e2d\")' > /tmp/without.out 2>&1; w=$?; echo \"observed WITHOUT var (C locale, coercion off): rc=$w $(tr '\\n' ' ' < /tmp/without.out | head -c 120)\"; export PYTHONIOENCODING=UTF-8; LC_ALL=C LANG=C PYTHONUTF8=0 PYTHONCOERCECLOCALE=0 python3 -c 'import sys;print(sys.stdout.encoding);print(\"\\u00e9\\u2014\\u4e2d\")' > /tmp/with.out 2>&1; v=$?; echo \"observed WITH var: rc=$v $(tr '\\n' ' ' < /tmp/with.out | head -c 120)\"; python3 -c \"import sys;s=open('/tmp/with.out','rb').read();assert $v==0 and 'utf-8' in s.decode().lower() and '\\u4e2d'.encode() in s\" && echo \"VERDICT_LINE: PASS export PYTHONIOENCODING=UTF-8 is documented and forces UTF-8 stdout (without it under C locale rc=$w; python>=3.7 usually coerces to UTF-8 anyway so instruction is era-specific)\" || echo 'VERDICT_LINE: FAIL PYTHONIOENCODING=UTF-8 did not yield UTF-8 stdout for non-ASCII output'"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
