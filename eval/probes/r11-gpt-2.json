@@ -1,0 +1,202 @@
+{
+ "case_id": "r11-gpt-2",
+ "repo": "https://github.com/openai/gpt-2",
+ "commit": "9b63575ef42771a015060c964af2c3da4cf7c8ab",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /venv"
+   ],
+   "commands": [
+    ". /venv/bin/activate && python -V && pip -V",
+    ". /venv/bin/activate && pip3 install tensorflow==1.12.0 > /tmp/tf.log 2>&1; echo \"EXIT=$?\"; tail -n 6 /tmp/tf.log",
+    ". /venv/bin/activate && if grep -q 'No matching distribution found for tensorflow==1.12.0' /tmp/tf.log; then echo \"VERDICT: pip3 install tensorflow==1.12.0 FAILS on $(python -V 2>&1) (no wheel/sdist for this interpreter)\"; else python -c 'import tensorflow as tf; print(\"VERDICT: installed\", tf.__version__)'; fi",
+    ". /venv/bin/activate && echo 'Versions pip can see for this interpreter (oldest at the end):' && pip3 index versions tensorflow 2>/dev/null | head -n 2"
+   ],
+   "timeout_s": 120,
+   "note": "Claim is tested on current Python (the interpreter a fresh reader would have). Expected outcome per hint: resolution failure; tensorflow 1.12.0 only has cp35/cp36 wheels. p-c4 separately tries the install on python:3.6-slim."
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq gcc libc6-dev >/dev/null",
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w",
+    "sha256sum /w/requirements.txt && cat /w/requirements.txt"
+   ],
+   "commands": [
+    "cd /w && python3 -V && pip3 install -r requirements.txt > /tmp/req.log 2>&1; echo \"EXIT=$?\"; grep -iE 'error|failed|Successfully installed' /tmp/req.log | head -n 8",
+    "cd /w && for p in fire regex requests tqdm; do spec=$(grep -i \"^$p\" requirements.txt); pip3 install \"$spec\" > /tmp/$p.log 2>&1 && echo \"OK   $spec\" || { echo \"FAIL $spec\"; grep -iE 'error' /tmp/$p.log | head -n 3; }; done",
+    "python3 -c 'import fire, regex, requests, tqdm; print(\"IMPORT OK\", regex.__version__, requests.__version__, tqdm.__version__)' || echo 'IMPORT FAIL'"
+   ],
+   "timeout_s": 120,
+   "note": "gcc is installed in setup so a failure is attributable to the pins (regex==2017.4.5 is sdist-only and must compile against a 3.11 C-API), not to a missing compiler."
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w",
+    "pip3 install -q requests tqdm",
+    "python3 -c 'import urllib.request\nfor m in [\"124M\",\"355M\",\"774M\",\"1558M\"]:\n    u=\"https://openaipublic.blob.core.windows.net/gpt-2/models/%s/model.ckpt.data-00000-of-00001\"%m\n    try:\n        r=urllib.request.urlopen(urllib.request.Request(u,method=\"HEAD\")); print(m,\"HEAD\",r.status,\"bytes=\",r.headers.get(\"Content-Length\"))\n    except Exception as e: print(m,\"HEAD ERR\",e)' > /tmp/head.txt 2>&1",
+    "cd /w && timeout 95 python3 download_model.py 124M > /tmp/dl.log 2>&1; echo $? > /tmp/dl.exit"
+   ],
+   "commands": [
+    "echo \"download_model.py 124M exit=$(cat /tmp/dl.exit) (124 = killed by 95s timeout)\"; tail -c 300 /tmp/dl.log; echo",
+    "echo '--- storage endpoint HEAD checks (all four documented sizes) ---'; cat /tmp/head.txt",
+    "cd /w && for f in checkpoint encoder.json hparams.json model.ckpt.data-00000-of-00001 model.ckpt.index model.ckpt.meta vocab.bpe; do test -s models/124M/$f && echo \"PRESENT $f $(stat -c %s models/124M/$f)\" || echo \"MISSING $f\"; done",
+    "python3 -c 'import json; print(\"hparams:\", json.load(open(\"/w/models/124M/hparams.json\")))' || echo 'hparams.json unreadable'",
+    "if [ \"$(cat /tmp/dl.exit)\" = 0 ]; then echo 'VERDICT: script completed; models/124M populated'; elif [ \"$(cat /tmp/dl.exit)\" = 124 ]; then echo 'VERDICT: PARTIAL - script runs and endpoint serves files but full 124M (~500MB) did not finish in budget; judge by HEAD statuses + files present'; else echo 'VERDICT: script errored'; fi"
+   ],
+   "timeout_s": 120,
+   "expected_partial": true,
+   "note": "The 124M checkpoint is ~500MB; the probe budget may cut the transfer. HEAD checks on all four sizes settle 'endpoint still serves' independent of bandwidth."
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.6-slim",
+   "network": "install-only",
+   "gated_on": [
+    "c1",
+    "c3"
+   ],
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq gcc libc6-dev >/dev/null",
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w",
+    "pip3 install tensorflow==1.12.0 > /tmp/tf36.log 2>&1; echo \"TF_INSTALL_EXIT=$?\" | tee /tmp/tf36.exit; tail -n 2 /tmp/tf36.log",
+    "cd /w && pip3 install -r requirements.txt > /tmp/req36.log 2>&1; echo \"REQ_INSTALL_EXIT=$?\" | tee /tmp/req36.exit",
+    "cd /w && timeout 60 python3 download_model.py 124M > /tmp/dl.log 2>&1; echo $? > /tmp/dl.exit"
+   ],
+   "commands": [
+    "cat /tmp/tf36.exit /tmp/req36.exit; echo \"download exit=$(cat /tmp/dl.exit)\"; python3 -c 'import tensorflow as tf; print(\"tensorflow\", tf.__version__)' || echo 'TF IMPORT FAIL'",
+    "cd /w && ls models/124M 2>/dev/null | wc -l | xargs -I{} echo 'model files present: {}/7'",
+    "cd /w && export PYTHONIOENCODING=UTF-8 && timeout 60 python3 src/generate_unconditional_samples.py | tee /tmp/samples > /dev/null 2>/tmp/gen.err; echo \"EXIT=${PIPESTATUS[0]} (124 expected: default nsamples=0 means generate forever)\"",
+    "grep -n 'nsamples=0' /w/src/generate_unconditional_samples.py; grep -c 'SAMPLE 1 ' /tmp/samples | xargs -I{} echo 'SAMPLE-1 headers in /tmp/samples: {}'; head -c 600 /tmp/samples; echo; tail -n 3 /tmp/gen.err",
+    "if grep -q 'SAMPLE 1 ' /tmp/samples; then echo 'VERDICT: documented command emits text samples (terminated by probe timeout, not by the script)'; else echo 'VERDICT: no samples produced - see gen.err and gating exits above'; fi"
+   ],
+   "timeout_s": 120,
+   "expected_partial": true,
+   "note": "Only image where tensorflow==1.12.0 has a wheel is a 3.5/3.6 interpreter, so python:3.6-slim is used. TF install + 500MB model + CPU sampling will likely exceed 120s; the probe records which gate broke. The verbatim command never terminates by design (nsamples default 0) - that is itself a finding."
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.6-slim",
+   "network": "install-only",
+   "gated_on": [
+    "c1",
+    "c3"
+   ],
+   "setup": [
+    "apt-get update -qq >/dev/null && apt-get install -y -qq gcc libc6-dev >/dev/null",
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w",
+    "pip3 install tensorflow==1.12.0 > /tmp/tf36.log 2>&1; echo \"TF_INSTALL_EXIT=$?\" | tee /tmp/tf36.exit",
+    "cd /w && pip3 install -r requirements.txt > /tmp/req36.log 2>&1; echo \"REQ_INSTALL_EXIT=$?\" | tee /tmp/req36.exit",
+    "cd /w && timeout 60 python3 download_model.py 124M > /tmp/dl.log 2>&1; echo $? > /tmp/dl.exit"
+   ],
+   "commands": [
+    "cat /tmp/tf36.exit /tmp/req36.exit; echo \"download exit=$(cat /tmp/dl.exit)\"; ls /w/models/124M 2>/dev/null | wc -l | xargs -I{} echo 'model files present: {}/7'",
+    "cd /w && python3 src/interactive_conditional_samples.py --help 2>&1 | grep -iE 'top_k|length|nsamples' | head -n 5 || echo 'CLI --help failed'",
+    "cd /w && export PYTHONIOENCODING=UTF-8 && printf 'The quick brown fox jumps over the lazy dog because\\n' | timeout 60 python3 src/interactive_conditional_samples.py --top_k 40 --length 20 > /tmp/cond 2>/tmp/cond.err; echo \"EXIT=$? (EOFError after the first sample is expected: script loops on input() and stdin is exhausted)\"",
+    "grep -c 'SAMPLE 1 ' /tmp/cond | xargs -I{} echo 'SAMPLE-1 headers: {}'; head -c 500 /tmp/cond; echo; grep -E 'EOFError|Error' /tmp/cond.err | tail -n 2",
+    "if grep -q 'SAMPLE 1 ' /tmp/cond; then echo 'VERDICT: prompt in, model continuation out via --top_k 40 (--length 20 added only to fit time budget)'; else echo 'VERDICT: no conditional sample produced - see gating exits'; fi"
+   ],
+   "timeout_s": 120,
+   "expected_partial": true,
+   "note": "Same environment gate as p-c4. --length 20 is a deviation from the verbatim command (default length = full 1024-token context, too slow on CPU in budget); it does not change the interface being tested."
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w",
+    "python3 -c 'import re,urllib.request,json\nfor f in [\"Dockerfile.cpu\",\"Dockerfile.gpu\"]:\n    base=re.search(r\"^FROM\\\\s+(\\\\S+)\",open(\"/w/\"+f).read(),re.M).group(1); repo,tag=base.split(\":\")\n    if \"/\" not in repo: repo=\"library/\"+repo\n    url=\"https://hub.docker.com/v2/repositories/%s/tags/%s\"%(repo,tag)\n    try:\n        d=json.load(urllib.request.urlopen(urllib.request.Request(url,headers={\"User-Agent\":\"probe\"}))); print(f,base,\"HUB_TAG_OK last_updated=\",d.get(\"last_updated\"),\"full_size=\",d.get(\"full_size\"))\n    except Exception as e: print(f,base,\"HUB_TAG_ERR\",e)' > /tmp/hub.txt 2>&1"
+   ],
+   "commands": [
+    "cd /w && ls -la Dockerfile.cpu Dockerfile.gpu && echo '--- Dockerfile.cpu ---' && cat Dockerfile.cpu && echo '--- Dockerfile.gpu ---' && cat Dockerfile.gpu",
+    "echo '--- Docker Hub tag existence for each FROM base ---'; cat /tmp/hub.txt",
+    "command -v docker >/dev/null && echo 'docker present' || echo 'docker: not available inside probe container - `docker build` NOT attempted; verdict rests on Dockerfile presence + base-tag availability'",
+    "if grep -q 'Dockerfile.cpu.*HUB_TAG_OK' /tmp/hub.txt; then echo 'VERDICT: CPU base image tag still resolvable on Docker Hub; build path plausible but unexecuted'; else echo 'VERDICT: CPU base tag NOT resolvable - documented build cannot start'; fi"
+   ],
+   "timeout_s": 120,
+   "note": "A python container cannot run docker build; this probe settles the pre-condition (files exist, base tags still pull). Full build belongs in the GitHub Actions execution arm."
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -c 'import urllib.request; r=urllib.request.Request(\"https://api.github.com/repos/openai/gpt-2\",headers={\"User-Agent\":\"probe\",\"Accept\":\"application/vnd.github+json\"}); open(\"/tmp/repo.json\",\"wb\").write(urllib.request.urlopen(r).read())'"
+   ],
+   "commands": [
+    "python3 -c 'import json; d=json.load(open(\"/tmp/repo.json\")); print(\"archived=\",d[\"archived\"],\"pushed_at=\",d[\"pushed_at\"],\"default_branch=\",d[\"default_branch\"],\"open_issues=\",d[\"open_issues_count\"])'",
+    "python3 -c 'import json,sys; d=json.load(open(\"/tmp/repo.json\")); assert d[\"archived\"] is True, \"repo is NOT archived on GitHub\"; print(\"VERDICT: GitHub reports archived=true, matching README Status: Archive\")'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w",
+    "python3 -c 'import urllib.request\nr=urllib.request.Request(\"https://api.github.com/repos/openai/gpt-2/contents/model_card.md?ref=9b63575ef42771a015060c964af2c3da4cf7c8ab\",headers={\"User-Agent\":\"probe\"})\ntry:\n    resp=urllib.request.urlopen(r); open(\"/tmp/mc_status\",\"w\").write(str(resp.status))\nexcept Exception as e: open(\"/tmp/mc_status\",\"w\").write(\"ERR \"+str(e))'"
+   ],
+   "commands": [
+    "echo \"GitHub contents API status for model_card.md@pinned SHA: $(cat /tmp/mc_status)\"",
+    "test -f /w/model_card.md && echo 'model_card.md PRESENT in pinned tree' && wc -lc /w/model_card.md && head -n 12 /w/model_card.md || echo 'model_card.md MISSING in pinned tree'",
+    "grep -n 'model_card.md' /w/README.md",
+    "grep -qiE 'model (details|description|type)|intended use|training data' /w/model_card.md && echo 'VERDICT: model card present and contains basic model info sections' || echo 'VERDICT: file exists but lacks recognizable model-card sections'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w",
+    "python3 -c 'import urllib.request\nfor m in [\"124M\",\"355M\",\"117M\",\"345M\"]:\n    u=\"https://openaipublic.blob.core.windows.net/gpt-2/models/%s/hparams.json\"%m\n    try:\n        r=urllib.request.urlopen(u); open(\"/tmp/hp_\"+m+\".json\",\"wb\").write(r.read()); print(m,\"hparams.json\",r.status)\n    except Exception as e: print(m,\"hparams.json ERR\",e)' > /tmp/hp_status.txt 2>&1"
+   ],
+   "commands": [
+    "grep -n -iE '117M|345M|parameter counts were wrong' /w/README.md",
+    "echo '--- model names used by code/docs ---'; grep -n -E '124M|355M|117M|345M' /w/DEVELOPERS.md /w/download_model.py /w/Dockerfile.cpu /w/Dockerfile.gpu | head -n 20",
+    "echo '--- download_model.py: how model name is taken (no whitelist => any name is passed to the URL) ---'; grep -n -E 'sys.argv|model = |models/' /w/download_model.py",
+    "echo '--- storage endpoint: which names actually exist ---'; cat /tmp/hp_status.txt",
+    "python3 -c 'import json\nfor m in [\"124M\",\"355M\"]:\n    h=json.load(open(\"/tmp/hp_\"+m+\".json\")); e=h[\"n_embd\"]; L=h[\"n_layer\"]\n    p=h[\"n_vocab\"]*e+h[\"n_ctx\"]*e+2*e+L*(12*e*e+13*e)\n    print(m,h,\"computed_params=%.1fM\"%(p/1e6))\n    assert abs(p/1e6-float(m[:-1]))<1.0, \"name does not match computed size\"\nprint(\"VERDICT: 124M/355M names match parameter counts computed from hparams (wte+wpe+ln_f+L*(12d^2+13d))\")' || echo 'VERDICT: could not confirm - see hp_status'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen(\"https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab\").read())).extractall(\"/src\")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w"
+   ],
+   "commands": [
+    "grep -n -B3 -A4 'PYTHONIOENCODING' /w/DEVELOPERS.md /w/README.md || echo 'PYTHONIOENCODING not documented in DEVELOPERS.md/README.md'",
+    "python3 -V; echo '--- case A: C locale, no var, modern defaults (PEP 538/540 locale coercion) ---'; env -i LANG=C /usr/local/bin/python3 -c 'import sys; print(\"stdout.encoding=\",sys.stdout.encoding); print(\"\\u00e9\\u2014\\u4e2d\")' && echo 'A: no UnicodeEncodeError without the variable' || echo 'A: UnicodeEncodeError without the variable'",
+    "echo '--- case B: C locale, coercion+utf8 mode disabled (legacy 3.6-era behaviour) ---'; env -i LANG=C PYTHONCOERCECLOCALE=0 PYTHONUTF8=0 /usr/local/bin/python3 -c 'import sys; print(\"stdout.encoding=\",sys.stdout.encoding); print(\"\\u00e9\\u2014\\u4e2d\")' && echo 'B: no error even in legacy mode' || echo 'B: UnicodeEncodeError - this is the failure the documented variable addresses'",
+    "echo '--- case C: same legacy mode + PYTHONIOENCODING=UTF-8 (the documented fix) ---'; env -i LANG=C PYTHONCOERCECLOCALE=0 PYTHONUTF8=0 PYTHONIOENCODING=UTF-8 /usr/local/bin/python3 -c 'import sys; print(\"stdout.encoding=\",sys.stdout.encoding); print(\"\\u00e9\\u2014\\u4e2d\")' && echo 'C: variable forces UTF-8 stdout, no error' || echo 'C: STILL fails with the variable set'",
+    "echo 'VERDICT: documented instruction is real and effective (case C); whether it is REQUIRED depends on interpreter era - compare A vs B above'"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
