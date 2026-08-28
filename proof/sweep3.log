@@ -1,2 +1,4 @@
 r01-humanize.json: ok wall=28.15s
 r02-python-tabulate.json: ok wall=37.12s
+r04-schedule.json: ok wall=31.68s
+r05-records.json: ok wall=33.77s
