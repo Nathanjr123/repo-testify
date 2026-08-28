@@ -1,0 +1,184 @@
+{
+ "case_id": "r09-pydub",
+ "repo": "https://github.com/jiaaro/pydub",
+ "commit": "103e339d3bc7a9a58a9f1de65f7d8074659b5f5a",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.13-slim",
+   "network": "install-only",
+   "setup": [
+    "python -m venv /venv && . /venv/bin/activate && pip install --no-cache-dir pydub > /pip.log 2>&1; echo PIP_RC=$? >> /pip.log"
+   ],
+   "commands": [
+    "python --version",
+    "cat /pip.log",
+    "grep -q 'PIP_RC=0' /pip.log",
+    ". /venv/bin/activate && pip show pydub | grep -E '^(Name|Version):'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.13-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub"
+   ],
+   "commands": [
+    "python --version",
+    "python -c 'import audioop' > audioop.log 2>&1; echo STDLIB_AUDIOOP_RC=$?; cat audioop.log",
+    "python -c \"from pydub import AudioSegment\" > import.log 2>&1; rc=$?; cat import.log; echo IMPORT_RC=$rc; grep -qi audioop import.log && echo VERDICT_HINT=import_fails_because_audioop_removed; exit $rc"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub"
+   ],
+   "commands": [
+    "command -v ffmpeg avconv ffprobe && { echo FFMPEG_PRESENT_PROBE_INVALID; exit 2; } || echo NO_FFMPEG_ON_PATH",
+    "python -c \"import wave,math,struct; fr=8000; n=fr*20; w=wave.open('in.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.close()\"",
+    "python -c \"from pydub import AudioSegment; s=AudioSegment.from_wav('in.wav'); print('loaded_ms',len(s)); s.export('out.wav', format='wav'); import wave; w=wave.open('out.wav','rb'); print('out_frames',w.getnframes(),'rate',w.getframerate(),'ch',w.getnchannels()); assert w.getnframes()==8000*20 and w.getframerate()==8000; print('PURE_PYTHON_WAV_ROUNDTRIP_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub",
+    "apt-get update -qq && apt-get install -y -qq --no-install-recommends ffmpeg > /dev/null",
+    "ffmpeg -loglevel error -y -f lavfi -i 'sine=frequency=440:duration=3' -ac 1 -ar 22050 test.mp3 && ls -l test.mp3"
+   ],
+   "commands": [
+    "command -v ffmpeg && echo FFMPEG_AT=$(command -v ffmpeg)",
+    "PATH=/usr/local/bin sh -c 'command -v ffmpeg avconv; echo PATH_WITHOUT_FFMPEG_CHECK_RC=$?'",
+    "PATH=/usr/local/bin python -c \"import warnings; warnings.simplefilter('always'); from pydub import AudioSegment\nwith warnings.catch_warnings(record=True) as ws:\n    try:\n        AudioSegment.from_mp3('test.mp3'); print('UNEXPECTED_SUCCESS_WITHOUT_FFMPEG'); raise SystemExit(1)\n    except Exception as e:\n        print('no-ffmpeg error:', type(e).__name__, e)\nmsgs=' '.join(str(w.message) for w in ws); print('warnings:', msgs); assert 'ffmpeg' in msgs.lower() or 'avconv' in msgs.lower(); print('FAILS_WITHOUT_FFMPEG_OK')\"",
+    "python -c \"from pydub import AudioSegment; s=AudioSegment.from_mp3('test.mp3'); print('with ffmpeg len_ms', len(s)); assert 2900 <= len(s) <= 3200; print('SUCCEEDS_WITH_FFMPEG_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "cat > fetch.py <<'EOF'\nimport urllib.request, sys\nurl, out = sys.argv[1], sys.argv[2]\nhdr = {'User-Agent': 'claim-probe/1.0', 'Travis-API-Version': '3'}\ntry:\n    r = urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=30)\n    body, code, final = r.read(), r.getcode(), r.geturl()\nexcept Exception as e:\n    body = getattr(e, 'read', lambda: b'')(); code = getattr(e, 'code', -1); final = str(e)\nopen(out, 'wb').write(body)\nprint(url, '->', code, final)\nEOF",
+    "python fetch.py 'https://travis-ci.org/jiaaro/pydub.svg?branch=master' travis_badge.svg | tee travis_badge.log",
+    "python fetch.py 'https://travis-ci.org/jiaaro/pydub' travis_page.html | tee travis_page.log",
+    "python fetch.py 'https://api.travis-ci.com/repo/jiaaro%2Fpydub/branch/master' travis_api.json | tee travis_api.log"
+   ],
+   "commands": [
+    "cat travis_badge.log travis_page.log travis_api.log",
+    "echo '--- badge svg (first 800 bytes) ---'; head -c 800 travis_badge.svg; echo",
+    "echo '--- api json (first 800 bytes) ---'; head -c 800 travis_api.json; echo",
+    "grep -qi 'passing' travis_badge.svg && ! grep -qi 'unknown' travis_badge.svg && grep -qi '\"state\": *\"passed\"' travis_api.json && echo TRAVIS_BADGE_BACKED_BY_LIVE_PASSING_BUILD"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "cat > fetch.py <<'EOF'\nimport urllib.request, sys\nurl, out = sys.argv[1], sys.argv[2]\nhdr = {'User-Agent': 'claim-probe/1.0', 'Accept': 'application/json, image/svg+xml, text/html'}\ntry:\n    r = urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=30)\n    body, code, final = r.read(), r.getcode(), r.geturl()\nexcept Exception as e:\n    body = getattr(e, 'read', lambda: b'')(); code = getattr(e, 'code', -1); final = str(e)\nopen(out, 'wb').write(body)\nprint(url, '->', code, final)\nEOF",
+    "python fetch.py 'https://ci.appveyor.com/api/projects/status/gy1ucp9o5khq7fqi/branch/master?svg=true' appveyor_badge.svg | tee appveyor_badge.log",
+    "python fetch.py 'https://ci.appveyor.com/api/projects/jiaaro/pydub/branch/master' appveyor_api.json | tee appveyor_api.log"
+   ],
+   "commands": [
+    "cat appveyor_badge.log appveyor_api.log",
+    "echo '--- badge svg (first 800 bytes) ---'; head -c 800 appveyor_badge.svg; echo",
+    "python -c \"import json,datetime\nd=json.load(open('appveyor_api.json')); b=d.get('build',{})\nprint('status:', b.get('status'), 'finished:', b.get('finished'), 'commit:', b.get('commitId'))\nfin=datetime.datetime.fromisoformat(b['finished'][:19]); age=(datetime.datetime.utcnow()-fin).days\nprint('build_age_days:', age)\nassert b.get('status')=='success', 'last master build not success'\nassert age <= 365, 'last master build is stale (>1 year old)'\nprint('APPVEYOR_RECENT_PASSING_BUILD')\"",
+    "grep -qi 'passing' appveyor_badge.svg && echo APPVEYOR_BADGE_SAYS_PASSING"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub",
+    "python -c \"import wave,math,struct; fr=8000; n=fr*20; w=wave.open('never_gonna_give_you_up.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.close()\""
+   ],
+   "commands": [
+    "python -c \"from pydub import AudioSegment\nsong = AudioSegment.from_wav('never_gonna_give_you_up.wav')\n# pydub does things in milliseconds\nten_seconds = 10 * 1000\nfirst_10_seconds = song[:ten_seconds]\nlast_5_seconds = song[-5000:]\nbeginning = first_10_seconds + 6\nend = last_5_seconds - 3\nwithout_the_middle = beginning + end\nprint('song_ms', len(song), 'first10_ms', len(first_10_seconds), 'last5_ms', len(last_5_seconds), 'concat_s', without_the_middle.duration_seconds)\nassert len(first_10_seconds) == 10000 and len(last_5_seconds) == 5000\nassert without_the_middle.duration_seconds == 15.0\nprint('SLICING_MS_AND_15S_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub",
+    "python -c \"import wave,math,struct; fr=8000; n=fr*5; w=wave.open('tone.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.close()\""
+   ],
+   "commands": [
+    "python -c \"from pydub import AudioSegment\nseg = AudioSegment.from_wav('tone.wav')\nup = seg + 6\ndown = seg - 3\nd_up = up.dBFS - seg.dBFS; d_down = down.dBFS - seg.dBFS\nprint('base_dBFS', seg.dBFS, 'plus6_delta', d_up, 'minus3_delta', d_down)\nassert abs(d_up - 6.0) < 0.2, d_up\nassert abs(d_down + 3.0) < 0.2, d_down\nprint('GAIN_ARITHMETIC_DB_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub",
+    "apt-get update -qq && apt-get install -y -qq --no-install-recommends ffmpeg > /dev/null",
+    "python -c \"import wave,math,struct; fr=8000; n=fr*3; w=wave.open('tone.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.close()\""
+   ],
+   "commands": [
+    "ffmpeg -version | head -1",
+    "python -c \"from pydub import AudioSegment; song = AudioSegment.from_wav('tone.wav'); song.export('out.ogg', format='ogg'); song.export('out_explicit.ogg', format='ogg', codec='libvorbis'); print('exported')\"",
+    "ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 out.ogg | tee codec_default.txt",
+    "ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 out_explicit.ogg | tee codec_explicit.txt",
+    "grep -qx vorbis codec_default.txt && grep -qx vorbis codec_explicit.txt && echo OGG_DEFAULT_CODEC_IS_VORBIS"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub",
+    "python -c \"import wave,math,struct; fr=8000; n=fr*7; w=wave.open('seven.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.close()\""
+   ],
+   "commands": [
+    "python -c \"import wave; w=wave.open('seven.wav','rb'); print('wav_seconds', w.getnframes()/w.getframerate())\"",
+    "python -c \"from pydub import AudioSegment; seg = AudioSegment.from_wav('seven.wav'); n=len(seg); print('len()', n, 'duration_seconds', seg.duration_seconds); assert abs(n - 7*1000) <= 1, n; print('LEN_IS_MILLISECONDS_OK')\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.12-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pydub",
+    "python -c \"import wave,math,struct; fr=8000; n=fr*4; w=wave.open('song.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr)*math.exp(-i/fr))) for i in range(n))); w.close()\""
+   ],
+   "commands": [
+    "python -c \"from pydub import AudioSegment\nsong = AudioSegment.from_wav('song.wav')\nbefore = bytes(song.raw_data); before_len = len(song); before_db = song.dBFS\n# song is not modified\nbackwards = song.reverse()\nlouder = song + 6\nfaded = song.fade_in(1000).fade_out(1000)\nclip = song[:1000]\nassert bytes(song.raw_data) == before and len(song) == before_len and song.dBFS == before_db, 'original mutated'\nassert bytes(backwards.raw_data) != before, 'reverse returned identical data'\nassert bytes(backwards.reverse().raw_data) == before, 'double reverse != original'\nassert bytes(louder.raw_data) != before and bytes(faded.raw_data) != before and len(clip) == 1000\nassert backwards is not song and louder is not song and faded is not song\nprint('IMMUTABLE_OPS_RETURN_NEW_OBJECTS_OK')\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
