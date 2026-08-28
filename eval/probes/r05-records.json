@@ -1,0 +1,177 @@
+{
+ "case_id": "r05-records",
+ "repo": "https://github.com/kennethreitz/records",
+ "commit": "ea4273695cee6da42edf1cb294d1f2a4505470fc",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install -q \"records[pandas]\" 2>&1 | tail -n 20"
+   ],
+   "commands": [
+    "/tmp/v/bin/python -c \"import records; from importlib.metadata import version; print('records', version('records'))\"",
+    "/tmp/v/bin/python -c \"import pandas; print('pandas', pandas.__version__)\"",
+    "/tmp/v/bin/python -c \"from importlib.metadata import version; assert version('records')=='0.6.0', version('records'); print('C1 PASS: records[pandas] installs from PyPI (claim wording, pip form) and import succeeds')\""
+   ],
+   "timeout_s": 120,
+   "note": "Uses the pip equivalent stated in the claim; pipenv itself is not exercised (lock step alone can exceed the budget). Installs the PyPI release, not the pinned commit \u2014 c2..c11 install the pinned commit."
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }",
+    "pip install -q psycopg2-binary"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "python - <<'EOF' | tee /tmp/c2.out\nimport records, sqlalchemy\nprint('sqlalchemy', sqlalchemy.__version__)\nfor url in ['postgres://user:pw@localhost:5432/db', 'postgresql://user:pw@localhost:5432/db']:\n    scheme = url.split(':')[0]\n    try:\n        records.Database(url)\n        print(scheme, 'ACCEPTED (engine built)')\n    except sqlalchemy.exc.NoSuchModuleError as e:\n        print(scheme, 'REJECTED_SCHEME', type(e).__name__, e)\n    except Exception as e:\n        print(scheme, 'ACCEPTED (dialect resolved; later error:', type(e).__name__ + ')')\nEOF",
+    "grep -q '^postgres ACCEPTED' /tmp/c2.out && echo 'C2 PASS: postgres:// scheme accepted' || { echo 'C2 FAIL: postgres:// scheme rejected (README snippet is stale under SQLAlchemy>=2.0; postgresql:// control line above)'; exit 1; }"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }",
+    "python - <<'EOF'\nimport sqlite3\nc = sqlite3.connect('/tmp/fx.db')\nc.execute('create table active_users (username text, active int, name text, user_email text, timezone text)')\nc.execute(\"insert into active_users values ('model-t',1,'Henry Ford','model-t@gmail.com','2016-02-06 22:28:23.894202')\")\nc.execute(\"insert into active_users values ('tin-lizzie',0,'Edsel Ford','edsel@gmail.com','2016-02-07 01:00:00.000000')\")\nc.commit(); c.close()\nprint('fixture written with stdlib sqlite3 (independent of records write path)')\nEOF"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "python - <<'EOF'\nimport records\ndb = records.Database('sqlite:////tmp/fx.db')\nrows = db.query('select * from active_users')\nr = rows[0]\nprint(repr(r))\nassert r.name == 'Henry Ford', r.name\nassert r['user_email'] == 'model-t@gmail.com', r['user_email']\nassert r[3] == 'model-t@gmail.com', r[3]\nn = 0\nfor r in rows:\n    print(r.name, r.user_email)\n    n += 1\nassert n == 2, n\nprint('C3 PASS: rows[0], iteration, row.attr / row[key] / row[int] all work')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "rm -f /tmp/c4.db",
+    "python - <<'EOF'\nimport records, sqlalchemy\nprint('sqlalchemy', sqlalchemy.__version__)\ndb = records.Database('sqlite:////tmp/c4.db')\nfor step, fn in [('create', lambda: db.query('create table t (x int)')),\n                 ('insert via query', lambda: db.query('insert into t values (1)')),\n                 ('insert via bulk_query', lambda: db.bulk_query('insert into t values (:x)', [{'x': 2}, {'x': 3}]))]:\n    try:\n        fn(); print(step, 'OK')\n    except Exception as e:\n        print(step, 'RAISED', type(e).__name__, e)\ndb.close()\nEOF",
+    "python - <<'EOF'\nimport sqlite3\ntry:\n    n = sqlite3.connect('/tmp/c4.db').execute('select count(*) from t').fetchone()[0]\nexcept Exception as e:\n    n = None; print('read-back RAISED', type(e).__name__, e)\nprint('rows persisted after close (stdlib read-back):', n, '(expected 3)')\nassert n == 3, 'DATA LOSS: writes through records were not committed'\nprint('C4 PASS')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "python - <<'EOF'\nimport records\ndb = records.Database('sqlite:////tmp/c5.db')\nt = db.transaction(); t.commit()\nprint('transaction()/commit() OK ->', type(t).__module__ + '.' + type(t).__name__)\nt2 = db.transaction(); t2.rollback()\nprint('transaction()/rollback() OK')\nprint('C5 PASS: documented transaction API executes')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }",
+    "python - <<'EOF'\nimport sqlite3\nc = sqlite3.connect('/tmp/fx.db')\nc.execute('create table active_users (username text, active int, name text, user_email text, timezone text)')\nc.execute(\"insert into active_users values ('model-t',1,'Henry Ford','model-t@gmail.com','2016-02-06 22:28:23.894202')\")\nc.execute(\"insert into active_users values ('tin-lizzie',0,'Edsel Ford','edsel@gmail.com','2016-02-07 01:00:00.000000')\")\nc.commit(); c.close()\nEOF"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "python - <<'EOF'\nimport records\ndb = records.Database('sqlite:////tmp/fx.db')\nrows = db.query('select * from active_users order by username desc')\nf = rows.first()\nprint(repr(f))\nassert isinstance(f, records.Record), type(f)\nassert f.username == 'tin-lizzie', f.username\nrows2 = db.query('select * from active_users')\na = rows2.all()\nprint(a)\nassert isinstance(a, list) and len(a) == 2 and all(isinstance(x, records.Record) for x in a), a\nprint('C6 PASS: first() -> Record, all() -> list[Record]')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }",
+    "python - <<'EOF'\nimport sqlite3\nc = sqlite3.connect('/tmp/fx.db')\nc.execute('create table active_users (username text, active int, name text, user_email text, timezone text)')\nc.execute(\"insert into active_users values ('model-t',1,'Henry Ford','model-t@gmail.com','2016-02-06 22:28:23.894202')\")\nc.commit(); c.close()\nEOF"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "python - <<'EOF'\nimport records\ndb = records.Database('sqlite:////tmp/fx.db')\nrows = db.query('select * from active_users')\nout = rows.export('csv')\nprint(out)\nlines = out.strip().splitlines()\nassert lines[0].strip() == 'username,active,name,user_email,timezone', lines[0]\nassert lines[1].startswith('model-t,') and 'Henry Ford' in lines[1] and lines[1].rstrip().endswith('2016-02-06 22:28:23.894202'), lines[1]\nprint('C7 PASS: CSV with header row (sqlite renders active as 1 rather than True; column set and order match README)')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q \"records[pandas]==0.6.0\" && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }",
+    "python - <<'EOF'\nimport sqlite3\nc = sqlite3.connect('/tmp/fx.db')\nc.execute('create table active_users (username text, active int, name text, user_email text, timezone text)')\nc.execute(\"insert into active_users values ('model-t',1,'Henry Ford','model-t@gmail.com','2016-02-06 22:28:23.894202')\")\nc.execute(\"insert into active_users values ('tin-lizzie',0,'Edsel Ford','edsel@gmail.com','2016-02-07 01:00:00.000000')\")\nc.commit(); c.close()\nEOF"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "python - <<'EOF'\nimport records, pandas\nprint('pandas', pandas.__version__)\ndb = records.Database('sqlite:////tmp/fx.db')\nrows = db.query('select * from active_users')\ndf = rows.export('df')\nprint(type(df)); print(df)\nassert isinstance(df, pandas.DataFrame), type(df)\nassert df.shape[0] == 2, df.shape\nassert list(df.columns) == ['username', 'active', 'name', 'user_email', 'timezone'], list(df.columns)\nprint('C8 PASS: export(\"df\") -> pandas.DataFrame')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }",
+    "pip install -q pymssql 2>&1 | tail -n 5 || echo 'pymssql install failed'"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "python - <<'EOF'\nimport records, sqlalchemy\nurl = 'mssql+pymssql://u:p@127.0.0.1:1/db'\n# PARTIAL PROBE: no MS-SQL server is available in a 120s sandbox. This only settles\n# whether the records wrapper resolves the mssql dialect+driver the same way raw SQLAlchemy does.\nres = {}\nfor label, fn in [('records', lambda: records.Database(url).query('select 1 as x').all()),\n                  ('sqlalchemy', lambda: sqlalchemy.create_engine(url).connect())]:\n    try:\n        fn(); res[label] = 'CONNECTED?!'\n    except (sqlalchemy.exc.NoSuchModuleError, ImportError, ModuleNotFoundError) as e:\n        res[label] = 'DIALECT/DRIVER MISSING: ' + type(e).__name__ + ': ' + str(e)[:120]\n    except Exception as e:\n        res[label] = 'dialect resolved; reached connection stage: ' + type(e).__name__\n    print(label, '->', res[label])\nassert 'dialect resolved' in res['records'] and 'dialect resolved' in res['sqlalchemy'], res\nprint('C9 PARTIAL: mssql+pymssql URL resolves through records identically to raw SQLAlchemy; query-level parity (issue #193) UNVERIFIED without a server -> escalate to human')\nEOF"
+   ],
+   "timeout_s": 120,
+   "note": "Cannot fully settle without an MS-SQL server; verdict must be ABSTAIN/partial, never 'supported'."
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python - <<'EOF'\nimport urllib.request\nurllib.request.urlretrieve('https://pypi.org/pypi/records/json', '/tmp/pypi_records.json')\nprint('fetched PyPI metadata during network phase')\nEOF",
+    "pip download -q --no-deps --no-binary :all: records==0.6.0 -d /tmp/sdist 2>&1 | tail -n 3 || echo 'sdist download failed'"
+   ],
+   "commands": [
+    "python - <<'EOF'\nimport json, datetime\nd = json.load(open('/tmp/pypi_records.json'))\nv = d['info']['version']\nrel = d['releases'].get(v, [])\nuploaded = rel[0]['upload_time'] if rel else 'n/a'\nprint('PyPI latest version:', v, 'uploaded:', uploaded)\nprint('all releases:', sorted(d['releases']))\nassert v == '0.6.0', 'latest on PyPI is %s, README badge/claim says 0.6.0' % v\nprint('C10 PASS: records is on PyPI, latest = 0.6.0 (matches setup.py version at pinned commit)')\nEOF",
+    "ls -la /tmp/sdist 2>/dev/null || true"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz\" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /tmp/records_src; }"
+   ],
+   "commands": [
+    "cat /tmp/records_src",
+    "rm -f /tmp/env_url.db",
+    "DATABASE_URL='sqlite:////tmp/env_url.db' python - <<'EOF'\nimport records, os\ndb = records.Database()\nprint('db_url picked up:', db.db_url)\nprint(db.query('select 1 as x').first())\nassert db.db_url == os.environ['DATABASE_URL'], db.db_url\nassert os.path.exists('/tmp/env_url.db'), 'db file not created -> URL not actually used'\nprint('C11 PASS: Database() reads $DATABASE_URL')\nEOF",
+    "env -u DATABASE_URL python -c \"import records\ntry:\n    records.Database(); print('no-env: constructed silently (unexpected)')\nexcept Exception as e:\n    print('no-env control: raises', type(e).__name__, e)\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
