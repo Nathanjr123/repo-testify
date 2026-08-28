@@ -1,0 +1,186 @@
+{
+ "case_id": "r02-python-tabulate",
+ "repo": "https://github.com/astanin/python-tabulate",
+ "commit": "268615a5c27dc40e5c22454c07b44d5c50410da0",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --no-cache-dir tabulate"
+   ],
+   "commands": [
+    "/tmp/v/bin/python -c 'from tabulate import tabulate; import tabulate as t; print(\"tabulate\", t.__version__); print(tabulate([[1,2],[3,4]]))'",
+    "/tmp/v/bin/pip show tabulate | grep -E '^(Name|Version|Location)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --no-cache-dir tabulate"
+   ],
+   "commands": [
+    "ls -l /tmp/v/bin/ | grep tabulate",
+    "test -x /tmp/v/bin/tabulate && echo 'SCRIPT_PRESENT_IN_BIN=yes' || { echo 'SCRIPT_PRESENT_IN_BIN=no'; exit 1; }",
+    "export PATH=/tmp/v/bin:$PATH && command -v tabulate",
+    "printf '1 2\\n3 4\\n' | tabulate",
+    "printf '1 2\\n3 4\\n' | tabulate | grep -qE '^1 +2$' && echo CLI_OUTPUT_OK"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v2",
+    "cd /tmp && TABULATE_INSTALL=lib-only /tmp/v2/bin/pip install --no-cache-dir tabulate",
+    "python3 -m venv /tmp/v3",
+    "cd /tmp && TABULATE_INSTALL=lib-only /tmp/v3/bin/pip install --no-cache-dir --no-binary tabulate tabulate || echo 'SDIST_INSTALL_FAILED'"
+   ],
+   "commands": [
+    "echo '--- wheel install with TABULATE_INSTALL=lib-only (README literal command) ---'",
+    "ls /tmp/v2/bin/ | grep -c '^tabulate$' || true",
+    "/tmp/v2/bin/python -c 'import tabulate; print(\"lib import ok\", tabulate.__version__)'",
+    "echo '--- sdist (from-source) install with TABULATE_INSTALL=lib-only ---'",
+    "ls /tmp/v3/bin/ | grep -c '^tabulate$' || true",
+    "/tmp/v3/bin/pip show -f tabulate 2>/dev/null | grep -iE 'entry_points|bin/tabulate' || true",
+    "echo 'expect 0 scripts in both venvs if claim holds'",
+    "test ! -e /tmp/v2/bin/tabulate && test ! -e /tmp/v3/bin/tabulate && echo 'CLAIM_HOLDS: no CLI script installed' || { echo 'CLAIM_FAILS: tabulate CLI script installed despite TABULATE_INSTALL=lib-only'; exit 1; }"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.10-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir tabulate",
+    "python3 - <<'EOF' > /tmp/pypi_requires_python.txt || echo 'PYPI_FETCH_FAILED' > /tmp/pypi_requires_python.txt\nimport json, urllib.request\nreq = urllib.request.Request('https://pypi.org/pypi/tabulate/json', headers={'User-Agent': 'probe'})\nd = json.load(urllib.request.urlopen(req, timeout=30))\nprint(d['info']['version'], d['info']['requires_python'])\nEOF"
+   ],
+   "commands": [
+    "python3 --version",
+    "echo 'PyPI latest version + requires_python:'; cat /tmp/pypi_requires_python.txt",
+    "python3 -c \"from importlib.metadata import metadata; m=metadata('tabulate'); print('installed', m['Version'], 'Requires-Python:', m['Requires-Python']); assert m['Requires-Python'].strip()=='>=3.10', m['Requires-Python']\"",
+    "python3 -c \"from importlib.metadata import metadata; cls=metadata('tabulate').get_all('Classifier'); print([c for c in cls if 'Programming Language' in c]); assert not any('Python :: 2' in c for c in cls), 'declares Python 2'\"",
+    "python3 -c 'from tabulate import tabulate; print(tabulate([[1,2]]))' && echo 'works on 3.10 (declared lower bound)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir tabulate"
+   ],
+   "commands": [
+    "python3 - <<'EOF'\nfrom tabulate import tabulate\ntable = [[\"Sun\",696000,1989100000],[\"Earth\",6371,5973.6],\n         [\"Moon\",1737,73.5],[\"Mars\",3390,641.85]]\nout = tabulate(table)\nprint(out)\nexpected = \"\"\"-----  ------  -------------\nSun    696000     1.9891e+09\nEarth    6371  5973.6\nMoon     1737    73.5\nMars     3390   641.85\n-----  ------  -------------\"\"\"\nassert out.splitlines()[1] == 'Sun    696000     1.9891e+09', repr(out.splitlines()[1])\nprint('FIRST_DATA_LINE_MATCH')\nassert out == expected, 'full block differs from README'\nprint('FULL_BLOCK_MATCH')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir tabulate"
+   ],
+   "commands": [
+    "python3 - <<'EOF'\nfrom tabulate import tabulate\nout = tabulate([[\"Name\",\"Age\"],[\"Alice\",24],[\"Bob\",19]],\n               headers=\"firstrow\")\nprint(out)\nlines = out.splitlines()\nassert lines[0] == 'Name      Age', repr(lines[0])\nassert 'Alice      24' in lines, lines\nexpected = \"Name      Age\\n------  -----\\nAlice      24\\nBob        19\"\nassert out == expected, 'full block differs from README'\nprint('MATCH')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir tabulate"
+   ],
+   "commands": [
+    "python3 - <<'EOF'\nfrom tabulate import tabulate\nout = tabulate({\"Name\": [\"Alice\", \"Bob\"],\n                \"Age\": [24, 19]}, headers=\"keys\")\nprint(out)\nassert out.splitlines()[0] == 'Name      Age', repr(out.splitlines()[0])\nexpected = \"Name      Age\\n------  -----\\nAlice      24\\nBob        19\"\nassert out == expected, 'full block differs from README'\nprint('MATCH')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir tabulate"
+   ],
+   "commands": [
+    "tabulate --help > /tmp/help.txt 2>&1; echo \"exit=$?\"; cat /tmp/help.txt",
+    "tr ',' '\\n' < /tmp/help.txt | tr -d ' .' > /tmp/fmts.txt",
+    "missing=0; for f in github grid html latex pipe rst simple tsv; do if grep -qx \"$f\" /tmp/fmts.txt; then echo \"present: $f\"; else echo \"MISSING: $f\"; missing=1; fi; done; exit $missing",
+    "echo '--- cross-check formats actually run ---'; for f in github grid html latex pipe rst simple tsv; do printf '1 2\\n3 4\\n' | tabulate -f $f > /dev/null && echo \"runs: $f\" || echo \"FAILS: $f\"; done"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/plain && /tmp/plain/bin/pip install --no-cache-dir tabulate",
+    "python3 -m venv /tmp/wide && /tmp/wide/bin/pip install --no-cache-dir 'tabulate[widechars]'"
+   ],
+   "commands": [
+    "/tmp/wide/bin/python -c 'import wcwidth; print(\"wcwidth\", wcwidth.__version__)'",
+    "/tmp/wide/bin/pip show wcwidth | grep -E '^Version'",
+    "/tmp/wide/bin/python - <<'EOF'\nimport tabulate\nprint('WIDE_CHARS_MODE =', tabulate.WIDE_CHARS_MODE)\nassert tabulate.WIDE_CHARS_MODE is True\nout = tabulate.tabulate([['\\u65e5\\u672c\\u8a9e','x'],['ab','y']], tablefmt='plain')\nprint(out)\n# with wcwidth, CJK cell has display width 6, so 'ab' is padded to 6 -> 'ab' + 4 spaces + 2 sep + 'y'\nassert out.splitlines()[1] == 'ab      y', repr(out.splitlines()[1])\nprint('WIDE_ALIGN_OK')\nEOF",
+    "echo '--- control: plain install without extra ---'; /tmp/plain/bin/python -c 'import tabulate; print(\"WIDE_CHARS_MODE =\", tabulate.WIDE_CHARS_MODE); print(tabulate.tabulate([[\"\\u65e5\\u672c\\u8a9e\",\"x\"],[\"ab\",\"y\"]], tablefmt=\"plain\"))'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir pytest",
+    "python3 - <<'EOF'\nimport json, urllib.request\nH = {'User-Agent': 'probe', 'Accept': 'application/vnd.github+json'}\nurl = 'https://api.github.com/repos/astanin/python-tabulate/actions/workflows/tabulate.yml/runs?per_page=5'\ntry:\n    d = json.load(urllib.request.urlopen(urllib.request.Request(url, headers=H), timeout=30))\n    with open('/tmp/ci_runs.txt', 'w') as f:\n        for r in d['workflow_runs']:\n            f.write(f\"{r['name']} branch={r['head_branch']} sha={r['head_sha'][:8]} status={r['status']} conclusion={r['conclusion']} created={r['created_at']}\\n\")\nexcept Exception as e:\n    open('/tmp/ci_runs.txt', 'w').write(f'API_FETCH_FAILED: {e}\\n')\nEOF",
+    "python3 -c \"import urllib.request; urllib.request.urlretrieve('https://github.com/astanin/python-tabulate/archive/268615a5c27dc40e5c22454c07b44d5c50410da0.tar.gz', '/tmp/src.tgz')\" && mkdir -p /tmp/src && tar xzf /tmp/src.tgz -C /tmp/src --strip-components=1",
+    "cd /tmp/src && SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0 pip install --no-cache-dir ."
+   ],
+   "commands": [
+    "echo '--- GitHub Actions tabulate.yml: latest 5 runs ---'; cat /tmp/ci_runs.txt",
+    "grep -q 'conclusion=success' /tmp/ci_runs.txt && echo 'LATEST_RUNS_INCLUDE_SUCCESS' || echo 'NO_SUCCESSFUL_RUN_IN_LATEST_5'",
+    "echo '--- independent check: run the test suite at pinned commit 268615a5 (pyproject addopts incl. README doctests) ---'",
+    "cd /tmp/src && python -m pytest -q -p no:cacheprovider 2>&1 | tail -n 15; exit ${PIPESTATUS[0]}"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir tabulate prettytable texttable"
+   ],
+   "commands": [
+    "python3 -c 'import tabulate, prettytable, texttable, platform; print(\"tabulate\", tabulate.__version__, \"prettytable\", prettytable.__version__, \"texttable\", texttable.__version__, \"python\", platform.python_version())'",
+    "python3 - <<'EOF'\nimport timeit\n# mirrors the repo's benchmark.py: 10x10 mixed text/numeric table\nsetup = '''\nfrom tabulate import tabulate\nfrom prettytable import PrettyTable\nfrom texttable import Texttable\nimport random\nrandom.seed(0)\ntable = [[\"abcd\", \"12345\", 1234.5, \"xyz\", 1, \"hello\", 3.14159, 42, \"world\", 0.5]] * 10\ndef run_prettytable():\n    pp = PrettyTable()\n    for row in table:\n        pp.add_row(row)\n    return str(pp)\ndef run_texttable():\n    tt = Texttable()\n    tt.set_cols_align([\"l\"]*10)\n    tt.add_rows(table, header=False)\n    return tt.draw()\n'''\nN = 2000\nres = {}\nfor name, stmt in [('tabulate', 'tabulate(table)'), ('prettytable', 'run_prettytable()'), ('texttable', 'run_texttable()')]:\n    t = min(timeit.repeat(stmt, setup, number=N, repeat=5)) / N * 1e6\n    res[name] = t\n    print(f'{name:12s} {t:8.1f} us per call (min of 5 x {N})')\nfaster_than_pt = res['tabulate'] < res['prettytable']\nfaster_than_tt = res['tabulate'] < res['texttable']\nprint('tabulate faster than PrettyTable:', faster_than_pt)\nprint('tabulate faster than texttable:', faster_than_tt)\nprint('README table itself reports tabulate 553.4us vs PrettyTable 468.0us (PrettyTable faster) and texttable 1071.4us')\nassert faster_than_pt and faster_than_tt, 'claim \"faster than PrettyTable and texttable\" not reproduced'\nEOF"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
