@@ -1,0 +1,70 @@
+r01-humanize.json: arm_error wall=1.34s
+r02-python-tabulate.json: arm_error wall=1.33s
+r04-schedule.json: arm_error wall=1.02s
+r05-records.json: arm_error wall=1.26s
+r07-newspaper3k.json: arm_error wall=1.23s
+r09-pydub.json: arm_error wall=1.01s
+r11-gpt-2.json: arm_error wall=1.04s
+{
+ "id": "baseline-n1-1787936011",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.0,
+   "confident_wrong": 0.0,
+   "evidence_valid": 0.0,
+   "coverage": 0.0,
+   "score_error": 0.0
+  },
+  "gates": {},
+  "raw": 0.0,
+  "n_cases": 0
+ }
+}
+run 1 done: 16:53
+r01-humanize.json: arm_error wall=1.09s
+r02-python-tabulate.json: arm_error wall=1.78s
+r04-schedule.json: arm_error wall=1.31s
+r05-records.json: arm_error wall=1.42s
+r07-newspaper3k.json: arm_error wall=1.29s
+r09-pydub.json: arm_error wall=1.07s
+r11-gpt-2.json: arm_error wall=1.11s
+{
+ "id": "baseline-n2-1787936020",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.0,
+   "confident_wrong": 0.0,
+   "evidence_valid": 0.0,
+   "coverage": 0.0,
+   "score_error": 0.0
+  },
+  "gates": {},
+  "raw": 0.0,
+  "n_cases": 0
+ }
+}
+run 2 done: 16:53
+r01-humanize.json: arm_error wall=1.17s
+r02-python-tabulate.json: arm_error wall=1.5s
+r04-schedule.json: arm_error wall=1.22s
+r05-records.json: arm_error wall=1.47s
+r07-newspaper3k.json: arm_error wall=1.18s
+r09-pydub.json: arm_error wall=1.11s
+r11-gpt-2.json: arm_error wall=1.13s
+{
+ "id": "baseline-n3-1787936029",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.0,
+   "confident_wrong": 0.0,
+   "evidence_valid": 0.0,
+   "coverage": 0.0,
+   "score_error": 0.0
+  },
+  "gates": {},
+  "raw": 0.0,
+  "n_cases": 0
+ }
+}
+run 3 done: 16:53
+ALL_DONE

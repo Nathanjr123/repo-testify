@@ -1,0 +1,188 @@
+[
+ {
+  "id": "baseline-n1-1787936011",
+  "arm": "baseline",
+  "label": "baseline-n1",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "c5b2588",
+  "ts": "2026-08-28T16:53:31Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.0,
+    "confident_wrong": 0.0,
+    "evidence_valid": 0.0,
+    "coverage": 0.0,
+    "score_error": 0.0
+   },
+   "gates": {},
+   "raw": 0.0,
+   "n_cases": 0
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 8.2,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.34
+   },
+   "r02-python-tabulate.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.33
+   },
+   "r04-schedule.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.02
+   },
+   "r05-records.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.26
+   },
+   "r07-newspaper3k.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.23
+   },
+   "r09-pydub.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.01
+   },
+   "r11-gpt-2.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.04
+   }
+  }
+ },
+ {
+  "id": "baseline-n2-1787936020",
+  "arm": "baseline",
+  "label": "baseline-n2",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "c5b2588",
+  "ts": "2026-08-28T16:53:40Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.0,
+    "confident_wrong": 0.0,
+    "evidence_valid": 0.0,
+    "coverage": 0.0,
+    "score_error": 0.0
+   },
+   "gates": {},
+   "raw": 0.0,
+   "n_cases": 0
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 9.1,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.09
+   },
+   "r02-python-tabulate.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.78
+   },
+   "r04-schedule.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.31
+   },
+   "r05-records.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.42
+   },
+   "r07-newspaper3k.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.29
+   },
+   "r09-pydub.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.07
+   },
+   "r11-gpt-2.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.11
+   }
+  }
+ },
+ {
+  "id": "baseline-n3-1787936029",
+  "arm": "baseline",
+  "label": "baseline-n3",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "c5b2588",
+  "ts": "2026-08-28T16:53:49Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.0,
+    "confident_wrong": 0.0,
+    "evidence_valid": 0.0,
+    "coverage": 0.0,
+    "score_error": 0.0
+   },
+   "gates": {},
+   "raw": 0.0,
+   "n_cases": 0
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 8.8,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.17
+   },
+   "r02-python-tabulate.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.5
+   },
+   "r04-schedule.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.22
+   },
+   "r05-records.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.47
+   },
+   "r07-newspaper3k.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.18
+   },
+   "r09-pydub.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.11
+   },
+   "r11-gpt-2.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "wall_s": 1.13
+   }
+  }
+ }
+]

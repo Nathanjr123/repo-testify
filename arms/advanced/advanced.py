@@ -4,6 +4,9 @@ Flags via ADVANCED_DISABLE (comma-separated): execution | k3 | notes | retry
 Usage: advanced.py <case.json>   -> report JSON on stdout
 Artifacts land in arms-runs/<case_id>/ ; report carries _run_dir for evidence checks."""
 import base64, json, os, pathlib, re, subprocess, sys, time
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+from common import resolve_claude
+CLAUDE = resolve_claude()
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 DISABLE = set(filter(None, os.environ.get("ADVANCED_DISABLE", "").split(",")))
@@ -13,7 +16,7 @@ def llm(prompt, retries=3):
     """claude -p with usage-limit backoff (limits are infra faults, never verdicts)."""
     delay = 60
     for i in range(retries + 1):
-        r = subprocess.run(["claude", "-p", prompt, "--model", "claude-fable-5"],
+        r = subprocess.run([CLAUDE, "-p", prompt, "--model", "claude-fable-5"],
                            capture_output=True, text=True, timeout=600)
         out = r.stdout.strip()
         low = (out + r.stderr).lower()
