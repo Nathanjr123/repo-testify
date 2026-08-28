@@ -1,0 +1,150 @@
+{
+ "case_id": "r07-newspaper3k",
+ "repo": "https://github.com/codelucas/newspaper",
+ "commit": "1618b547f31c2d1fd19ae3b6afd8f7542dd02074",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip3 install -q newspaper3k"
+   ],
+   "commands": [
+    "python3 -m pip show lxml newspaper3k 2>/dev/null | grep -E '^(Name|Version):'",
+    "python3 -c \"import traceback\ntry:\n    import newspaper\n    from newspaper import Article\n    print('OBSERVED: import ok, newspaper3k version', newspaper.__version__)\n    print('VERDICT_LINE: PASS import newspaper and from newspaper import Article succeed on python 3.11')\nexcept Exception as e:\n    print('OBSERVED:', type(e).__name__, str(e)[:300])\n    print('VERDICT_LINE: FAIL import raised', type(e).__name__, str(e)[:120])\n\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 -c \"import json, urllib.request as u\ntry:\n    d = json.load(u.urlopen('https://pypi.org/pypi/newspaper3k/json', timeout=30))['info']\n    e = json.load(u.urlopen('https://pypi.org/pypi/newspaper/json', timeout=30))['info']\n    c3 = [c for c in d['classifiers'] if 'Python' in c]\n    c2 = [c for c in e['classifiers'] if 'Python' in c]\n    desc2 = ((e.get('summary') or '') + ' ' + (e.get('description') or '')).lower()\n    print('OBSERVED newspaper3k', d['version'], c3, 'requires_python=', d.get('requires_python'))\n    print('OBSERVED newspaper', e['version'], c2, 'requires_python=', e.get('requires_python'))\n    ok3 = any('Python :: 3' in c for c in c3) and not any('Python :: 2' in c for c in c3)\n    ok2 = any('Python :: 2' in c for c in c2) or 'python2' in desc2 or 'python 2' in desc2\n    assert ok3, 'newspaper3k classifiers do not declare python3-only'\n    assert ok2, 'PyPI newspaper does not present as the python2 package'\n    print('VERDICT_LINE: PASS newspaper3k is py3 on PyPI; newspaper exists as the py2 package')\nexcept Exception as ex:\n    print('VERDICT_LINE: FAIL', type(ex).__name__, str(ex)[:150])\n\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 -c \"import urllib.request as u, urllib.error as ue\nurl = 'https://travis-ci.org/codelucas/newspaper.svg'\ntry:\n    r = u.urlopen(u.Request(url, headers={'User-Agent': 'probe/1'}), timeout=30)\n    body = r.read(20000).decode('utf-8', 'replace')\n    print('OBSERVED status', r.status, 'final_url', r.geturl(), 'content-type', r.headers.get('content-type'), 'passing_in_body', 'passing' in body, 'head', body[:120].replace(chr(10),' '))\n    assert r.status == 200 and 'svg' in (r.headers.get('content-type') or '') and 'passing' in body, 'badge is not a live passing-build svg'\n    print('VERDICT_LINE: PASS travis-ci.org badge serves a passing svg')\nexcept ue.HTTPError as e:\n    print('OBSERVED HTTPError', e.code, 'final_url', e.geturl())\n    print('VERDICT_LINE: FAIL travis-ci.org badge returns HTTP', e.code)\nexcept Exception as e:\n    print('OBSERVED', type(e).__name__, str(e)[:150])\n    print('VERDICT_LINE: FAIL badge unreachable:', type(e).__name__)\n\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip3 install -q newspaper3k"
+   ],
+   "commands": [
+    "timeout 110 python3 -c \"import datetime\ntry:\n    from newspaper import Article\n    url = 'http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'\n    article = Article(url)\n    article.download()\n    article.parse()\n    print('OBSERVED authors', article.authors, 'publish_date', repr(article.publish_date), 'html_len', len(article.html or ''))\n    assert article.authors == ['Leigh Ann Caldwell', 'John Honway'], 'authors mismatch'\n    assert article.publish_date == datetime.datetime(2013, 12, 30, 0, 0), 'publish_date mismatch'\n    print('VERDICT_LINE: PASS authors and publish_date match README')\nexcept Exception as e:\n    print('OBSERVED', type(e).__name__, str(e)[:200])\n    print('VERDICT_LINE: FAIL', type(e).__name__, str(e)[:120])\n\" || echo 'VERDICT_LINE: FAIL probe timed out or crashed'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip3 install -q newspaper3k",
+    "python3 -c \"import urllib.request; exec(urllib.request.urlopen('https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py', timeout=60).read().decode())\" || echo 'SETUP-NOTE: download_corpora.py failed (README corpora step)'"
+   ],
+   "commands": [
+    "timeout 110 python3 -c \"try:\n    from newspaper import Article\n    a = Article('http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/')\n    a.download(); a.parse(); a.nlp()\n    print('OBSERVED keywords', a.keywords[:8], 'summary', repr(a.summary[:120]))\n    assert isinstance(a.keywords, list) and a.keywords and all(isinstance(k, str) for k in a.keywords), 'keywords empty or not list of str'\n    assert isinstance(a.summary, str) and a.summary.strip(), 'summary empty'\n    print('VERDICT_LINE: PASS nlp() populated keywords and summary')\nexcept Exception as e:\n    print('OBSERVED', type(e).__name__, str(e)[:300].replace(chr(10), ' '))\n    print('VERDICT_LINE: FAIL', type(e).__name__, str(e)[:120].replace(chr(10), ' '))\n\" || echo 'VERDICT_LINE: FAIL probe timed out or crashed'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip3 install -q newspaper3k",
+    "apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null"
+   ],
+   "commands": [
+    "curl https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py | python3; echo \"OBSERVED pipe exit codes curl=${PIPESTATUS[0]} python3=${PIPESTATUS[1]}\"",
+    "python3 -c \"import nltk\nmissing = []\nfor p in ['tokenizers/punkt', 'corpora/stopwords', 'corpora/brown']:\n    try:\n        nltk.data.find(p)\n    except LookupError:\n        missing.append(p)\nprint('OBSERVED missing corpora after script:', missing)\nassert not missing, 'corpora missing: ' + str(missing)\nprint('VERDICT_LINE: PASS curl|python3 corpora script installed punkt/stopwords/brown')\n\" || echo 'VERDICT_LINE: FAIL corpora script did not leave required nltk data installed'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "apt-get update -qq >/dev/null"
+   ],
+   "commands": [
+    "grep PRETTY_NAME /etc/os-release",
+    "echo \"OBSERVED apt-cache policy libpng12-dev: $(apt-cache policy libpng12-dev 2>&1 | tr '\\n' ' ' | head -c 200)\"",
+    "apt-get install -y -qq libjpeg-dev zlib1g-dev libpng12-dev >/tmp/apt.log 2>&1 && echo 'VERDICT_LINE: PASS libjpeg-dev zlib1g-dev libpng12-dev installed as written' || { tail -3 /tmp/apt.log; echo 'VERDICT_LINE: FAIL apt-get install failed as written (libpng12-dev not available on current Debian)'; }"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip3 install -q newspaper3k"
+   ],
+   "commands": [
+    "python3 -c \"import io, contextlib\ntry:\n    import newspaper\n    buf = io.StringIO()\n    with contextlib.redirect_stdout(buf):\n        newspaper.languages()\n    out = buf.getvalue()\n    toks = out.split()\n    print('OBSERVED first lines:', out.strip().splitlines()[:4], 'n_lines', len(out.strip().splitlines()))\n    assert 'Your available languages are' in out, 'header missing'\n    missing = [c for c in ['ar','be','bg','da','de','el','en','es','zh'] if c not in toks]\n    assert not missing, 'codes missing: ' + str(missing)\n    print('VERDICT_LINE: PASS newspaper.languages() prints the language table incl. ar..zh')\nexcept Exception as e:\n    print('OBSERVED', type(e).__name__, str(e)[:200])\n    print('VERDICT_LINE: FAIL', type(e).__name__, str(e)[:120])\n\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip3 install -q newspaper3k"
+   ],
+   "commands": [
+    "python3 -c \"try:\n    from newspaper import news_pool\n    print('OBSERVED type', type(news_pool), 'has set/join:', callable(getattr(news_pool, 'set', None)), callable(getattr(news_pool, 'join', None)))\n    assert callable(getattr(news_pool, 'set', None)) and callable(getattr(news_pool, 'join', None)), 'news_pool lacks set()/join()'\n    print('VERDICT_LINE: PASS from newspaper import news_pool works and exposes set()/join()')\nexcept Exception as e:\n    print('OBSERVED', type(e).__name__, str(e)[:200])\n    print('VERDICT_LINE: FAIL', type(e).__name__, str(e)[:120])\n\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip3 install -q newspaper3k"
+   ],
+   "commands": [
+    "timeout 110 python3 -c \"try:\n    import newspaper\n    cnn_paper = newspaper.build('http://cnn.com')\n    arts = cnn_paper.articles\n    print('OBSERVED type', type(cnn_paper).__name__, 'n_articles', len(arts), 'first_urls', [a.url for a in arts[:3]])\n    assert type(cnn_paper).__name__ == 'Source', 'build did not return a Source'\n    assert arts, 'articles list is EMPTY'\n    assert all(isinstance(a.url, str) and a.url.startswith('http') for a in arts), 'article urls not populated'\n    print('VERDICT_LINE: PASS build(cnn.com) returned Source with', len(arts), 'articles having urls')\nexcept Exception as e:\n    print('OBSERVED', type(e).__name__, str(e)[:200])\n    print('VERDICT_LINE: FAIL', type(e).__name__, str(e)[:120])\n\" || echo 'VERDICT_LINE: FAIL build(cnn.com) timed out or crashed within 110s'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 -c \"import urllib.request as u\ntry:\n    r = u.urlopen(u.Request('https://www.swiftproxy.net/', headers={'User-Agent': 'Mozilla/5.0'}), timeout=30)\n    body = r.read(2000000).decode('utf-8', 'replace')\n    found = {s: (s in body) for s in ['80M', '195', '99.89', 'methodology', 'benchmark']}\n    print('OBSERVED vendor page status', r.status, 'substrings', found)\nexcept Exception as e:\n    print('OBSERVED vendor page unreachable', type(e).__name__, str(e)[:120])\nprint('VERDICT_LINE: FAIL unverifiable by execution: 80M+/195+/99.89% are vendor self-reported marketing figures with no methodology; README embeds third-party advertising (escalate to human)')\n\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
