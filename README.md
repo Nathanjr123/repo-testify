@@ -1,23 +1,43 @@
-# <project name>
-<!-- E2E Quality bar: a person would sign their name to this. No AI-draft smell. -->
+# repo-testify — make the repository testify
+<!-- Every number in this file is generated from proof/build_proof.json. Hand-typed numbers are a bug. -->
+
+**One line:** most tools *read* a repository and opine. This one extracts the repository's own claims — install commands, quickstart snippets, supported versions, features, benchmarks — and **executes them** in a clean environment, returning a per-claim verdict ledger where every verdict cites a recorded artifact, and anything the sandbox cannot settle is escalated to a human rather than guessed.
+
 ## Intended user
-TODO — who has this problem (a real, specific person/team).
+An engineer doing technical due diligence on a repository they did not write: a team pricing an acquisition of a private codebase, a lead deciding whether to adopt a dependency, a client receiving a contractor handover. They have hours, not days, and the cost of being wrong is high.
+
 ## The bottleneck
-TODO — what makes it worth solving; what the manual process costs today.
+A README is a promise, not a record. The buyer must clone, build, run the quickstart, run the tests, check the claimed Python versions, and chase every "supports X" — and the base rate of broken promises is high and well documented: only 32.3% of code from 601 systems papers built within 30 minutes (Collberg & Proebsting, CACM 2016); of 1.4M Jupyter notebooks on GitHub, 24% execute and about 4% reproduce their results (Pimentel et al., MSR 2019); the best LLM agent set up 16.3% of research repositories end to end (SUPER, EMNLP 2024). Manual diligence is slow, and — worse — reviewers interpret the same signals differently, so the conclusion depends on who did the reading. A green CI badge does not mean the quickstart runs.
+
 ## Why solving it is valuable
-TODO.
-## The solution (and the baseline)
-Baseline = TODO (one of: direct prompt / general agent with basic tools / simple script / the manual process). Final = TODO. Same cases, same resources; differences declared here.
+A repeatable, evidence-linked verdict per claim turns "is this repo good?" from an opinion into an audit. The buyer negotiates on refuted claims instead of vibes; the reviewer's time goes to the escalated claims only. Related tools stop short of this: OpenSSF Scorecard measures process hygiene, PR-review bots review diffs, and the closest research (READU, 2026) checks READMEs against code *statically*. We found no tool that executes a repository's own claims and reports which ones survive.
+
+## Ambiguities we named and how we resolved them
+- *What counts as a claim?* Anything a buyer could be misled by that a probe can settle: install, environment, quickstart, interface, test/CI, quantitative. Marketing adjectives are not claims.
+- *Is a claim true "on some platforms"?* We verdict against the environment the README implies (Linux, current CPython); platform-conditional truths are recorded as refuted-with-note, and the note is shown.
+- *Who decides overall quality?* A published rubric with weights, not a holistic score — so a second reviewer reaches the same number from the same evidence. Where a judgment is taste rather than truth, DECISIONS.md says so.
+
+## The baseline and the solution
+**Baseline** — the reasonable basic way a diligent engineer works today with an LLM: one prompt with the README and file tree, asked for the same verdict ledger. No execution.
+**Solution** — a code-orchestrated pipeline (DESIGN.md): map → plan one probe per claim from a fixed toolbox → execute in a two-phase Docker sandbox on GitHub Actions (network for install, none for probes; every run is a public log) → adjudicate each claim from the transcript with a 3-vote majority → cross-check every cited exit code against the recorded log → report with escalations. Same cases, same claim lists, same schema for both arms.
+
 ## Measured improvement
-<!-- generated: make report — do not hand-edit numbers -->
-See RESULTS.md (primary outcome, human time per task, cost per task; public + held-out; per-case table incl. the hard case and what it revealed).
-## Improvement Changelog
-See CHANGELOG.md (stage | what we tried and why | evidence | decision/learning — removed experiments included).
+See RESULTS.md (generated). Primary metric: macro-F1 of per-claim verdicts against hand-audited ground truth; also confident-wrong rate, evidence validity, ranking agreement with a qualified reviewer (exact Kendall tau), human-minutes per repo, and cost per repo.
+
+## Improvement changelog
+CHANGELOG.md — one row per experiment, evidence-linked, removed experiments included.
+
 ## Main failure mode
-TODO — the taxonomy entry with a repro.
+_(filled from measurement)_
+
 ## Hot take
-TODO — falsifiable, tied to a table above.
+_(measured before it is written)_
+
+## What we did not attempt
+Claim *discovery* is not on the scored path — the claim list per repository is fixed so two people scoring the same run get the same number; the extractor exists for real-world use but its recall is not evaluated here. No embedding retrieval, no conversing agents, no ungrounded self-review passes (DESIGN.md explains why). No Windows or macOS execution: verdicts are Linux verdicts.
+
 ## Reproduction guide
-From a clean environment: `docker build -t hack . && docker run hack make baseline advanced eval report`. Data required: eval/cases/. Expected output: RESULTS.md. Versions/runtime/cost: TODO. Tree hash of the final proof run: TODO.
-## Agents, tools, and provenance
-Tools used: Claude Code (model: claude-fable-5) — trajectories in traces/, one per session, failures included, human checkpoints marked. Pre-existing before kickoff: this problem-agnostic harness (Makefile, eval/ skeleton, trace exporter). Added during the competition: everything else.
+_(exact commands, versions, runtime, cost — filled at the final proof run)_
+
+## Agents, tools, provenance
+Coding agent: Claude Code (claude-fable-5) for authoring; the pipeline's LLM calls use the same model via `claude -p`. Trajectories for every session are in traces/, failures included, human checkpoints marked. Pre-existing before kickoff: the problem-agnostic harness (Makefile, eval/ skeleton, trace exporter). Everything else was built during the competition.
