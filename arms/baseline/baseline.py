@@ -3,8 +3,7 @@ one claude -p call, emit the report schema. This is the honest 'reasonable basic
 what an engineer does today = read the README and skim the tree, then judge."""
 import json, pathlib, subprocess, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from common import resolve_claude
-CLAUDE = resolve_claude()
+from common import llm, exit_if_limited
 
 case = json.loads(pathlib.Path(sys.argv[1]).read_text())
 owner_repo = case["repo"].split("github.com/")[-1].strip("/")
@@ -28,10 +27,11 @@ Claims: {claims}
 README:\n{readme_text[:30000]}\nFile tree (first 400): {json.dumps(paths)}
 Reply with ONLY a JSON object: {{"repo": str, "overall_score": 0-100, "claims": [{{"id","verdict","confidence","evidence":[{{"kind","ref","excerpt"}}]}}], "escalations": [ids], "memo_md": "<=300 word due-diligence memo"}}"""
 
-r = subprocess.run([CLAUDE, "-p", prompt, "--model", "claude-fable-5"],
-                   capture_output=True, text=True, timeout=600)
-out = r.stdout.strip()
-start, end = out.find("{"), out.rfind("}")
-report = json.loads(out[start:end + 1])
-report.setdefault("usage", {})
-print(json.dumps(report))
+def main():
+    out = llm(prompt)
+    start, end = out.find("{"), out.rfind("}")
+    report = json.loads(out[start:end + 1])
+    report.setdefault("usage", {})
+    print(json.dumps(report))
+
+exit_if_limited(main)

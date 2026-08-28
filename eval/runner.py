@@ -19,6 +19,8 @@ def run_case(arm, case_path):
     p = subprocess.run(["bash", str(ROOT / "arms" / arm / "run.sh"), str(case_path)],
                        capture_output=True, text=True, timeout=1800)
     wall = round(time.monotonic() - t0, 2)
+    if p.returncode == 75:
+        return {"status": "limit_blocked", "stderr": p.stderr[-500:], "wall_s": wall}
     if p.returncode != 0:
         return {"status": "arm_error", "stderr": p.stderr[-2000:], "wall_s": wall}
     try:
@@ -54,6 +56,9 @@ def main():
         if r["status"] == "ok":
             per_case.append(r)
         print(f"{c.name}: {r['status']} wall={r['wall_s']}s", file=sys.stderr)
+        if r["status"] == "limit_blocked":
+            print("USAGE LIMIT — halting sweep; rerun later resumes cleanly (partial entry flagged)", file=sys.stderr)
+            break
     agg = aggregate(per_case)
     entry = {"id": f"{a.label or a.arm}-{int(time.time())}", "arm": a.arm,
              "label": a.label or a.arm, "disable": os.environ.get("ADVANCED_DISABLE"),
@@ -64,7 +69,9 @@ def main():
              "human_time_s": None,  # fill from measurement, per PDF metric table
              "cost_usd": round(sum(r.get("usage", {}).get("cost_usd", 0) for r in per_case), 4),
              "wall_total_s": round(sum(r["wall_s"] for r in results.values()), 1),
-             "per_case": results}
+             "per_case": results,
+             "limit_blocked": any(r["status"] == "limit_blocked" for r in results.values()),
+             "partial": len(per_case) < len(cases)}
     PROOF.parent.mkdir(exist_ok=True)
     proof = json.loads(PROOF.read_text()) if PROOF.exists() else []
     proof.append(entry)

@@ -5,27 +5,12 @@ Usage: advanced.py <case.json>   -> report JSON on stdout
 Artifacts land in arms-runs/<case_id>/ ; report carries _run_dir for evidence checks."""
 import base64, json, os, pathlib, re, subprocess, sys, time
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from common import resolve_claude
-CLAUDE = resolve_claude()
+from common import llm, exit_if_limited
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 DISABLE = set(filter(None, os.environ.get("ADVANCED_DISABLE", "").split(",")))
 GHREPO = "Nathanjr123/repo-testify"
 
-def llm(prompt, retries=3):
-    """claude -p with usage-limit backoff (limits are infra faults, never verdicts)."""
-    delay = 60
-    for i in range(retries + 1):
-        r = subprocess.run([CLAUDE, "-p", prompt, "--model", "claude-fable-5"],
-                           capture_output=True, text=True, timeout=600)
-        out = r.stdout.strip()
-        low = (out + r.stderr).lower()
-        if r.returncode == 0 and out:
-            return out
-        if any(k in low for k in ("rate limit", "usage limit", "429", "overloaded")):
-            time.sleep(delay); delay = min(delay * 5, 900); continue
-        raise RuntimeError(f"llm failed: {r.stderr[:500]}")
-    raise RuntimeError("llm blocked on limits after retries")
 
 def jparse(text):
     s, e = text.find("{"), text.rfind("}")
@@ -157,6 +142,7 @@ Claims again: {claims}"""
         win = max(tally, key=tally.get)
         best = dict(next(v for v in vs if v["verdict"] == win))
         if tally[win] < len(vs): best["confidence"] = "low"
+        best["votes"] = [{"verdict": v["verdict"], "confidence": v.get("confidence")} for v in vs]  # k=1 ablation replays from vote 0
         out.append(best)
     return out
 
@@ -198,4 +184,4 @@ def main():
     print(json.dumps(report))
 
 if __name__ == "__main__":
-    main()
+    exit_if_limited(main)
