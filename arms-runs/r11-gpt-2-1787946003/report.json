@@ -1,0 +1,278 @@
+{
+ "repo": "https://github.com/openai/gpt-2",
+ "overall_score": 70,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "refuted",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "Python 3.11.16 ... EXIT=1 ... ERROR: No matching distribution found for tensorflow==1.12.0 (from versions: 2.12.0rc0, ... 2.21.0); probe exit_code 0 (wrapper), pip exit 1"
+    },
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "python:3.6-slim: TF_INSTALL_EXIT=0 / tensorflow 1.12.0 \u2014 the exact command only succeeds on an EOL Python 3.6 interpreter, fails unqualified on a current one; tensorflow-gpu variant never probed"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "low"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "low"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "EXIT=0 / Successfully installed ... fire-0.7.1 ... regex-2017.4.5 requests-2.21.0 ... tqdm-4.31.1 / IMPORT OK 2.4.120 2.21.0 4.31.1; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "download_model.py 124M exit=0 / 124M HEAD 200 bytes= 497759232 / 355M HEAD 200 / 774M HEAD 200 / 1558M HEAD 200 / PRESENT model.ckpt.data-00000-of-00001 497759232 (7/7 files PRESENT); exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "refuted",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "tensorflow 1.12.0 / model files present: 7/7 / EXIT=1 (124 expected ...) / SAMPLE-1 headers in /tmp/samples: 0 / VERDICT: no samples produced \u2014 script exit 1 with zero samples on python:3.6-slim; stderr captured only FutureWarnings, root-cause traceback truncated, so low confidence"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "low"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "low"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "--help succeeded (shows :nsamples=1 ... :length=None ... top_k), but the transcript is truncated before the generation EXIT line and no generated text is present; probe exit_code 0 covers only the wrapper \u2014 escalate"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "PHASE_A_FAILED: cp -r /repo-src /repo && ... ; exit_code 1, stdout empty, stderr empty \u2014 no docker build was attempted, no base-image check completed; escalate"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "archived= True pushed_at= 2024-08-14T10:50:53Z ... / VERDICT: GitHub reports archived=true, matching README Status: Archive; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "GitHub contents API status for model_card.md@pinned SHA: 200 / model_card.md PRESENT in pinned tree / 69 4989 /w/model_card.md / # GPT-2 model card ... ## Model Details. / README.md:17 links model card; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "README.md:11: *Note that our original parameter counts were wrong due to an error ... small referred to as 117M and medium referred to as 345M.* / DEVELOPERS.md:30-31 download_model.py 124M / 355M / Dockerfile.cpu:8-9 download_model.py 124M / 355M; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "DEVELOPERS.md:56-60: 'Some of the examples below may include Unicode text characters. Set the environment variable: export PYTHONIOENCODING=UTF-8 to override the standard stream settings in UTF-8 mode.'; exit_code 0. Note: empirically needed only for legacy behaviour (case B: stdout.encoding= ascii -> UnicodeEncodeError), not on Python 3.11 defaults (case A: no UnicodeEncodeError without the variable)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [
+  "c5",
+  "c6"
+ ],
+ "run_id": "33205117828",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787946003",
+ "memo_md": "6 verified, 2 refuted, 2 escalated of 10 claims."
+}

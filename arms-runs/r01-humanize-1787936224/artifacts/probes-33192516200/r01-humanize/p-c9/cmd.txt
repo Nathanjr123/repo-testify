@@ -1,1 +1,0 @@
-python3 -c "import humanize; r=humanize.scientific(0.3); print(ascii(r)); assert r == '3.00 x 10\u207b\u00b9', ascii(r)"

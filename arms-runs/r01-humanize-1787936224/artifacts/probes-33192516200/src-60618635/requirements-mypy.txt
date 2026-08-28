@@ -1,4 +1,0 @@
-mypy==2.3.0
-pytest
-types-freezegun
-types-setuptools

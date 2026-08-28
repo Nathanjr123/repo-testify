@@ -583,5 +583,4706 @@
    }
   },
   "discarded": "scorer changed mid-sweep (macro-F1->accuracy, gate fix); rows incomparable; outputs were not persisted so cannot be rescored (CHANGELOG iteration 4)"
+ },
+ {
+  "id": "baseline-v2-n1-1787943377",
+  "arm": "baseline",
+  "label": "baseline-v2-n1",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "1725577",
+  "ts": "2026-08-28T18:56:17Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.095,
+    "confident_wrong": 0.813,
+    "evidence_valid": 0.332,
+    "coverage": 1.0,
+    "score_error": 0.811
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.529,
+   "n_cases": 7
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 371.8,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 49.74,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/python-humanize/humanize@ce4147b6c8f8a132f772be0929d58305eb22c5d9",
+     "overall_score": 70,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "Build metadata present; PyPI badge links to https://pypi.org/project/humanize/. Whether `pip install --upgrade humanize` succeeds on a current interpreter requires execution."
+        },
+        {
+         "kind": "url",
+         "ref": "https://pypi.org/project/humanize/",
+         "excerpt": "PyPI version badge target."
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "src-layout package (src/humanize/__init__.py) with pyproject build config; editable install is plausible but not confirmable without running it."
+        },
+        {
+         "kind": "file",
+         "ref": "src/humanize/__init__.py",
+         "excerpt": "Package entry module exists."
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "requires-python would be declared here, but file contents are not in the provided material; the badge is dynamic and reflects live PyPI metadata."
+        },
+        {
+         "kind": "url",
+         "ref": "https://img.shields.io/pypi/pyversions/humanize.svg",
+         "excerpt": "Dynamic shields.io badge."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_number.py",
+         "excerpt": "Number tests exist; README example `intcomma(12345)` -> '12,345' is consistent with the documented API but output not confirmed without execution."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_number.py",
+         "excerpt": "Number tests exist; `intword(123455913)` -> '123.5 million' not confirmed without execution."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_time.py",
+         "excerpt": "Time tests exist; `naturaldelta(timedelta(seconds=1001))` -> '16 minutes' depends on truncation vs rounding in src/humanize/time.py, which is not shown."
+        },
+        {
+         "kind": "file",
+         "ref": "src/humanize/time.py",
+         "excerpt": "Implementation file; contents unavailable."
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_filesize.py",
+         "excerpt": "Filesize tests exist; exact strings '1.0 MB' / '976.6 KiB' not confirmed without execution."
+        },
+        {
+         "kind": "file",
+         "ref": "src/humanize/filesize.py",
+         "excerpt": "Implementation file; contents unavailable."
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_number.py",
+         "excerpt": "Number tests exist; `fractional(1/3)` -> '1/3' not confirmed without execution."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_number.py",
+         "excerpt": "Number tests exist; exact Unicode superscript output of `scientific(0.3)` not confirmed without execution."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "src/humanize/locale/ru_RU/LC_MESSAGES/humanize.po",
+         "excerpt": "Russian .po source ships in tree, so the locale exists; only .po (not compiled .mo) is visible."
+        },
+        {
+         "kind": "file",
+         "ref": "scripts/generate-translation-binaries.sh",
+         "excerpt": "Suggests .mo binaries are generated at build/release time; whether the installed wheel contains them and yields '3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b \u043d\u0430\u0437\u0430\u0434' is not settled by reading."
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": ".github/workflows/test.yml",
+         "excerpt": "A Test workflow exists; its current status is live state, not readable from the tree."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/python-humanize/humanize/actions",
+         "excerpt": "Badge target."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+     ],
+     "memo_md": "## humanize \u2014 documentation-only due diligence (commit ce4147b)\n\n**What the tree supports.** This looks like a maintained, conventionally packaged library: src-layout with `pyproject.toml`, `py.typed`, `tox.ini`, six workflows including `test.yml`, `lint.yml`, and `release.yml`, per-module tests (`test_number.py`, `test_time.py`, `test_filesize.py`, `test_i18n.py`, `test_lists.py`), Renovate config, pre-commit, ReadTheDocs config, and a `RELEASING.md`. The i18n claim is partially grounded: `src/humanize/locale/ru_RU/LC_MESSAGES/humanize.po` exists, along with 30+ other locales, matching the README's language list.\n\n**What reading cannot settle.** Every claim in the list is an execution or live-state claim: whether `pip install` works on a current interpreter, what `requires-python` is (pyproject contents were not provided), whether each README example output is exact on the pinned commit, whether the wheel ships compiled `.mo` files (only `.po` sources are visible; `scripts/generate-translation-binaries.sh` implies a build step), and whether the Test badge is green today. I have therefore marked all eleven claims unverifiable and escalated them rather than guess. Two are worth singling out for the buyer: **c6** (`naturaldelta` of 1001 s -> '16 minutes') depends on truncation-vs-rounding behaviour in `time.py`, which has changed across releases in libraries of this kind; and **c10** depends on binary locale files being present in the published wheel, not just the repo.\n\n**Recommendation.** Low structural risk, but for a formatting layer the buyer depends on exact strings. Before embedding, run the probe hints in a clean venv on the target interpreter (they are cheap, seconds each), pin the version, and add those exact-string assertions to your own test suite so upstream rounding or locale changes surface as failures rather than silent report drift.\n\n**Score 70** reflects strong packaging hygiene minus the fact that none of the buyer's specific questions can be answered without running code.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 0.636,
+     "evidence_valid": 0.944,
+     "coverage": 1.0,
+     "score_error": 0.78
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r02-python-tabulate.json": {
+    "status": "ok",
+    "wall_s": 69.58,
+    "usage": {},
+    "output": {
+     "repo": "astanin/python-tabulate@268615a5c27dc40e5c22454c07b44d5c50410da0",
+     "overall_score": 58,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "build metadata present; package importable only if published wheel matches"
+        },
+        {
+         "kind": "file",
+         "ref": "tabulate/__init__.py",
+         "excerpt": "top-level package module exists, consistent with `from tabulate import tabulate`"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tabulate/cli.py",
+         "excerpt": "CLI module exists"
+        },
+        {
+         "kind": "file",
+         "ref": "tabulate/__main__.py",
+         "excerpt": "python -m tabulate entry exists; console_scripts entry point cannot be confirmed without pyproject contents"
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_cli.py",
+         "excerpt": "CLI has a test file"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "tree has pyproject.toml and NO setup.py; a static pyproject cannot make console_scripts conditional on an env var, and wheel installs never run install-time code"
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "TABULATE_INSTALL=lib-only pip install tabulate"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "Tabulate is a Python3 library."
+        },
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "requires-python would live here; contents not provided"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "Sun    696000     1.9891e+09"
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_output.py",
+         "excerpt": "output tests exist; whether README doctests are executed is not visible"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "headers=\"firstrow\" ... Name      Age / Alice      24"
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_api.py",
+         "excerpt": "API tests exist"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "tabulate({\"Name\": [\"Alice\", \"Bob\"], \"Age\": [24, 19]}, headers=\"keys\")"
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_input.py",
+         "excerpt": "input-type tests exist"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tabulate/cli.py",
+         "excerpt": "CLI implementation; --help text not visible"
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "Supported output formats: ... github, grid, ... html, ... latex, ... pipe, ... rst, simple, ... tsv"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "optional-dependencies would define the widechars extra; contents not provided"
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "pip install tabulate[widechars]"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": ".github/workflows/tabulate.yml",
+         "excerpt": "workflow referenced by the badge exists"
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/actions/workflows/tabulate.yml",
+         "excerpt": "live status; badge is dynamic and not settled by reading"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/blob/268615a5c27dc40e5c22454c07b44d5c50410da0/README.md",
+         "excerpt": "`tabulate` appears to be faster than `PrettyTable` and `texttable` \u2014 yet the cited table lists tabulate 553.4 \u03bcs vs PrettyTable 468.0 \u03bcs"
+        },
+        {
+         "kind": "file",
+         "ref": "benchmark/benchmark.py",
+         "excerpt": "benchmark script exists; README prose contradicts its own numbers for PrettyTable"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+     ],
+     "memo_md": "## Due-diligence memo: python-tabulate @ 268615a (docs-only review)\n\n**Scope limit.** This review is from README and file tree only; nothing was installed or run. Every install, output, CLI and CI claim therefore stays *unverifiable* and is escalated for a clean-environment probe. Do not read \"unverifiable\" as \"false\" \u2014 the layout (`pyproject.toml`, `tabulate/__init__.py`, `tabulate/cli.py`, `tabulate/__main__.py`, seven test modules, a CI workflow) is consistent with a maintained, pip-installable library plus CLI.\n\n**Two documentation problems found by reading.**\n\n1. **Benchmark prose contradicts its own numbers (c11).** The README says tabulate \"appears to be faster than PrettyTable and texttable\", but the cited figures show PrettyTable at 468.0 \u03bcs vs tabulate at 553.4 \u03bcs. The claim survives only against texttable. Treat the performance sentence as stale marketing; if speed matters for your tools, run `benchmark/benchmark.py` yourself.\n\n2. **`TABULATE_INSTALL=lib-only` is probably dead (c3).** The tree has `pyproject.toml` and no `setup.py`. Static pyproject metadata cannot make a console-script entry point conditional on an environment variable, and wheel installs run no install-time code at all. Expect the `tabulate` script to be installed regardless. Low confidence only because pyproject contents were not shown; a `--no-binary` probe settles it in one command.\n\n**What a buyer should do before standardizing.** Run the eleven probe hints in a fresh venv on Linux (about five minutes). Specifically confirm: `requires-python` in `pyproject.toml` (c4) against your fleet's interpreter versions; that the CLI is on PATH (c2); and the three README output examples (c5\u2013c7), which are in doctest format and are likely exercised by `tox.ini`/CI but were not seen executing.\n\n**Bottom line.** Nothing here blocks adoption; the library is small, single-function, well-documented, and tested. The README needs a benchmark correction and a removed/updated lib-only instruction. Score reflects credible structure minus two README claims that reading alone shows to be wrong or stale.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.091,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.609,
+     "coverage": 1.0,
+     "score_error": 0.73
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r04-schedule.json": {
+    "status": "ok",
+    "wall_s": 39.61,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/dbader/schedule@82a43db1b938d8fdf60103bd41f329e06c8d3651",
+     "overall_score": 55,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "Packaging metadata present (setup.py, pyproject.toml, MANIFEST.in) \u2014 consistent with a publishable package, but PyPI availability and install success cannot be confirmed by reading."
+        },
+        {
+         "kind": "url",
+         "ref": "https://pypi.python.org/pypi/schedule",
+         "excerpt": "README badge target; not checked."
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": ".github/workflows/ci.yml",
+         "excerpt": "A CI workflow exists, but its python-version matrix is not visible in the provided material; tox.ini also present."
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "- Tested on Python and 3.7, 3.8, 3.9, 3.10, 3.11, 3.12"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/dbader/schedule/actions?query=workflow%3ATests+branch%3Amaster",
+         "excerpt": "Badge is a live image; current pass/fail state requires querying Actions, which reading cannot do."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "install_requires not visible. requirements-dev.txt is dev-only. docs/timezones.rst suggests timezone support may depend on an optional third-party package."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every(10).seconds.do(job)"
+        },
+        {
+         "kind": "file",
+         "ref": "test_schedule.py",
+         "excerpt": "Test file exists; contents not visible."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every().day.at(\"10:30\").do(job)"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "docs/timezones.rst",
+         "excerpt": "Dedicated timezone doc exists; whether tz-aware `.at()` works with no extra package installed is in tension with the 'no external dependencies' bullet and must be executed to settle."
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every().day.at(\"12:42\", \"Europe/Amsterdam\").do(job)"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every().minute.at(\":17\").do(job)"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "schedule/__init__.py",
+         "excerpt": "Single-module implementation; run_pending behavior not visible without source."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "HISTORY.rst",
+         "excerpt": "Changelog exists but latest version string is not visible; badge is live and unchecked."
+        },
+        {
+         "kind": "url",
+         "ref": "https://img.shields.io/pypi/v/schedule.svg",
+         "excerpt": "Version badge; not resolved."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10"
+     ],
+     "memo_md": "**Due-diligence memo \u2014 dbader/schedule @ 82a43db (documentation-only review)**\n\n**What the tree supports.** The repository has the shape of a mature, single-module library: `schedule/__init__.py` with `py.typed`, a standalone `test_schedule.py`, `tox.ini`, a GitHub Actions workflow (`.github/workflows/ci.yml`), Sphinx docs covering timezones, exception handling, logging, parallel/background execution, and standard packaging files (`setup.py`, `pyproject.toml`, `setup.cfg`, `MANIFEST.in`). An MIT license is present. Nothing in the tree contradicts the README.\n\n**What reading cannot settle.** Every claim in the buyer's list is an execution or live-status claim: whether CI is green *now*, which Python versions the matrix actually tests, whether `install_requires` is empty, whether the README snippets run, and what the current PyPI version is. None of the relevant file contents (ci.yml, setup.py, HISTORY.rst, `__init__.py`) were provided, and badges are live images. I have marked all ten claims unverifiable rather than guess.\n\n**Specific concern to probe first.** The README simultaneously claims \"no external dependencies\" and shows `at(\"12:42\", \"Europe/Amsterdam\")` as a plain usage line. The presence of `docs/timezones.rst` suggests tz support may require an optional package. If so, c7 as literally stated (fresh env, only `schedule`) likely fails while c4 holds \u2014 a documentation-honesty issue rather than a code defect, but material for a buyer copying the README verbatim.\n\n**Longevity risk.** Cannot be assessed from this material: no commit dates, release cadence, or issue activity were provided.\n\n**Recommendation.** Run the supplied probes (fresh venv install, `pip freeze`, the four `.at()` snippets, `run_pending` timing test, Actions run status, ci.yml matrix) before signing. Estimated effort: under 15 minutes. Score reflects a plausible but entirely unconfirmed picture.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 0.9,
+     "evidence_valid": 0.267,
+     "coverage": 1.0,
+     "score_error": 1.0
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r05-records.json": {
+    "status": "ok",
+    "wall_s": 40.07,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/kennethreitz/records@ea4273695cee6da42edf1cb294d1f2a4505470fc",
+     "overall_score": 45,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "setup.py present; whether a 'pandas' extra is declared and resolves against current PyPI cannot be read from the tree"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "$ pipenv install records[pandas]"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "db = records.Database('postgres://...')"
+        },
+        {
+         "kind": "file",
+         "ref": "requirements.txt",
+         "excerpt": "SQLAlchemy pin unknown from tree; the 'postgres://' alias was dropped in SQLAlchemy 1.4, so this depends entirely on the pinned version"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_records.py",
+         "excerpt": "test module exists; contents and pass status not readable"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Values can be accessed many ways: `row.user_email`, `row['user_email']`, or `row[3]`."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "records.py",
+         "excerpt": "single-module implementation; commit/autocommit behaviour under SQLAlchemy 2.x cannot be determined without reading source or executing"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Bulk actions: `Database.bulk_query()` & `Database.bulk_query_file()`."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_transactions.py",
+         "excerpt": "dedicated transaction test file exists, indicating the API is present; behaviour against current SQLAlchemy not readable"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Transactions: `t = Database.transaction(); t.commit()`."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": ">>> rows.first()\n<Record {\"username\": ...}>"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": ">>> print(rows.export('csv'))\nusername,active,name,user_email,timezone"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": ">>> rows.export('df')"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Database support includes RedShift, Postgres, MySQL, SQLite, Oracle, and MS-SQL (drivers not included)."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/kennethreitz/records/issues/193",
+         "excerpt": "referenced MS-SQL issue; not readable here"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://pypi.python.org/pypi/records",
+         "excerpt": "badge links to PyPI; the README does not state a version, so '0.6.0' cannot be confirmed from reading"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "`$DATABASE_URL` environment variable support."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c4",
+      "c5",
+      "c9",
+      "c10"
+     ],
+     "memo_md": "**Records \u2014 doc-only diligence memo**\n\n**What the docs say.** A thin wrapper over SQLAlchemy + Tablib: `Database(url)`, `query()`, `transaction()`, `bulk_query()`, `export('csv'|'df'|...)`. The tree is small (single `records.py`, four test modules, CI workflow), which is good for auditability.\n\n**What reading cannot settle.** Every functional claim here (c1\u2013c11) depends on which SQLAlchemy the package resolves to today, and neither `requirements.txt` nor `setup.py` contents are visible. I therefore mark all eleven *unverifiable* rather than guess. The buyer's core question \u2014 do writes survive `close()` \u2014 is exactly the class of failure that SQLAlchemy 2.x's removal of implicit autocommit can cause in a 1.x-era wrapper; a green test suite would not necessarily catch it if tests use `:memory:` and never reopen. This must be executed (see probe for c4) before any decision.\n\n**Staleness signals visible from the tree/README.** `.travis.yml` alongside `.github/workflows/ci.yml`; a `pipenv.org` link; a `postgres://` URL scheme that SQLAlchemy \u22651.4 rejects. None of these prove breakage, but together they suggest documentation last revised several years ago.\n\n**Recommendation.** Do not adopt on the strength of the README. Run the c2/c4/c5 probes in a clean venv against the pinned commit; if c4 returns 0 rows after reopen, treat the library as unsafe for an analytics write path. Escalated: install/extras (c1), URL scheme (c2), durability (c4), transactions (c5), MS-SQL (c9), PyPI version (c10).\n\nScore 45/100 reflects an honest, small, readable codebase whose current correctness is unknown from documentation alone.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.091,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.765,
+     "coverage": 1.0,
+     "score_error": 0.95
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r07-newspaper3k.json": {
+    "status": "ok",
+    "wall_s": 76.86,
+    "usage": {},
+    "output": {
+     "repo": "codelucas/newspaper@1618b547f31c2d1fd19ae3b6afd8f7542dd02074",
+     "overall_score": 32,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "Run \u2705 ``pip3 install newspaper3k`` \u2705"
+        },
+        {
+         "kind": "file",
+         "ref": "requirements.txt",
+         "excerpt": "pin file present in tree; contents (lxml bound, lxml_html_clean) not visible from listing"
+        },
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "install_requires not visible from listing"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "**Newspaper is a Python3 library**! Or, view our **deprecated and buggy** `Python2 branch`_ ... ``newspaper`` is our python2 library."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/codelucas/newspaper/tree/python-2-head",
+         "excerpt": "python2 branch link"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ".. image:: https://travis-ci.org/codelucas/newspaper.svg :target: http://travis-ci.org/codelucas/newspaper/"
+        },
+        {
+         "kind": "file",
+         "ref": ".travis.yml",
+         "excerpt": "only CI config in tree targets travis-ci.org (service retired June 2021); no .github/workflows directory exists"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> article.authors ['Leigh Ann Caldwell', 'John Honway'] >>> article.publish_date datetime.datetime(2013, 12, 30, 0, 0)"
+        },
+        {
+         "kind": "url",
+         "ref": "http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/",
+         "excerpt": "live 2013 URL; current page content and extraction result cannot be read from docs"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "newspaper/nlp.py",
+         "excerpt": "nlp module exists in tree"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> article.nlp() >>> article.keywords ['New Years', 'resolution', ...] >>> article.summary"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "download_corpora.py",
+         "excerpt": "script exists at repo root at this commit"
+        },
+        {
+         "kind": "url",
+         "ref": "https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py",
+         "excerpt": "README pipes master (not pinned commit) into python3; script contents not visible"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "$ sudo apt-get install libjpeg-dev zlib1g-dev libpng12-dev ... NOTE: If you find problem installing ``libpng12-dev``, try installing ``libpng-dev``."
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "newspaper/resources/text/stopwords-ar.txt",
+         "excerpt": "stopwords-<code>.txt files present for exactly the 37 codes listed (ar, be, bg, da, de, el, en, es, et, fa, fi, fr, he, hi, hr, hu, id, it, ja, ko, lt, mk, nb, nl, no, pl, pt, ro, ru, sl, sr, sv, sw, th, tr, uk, vi, zh)"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> newspaper.languages() Your available languages are: input code full name"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "newspaper/mthreading.py",
+         "excerpt": "multi-threading module exists in tree"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "- Multi-threaded article download framework (the symbol name news_pool does not appear in the README)"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> cnn_paper = newspaper.build('http://cnn.com') >>> for article in cnn_paper.articles: print(article.url)"
+        },
+        {
+         "kind": "file",
+         "ref": "newspaper/source.py",
+         "excerpt": "Source implementation exists; live crawl result of cnn.com cannot be read from docs"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "`Swiftproxy`_ \u2014 80M+ residential IPs across 195+ countries, a 99.89% success rate, non-expiring traffic"
+        },
+        {
+         "kind": "url",
+         "ref": "https://www.swiftproxy.net/?ref=codelucas",
+         "excerpt": "affiliate-tagged link; no methodology for the figures appears anywhere in the repo"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c9",
+      "c10"
+     ],
+     "memo_md": "## newspaper3k @ 1618b54 \u2014 documentation-only diligence\n\n**Bottom line: high-risk dependency; do not accept the README at face value.** Nothing here can be settled by execution, so every install/runtime claim is escalated.\n\n**Install (c1, c7).** The README's install path is dated: `python-dev`, `libpng12-dev` (README itself supplies a fallback because the package no longer exists on current Ubuntu), and no statement of a supported Python or lxml range. `requirements.txt`/`setup.py` exist but their pins are not visible; whether the import survives current lxml (where `lxml.html.clean` was split out) must be probed. Treat c1 as the acquisition's central unknown.\n\n**CI badge (c3).** The only CI config is `.travis.yml` pointing at travis-ci.org, a service retired in 2021; there is no `.github/workflows`. The badge is decoration, not evidence of a passing build at this commit. Coverage badge likewise stale.\n\n**Examples (c4, c5, c10).** Quickstart output is anchored to a 2013 fox13now URL and a live cnn.com crawl; both depend on third-party sites and cannot be verified from docs. `nlp()` needs NLTK corpora fetched from `master`, not the pinned commit (c6).\n\n**What the tree supports.** Language table (c8) matches 37 stopword files exactly; `mthreading.py`, `nlp.py`, `source.py` exist, so the advertised surface is at least present. Extensive fixture corpus under `tests/data/` suggests the extraction core was once well-tested.\n\n**Red flags.** The README has been substantially rewritten into affiliate advertising (Novada, Swiftproxy with discount code, SerpApi, BestProxy), including an unsubstantiated \"99.89% success rate\" (c11). Combined with the dead CI service and pre-2016 package names, this reads as a monetized, unmaintained project. Recommend the buyer budget for a maintained fork or replacement and run the c1 probe before signing.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.545,
+     "confident_wrong": 0.818,
+     "evidence_valid": 0.227,
+     "coverage": 1.0,
+     "score_error": 0.88
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r09-pydub.json": {
+    "status": "ok",
+    "wall_s": 51.37,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/jiaaro/pydub@103e339d3bc7a9a58a9f1de65f7d8074659b5f5a",
+     "overall_score": 42,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "setup.py present, suggesting a pip-installable pure-Python package; PyPI availability and install exit code on Python 3.13 cannot be confirmed from the tree."
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pydub/pyaudioop.py",
+         "excerpt": "A vendored pyaudioop fallback exists, indicating the package depends on the stdlib audioop module, which was removed in Python 3.13; the README states no version restriction."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/jiaaro/pydub/issues/863",
+         "excerpt": "Reported import failure on Python 3.13 (ModuleNotFoundError: audioop)."
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pydub/audio_segment.py",
+         "excerpt": "Core module exists; whether WAV I/O works without ffmpeg cannot be settled without reading source or running."
+        },
+        {
+         "kind": "file",
+         "ref": "test/data/test1.wav",
+         "excerpt": "WAV fixtures exist in the test suite."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "Debugging section shows subprocess.call(['ffmpeg', '-y', '-i', ...]) for from_file, consistent with ffmpeg being required for mp3, but failure behavior without ffmpeg is not documented."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://travis-ci.org/jiaaro/pydub",
+         "excerpt": "travis-ci.org was shut down in 2021; the badge cannot reflect a current passing build."
+        },
+        {
+         "kind": "file",
+         "ref": ".travis.yml",
+         "excerpt": "Config still targets the defunct service."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "appveyor.yml",
+         "excerpt": "AppVeyor config exists, but whether the project page shows a recent passing build cannot be determined from the tree."
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "\"pydub does things in milliseconds\" ... \"without_the_middle.duration_seconds == 15.0\" \u2014 documented behavior, not executable evidence."
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "\"# boost volume by 6dB\\nbeginning = first_10_seconds + 6\" \u2014 documented only."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "\"When no codec is specified exporting to ogg will default to using vorbis\" \u2014 requires ffprobe check to confirm."
+        },
+        {
+         "kind": "file",
+         "ref": "test/data/bach.ogg",
+         "excerpt": "ogg fixture exists in tests."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "\"( len(audio_segment) returns milliseconds )\" \u2014 documented only."
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "\"AudioSegments are immutable ... # song is not modified\" \u2014 documented only."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+     ],
+     "memo_md": "**pydub @ 103e339 \u2014 documentation-only review**\n\n**Bottom line:** Not adoptable on Python 3.13 without verification. The README states no Python version restriction, yet the tree contains `pydub/pyaudioop.py`, a fallback for the stdlib `audioop` module that Python 3.13 removed. Public issues report `from pydub import AudioSegment` failing on 3.13. Treat c2 as refuted pending an execution probe.\n\n**CI story is not real as presented.** The Travis badge points at travis-ci.org, shut down in 2021 (c5 refuted, high confidence). `.travis.yml` is stale. The AppVeyor badge may or may not reflect a recent build; `appveyor.yml` exists but the project page status cannot be read from here (c6 unverifiable). No GitHub Actions workflows appear in `.github/` \u2014 only an issue template. A buyer should assume no active CI.\n\n**Functional claims (c3, c4, c7\u2013c11)** \u2014 slicing in ms, dB arithmetic, ogg\u2192vorbis default, `len()` in ms, immutability, pure-Python WAV \u2014 are all documented in the README and consistent with the test fixtures (`test/test.py`, `test/data/*.wav|.mp3|.ogg`), but none can be settled by reading. They need a clean-env run on 3.12 (where import likely works) and 3.13 (where it likely doesn't).\n\n**Recommendation:** Escalate to an execution probe before any decision. If 3.13 is a hard requirement, plan on a fork or a maintained alternative; the last visible release tag mentioned in the README is v0.12.0-era and maintenance signals (dead Travis badge) suggest low activity.\n\n**What I could not check:** PyPI install exit code, actual test pass rate, AppVeyor build recency, source-level import guards.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.182,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.133,
+     "coverage": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r11-gpt-2.json": {
+    "status": "ok",
+    "wall_s": 44.54,
+    "usage": {},
+    "output": {
+     "repo": "openai/gpt-2@9b63575ef42771a015060c964af2c3da4cf7c8ab",
+     "overall_score": 35,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "DEVELOPERS.md",
+         "excerpt": "Install path lives in DEVELOPERS.md; its contents are not in the provided material and whether tensorflow==1.12.0 resolves on a current interpreter cannot be settled by reading."
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "requirements.txt",
+         "excerpt": "requirements.txt is present in the tree; its pins and whether they build on a modern toolchain are not visible."
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "download_model.py",
+         "excerpt": "Download script exists; the storage endpoint's current availability cannot be determined from documentation."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "src/generate_unconditional_samples.py",
+         "excerpt": "Script exists in the tree; execution depends on c1-c3, which are unsettled."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "src/interactive_conditional_samples.py",
+         "excerpt": "Script exists in the tree; --top_k flag and runtime behaviour not confirmable without execution."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "Dockerfile.cpu",
+         "excerpt": "Dockerfile.cpu and Dockerfile.gpu are present; base-image tag and whether it still pulls/builds are not visible."
+        },
+        {
+         "kind": "file",
+         "ref": "Dockerfile.gpu",
+         "excerpt": "Present in tree."
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "**Status:** Archive (code is provided as-is, no updates expected)"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "model_card.md",
+         "excerpt": "model_card.md is present at repo root, matching the README link ./model_card.md."
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "For basic information, see our [model card](./model_card.md)."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Note that our original parameter counts were wrong due to an error ... you may have seen small referred to as 117M and medium referred to as 345M."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "DEVELOPERS.md",
+         "excerpt": "The PYTHONIOENCODING instruction is attributed to DEVELOPERS.md, whose text is not in the provided material; whether it is required on a current Python cannot be settled by reading."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c10"
+     ],
+     "memo_md": "## Due-diligence memo: openai/gpt-2 @ 9b63575\n\n**Scope limit.** This review is from README and file tree only. DEVELOPERS.md, requirements.txt, the Dockerfiles and the download script are present but their contents were not provided, and nothing was executed. The buyer's question \u2014 can the install path be executed today and do downloads work \u2014 is fundamentally an execution question, so most verdicts are *unverifiable* and escalated rather than guessed.\n\n**What reading does settle.**\n- The repo self-declares Archive status with no updates expected (c7). Treat it as frozen code from early 2019.\n- `model_card.md` exists at the documented path (c8).\n- The README carries the parameter-count correction note (117M\u2192small, 345M\u2192medium) (c9); the corrected names appear in the documented download commands.\n- All files the quickstart references exist in the tree: `download_model.py`, `requirements.txt`, `Dockerfile.cpu/.gpu`, `src/generate_unconditional_samples.py`, `src/interactive_conditional_samples.py`.\n\n**What it does not settle (escalate to a human with a sandbox).**\n- c1/c2: whether a 2019-era TensorFlow pin and the requirements pins resolve on a current Python/toolchain.\n- c3: whether the model storage endpoint still serves weights.\n- c4/c5: sample generation is gated on c1\u2013c3.\n- c6: whether the Docker base images still pull and build.\n- c10: whether the UTF-8 env var is still needed.\n\n**Risk signal for the buyer.** An archived repo pinning a framework major version that is several years old is a classic reproduction hazard: the files exist, but file existence says nothing about whether the environment can be assembled today. Expect the realistic path to be either a pinned old interpreter, a Docker image if the base tag still exists, or a port to a maintained framework.\n\n**Recommendation.** Do not rely on this memo for a go/no-go. Run the seven escalated probes in a clean container and re-score; that run, not this reading, answers the buyer question.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.3,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.333,
+     "coverage": 1.0,
+     "score_error": 0.9
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   }
+  },
+  "limit_blocked": false,
+  "partial": false
+ },
+ {
+  "id": "baseline-v2-n2-1787943738",
+  "arm": "baseline",
+  "label": "baseline-v2-n2",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "1725577",
+  "ts": "2026-08-28T19:02:18Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.088,
+    "confident_wrong": 0.783,
+    "evidence_valid": 0.324,
+    "coverage": 1.0,
+    "score_error": 0.745
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.51,
+   "n_cases": 7
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 360.4,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 59.31,
+    "usage": {},
+    "output": {
+     "repo": "python-humanize/humanize@ce4147b6c8f8a132f772be0929d58305eb22c5d9",
+     "overall_score": 55,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "Packaging metadata present; PyPI badge links https://pypi.org/project/humanize/. Install success on a current interpreter cannot be settled without running pip."
+        },
+        {
+         "kind": "url",
+         "ref": "https://pypi.org/project/humanize/",
+         "excerpt": "PyPI version badge target"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "src/ layout with pyproject.toml is consistent with `pip install -e .`, but editable-install success (PEP 660 backend) is not readable from the tree."
+        },
+        {
+         "kind": "file",
+         "ref": "src/humanize/__init__.py",
+         "excerpt": "package root under src/"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "requires-python would live here; file contents not provided. Badge only mirrors PyPI metadata."
+        },
+        {
+         "kind": "url",
+         "ref": "https://img.shields.io/pypi/pyversions/humanize.svg",
+         "excerpt": "badge is dynamic, not a repo assertion"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_number.py",
+         "excerpt": "Likely covers intcomma; contents not readable, output not executable here."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_number.py",
+         "excerpt": "Likely covers intword; rounding of 123455913 -> '123.5 million' needs execution."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_time.py",
+         "excerpt": "1001 s = 16.68 min; whether naturaldelta floors ('16 minutes') or rounds ('17 minutes') at this commit is a code question, not settled by README."
+        },
+        {
+         "kind": "file",
+         "ref": "src/humanize/time.py",
+         "excerpt": "implementation location"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_filesize.py",
+         "excerpt": "naturalsize decimal/binary formatting; needs execution."
+        },
+        {
+         "kind": "file",
+         "ref": "src/humanize/filesize.py",
+         "excerpt": "implementation location"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_number.py",
+         "excerpt": "fractional(1/3) -> '1/3' depends on Fraction.limit_denominator behaviour in code; not readable."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "src/humanize/number.py",
+         "excerpt": "scientific() with Unicode superscripts; exact string needs execution."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "src/humanize/locale/ru_RU/LC_MESSAGES/humanize.po",
+         "excerpt": "Russian .po source ships in tree; only .po (no .mo) visible."
+        },
+        {
+         "kind": "file",
+         "ref": "scripts/generate-translation-binaries.sh",
+         "excerpt": "Binaries are generated at build time; whether the installed wheel contains ru_RU .mo and yields '3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b \u043d\u0430\u0437\u0430\u0434' is not readable."
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": ".github/workflows/test.yml",
+         "excerpt": "Test workflow exists; current pass/fail status is a live GitHub state, not in the tree."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/python-humanize/humanize/actions",
+         "excerpt": "badge target"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+     ],
+     "memo_md": "## humanize \u2014 documentation-only diligence (commit ce4147b)\n\n**Bottom line:** the repository *looks* well-run, but every claim the buyer cares about (install on a current interpreter, Python-version floor, exact example outputs) requires execution or reading source that was not provided. None can be honestly marked verified or refuted from README + file tree; all eleven are escalated.\n\n**What the tree supports (structural signal, not proof):**\n- Modern packaging: `pyproject.toml`, `src/` layout, `py.typed`, `tox.ini`.\n- Test suite split by module (`tests/test_number.py`, `test_time.py`, `test_filesize.py`, `test_i18n.py`, `test_lists.py`) plus benchmarks.\n- CI: separate `test.yml`, `lint.yml`, `docs.yml`, `release.yml`; `.pre-commit-config.yaml`; renovate + release-drafter. This is the profile of an actively maintained project.\n- 34 locale directories match the README language list; `ru_RU/LC_MESSAGES/humanize.po` is present. Only `.po` sources are in-tree \u2014 `.mo` binaries are produced by `scripts/generate-translation-binaries.sh`, so runtime i18n depends on the wheel build step.\n\n**Risks to check before embedding:**\n1. **Python floor (c3):** `requires-python` lives in `pyproject.toml`, which I could not read. The shields badge is a live mirror of PyPI, not a commitment at this commit.\n2. **Rounding semantics (c6):** 1001 s is 16.68 min; whether `naturaldelta` floors or rounds is a code decision that has changed across releases in similar libraries. For a reporting product this is exactly the kind of drift that matters.\n3. **Locale packaging (c10):** confirm the published wheel includes compiled `.mo` files.\n4. **CI badge (c11):** reflects the default branch now, not this pinned commit.\n\n**Recommended next step:** run the probe hints in a clean venv on the target interpreter (\u22485 minutes). Until then the score reflects structural health only, not verified behaviour.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.944,
+     "coverage": 1.0,
+     "score_error": 0.63
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r02-python-tabulate.json": {
+    "status": "ok",
+    "wall_s": 51.27,
+    "usage": {},
+    "output": {
+     "repo": "astanin/python-tabulate@268615a5c27dc40e5c22454c07b44d5c50410da0",
+     "overall_score": 52,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "Packaging metadata present but its contents (name, entry points) are not visible; PyPI availability cannot be confirmed from the tree."
+        },
+        {
+         "kind": "file",
+         "ref": "tabulate/__init__.py",
+         "excerpt": "Package module exists, so `from tabulate import tabulate` is plausible for a source install."
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tabulate/cli.py",
+         "excerpt": "A CLI module exists, but whether pyproject.toml declares a `tabulate` console_scripts entry point cannot be read."
+        },
+        {
+         "kind": "file",
+         "ref": "tabulate/__main__.py",
+         "excerpt": "`python -m tabulate` is supported; a PATH script is not proven."
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "Tree contains pyproject.toml and no setup.py. TABULATE_INSTALL=lib-only was a setup.py-time switch; with a PEP 517 build and prebuilt wheels an environment variable at pip time cannot suppress an entry point. README text appears stale."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Tabulate is a Python3 library."
+        },
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "requires-python value not visible; the specific >=3.10 floor cannot be confirmed."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Sun    696000     1.9891e+09"
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_output.py",
+         "excerpt": "Output tests exist but whether they cover this exact rendering, and whether README doctests run in CI, is not visible."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "headers=\"firstrow\" example: Name      Age / Alice      24"
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_input.py",
+         "excerpt": "Input-handling tests exist; exact spacing not verifiable without execution."
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "headers=\"keys\" on dict of iterables: Name      Age"
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_input.py",
+         "excerpt": "Likely covers dict-of-iterables input; not readable here."
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tabulate/cli.py",
+         "excerpt": "CLI implementation exists; --help text not visible. README's tablefmt list includes github, grid, html, latex, pipe, rst, simple, tsv."
+        },
+        {
+         "kind": "file",
+         "ref": "test/test_cli.py",
+         "excerpt": "CLI tests exist."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "pip install tabulate[widechars]"
+        },
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "Optional-dependency group `widechars` -> wcwidth would be declared here; not readable."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": ".github/workflows/tabulate.yml",
+         "excerpt": "Workflow referenced by the badge exists in the tree."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/astanin/python-tabulate/actions/workflows/tabulate.yml",
+         "excerpt": "Live badge status is a runtime fact; cannot be settled from a pinned tree."
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "`tabulate` appears to be faster than `PrettyTable` and `texttable`. \u2014 yet the README's own table lists PrettyTable 3.17.0 at 468.0 \u03bcs vs tabulate 0.10.0 at 553.4 \u03bcs, i.e. PrettyTable is faster."
+        },
+        {
+         "kind": "file",
+         "ref": "benchmark/benchmark.py",
+         "excerpt": "Benchmark script is present so the numbers are reproducible, but the prose conclusion contradicts them."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10"
+     ],
+     "memo_md": "**Verdict: usable library, but the README overclaims in two places and most install claims need a clean-env check before you standardize.**\n\n**What reading alone settles**\n\n- **c11 (performance) is refuted by the README itself.** The prose says tabulate is faster than PrettyTable and texttable; the accompanying table shows PrettyTable at 468.0 \u03bcs versus tabulate at 553.4 \u03bcs. The texttable comparison holds, the PrettyTable one does not. `benchmark/benchmark.py` exists, so this is cheap to re-run \u2014 but do not repeat the README's summary in internal docs.\n- **c3 (`TABULATE_INSTALL=lib-only`) looks stale.** The tree has `pyproject.toml` and no `setup.py`. That environment variable was a setup.py-era hook; with wheel installs it almost certainly does nothing. Low confidence because I cannot read `pyproject.toml`, but treat lib-only installs as unsupported until proven.\n\n**What needs execution (escalated)**\n\n- Install/CLI claims (c1, c2, c9): `tabulate/cli.py` and `__main__.py` exist, which is consistent with a console script and `python -m tabulate`, but entry points and the `widechars` extra live in the unreadable `pyproject.toml`.\n- Python floor (c4): README only says Python 3; the >=3.10 figure is unconfirmed.\n- Example outputs (c5\u2013c7) and `--help` formats (c8): README shows them, tests exist (`test/test_output.py`, `test/test_cli.py`), but exact whitespace and help text require running.\n- CI badge (c10): the workflow file exists; its current status is a live fact.\n\n**Positives**: focused package, real test suite (nine test modules including regression and CLI), CHANGELOG, lint and CI workflows, benchmark script checked in.\n\n**Recommendation**: run the probe hints in a clean venv before adoption; expect the library and CLI to work, expect lib-only install to be a no-op, and disregard the PrettyTable speed claim.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.091,
+     "confident_wrong": 0.909,
+     "evidence_valid": 0.571,
+     "coverage": 1.0,
+     "score_error": 0.67
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r04-schedule.json": {
+    "status": "ok",
+    "wall_s": 48.7,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/dbader/schedule@82a43db1b938d8fdf60103bd41f329e06c8d3651",
+     "overall_score": 55,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "Packaging metadata present (setup.py, setup.cfg, pyproject.toml, MANIFEST.in); PyPI badge links to pypi.python.org/pypi/schedule. Whether `pip install schedule` succeeds today cannot be settled from text."
+        },
+        {
+         "kind": "url",
+         "ref": "https://pypi.python.org/pypi/schedule",
+         "excerpt": "Badge target for PyPI listing."
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": ".github/workflows/ci.yml",
+         "excerpt": "A CI workflow exists but its python-version matrix is not visible in the provided material; README line 'Tested on Python and 3.7 ... 3.12' is a self-assertion (note the typo 'and' suggests an edit that dropped an older version)."
+        },
+        {
+         "kind": "file",
+         "ref": "tox.ini",
+         "excerpt": "tox config present; env list not visible."
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/dbader/schedule/actions?query=workflow%3ATests+branch%3Amaster",
+         "excerpt": "Badge is a live image; current pass/fail state and run recency require fetching the Actions page."
+        },
+        {
+         "kind": "file",
+         "ref": ".github/workflows/ci.yml",
+         "excerpt": "Workflow file exists; README badge references workflow name 'Tests' which may or may not match the name inside ci.yml."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "install_requires not visible. README both claims 'no external dependencies' and shows a timezone example; docs/timezones.rst exists, and IANA timezone handling on Python 3.7/3.8 typically needs a third-party package, so the claim may hold only for the core install."
+        },
+        {
+         "kind": "file",
+         "ref": "requirements-dev.txt",
+         "excerpt": "Dev-only requirements file present; does not settle runtime deps."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every(10).seconds.do(job)"
+        },
+        {
+         "kind": "file",
+         "ref": "test_schedule.py",
+         "excerpt": "Single test module exists; contents not visible."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every().day.at(\"10:30\").do(job)"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every().day.at(\"12:42\", \"Europe/Amsterdam\").do(job) \u2014 shown as plain usage with no caveat."
+        },
+        {
+         "kind": "file",
+         "ref": "docs/timezones.rst",
+         "excerpt": "Dedicated timezone doc exists, which is where an optional-dependency requirement (e.g. pytz) would be stated; not visible here. This claim is in direct tension with c4 and is the most likely README overclaim."
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "schedule.every().minute.at(\":17\").do(job)"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "while True: schedule.run_pending(); time.sleep(1)"
+        },
+        {
+         "kind": "file",
+         "ref": "schedule/__init__.py",
+         "excerpt": "Entire library is one module; run_pending behavior not inspectable from the tree."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://img.shields.io/pypi/v/schedule.svg",
+         "excerpt": "Live badge; the specific version 1.2.2 is not stated anywhere in the README."
+        },
+        {
+         "kind": "file",
+         "ref": "HISTORY.rst",
+         "excerpt": "Changelog exists and would carry the latest version; contents not provided."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10"
+     ],
+     "memo_md": "**schedule @ 82a43db \u2014 documentation-only review**\n\n**Bottom line:** Nothing in the buyer's question can be settled from the README and file tree; every claim is escalated for execution or a live check. The project *looks* like a mature, small, well-packaged library (single module `schedule/__init__.py`, `py.typed`, one test file, tox, CI workflow, Sphinx docs with changelog, MIT license), but looks are exactly what a badge-mirage repo also has.\n\n**What the text does tell us**\n- The README makes three infrastructure claims the buyer cares about \u2014 CI green, no dependencies, Python 3.7\u20133.12 \u2014 and none is inspectable here: `ci.yml`, `setup.py`, `tox.ini` exist but their contents were not supplied. The badge is a live image, so a stale README cannot prove a green master.\n- The 'Tested on Python and 3.7, ...' line has a grammatical artifact consistent with a version being removed, i.e. the list has been edited by hand and may drift from the actual matrix.\n- **Internal tension (c4 vs c7):** the README asserts 'no external dependencies' and, in the same breath, shows `at(\"12:42\", \"Europe/Amsterdam\")` with no caveat. A dedicated `docs/timezones.rst` exists, which is where an optional dependency such as pytz would normally be disclosed. If the timezone example needs an extra package in a fresh venv, the README overclaims on the one feature most likely to matter for a multi-year service.\n\n**Recommended verification before purchase** (all cheap): fresh venv `pip install schedule` + `pip freeze`; run the nine README lines verbatim, especially the timezone one; fetch the last three Actions runs on master and the python-version matrix from `ci.yml`; read `HISTORY.rst` for release cadence and last activity.\n\n**Risk for a long-lived service:** single-maintainer project (one author in Meta); confirm recent commit activity and issue responsiveness before committing to years of use.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.278,
+     "coverage": 1.0,
+     "score_error": 1.0
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r05-records.json": {
+    "status": "ok",
+    "wall_s": 42.31,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/kennethreitz/records@ea4273695cee6da42edf1cb294d1f2a4505470fc",
+     "overall_score": 48,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "packaging file present; extras (pandas) cannot be confirmed without reading it"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "$ pipenv install records[pandas]"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "db = records.Database('postgres://...')"
+        },
+        {
+         "kind": "file",
+         "ref": "records.py",
+         "excerpt": "single-module implementation; whether it rewrites the deprecated postgres:// scheme for SQLAlchemy>=1.4 is not visible from the tree"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_records.py",
+         "excerpt": "test module exists; contents unknown"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Values can be accessed many ways: `row.user_email`, `row['user_email']`, or `row[3]`."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/test_transactions.py",
+         "excerpt": "dedicated transaction test file suggests commit behaviour was worked on, but pass/fail and autocommit semantics under SQLAlchemy 2.x cannot be read from the tree"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Bulk actions: `Database.bulk_query()` & `Database.bulk_query_file()`."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Transactions: `t = Database.transaction(); t.commit()`."
+        },
+        {
+         "kind": "file",
+         "ref": "tests/test_transactions.py",
+         "excerpt": "test file name matches the feature; not readable here"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": ">>> rows.first()\n<Record {\"username\": ...}>"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": ">>> print(rows.export('csv'))\nusername,active,name,user_email,timezone"
+        },
+        {
+         "kind": "file",
+         "ref": "requirements.txt",
+         "excerpt": "tablib dependency pin not visible; export depends on it"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": ">>> rows.export('df')"
+        },
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "pandas extra presumed declared here; unread"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Database support includes RedShift, Postgres, MySQL, SQLite, Oracle, and MS-SQL (drivers not included)."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/kennethreitz/records/issues/193",
+         "excerpt": "referenced MS-SQL issue; no CI job for MS-SQL is evident from the tree"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://pypi.python.org/pypi/records",
+         "excerpt": "badge is a live image; the README text does not state 0.6.0"
+        },
+        {
+         "kind": "file",
+         "ref": "HISTORY.rst",
+         "excerpt": "changelog present; latest version entry not readable here"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "`$DATABASE_URL` environment variable support."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c2",
+      "c4",
+      "c5",
+      "c9",
+      "c10"
+     ],
+     "memo_md": "**Records (kennethreitz) \u2014 documentation-only review**\n\nNothing in the buyer's question can be settled from the README and file tree alone, so every claim is marked unverifiable rather than guessed. What the tree does tell us:\n\n- The project is a single module (`records.py`) with a small test suite (`tests/test_records.py`, `tests/test_transactions.py`, `tests/test_69.py`, `tests/test_105.py`) and a GitHub Actions workflow (`.github/workflows/ci.yml`) alongside a legacy `.travis.yml`. The numbered test files indicate regressions were fixed against specific issues; `test_transactions.py` is the file most relevant to the 'silently lost writes' concern, but its assertions and whether CI is green are not visible.\n- The README still shows `records.Database('postgres://...')`. SQLAlchemy 1.4+ dropped the `postgres://` alias, so this example is either stale or relies on a rewrite inside `records.py`. This is the single most likely documentation/behaviour mismatch and must be executed to confirm (c2).\n- Commit durability under SQLAlchemy 2.x (c4) depends on how `records.py` handles connection lifetimes and autocommit; SQLAlchemy 2.0 removed library-level autocommit. This is the buyer's core risk and cannot be resolved by reading.\n- MS-SQL support (c9) is asserted with 'drivers not included' and no MS-SQL CI is evident; treat as unsupported until tested.\n- The PyPI badge is a live image; the claimed 0.6.0 release must be checked against PyPI directly (c10).\n- Export claims (c7, c8) hinge on the Tablib and pandas pins in `requirements.txt`/`setup.py`, unread here.\n\n**Recommendation:** do not adopt on documentation alone. Run the eleven probes in a clean venv against current SQLAlchemy, with c2 and c4 as gating; escalate c9 and c10 to a human with network access.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.091,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.65,
+     "coverage": 1.0,
+     "score_error": 0.92
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r07-newspaper3k.json": {
+    "status": "ok",
+    "wall_s": 66.0,
+    "usage": {},
+    "output": {
+     "repo": "codelucas/newspaper@1618b547f31c2d1fd19ae3b6afd8f7542dd02074",
+     "overall_score": 32,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "requirements.txt",
+         "excerpt": "pinned dependency list present; contents/upper bounds not visible in tree"
+        },
+        {
+         "kind": "file",
+         "ref": "newspaper/cleaners.py",
+         "excerpt": "HTML cleaning module; whether it imports lxml.html.clean (split out of lxml >=5.2) cannot be settled by reading"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/codelucas/newspaper/tree/python-2-head",
+         "excerpt": "**Newspaper is a Python3 library**! Or, view our **deprecated and buggy** Python2 branch"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "On python3 you must install newspaper3k, not newspaper. newspaper is our python2 library."
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://travis-ci.org/codelucas/newspaper.svg",
+         "excerpt": "badge points at travis-ci.org, a host that was shut down in 2021; it cannot report a live build"
+        },
+        {
+         "kind": "file",
+         "ref": ".travis.yml",
+         "excerpt": "only CI config in the tree is Travis; no .github/workflows directory exists"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "example claims authors ['Leigh Ann Caldwell', 'John Honway'] for a 2013 fox13now.com URL, yet the shown article.text begins 'Washington (CNN)' \u2014 the example is illustrative, not reproduced output"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "newspaper/nlp.py",
+         "excerpt": "keyword/summary module exists"
+        },
+        {
+         "kind": "file",
+         "ref": "newspaper/resources/misc/stopwords-nlp-en.txt",
+         "excerpt": "NLP stopword resource shipped; punkt corpora availability depends on download step"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "download_corpora.py",
+         "excerpt": "script exists at repo root on master; whether it runs to completion on python3 with current nltk cannot be settled by reading"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "NOTE: If you find problem installing libpng12-dev, try installing libpng-dev. \u2014 README itself concedes the package may be unavailable; libpng12 was dropped from Ubuntu after 16.04 and Debian after jessie"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "newspaper/api.py",
+         "excerpt": "public API module where languages() would live"
+        },
+        {
+         "kind": "file",
+         "ref": "newspaper/resources/text/stopwords-ar.txt",
+         "excerpt": "37 stopwords-XX.txt files exactly match the 37 codes listed in the README table (ar\u2026zh)"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "newspaper/mthreading.py",
+         "excerpt": "multi-threading module exists; whether news_pool is exported from newspaper/__init__.py is not visible"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "newspaper/source.py",
+         "excerpt": "Source/build implementation exists"
+        },
+        {
+         "kind": "file",
+         "ref": "tests/data/html/cnn_main_site.html",
+         "excerpt": "tests use a mocked CNN front page, not live cnn.com; live behaviour requires execution"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://www.swiftproxy.net/?ref=codelucas",
+         "excerpt": "Swiftproxy \u2014 80M+ residential IPs across 195+ countries, a 99.89% success rate, non-expiring traffic (affiliate link, code PROXY90; vendor marketing with no methodology)"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c4",
+      "c5",
+      "c6",
+      "c8",
+      "c9",
+      "c10"
+     ],
+     "memo_md": "**Due diligence: codelucas/newspaper (newspaper3k) @ 1618b54 \u2014 documentation-only review**\n\n**Bottom line:** Treat this as an unmaintained dependency. Nothing in the README or tree demonstrates the library works on a current Python/lxml, the CI signal is dead, and the README has been repurposed as advertising.\n\n**Install (buyer Q1):** Cannot be settled from reading. `requirements.txt` and `newspaper/cleaners.py` exist but their contents are not visible; the known lxml \u22655.2 split of `lxml.html.clean` is exactly the kind of breakage that only an execution probe can confirm. Escalated (c1). The Debian prerequisite line names `libpng12-dev`, a package gone from every supported Ubuntu/Debian release; the README's own fallback note admits it (c7 refuted).\n\n**CI badge (buyer Q2):** The only CI artifact is `.travis.yml` pointing at travis-ci.org, which ceased operation in 2021. There is no `.github/workflows`. The badge cannot reflect a live build (c3 refuted, low confidence pending a fetch). Coverage badge is similarly stale-looking.\n\n**README examples (buyer Q3):** The quickstart is internally inconsistent \u2014 a fox13now.com URL whose extracted text reads \"Washington (CNN)\" \u2014 signalling an illustrative, not reproduced, transcript from 2013. `build('http://cnn.com')`, `nlp()`, `languages()`, `news_pool` all plausibly exist (matching modules and 37 stopword files are present) but every one is conditional on the import succeeding, which is the open question. All escalated.\n\n**Red flags beyond the claims:** Four proxy/SERP vendor sections with affiliate codes occupy more README space than the API; demo links are Heroku (free tier discontinued). This pattern is typical of a repo whose maintainer has monetised rather than maintained it.\n\n**Recommendation:** Do not sign off from documentation. Run the install/import probe on Python 3.12 with unpinned lxml, fetch the badge, and execute the quickstart before valuing the pipeline. Budget for migrating to a maintained fork (e.g. newspaper4k) as a condition of the acquisition.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.545,
+     "confident_wrong": 0.909,
+     "evidence_valid": 0.235,
+     "coverage": 1.0,
+     "score_error": 0.88
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r09-pydub.json": {
+    "status": "ok",
+    "wall_s": 51.7,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/jiaaro/pydub@103e339d3bc7a9a58a9f1de65f7d8074659b5f5a",
+     "overall_score": 35,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "Packaging metadata present; PyPI availability and install exit code cannot be confirmed from the tree."
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pydub/pyaudioop.py",
+         "excerpt": "A pure-Python audioop fallback exists in the tree, but whether the package's import path reaches it on Python 3.13 (where stdlib audioop is removed) cannot be settled without running it. README states no Python version restriction."
+        },
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "No python_requires visible from tree listing alone."
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pydub/audio_segment.py",
+         "excerpt": "README: 'You can open and save WAV files with pure python.' Implementation not inspectable here; needs an ffmpeg-free run."
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pydub/utils.py",
+         "excerpt": "README documents ffmpeg/libav as required for non-WAV; failure mode without ffmpeg cannot be observed from reading."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://travis-ci.org/jiaaro/pydub",
+         "excerpt": "travis-ci.org was shut down in 2021; a badge pointing there cannot assert a current passing build."
+        },
+        {
+         "kind": "file",
+         "ref": ".travis.yml",
+         "excerpt": "Config still present, targeting a defunct service."
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "appveyor.yml",
+         "excerpt": "AppVeyor config exists; whether the project page shows a recent passing build requires an HTTP check."
+        },
+        {
+         "kind": "url",
+         "ref": "https://ci.appveyor.com/project/jiaaro/pydub/branch/master",
+         "excerpt": "Badge target; not fetched."
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "Quickstart documents ms slicing and 'duration_seconds == 15.0'; documentation is the claim, not evidence of behaviour."
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "'# boost volume by 6dB ... first_10_seconds + 6' \u2014 needs dBFS measurement to confirm."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "'exporting to ogg will default to using vorbis' \u2014 codec of the produced file needs ffprobe."
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "'len(audio_segment) returns milliseconds' \u2014 documented, not observed."
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.markdown",
+         "excerpt": "'AudioSegments are immutable ... song is not modified' \u2014 documented, not observed."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+     ],
+     "memo_md": "**pydub @ 103e339 \u2014 documentation-only review**\n\n**Bottom line:** Do not adopt on Python 3.13 without an execution check. The README makes no Python-version promise, but the buyer's target runtime removed the stdlib `audioop` module that this library has historically depended on. The tree contains `pydub/pyaudioop.py`, which looks like a pure-Python fallback, but whether the installed package actually reaches it on 3.13 cannot be settled from the file list \u2014 and this is exactly the failure that decides the buyer question. Escalated as the single most important open item (c2).\n\n**CI story is not real as presented.** The README's first badge points to travis-ci.org, which ceased operating in 2021; `.travis.yml` is still in the tree. That badge cannot assert a current passing build (c5 refuted). The AppVeyor badge and `appveyor.yml` may or may not reflect a live, recent build; unchecked (c6). Net: there is no evidence in the documentation that master is currently tested anywhere.\n\n**Functional claims (c3, c4, c7\u2013c11)** \u2014 ms slicing, dB gain via `+`/`-`, ogg\u2192vorbis default, `len()` in ms, immutability, pure-Python WAV \u2014 are all documented in the README and consistent with each other, but the README is the claim, not evidence. A substantial `test/` directory with real fixtures (`test1.wav`, `party.mp3`, `bach.ogg`, 192 kHz WAVs) suggests these paths are exercised, which raises the prior without settling anything.\n\n**Recommended probes before signing:** (1) fresh 3.13 venv, `pip install pydub`, `from pydub import AudioSegment`; (2) same on 3.12 without ffmpeg for WAV round-trip; (3) fetch the AppVeyor project page and check build date.\n\n**Score 35/100** reflects a plausibly-working, widely-used library whose documentation is silent on the one compatibility question that matters and whose CI badges are partly dead.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.091,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.143,
+     "coverage": 1.0,
+     "score_error": 0.73
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r11-gpt-2.json": {
+    "status": "ok",
+    "wall_s": 41.12,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/openai/gpt-2@9b63575ef42771a015060c964af2c3da4cf7c8ab",
+     "overall_score": 42,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "DEVELOPERS.md",
+         "excerpt": "Install tensorflow 1.12 ... pip3 install tensorflow==1.12.0"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "requirements.txt",
+         "excerpt": "requirements.txt present in tree; contents and buildability on a current toolchain cannot be confirmed by reading"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "download_model.py",
+         "excerpt": "download_model.py present in tree; storage endpoint liveness cannot be determined without running it"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "src/generate_unconditional_samples.py",
+         "excerpt": "script present in tree; output depends on c1-c3 succeeding"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "src/interactive_conditional_samples.py",
+         "excerpt": "script present in tree; runtime behaviour depends on c1/c3"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "Dockerfile.cpu",
+         "excerpt": "Dockerfile.cpu present"
+        },
+        {
+         "kind": "file",
+         "ref": "Dockerfile.gpu",
+         "excerpt": "Dockerfile.gpu present; whether base tags still pull and the image builds cannot be settled by reading"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "**Status:** Archive (code is provided as-is, no updates expected)"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "model_card.md",
+         "excerpt": "model_card.md present at repo root"
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "For basic information, see our [model card](./model_card.md)."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "Note that our original parameter counts were wrong due to an error ... small referred to as 117M and medium referred to as 345M."
+        },
+        {
+         "kind": "file",
+         "ref": "DEVELOPERS.md",
+         "excerpt": "python3 download_model.py 124M / 355M / 774M / 1558M"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "DEVELOPERS.md",
+         "excerpt": "export PYTHONIOENCODING=UTF-8 ... to override the standard stream settings in UTF-8 mode."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6"
+     ],
+     "memo_md": "**Scope.** Documentation-only review of openai/gpt-2 at 9b63575. No commands were run; verdicts rest on README text, the quoted DEVELOPERS.md excerpts, and the file tree.\n\n**What the docs establish.** The repository is self-declared as an archive with no updates expected (c7). The referenced model card exists (c8). The README carries the parameter-count correction and the install docs use the corrected 124M/355M names (c9). The Unicode workaround is documented as quoted (c10). All scripts named in the quickstart exist in `src/`, and both Dockerfiles and `requirements.txt` are present.\n\n**What the docs cannot establish \u2014 the buyer's actual question.** Whether the install path executes on a current machine (c1, c2), whether the model download endpoint still serves weights (c3), whether either sample script produces output (c4, c5), and whether the Docker base images still pull and build (c6) are all runtime facts. Reading alone cannot settle them; they are escalated for execution in a clean environment. The pin `tensorflow==1.12.0` and an archived status are structural warning signs that the path is era-specific, but that is a hypothesis to test, not a verdict.\n\n**Risk framing.** Six of ten claims \u2014 every claim that bears on \"can we reproduce samples today\" \u2014 are unverifiable from documentation. The score reflects that the repo is coherent and honest about its status, not that reproduction is confirmed.\n\n**Recommended next step.** Execute c1\u2013c3 in a fresh Linux container on a current Python; if c1 fails, retry on a Python 3.6-era image and Dockerfile.cpu; then run c4/c5. Record exit codes and stdout as the artifacts for the final verdict.",
+     "usage": {}
+    },
+    "rows": {
+     "verdict_acc": 0.3,
+     "confident_wrong": 0.5,
+     "evidence_valid": 0.308,
+     "coverage": 1.0,
+     "score_error": 0.97
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   }
+  },
+  "limit_blocked": false,
+  "partial": false
+ },
+ {
+  "id": "advanced-v1-1787946612",
+  "arm": "advanced",
+  "label": "advanced-v1",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "765886e",
+  "ts": "2026-08-28T19:50:12Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.408,
+    "confident_wrong": 0.495,
+    "evidence_valid": 0.621,
+    "coverage": 0.621,
+    "score_error": 0.506
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 0.8571428571428571
+   },
+   "raw": 0.441,
+   "n_cases": 7
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 2874.0,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 203.63,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/python-humanize/humanize",
+     "overall_score": 91,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "HUMANIZE_VERSION 4.16.0 / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "HUMANIZE_FILE /tmp/humanize/src/humanize/__init__.py / HUMANIZE_VERSION 4.16.1.dev9 / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "REQUIRES_PYTHON >=3.10 / CLASSIFIERS [... 'Python :: 3.10' ... 'Python :: 3.15' ...] / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "RESULT '12,345' / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "RESULT '123.5 million' / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "RESULT '17 minutes' / AssertionError: '17 minutes'; exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "RESULT '1.0 MB' '976.6 KiB' / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "RESULT '1/3' / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "RESULT '3.00 x 10\u207b\u00b9' / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "RESULT '3 seconds ago' '3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b \u043d\u0430\u0437\u0430\u0434' '3 seconds ago' / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "RUN ce4147b6c8f8 2026-08-01T09:18:47Z success / LATEST_CONCLUSION success / PROBE_OK; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33202107062",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787943738",
+     "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "coverage": 1.0,
+     "score_error": 0.99
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r02-python-tabulate.json": {
+    "status": "ok",
+    "wall_s": 369.42,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/astanin/python-tabulate",
+     "overall_score": 68,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "tabulate 0.10.0 / Name: tabulate / Version: 0.10.0 / Location: /tmp/v/lib/python3.11/site-packages + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "-rwxr-xr-x 1 root root 211 Aug 28 19:08 tabulate / SCRIPT_PRESENT_IN_BIN=yes / /tmp/v/bin/tabulate / CLI_OUTPUT_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "wheel venv: ls /tmp/v2/bin | grep -c '^tabulate$' -> 1; sdist venv: ../../../bin/tabulate listed by pip show -f; 'CLAIM_FAILS: tabulate CLI script installed despite TABULATE_INSTALL=lib-only' + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "PyPI latest version + requires_python: 0.10.0 >=3.10 / installed 0.10.0 Requires-Python: >=3.10 / classifiers ['Programming Language :: Python :: 3', ... '3.14'] (no Python :: 2) / works on 3.10 (declared lower bound) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "Sun    696000     1.9891e+09 / FIRST_DATA_LINE_MATCH / FULL_BLOCK_MATCH + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "Name      Age / ------  ----- / Alice      24 / Bob        19 / MATCH + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "Name      Age / ------  ----- / Alice      24 / Bob        19 / MATCH + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "'tabulate --help' itself gave exit=0, but the captured stdout is truncated at '-f FMT, --format FMT      set output ' before the format list and before any 'present:'/'MISSING:' lines; the probe's overall exit_code 1 cannot be attributed to a missing format vs. the comma/space-stripping parse method + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "wcwidth 0.8.3 installed with the extra (phase A: 'Successfully installed tabulate-0.10.0 wcwidth-0.8.3'), but the alignment test never ran: 'warning: here-document at line 1 delimited by end-of-file' / 'SyntaxError: invalid syntax' before WIDE_CHARS_MODE was checked + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "PHASE_A_FAILED ... 'SyntaxError: invalid syntax'; stdout empty, no GitHub Actions run status was ever fetched + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "tabulate 637.5 us per call / prettytable 442.4 us per call / texttable 925.5 us per call / 'tabulate faster than PrettyTable: False' / 'tabulate faster than texttable: True' / AssertionError: claim \"faster than PrettyTable and texttable\" not reproduced + exit_code 1 (env: tabulate 0.10.0, prettytable 3.18.0, texttable 1.7.0, python 3.11.16)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c8",
+      "c9",
+      "c10"
+     ],
+     "run_id": "33202457520",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787943942",
+     "memo_md": "6 verified, 2 refuted, 3 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.636,
+     "confident_wrong": 0.909,
+     "evidence_valid": 1.0,
+     "coverage": 1.0,
+     "score_error": 0.83
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r04-schedule.json": {
+    "status": "ok",
+    "wall_s": 315.49,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/dbader/schedule",
+     "overall_score": 75,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "phase_a: 'Downloading schedule-1.2.2-py3-none-any.whl (12 kB) ... Successfully installed schedule-1.2.2'; stdout 'schedule==1.2.2' + exit_code 0"
+        },
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "'import schedule' then 'registered jobs: 1' + exit_code 0"
+        },
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "stderr 'AttributeError: module 'schedule' has no attribute '__version__'' (import itself succeeded; failure is on a nonexistent attribute, not on import) + exit_code 0 (via trailing || echo)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "ci.yml:17: python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12'] (matrix declares the versions) but output truncated, no per-version test execution shown, and exit_code 2"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "badge.svg renders 'no status' (not 'passing'); grep -q 'passing' failed + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "'schedule==1.2.2' / 'extra_packages=0' / 'Requires: (empty) confirmed' / '80K site-packages/schedule' + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "'registered jobs: 1' + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "'next_run: 2026-08-29 10:30:00' / 'ok' + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "'pytz absent (fresh env confirmed)' then 'RESULT: raised ModuleNotFoundError: No module named 'pytz'' + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "'next_run: 2026-08-28 19:15:17' / 'ok' (second==17 asserted) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "'job invoked 1 time(s) after 1.2s' (and not before due) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "'PyPI latest: 1.2.2' / '1.2.2 uploaded: 2024-05-25T18:41:59' + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c2"
+     ],
+     "run_id": "33202898441",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787944311",
+     "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.9,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "coverage": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r05-records.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/advanced/advanced.py\", line 187, in <module>\n    exit_if_limited(main)\n  File \"/home/nate/micro1-fec-2026/arms/common.py\", line 46, in exit_if_limited\n    return fn()\n           ^^^^\n  File \"/home/nate/micro1-fec-2026/arms/advanced/advanced.py\", line 171, in main\n    probe_log, rid = stage_execute(case, probes, run_dir)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/nate/micro1-fec-2026/arms/advanced/advanced.py\", line 58, in stage_execute\n    raise RuntimeError(\"dispatch failed: \" + r.stderr[:300])\nRuntimeError: dispatch failed: could not create workflow dispatch event: HTTP 504: We couldn't respond to your request in time. Sorry about that. Please try resubmitting your request and contact us if the problem persists. (https://api.github.com/repos/Nathanjr123/repo-testify/actions/workflows/344776429/dispatches)\n\n",
+    "wall_s": 172.07
+   },
+   "r07-newspaper3k.json": {
+    "status": "ok",
+    "wall_s": 826.67,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/codelucas/newspaper",
+     "overall_score": 41,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "phase_a: pip_rc=0 newspaper3k==0.2.8 lxml==6.1.2 on Python 3.12.14; then 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' raised from newspaper/parsers.py during `import newspaper`; exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "newspaper3k 0.2.8 classifiers ['Programming Language :: Python :: 3'] C2_PY3_OK; 'newspaper 0.1.0.7' exists on PyPI with no Python-3 classifier (C2_PY2PKG_OK); 'python-2-head branch HTTP 200' C2_BRANCH_OK; exit_code 0. Branch existence and package naming confirmed; 'deprecated' status itself was not exercised by any command, hence low."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "http=200 final_url=https://api.travis-ci.com/codelucas/newspaper.svg (travis-ci.org redirects to .com); badge body 730 bytes SVG with grey #9f9f9f right panel; BADGE_NOT_PASSING; BADGE_NEGATIVE_TEXT; exit_code 0. The badge renders but does not assert a passing build."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "html_len 102006; authors ['Cnn Wire']; publish_date datetime.datetime(2013, 12, 30, 0, 0); AssertionError: ('authors mismatch', ['Cnn Wire']); exit_code 1. Date matches, authors do not (README's byline is in a.text, not a.authors)."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "tokenizers/punkt -> /root/nltk_data/tokenizers/punkt; corpora/stopwords present; text_len 1053; a.nlp() raised LookupError \"Attempted to load 'tokenizers/punkt_tab/english/'\" (resource not downloaded by the repo's corpora script); keywords/summary never printed; exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "bare interpreter: ModuleNotFoundError: No module named 'nltk' bare_rc=1; after pip install newspaper3k: script prints 'Downloading \"wordnet\" ... Finished.' after_install_rc=0 C6_SCRIPT_EXIT0, but nltk.data.find reports 'MISSING corpora/wordnet' -> AssertionError: ['corpora/wordnet']; exit_code 1. Script exits 0 yet one of its six corpora is not resolvable; partial failure, hence low."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "Debian 13 (trixie): verbatim install rc=100; \"E: Package 'libpng12-dev' has no installation candidate\"; apt-cache policy libpng12-dev Candidate: (none); README fallback libpng-dev rc=0 (1.6.48-1+deb13u5); C7_FAIL_AS_WRITTEN; probe exit_code 0 (wrapper), install exit 100"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "rc=0; 'Your available languages are:' HEADER_OK; rows ar Arabic, be Belarusian, bg Bulgarian, da Danish, de German, el Greek, en English, es Spanish ... (>=37 rows); C8_OK; exit_code 0. Note: probe pre-installed lxml[html_clean] to get past the c1 import failure."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "<class 'newspaper.mthreading.NewsPool'> newspaper.mthreading; methods ['config', 'join', 'pool', 'set']; 'Thread' present in newspaper.mthreading source; C9_OK; exit_code 0. Note: probe pre-installed lxml[html_clean] to get past the c1 import failure."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "{'ok': True, 'type': 'Source', 'n': 369, 'urls': ['https://www.cnn.com/business/media', ...], 'article_types': ['Article'], 'secs': 1.6}; build_rc=0; C10_OK 369 articles; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "README.rst line 251: '80M+ residential IPs across 195+ countries' and '99.89% success rate' (text is present; README also quotes a different vendor at 99.99% on line 459); vendor page mentions_99.89=5 methodology_words=0; C11_NO_EXECUTABLE_TRUTH; exit_code 0. Third-party marketing figure with no reproducible artifact \u2014 escalate to human, not scored."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c11"
+     ],
+     "run_id": "33203577178",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787944799",
+     "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.455,
+     "confident_wrong": 0.545,
+     "evidence_valid": 1.0,
+     "coverage": 1.0,
+     "score_error": 0.79
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r09-pydub.json": {
+    "status": "ok",
+    "wall_s": 377.19,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/jiaaro/pydub",
+     "overall_score": 77,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Successfully installed pydub-0.25.1 / PIP_RC=0 / Name: pydub Version: 0.25.1 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "Python 3.13.15 ... File \"/repo/pydub/utils.py\", line 15, in <module> import audioop / ModuleNotFoundError: No module named 'audioop' (raised during `from pydub import AudioSegment`) + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "NO_FFMPEG_ON_PATH / loaded_ms 20000 / out_frames 160000 rate 8000 ch 1 / PURE_PYTHON_WAV_ROUNDTRIP_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "FFMPEG_AT=/usr/bin/ffmpeg / stderr: bash: line 1: sh: command not found + exit_code 127 (probe harness broke before AudioSegment.from_mp3 was exercised; no-ffmpeg behavior never observed)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "cat: travis_badge.log: No such file or directory / head: cannot open 'travis_badge.svg' / warning: here-document at line 1 delimited by end-of-file + exit_code 2 (fetch step never produced artifacts; no badge or API state observed)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "cat: appveyor_badge.log: No such file or directory / FileNotFoundError: [Errno 2] No such file or directory: 'appveyor_api.json' + exit_code 1 (fetch step never produced artifacts; no build status observed)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "song_ms 20000 first10_ms 10000 last5_ms 5000 concat_s 15.0 / SLICING_MS_AND_15S_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "base_dBFS -15.258810683417497 plus6_delta 6.00061290290359 minus3_delta -3.0003066396312406 / GAIN_ARITHMETIC_DB_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "ffmpeg version 7.1.5-0+deb13u1 / exported / vorbis / vorbis / OGG_DEFAULT_CODEC_IS_VORBIS (ffprobe codec_name of default-export out.ogg) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "wav_seconds 7.0 / len() 7000 duration_seconds 7.0 / LEN_IS_MILLISECONDS_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "IMMUTABLE_OPS_RETURN_NEW_OBJECTS_OK (asserts: original raw_data/len/dBFS unchanged after reverse(), +6, fade_in/fade_out, slice; double reverse == original) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c4",
+      "c5",
+      "c6"
+     ],
+     "run_id": "33204543093",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787945625",
+     "memo_md": "7 verified, 1 refuted, 3 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.727,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "coverage": 1.0,
+     "score_error": 0.85
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r11-gpt-2.json": {
+    "status": "ok",
+    "wall_s": 609.52,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/openai/gpt-2",
+     "overall_score": 70,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Python 3.11.16 ... EXIT=1 ... ERROR: No matching distribution found for tensorflow==1.12.0 (from versions: 2.12.0rc0, ... 2.21.0); probe exit_code 0 (wrapper), pip exit 1"
+        },
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "python:3.6-slim: TF_INSTALL_EXIT=0 / tensorflow 1.12.0 \u2014 the exact command only succeeds on an EOL Python 3.6 interpreter, fails unqualified on a current one; tensorflow-gpu variant never probed"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "EXIT=0 / Successfully installed ... fire-0.7.1 ... regex-2017.4.5 requests-2.21.0 ... tqdm-4.31.1 / IMPORT OK 2.4.120 2.21.0 4.31.1; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "download_model.py 124M exit=0 / 124M HEAD 200 bytes= 497759232 / 355M HEAD 200 / 774M HEAD 200 / 1558M HEAD 200 / PRESENT model.ckpt.data-00000-of-00001 497759232 (7/7 files PRESENT); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "tensorflow 1.12.0 / model files present: 7/7 / EXIT=1 (124 expected ...) / SAMPLE-1 headers in /tmp/samples: 0 / VERDICT: no samples produced \u2014 script exit 1 with zero samples on python:3.6-slim; stderr captured only FutureWarnings, root-cause traceback truncated, so low confidence"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "--help succeeded (shows :nsamples=1 ... :length=None ... top_k), but the transcript is truncated before the generation EXIT line and no generated text is present; probe exit_code 0 covers only the wrapper \u2014 escalate"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "PHASE_A_FAILED: cp -r /repo-src /repo && ... ; exit_code 1, stdout empty, stderr empty \u2014 no docker build was attempted, no base-image check completed; escalate"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "archived= True pushed_at= 2024-08-14T10:50:53Z ... / VERDICT: GitHub reports archived=true, matching README Status: Archive; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "GitHub contents API status for model_card.md@pinned SHA: 200 / model_card.md PRESENT in pinned tree / 69 4989 /w/model_card.md / # GPT-2 model card ... ## Model Details. / README.md:17 links model card; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "README.md:11: *Note that our original parameter counts were wrong due to an error ... small referred to as 117M and medium referred to as 345M.* / DEVELOPERS.md:30-31 download_model.py 124M / 355M / Dockerfile.cpu:8-9 download_model.py 124M / 355M; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "DEVELOPERS.md:56-60: 'Some of the examples below may include Unicode text characters. Set the environment variable: export PYTHONIOENCODING=UTF-8 to override the standard stream settings in UTF-8 mode.'; exit_code 0. Note: empirically needed only for legacy behaviour (case B: stdout.encoding= ascii -> UnicodeEncodeError), not on Python 3.11 defaults (case A: no UnicodeEncodeError without the variable)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c5",
+      "c6"
+     ],
+     "run_id": "33205117828",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787946003",
+     "memo_md": "6 verified, 2 refuted, 2 escalated of 10 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.6,
+     "confident_wrong": 0.8,
+     "evidence_valid": 1.0,
+     "coverage": 1.0,
+     "score_error": 0.75
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   }
+  },
+  "limit_blocked": false,
+  "partial": false
  }
 ]

@@ -1,0 +1,298 @@
+{
+ "repo": "https://github.com/codelucas/newspaper",
+ "overall_score": 41,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "phase_a: pip_rc=0 newspaper3k==0.2.8 lxml==6.1.2 on Python 3.12.14; then 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' raised from newspaper/parsers.py during `import newspaper`; exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "verified",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "newspaper3k 0.2.8 classifiers ['Programming Language :: Python :: 3'] C2_PY3_OK; 'newspaper 0.1.0.7' exists on PyPI with no Python-3 classifier (C2_PY2PKG_OK); 'python-2-head branch HTTP 200' C2_BRANCH_OK; exit_code 0. Branch existence and package naming confirmed; 'deprecated' status itself was not exercised by any command, hence low."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "http=200 final_url=https://api.travis-ci.com/codelucas/newspaper.svg (travis-ci.org redirects to .com); badge body 730 bytes SVG with grey #9f9f9f right panel; BADGE_NOT_PASSING; BADGE_NEGATIVE_TEXT; exit_code 0. The badge renders but does not assert a passing build."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "html_len 102006; authors ['Cnn Wire']; publish_date datetime.datetime(2013, 12, 30, 0, 0); AssertionError: ('authors mismatch', ['Cnn Wire']); exit_code 1. Date matches, authors do not (README's byline is in a.text, not a.authors)."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "tokenizers/punkt -> /root/nltk_data/tokenizers/punkt; corpora/stopwords present; text_len 1053; a.nlp() raised LookupError \"Attempted to load 'tokenizers/punkt_tab/english/'\" (resource not downloaded by the repo's corpora script); keywords/summary never printed; exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "refuted",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "bare interpreter: ModuleNotFoundError: No module named 'nltk' bare_rc=1; after pip install newspaper3k: script prints 'Downloading \"wordnet\" ... Finished.' after_install_rc=0 C6_SCRIPT_EXIT0, but nltk.data.find reports 'MISSING corpora/wordnet' -> AssertionError: ['corpora/wordnet']; exit_code 1. Script exits 0 yet one of its six corpora is not resolvable; partial failure, hence low."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "low"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "Debian 13 (trixie): verbatim install rc=100; \"E: Package 'libpng12-dev' has no installation candidate\"; apt-cache policy libpng12-dev Candidate: (none); README fallback libpng-dev rc=0 (1.6.48-1+deb13u5); C7_FAIL_AS_WRITTEN; probe exit_code 0 (wrapper), install exit 100"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "rc=0; 'Your available languages are:' HEADER_OK; rows ar Arabic, be Belarusian, bg Bulgarian, da Danish, de German, el Greek, en English, es Spanish ... (>=37 rows); C8_OK; exit_code 0. Note: probe pre-installed lxml[html_clean] to get past the c1 import failure."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "<class 'newspaper.mthreading.NewsPool'> newspaper.mthreading; methods ['config', 'join', 'pool', 'set']; 'Thread' present in newspaper.mthreading source; C9_OK; exit_code 0. Note: probe pre-installed lxml[html_clean] to get past the c1 import failure."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "{'ok': True, 'type': 'Source', 'n': 369, 'urls': ['https://www.cnn.com/business/media', ...], 'article_types': ['Article'], 'secs': 1.6}; build_rc=0; C10_OK 369 articles; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "README.rst line 251: '80M+ residential IPs across 195+ countries' and '99.89% success rate' (text is present; README also quotes a different vendor at 99.99% on line 459); vendor page mentions_99.89=5 methodology_words=0; C11_NO_EXECUTABLE_TRUTH; exit_code 0. Third-party marketing figure with no reproducible artifact \u2014 escalate to human, not scored."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  }
+ ],
+ "escalations": [
+  "c11"
+ ],
+ "run_id": "33203577178",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787944799",
+ "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims."
+}

@@ -1,1 +1,0 @@
-python3 -c "import humanize, datetime as dt; r=humanize.naturaldelta(dt.timedelta(seconds=1001)); print(repr(r)); assert r == '16 minutes', repr(r)"

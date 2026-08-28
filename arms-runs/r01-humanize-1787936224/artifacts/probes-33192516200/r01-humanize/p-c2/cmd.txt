@@ -1,1 +1,0 @@
-cd / && python3 -c "import humanize; print('import OK, humanize', humanize.__version__, 'from', humanize.__file__)" && cd / && python3 -c "import humanize; assert humanize.__file__.startswith('/tmp/humanize/'), 'not an editable install: ' + humanize.__file__"

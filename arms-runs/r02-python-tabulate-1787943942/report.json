@@ -1,0 +1,300 @@
+{
+ "repo": "https://github.com/astanin/python-tabulate",
+ "overall_score": 68,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "tabulate 0.10.0 / Name: tabulate / Version: 0.10.0 / Location: /tmp/v/lib/python3.11/site-packages + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "-rwxr-xr-x 1 root root 211 Aug 28 19:08 tabulate / SCRIPT_PRESENT_IN_BIN=yes / /tmp/v/bin/tabulate / CLI_OUTPUT_OK + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "wheel venv: ls /tmp/v2/bin | grep -c '^tabulate$' -> 1; sdist venv: ../../../bin/tabulate listed by pip show -f; 'CLAIM_FAILS: tabulate CLI script installed despite TABULATE_INSTALL=lib-only' + exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "PyPI latest version + requires_python: 0.10.0 >=3.10 / installed 0.10.0 Requires-Python: >=3.10 / classifiers ['Programming Language :: Python :: 3', ... '3.14'] (no Python :: 2) / works on 3.10 (declared lower bound) + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "Sun    696000     1.9891e+09 / FIRST_DATA_LINE_MATCH / FULL_BLOCK_MATCH + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "Name      Age / ------  ----- / Alice      24 / Bob        19 / MATCH + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "Name      Age / ------  ----- / Alice      24 / Bob        19 / MATCH + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "'tabulate --help' itself gave exit=0, but the captured stdout is truncated at '-f FMT, --format FMT      set output ' before the format list and before any 'present:'/'MISSING:' lines; the probe's overall exit_code 1 cannot be attributed to a missing format vs. the comma/space-stripping parse method + exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "wcwidth 0.8.3 installed with the extra (phase A: 'Successfully installed tabulate-0.10.0 wcwidth-0.8.3'), but the alignment test never ran: 'warning: here-document at line 1 delimited by end-of-file' / 'SyntaxError: invalid syntax' before WIDE_CHARS_MODE was checked + exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "PHASE_A_FAILED ... 'SyntaxError: invalid syntax'; stdout empty, no GitHub Actions run status was ever fetched + exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "tabulate 637.5 us per call / prettytable 442.4 us per call / texttable 925.5 us per call / 'tabulate faster than PrettyTable: False' / 'tabulate faster than texttable: True' / AssertionError: claim \"faster than PrettyTable and texttable\" not reproduced + exit_code 1 (env: tabulate 0.10.0, prettytable 3.18.0, texttable 1.7.0, python 3.11.16)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [
+  "c8",
+  "c9",
+  "c10"
+ ],
+ "run_id": "33202457520",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787943942",
+ "memo_md": "6 verified, 2 refuted, 3 escalated of 11 claims."
+}
