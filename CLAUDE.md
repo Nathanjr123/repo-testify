@@ -36,3 +36,7 @@ Ground truth: per-claim hand audit (objective) + Nate's reviewer ranking under a
 - BOX (nate@100.112.249.9, key ~/.ssh/id_lbx_gpu): Windows 11, Python 3.11, winget, NO git/docker/WSL. Use for bulk storage/scratch (C: 236GB, F: 2TB) and Python-only jobs. NOT for repo execution truth (Windows failures would corrupt verdicts).
 - EXECUTION TRUTH: Linux + Docker via GitHub Actions runners (free, docker preinstalled, 14GB) — doubles as judge-facing clean-env reproduction. Keep every workflow log as evidence artifacts.
 - POLLER DUTIES (every wakeup): (1) re-read this file top to bottom — it encodes the PDF rubric and standards; (2) `df -h /` — if free < 1GB, stop and clean OUR OWN scratch only (never other projects); (3) check ~/micro1-fec-research/PARKED-QUESTIONS.md for answers Nate left; (4) check background agents; (5) continue highest-value work toward Sun 23:59 UTC.
+
+## Epistemic standards (why the eval looks the way it does)
+Metrics are stated operationalizations of a construct; optimization pressure finds any gap between them (hence held-out truth, read-only claim lists, evidence-existence gates). No improvement is claimed below the baseline-vs-baseline noise floor. Ambiguities are named and our interpretation justified, not silently assumed. Adverse results go in the main table. Truth-vs-taste is declared per decision in DECISIONS.md. What we did NOT attempt is listed in the README.
+## Poller: also re-read ~/micro1-fec-research/FOUNDING-PRINCIPLES.md (private) every wakeup.
