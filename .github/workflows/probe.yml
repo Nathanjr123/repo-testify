@@ -1,5 +1,7 @@
 name: probe
 on:
+  push:
+    paths: ['eval/probes/**']
   workflow_dispatch:
     inputs:
       probes_path:
@@ -12,7 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run probes (deterministic, no LLM)
-        run: python3 eval/probe_runner.py "${{ inputs.probes_path }}" probes_out
+        run: |
+          if [ -n "${{ inputs.probes_path }}" ]; then
+            python3 eval/probe_runner.py "${{ inputs.probes_path }}" probes_out
+          else
+            for f in eval/probes/*.json; do python3 eval/probe_runner.py "$f" probes_out; done
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: probes-${{ github.run_id }}
