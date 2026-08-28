@@ -2,3 +2,26 @@ r01-humanize.json: ok wall=28.15s
 r02-python-tabulate.json: ok wall=37.12s
 r04-schedule.json: ok wall=31.68s
 r05-records.json: ok wall=33.77s
+r07-newspaper3k.json: ok wall=39.4s
+r09-pydub.json: ok wall=32.73s
+r11-gpt-2.json: ok wall=30.07s
+{
+ "id": "ablate-no-execution-1787952939",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.007,
+   "confident_wrong": 1.0,
+   "evidence_valid": 0.0,
+   "score_error": 0.712
+  },
+  "gates": {
+   "no_fabricated_evidence": 0.14285714285714285,
+   "valid_report": 1.0
+  },
+  "raw": 0.044,
+  "n_cases": 7,
+  "settled_fraction": 0.0,
+  "capped": false
+ }
+}
+SWEEP3_DONE
