@@ -1,0 +1,146 @@
+{
+ "case_id": "r04-schedule",
+ "repo": "https://github.com/dbader/schedule",
+ "commit": "82a43db1b938d8fdf60103bd41f329e06c8d3651",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "python - <<'EOF'\nimport sys\ntry:\n    import schedule\n    print('OBSERVED: import ok, schedule.__version__ =', getattr(schedule, '__version__', '?'), 'from', schedule.__file__)\n    print('VERDICT_LINE: PASS pip install schedule succeeded and import schedule works')\nexcept Exception as e:\n    print('OBSERVED: import failed:', repr(e))\n    print('VERDICT_LINE: FAIL import schedule raised after pip install')\n    sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.7-slim",
+   "network": "on",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "python - <<'EOF'\nimport json, sys, urllib.request, base64, re\nSHA='82a43db1b938d8fdf60103bd41f329e06c8d3651'\nWANT=['3.7','3.8','3.9','3.10','3.11','3.12']\ndef get(url):\n    req=urllib.request.Request(url, headers={'User-Agent':'probe','Accept':'application/vnd.github+json'})\n    with urllib.request.urlopen(req, timeout=30) as r:\n        return r.status, r.read().decode('utf-8','replace')\ntry:\n    st, body = get(f'https://api.github.com/repos/dbader/schedule/contents/.github/workflows?ref={SHA}')\n    files=[f['name'] for f in json.loads(body) if f['type']=='file']\n    print('OBSERVED: workflow files at pinned commit:', files)\n    text=''\n    for name in files:\n        st, raw = get(f'https://raw.githubusercontent.com/dbader/schedule/{SHA}/.github/workflows/{name}')\n        text += raw + '\\n'\n    found=set(re.findall(r'\"?(3\\.\\d+)\"?', text))\n    missing=[v for v in WANT if v not in found]\n    print('OBSERVED: python versions mentioned in CI workflows:', sorted(found, key=lambda s: float(s)), 'missing:', missing)\n    import schedule\n    print('OBSERVED: this container is python', sys.version.split()[0], '; import schedule ok')\n    if not missing:\n        print('VERDICT_LINE: PASS CI matrix at pinned commit lists 3.7-3.12 and import works on 3.7')\n    else:\n        print('VERDICT_LINE: FAIL CI matrix missing versions ' + ','.join(missing))\n        sys.exit(1)\nexcept Exception as e:\n    print('OBSERVED: error', repr(e))\n    print('VERDICT_LINE: FAIL could not fetch/verify CI workflow python matrix')\n    sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python - <<'EOF'\nimport json, sys, urllib.request\ndef get(url, accept='*/*'):\n    req=urllib.request.Request(url, headers={'User-Agent':'probe','Accept':accept})\n    with urllib.request.urlopen(req, timeout=30) as r:\n        return r.status, r.read().decode('utf-8','replace')\nbadge_ok=False; run_ok=False\ntry:\n    st, svg = get('https://github.com/dbader/schedule/workflows/Tests/badge.svg')\n    print('OBSERVED: badge HTTP', st, '| contains \"passing\":', 'passing' in svg, '| contains \"failing\":', 'failing' in svg, '| contains \"no status\":', 'no status' in svg)\n    badge_ok = (st==200 and 'passing' in svg)\nexcept Exception as e:\n    print('OBSERVED: badge fetch error', repr(e))\ntry:\n    st, body = get('https://api.github.com/repos/dbader/schedule/actions/runs?branch=master&per_page=10', 'application/vnd.github+json')\n    runs=[r for r in json.loads(body)['workflow_runs'] if r.get('name')=='Tests']\n    if runs:\n        r=runs[0]\n        print('OBSERVED: latest Tests run on master:', r['conclusion'], r['created_at'], r['html_url'])\n        run_ok = (r['conclusion']=='success')\n    else:\n        print('OBSERVED: no workflow named Tests among recent master runs')\nexcept Exception as e:\n    print('OBSERVED: actions API error', repr(e))\nif badge_ok and run_ok:\n    print('VERDICT_LINE: PASS Tests badge renders passing and latest master Tests run concluded success')\nelif badge_ok or run_ok:\n    print('VERDICT_LINE: FAIL badge and actions API disagree (badge_ok=%s run_ok=%s)' % (badge_ok, run_ok)); sys.exit(1)\nelse:\n    print('VERDICT_LINE: FAIL Tests workflow on master not passing (badge and API both negative or unreachable)'); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "pip show schedule | grep -i '^Requires:' || echo 'Requires: (pip show gave no line)'",
+    "pip freeze | grep -vi '^schedule==' > /tmp/others.txt; echo \"OBSERVED: non-schedule packages pulled in: $(wc -l < /tmp/others.txt) -> $(tr '\\n' ' ' < /tmp/others.txt)\"",
+    "python - <<'EOF'\nimport subprocess, sys\nreq=subprocess.run(['pip','show','schedule'],capture_output=True,text=True).stdout\nreqline=[l for l in req.splitlines() if l.lower().startswith('requires:')]\nreqs=reqline[0].split(':',1)[1].strip() if reqline else ''\nothers=open('/tmp/others.txt').read().split()\nprint('OBSERVED: Requires=%r extra_packages=%r' % (reqs, others))\nif reqs=='' and not others:\n    print('VERDICT_LINE: PASS pip install schedule installed no other packages and metadata declares no requirements')\nelse:\n    print('VERDICT_LINE: FAIL schedule pulled in dependencies: %s %s' % (reqs, others)); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "python - <<'EOF'\nimport sys\nimport schedule\ndef job():\n    print(\"I'm working...\")\ntry:\n    j = schedule.every(10).seconds.do(job)\n    print('OBSERVED: registered job:', repr(j), '| jobs =', len(schedule.get_jobs()))\n    assert len(schedule.get_jobs()) == 1\n    print('VERDICT_LINE: PASS schedule.every(10).seconds.do(job) registered one job without raising')\nexcept Exception as e:\n    print('OBSERVED: raised', repr(e))\n    print('VERDICT_LINE: FAIL every(10).seconds.do(job) raised'); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "python - <<'EOF'\nimport sys\nimport schedule\ndef job():\n    print(\"I'm working...\")\ntry:\n    j = schedule.every().day.at(\"10:30\").do(job)\n    print('OBSERVED: registered job:', repr(j), '| next_run =', j.next_run, '| at_time =', j.at_time)\n    assert str(j.at_time) == '10:30:00', j.at_time\n    print('VERDICT_LINE: PASS every().day.at(\"10:30\").do(job) registered a daily 10:30 job without raising')\nexcept Exception as e:\n    print('OBSERVED: raised', repr(e))\n    print('VERDICT_LINE: FAIL every().day.at(\"10:30\").do(job) raised or wrong time'); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "pip freeze | grep -i pytz && echo 'OBSERVED: pytz present (unexpected in fresh env)' || echo 'OBSERVED: pytz NOT installed (fresh env, only schedule)'",
+    "python - <<'EOF'\nimport sys\nimport schedule\ndef job():\n    print(\"I'm working...\")\ntry:\n    j = schedule.every().day.at(\"12:42\", \"Europe/Amsterdam\").do(job)\n    print('OBSERVED: registered job:', repr(j), '| next_run =', j.next_run)\n    print('VERDICT_LINE: PASS timezone-aware at() works with only schedule installed')\nexcept Exception as e:\n    print('OBSERVED: raised', type(e).__name__ + ':', e)\n    print('VERDICT_LINE: FAIL README timezone line raises without extra package (' + type(e).__name__ + ')'); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "python - <<'EOF'\nimport sys\nimport schedule\ndef job():\n    print(\"I'm working...\")\ntry:\n    j = schedule.every().minute.at(\":17\").do(job)\n    print('OBSERVED: registered job:', repr(j), '| at_time =', j.at_time, '| next_run =', j.next_run)\n    assert j.next_run.second == 17, j.next_run\n    print('VERDICT_LINE: PASS every().minute.at(\":17\").do(job) registered; next_run lands on second 17')\nexcept Exception as e:\n    print('OBSERVED: raised', repr(e))\n    print('VERDICT_LINE: FAIL every().minute.at(\":17\") raised or next_run not at second 17'); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --no-cache-dir schedule"
+   ],
+   "commands": [
+    "python - <<'EOF'\nimport sys, time\nimport schedule\nhits = []\ndef f():\n    hits.append(time.time())\ntry:\n    schedule.every(1).seconds.do(f)\n    schedule.run_pending()\n    before = len(hits)\n    time.sleep(1.5)\n    schedule.run_pending()\n    print('OBSERVED: hits before sleep =', before, '| hits after 1.5s + run_pending =', len(hits))\n    assert before == 0, 'job ran before it was due'\n    assert len(hits) == 1, 'job did not run after >1s'\n    print('VERDICT_LINE: PASS run_pending() executed the 1-second job exactly once after 1.5s')\nexcept Exception as e:\n    print('OBSERVED: raised', repr(e))\n    print('VERDICT_LINE: FAIL run_pending did not execute due job as expected'); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python - <<'EOF'\nimport json, sys, urllib.request\ndef get(url):\n    req=urllib.request.Request(url, headers={'User-Agent':'probe'})\n    with urllib.request.urlopen(req, timeout=30) as r:\n        return r.status, r.read().decode('utf-8','replace')\ntry:\n    st, body = get('https://pypi.org/pypi/schedule/json')\n    ver = json.loads(body)['info']['version']\n    print('OBSERVED: pypi.org JSON HTTP', st, '| latest version =', ver)\n    try:\n        st2, svg = get('https://img.shields.io/pypi/v/schedule.svg')\n        print('OBSERVED: shields badge HTTP', st2, '| badge mentions 1.2.2:', '1.2.2' in svg)\n    except Exception as e:\n        print('OBSERVED: shields badge fetch error', repr(e))\n    assert st == 200\n    if ver == '1.2.2':\n        print('VERDICT_LINE: PASS schedule is on PyPI, latest release 1.2.2 matches setup.py')\n    else:\n        print('VERDICT_LINE: FAIL PyPI latest is %s, not 1.2.2' % ver); sys.exit(1)\nexcept Exception as e:\n    print('OBSERVED: error', repr(e))\n    print('VERDICT_LINE: FAIL could not confirm schedule on PyPI'); sys.exit(1)\nEOF",
+    "true || echo \"VERDICT_LINE: FAIL probe crashed before verdict\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
