@@ -76,6 +76,7 @@ def main():
              "agg": agg,
              "human_time_s": None,  # fill from measurement, per PDF metric table
              "cost_usd": round(sum(r.get("usage", {}).get("cost_usd", 0) for r in per_case), 4),
+             "llm_calls": (round(sum(r.get("output", {}).get("llm_calls", 0) for r in per_case) / max(1, len(per_case)), 1) if any(r.get("output", {}).get("llm_calls") for r in per_case) else None),
              "wall_total_s": round(sum(r["wall_s"] for r in results.values()), 1),
              "per_case": results,
              "limit_blocked": any(r["status"] == "limit_blocked" for r in results.values()),

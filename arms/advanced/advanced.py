@@ -10,7 +10,7 @@ Usage: advanced.py <case.json>   -> report JSON on stdout
 Artifacts land in arms-runs/<case_id>/ ; report carries _run_dir for evidence checks."""
 import base64, json, os, pathlib, re, subprocess, sys, time
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from common import llm, exit_if_limited
+from common import llm, exit_if_limited, CALLS
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 DISABLE = set(filter(None, os.environ.get("ADVANCED_DISABLE", "").split(",")))
@@ -219,6 +219,7 @@ Reply ONLY JSON: {{"probes": [...same schema...]}}"""
     report = {"repo": case["repo"], "overall_score": score, "claims": verdicts,
               "escalations": esc, "run_id": rid, "_run_dir": str(run_dir),
               "_evidence_index": {"probes": [p["probe"] for p in probe_log], "text": idx_text},
+              "llm_calls": CALLS["n"],
               "memo_md": f"{n_ver} verified, {n_ref} refuted, {len(esc)} escalated of {len(verdicts)} claims."}
     (run_dir / "report.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report))
