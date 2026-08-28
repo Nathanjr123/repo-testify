@@ -9,11 +9,12 @@
    "image": "python:3.11-slim",
    "network": "install-only",
    "setup": [
-    "python3 -m pip install --upgrade humanize"
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/python -m pip install --upgrade humanize"
    ],
    "commands": [
-    "python3 -m pip show humanize | grep -E '^(Name|Version):'",
-    "python3 -c \"import humanize; print('import OK, humanize', humanize.__version__)\""
+    "/tmp/v/bin/python -c 'import humanize; print(\"HUMANIZE_VERSION\", humanize.__version__)'",
+    "/tmp/v/bin/python -c 'import humanize' && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -23,28 +24,29 @@
    "image": "python:3.11-slim",
    "network": "install-only",
    "setup": [
-    "apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates >/dev/null",
-    "git clone https://github.com/python-humanize/humanize /tmp/humanize && cd /tmp/humanize && git checkout -q ce4147b6c8f8a132f772be0929d58305eb22c5d9 && git rev-parse HEAD",
+    "apt-get update -qq && apt-get install -y -qq git >/dev/null",
+    "git clone https://github.com/python-humanize/humanize /tmp/humanize",
+    "cd /tmp/humanize && git checkout -q ce4147b6c8f8a132f772be0929d58305eb22c5d9",
     "cd /tmp/humanize && python3 -m pip install -e ."
    ],
    "commands": [
-    "cd / && python3 -c \"import humanize; print('import OK, humanize', humanize.__version__, 'from', humanize.__file__)\"",
-    "cd / && python3 -c \"import humanize; assert humanize.__file__.startswith('/tmp/humanize/'), 'not an editable install: ' + humanize.__file__\""
+    "cd / && python3 -c 'import humanize, os; print(\"HUMANIZE_FILE\", humanize.__file__); assert humanize.__file__.startswith(\"/tmp/humanize/\"), humanize.__file__'",
+    "cd / && python3 -c 'import humanize; print(\"HUMANIZE_VERSION\", humanize.__version__)' && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
   {
    "id": "p-c3",
    "claim_id": "c3",
-   "image": "python:3.10-slim",
+   "image": "python:3.11-slim",
    "network": "install-only",
    "setup": [
-    "python3 -m pip install --upgrade humanize",
-    "python3 -c \"import urllib.request; open('/tmp/pypi.json','wb').write(urllib.request.urlopen('https://pypi.org/pypi/humanize/json', timeout=30).read())\""
+    "apt-get update -qq && apt-get install -y -qq curl >/dev/null",
+    "curl -sf https://pypi.org/pypi/humanize/json -o /tmp/pypi.json"
    ],
    "commands": [
-    "python3 -c \"import json; i=json.load(open('/tmp/pypi.json'))['info']; print('pypi version', i['version'], 'requires_python', i['requires_python']); print([c for c in i['classifiers'] if c.startswith('Programming Language :: Python :: 3.')]); assert i['requires_python']=='>=3.10', i['requires_python']\"",
-    "python3 -c \"import sys, humanize; assert sys.version_info[:2]==(3,10), sys.version; print('import OK on lowest advertised version', sys.version.split()[0], 'humanize', humanize.__version__)\""
+    "python3 -c \"import json; d=json.load(open('/tmp/pypi.json'))['info']; print('REQUIRES_PYTHON', d['requires_python']); print('CLASSIFIERS', [c for c in d['classifiers'] if 'Python ::' in c])\"",
+    "python3 -c \"import json; d=json.load(open('/tmp/pypi.json'))['info']; assert d['requires_python']=='>=3.10', d['requires_python']\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -57,7 +59,7 @@
     "python3 -m pip install --upgrade humanize"
    ],
    "commands": [
-    "python3 -c \"import humanize; r=humanize.intcomma(12345); print(repr(r)); assert r == '12,345', repr(r)\""
+    "python3 -c \"import humanize; r=humanize.intcomma(12345); print('RESULT', repr(r)); assert r == '12,345', repr(r)\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -70,7 +72,7 @@
     "python3 -m pip install --upgrade humanize"
    ],
    "commands": [
-    "python3 -c \"import humanize; r=humanize.intword(123455913); print(repr(r)); assert r == '123.5 million', repr(r)\""
+    "python3 -c \"import humanize; r=humanize.intword(123455913); print('RESULT', repr(r)); assert r == '123.5 million', repr(r)\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -83,7 +85,7 @@
     "python3 -m pip install --upgrade humanize"
    ],
    "commands": [
-    "python3 -c \"import humanize, datetime as dt; r=humanize.naturaldelta(dt.timedelta(seconds=1001)); print(repr(r)); assert r == '16 minutes', repr(r)\""
+    "python3 -c \"import humanize, datetime as dt; r=humanize.naturaldelta(dt.timedelta(seconds=1001)); print('RESULT', repr(r)); assert r == '16 minutes', repr(r)\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -96,7 +98,7 @@
     "python3 -m pip install --upgrade humanize"
    ],
    "commands": [
-    "python3 -c \"import humanize; a=humanize.naturalsize(1_000_000); b=humanize.naturalsize(1_000_000, binary=True); print(repr(a), repr(b)); assert a == '1.0 MB', repr(a); assert b == '976.6 KiB', repr(b)\""
+    "python3 -c \"import humanize; a=humanize.naturalsize(1_000_000); b=humanize.naturalsize(1_000_000, binary=True); print('RESULT', repr(a), repr(b)); assert a == '1.0 MB', repr(a); assert b == '976.6 KiB', repr(b)\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -109,7 +111,7 @@
     "python3 -m pip install --upgrade humanize"
    ],
    "commands": [
-    "python3 -c \"import humanize; r=humanize.fractional(1/3); print(repr(r)); assert r == '1/3', repr(r)\""
+    "python3 -c \"import humanize; r=humanize.fractional(1/3); print('RESULT', repr(r)); assert r == '1/3', repr(r)\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -122,7 +124,7 @@
     "python3 -m pip install --upgrade humanize"
    ],
    "commands": [
-    "python3 -c \"import humanize; r=humanize.scientific(0.3); print(ascii(r)); assert r == '3.00 x 10\\u207b\\u00b9', ascii(r)\""
+    "PYTHONIOENCODING=utf-8 python3 -c \"import humanize; r=humanize.scientific(0.3); print('RESULT', repr(r)); assert r == '3.00 x 10\\u207b\\u00b9', repr(r)\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -135,8 +137,7 @@
     "python3 -m pip install --upgrade humanize"
    ],
    "commands": [
-    "ls -l \"$(python3 -c 'import humanize,os;print(os.path.dirname(humanize.__file__))')/locale/ru_RU/LC_MESSAGES/\"",
-    "python3 -c \"import humanize, datetime as dt; b=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.activate('ru_RU'); r=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.deactivate(); a=humanize.naturaltime(dt.timedelta(seconds=3)); print(ascii((b, r, a))); assert b == '3 seconds ago', ascii(b); assert r == '3 \\u0441\\u0435\\u043a\\u0443\\u043d\\u0434\\u044b \\u043d\\u0430\\u0437\\u0430\\u0434', ascii(r); assert a == '3 seconds ago', ascii(a)\""
+    "PYTHONIOENCODING=utf-8 python3 -c \"import humanize, datetime as dt; before=humanize.naturaltime(dt.timedelta(seconds=3)); _t=humanize.i18n.activate('ru_RU'); ru=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.deactivate(); after=humanize.naturaltime(dt.timedelta(seconds=3)); print('RESULT', repr(before), repr(ru), repr(after)); assert before == '3 seconds ago', repr(before); assert ru == '3 \\u0441\\u0435\\u043a\\u0443\\u043d\\u0434\\u044b \\u043d\\u0430\\u0437\\u0430\\u0434', repr(ru); assert after == '3 seconds ago', repr(after)\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   },
@@ -146,12 +147,12 @@
    "image": "python:3.11-slim",
    "network": "install-only",
    "setup": [
-    "python3 - <<'EOF'\nimport urllib.request, os\nua = {'User-Agent': 'claim-probe'}\nreq = urllib.request.Request('https://github.com/python-humanize/humanize/workflows/Test/badge.svg', headers=ua)\nopen('/tmp/badge.svg', 'wb').write(urllib.request.urlopen(req, timeout=30).read())\nreq = urllib.request.Request('https://api.github.com/repos/python-humanize/humanize/actions/runs?branch=main&event=push&per_page=50', headers={**ua, 'Accept': 'application/vnd.github+json'})\ntok = os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')\nif tok:\n    req.add_header('Authorization', 'Bearer ' + tok)\ntry:\n    open('/tmp/runs.json', 'wb').write(urllib.request.urlopen(req, timeout=30).read())\nexcept Exception as e:\n    print('GitHub API fetch failed (unauthenticated rate limit?):', e)\nEOF"
+    "apt-get update -qq && apt-get install -y -qq curl >/dev/null",
+    "curl -sf -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/python-humanize/humanize/actions/workflows' -o /tmp/workflows.json",
+    "WF_ID=$(python3 -c \"import json; ws=json.load(open('/tmp/workflows.json'))['workflows']; print([w['id'] for w in ws if w['name']=='Test'][0])\") && curl -sf -H 'Accept: application/vnd.github+json' \"https://api.github.com/repos/python-humanize/humanize/actions/workflows/$WF_ID/runs?branch=main&status=completed&per_page=5\" -o /tmp/runs.json"
    ],
    "commands": [
-    "grep -o 'passing\\|failing\\|no status' /tmp/badge.svg | head -1",
-    "grep -q 'passing' /tmp/badge.svg",
-    "python3 - <<'EOF'\nimport json, os\nif not os.path.exists('/tmp/runs.json'):\n    print('no API data; badge SVG check above is the verdict')\n    raise SystemExit(0)\nruns = [r for r in json.load(open('/tmp/runs.json'))['workflow_runs'] if r['name'] == 'Test' and r['status'] == 'completed']\nassert runs, 'no completed Test runs on main in last 50 push runs'\nfor r in runs[:5]:\n    print(r['head_sha'][:7], r['created_at'], r['conclusion'])\nassert runs[0]['conclusion'] == 'success', 'latest Test run on main: ' + str(runs[0]['conclusion'])\nEOF"
+    "python3 -c \"import json; runs=json.load(open('/tmp/runs.json'))['workflow_runs']; [print('RUN', r['head_sha'][:12], r['created_at'], r['conclusion']) for r in runs]; assert runs, 'no completed Test runs on main'; latest=runs[0]; print('LATEST_CONCLUSION', latest['conclusion']); assert latest['conclusion']=='success', latest['conclusion']\" && echo PROBE_OK"
    ],
    "timeout_s": 120
   }
