@@ -1,0 +1,12 @@
+Collecting humanize
+  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)
+Downloading humanize-4.16.0-py3-none-any.whl (137 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 137.2/137.2 kB 762.3 kB/s eta 0:00:00
+Installing collected packages: humanize
+Successfully installed humanize-4.16.0
+
+--stderr--
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip

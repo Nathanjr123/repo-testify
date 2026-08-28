@@ -1,0 +1,28 @@
+Collecting humanize
+  Downloading humanize-4.16.0-py3-none-any.whl (137 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 137.2/137.2 kB 4.2 MB/s eta 0:00:00
+Installing collected packages: humanize
+Successfully installed humanize-4.16.0
+
+--stderr--
+Unable to find image 'python:3.10-slim' locally
+3.10-slim: Pulling from library/python
+6310eb16bf42: Already exists
+5466a598b0f9: Pulling fs layer
+4f9c6a734391: Pulling fs layer
+bbfc75a06bd2: Pulling fs layer
+bbfc75a06bd2: Verifying Checksum
+bbfc75a06bd2: Download complete
+5466a598b0f9: Verifying Checksum
+5466a598b0f9: Download complete
+4f9c6a734391: Verifying Checksum
+4f9c6a734391: Download complete
+5466a598b0f9: Pull complete
+4f9c6a734391: Pull complete
+bbfc75a06bd2: Pull complete
+Digest: sha256:38758a82a44d1acb9bae3dd5f7d2a55452fb44a5ceca7c4589f360f2c4aa3d0c
+Status: Downloaded newer image for python:3.10-slim
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.0.1 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip

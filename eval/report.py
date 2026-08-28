@@ -4,6 +4,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 proof = json.loads((ROOT / "proof" / "build_proof.json").read_text())
 latest = {}
 for e in proof:
+    if e.get("discarded"):
+        continue
     latest[(e["label"], e["cases_dir"])] = e  # newest wins
 print("# Results\n")
 print("| run | cases | raw | rows | gates | cost $ | wall s | git | ts |")

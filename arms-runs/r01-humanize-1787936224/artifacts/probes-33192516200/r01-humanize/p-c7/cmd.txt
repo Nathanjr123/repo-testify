@@ -1,0 +1,1 @@
+python3 -c "import humanize; a=humanize.naturalsize(1_000_000); b=humanize.naturalsize(1_000_000, binary=True); print(repr(a), repr(b)); assert a == '1.0 MB', repr(a); assert b == '976.6 KiB', repr(b)"

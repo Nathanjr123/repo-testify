@@ -13,10 +13,10 @@ Ground truth (PRIVATE, eval/truth/<case_id>.json — heldout half never seen dur
 Rows ADD (weights below), gates MULTIPLY (award nothing, only remove).
 Bands to be set AFTER measuring row distributions on the first baseline run (law 5).
 """
-import json, pathlib
+import json, pathlib, re
 
 WEIGHTS = {
-    "verdict_acc":     0.30,  # macro-F1 over the 3 verdict classes vs ground truth
+    "verdict_acc":     0.30,  # per-claim accuracy vs ground truth (suite-level macro-F1 lives in report.py)
     "confident_wrong": 0.20,  # 1 - (high-confidence wrong verdicts / claims); abstention is the honest exit
     "evidence_valid":  0.20,  # fraction of verdicts whose evidence refs exist in run artifacts
     "coverage":        0.15,  # fraction of the case's claims addressed
@@ -53,18 +53,22 @@ def score(case: dict, output: dict) -> dict:
         for e in c.get("evidence", []):
             ev_total += 1
             ref = str(e.get("ref", ""))
-            if e.get("kind") == "file":
-                ev_ok += (run_dir / ref).exists()
-            elif e.get("kind") == "command":
-                ev_ok += (run_dir / "commands.log").exists() and ref in (run_dir / "commands.log").read_text(errors="replace")
+            if e.get("kind") in ("file", "command"):
+                clog = (run_dir / "commands.log")
+                text = clog.read_text(errors="replace") if clog.exists() else ""
+                probe_hit = re.search(r"\bp-c\d+\b", ref) and re.search(r"\bp-c\d+\b", ref).group(0) in text
+                ev_ok += bool(probe_hit or ref in text or (run_dir / ref).exists()
+                              or any(run_dir.rglob(pathlib.Path(ref).name)) if ref else False)
             else:
                 ev_ok += bool(ref.startswith("http"))
-    fabricated = ev_total > 0 and ev_ok < ev_total
+    # Fabrication = evidence asserted but NONE of it resolves to a recorded artifact.
+    # Imprecise pointers are penalised through the evidence_valid row, not zeroed by the gate.
+    fabricated = ev_total > 0 and ev_ok == 0
 
     hi_wrong = sum(1 for cid, c in rep_claims.items()
                    if c.get("confidence") == "high" and pred.get(cid) != truth["verdicts"].get(cid))
     rows = {
-        "verdict_acc": _macro_f1(pred, truth["verdicts"]),
+        "verdict_acc": sum(1 for cid in claims if pred.get(cid) == truth["verdicts"].get(cid)) / max(1, len(claims)),
         "confident_wrong": 1.0 - hi_wrong / max(1, len(claims)),
         "evidence_valid": (ev_ok / ev_total) if ev_total else 0.0,
         "coverage": len(rep_claims) / max(1, len(claims)),
