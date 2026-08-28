@@ -1,0 +1,80 @@
+{
+  "id": "r06-thefuck",
+  "repo": "https://github.com/nvbn/thefuck",
+  "commit": "c7e7e1d884d3bb241ea6448f72a989434c2a35ec",
+  "license": "MIT",
+  "bucket": "B",
+  "buyer_question": "We want to ship thefuck in our developer-tools image based on Python 3.12 — does it actually install and run on that interpreter, and is the project's CI still green?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The 'thefuck' package requires only python 3.5 or newer (plus pip and python-dev), i.e. it runs on every Python version from 3.5 up, including current 3.12+.",
+      "type": "environment",
+      "source_quote": "## Requirements\n\n- python (3.5+)\n- pip\n- python-dev",
+      "probe_hint": "python3.12 -m venv /tmp/v && /tmp/v/bin/pip install thefuck && /tmp/v/bin/thefuck --version  # expect ModuleNotFoundError: No module named 'imp' on 3.12+"
+    },
+    {
+      "id": "c2",
+      "text": "Installing with `pip install thefuck` yields a working `thefuck` command-line executable on the current default Python.",
+      "type": "install",
+      "source_quote": "On other systems, install *The Fuck*  by using `pip`:\n\n```bash\npip install thefuck\n```",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install thefuck && /tmp/v/bin/thefuck --version"
+    },
+    {
+      "id": "c3",
+      "text": "On Ubuntu/Mint, thefuck installs successfully with `sudo apt update; sudo apt install python3-dev python3-pip python3-setuptools; pip3 install thefuck --user` and the `thefuck` command then works.",
+      "type": "install",
+      "source_quote": "On Ubuntu / Mint, install *The Fuck* with the following commands:\n```bash\nsudo apt update\nsudo apt install python3-dev python3-pip python3-setuptools\npip3 install thefuck --user\n```",
+      "probe_hint": "docker run --rm ubuntu:24.04 bash -c 'apt update && apt install -y python3-dev python3-pip python3-setuptools && pip3 install --break-system-packages thefuck && thefuck --version'"
+    },
+    {
+      "id": "c4",
+      "text": "Running `thefuck --alias` prints shell code suitable for `eval $(thefuck --alias)`, which defines a `fuck` shell function.",
+      "type": "interface",
+      "source_quote": "```bash\neval $(thefuck --alias)\n# You can use whatever you want as an alias, like for Mondays:\neval $(thefuck --alias FUCK)\n```",
+      "probe_hint": "thefuck --alias | grep -q 'fuck' && bash -c 'eval \"$(thefuck --alias)\"; type fuck'"
+    },
+    {
+      "id": "c5",
+      "text": "The `fuck` command supports a `--yeah` option (also `-y` and `--hard`) that runs the corrected command without asking for confirmation.",
+      "type": "interface",
+      "source_quote": "To run fixed commands without confirmation, use the `--yeah` option (or just `-y` for short, or `--hard` if you're especially frustrated):\n\n```bash\nfuck --yeah\n```",
+      "probe_hint": "thefuck --help 2>&1 | grep -E '\\-\\-yeah|-y\\b'; bash -c 'eval \"$(thefuck --alias)\"; history -s \"eco test\"; fuck --yeah' # in an interactive-like shell"
+    },
+    {
+      "id": "c6",
+      "text": "The `fuck` command supports a `-r` option that re-runs corrections recursively until the command succeeds.",
+      "type": "interface",
+      "source_quote": "To fix commands recursively until succeeding, use the `-r` option:\n\n```bash\nfuck -r\n```",
+      "probe_hint": "thefuck --help 2>&1 | grep -E '\\-r\\b|repeat'"
+    },
+    {
+      "id": "c7",
+      "text": "thefuck's `pip_unknown_command` rule corrects a mistyped pip subcommand: after running `pip instatl <pkg>` (which fails), thefuck suggests `pip install <pkg>`.",
+      "type": "interface",
+      "source_quote": "* `pip_unknown_command` &ndash; fixes wrong `pip` commands, for example `pip instatl/pip install`;",
+      "probe_hint": "python3 -c \"from thefuck.rules.pip_unknown_command import match, get_new_command; from thefuck.types import Command; c=Command('pip instatl requests', 'ERROR: unknown command \\\"instatl\\\" - maybe you meant \\\"install\\\"'); assert match(c); print(get_new_command(c))\""
+    },
+    {
+      "id": "c8",
+      "text": "After a failed `apt-get install vim` (permission denied), running `fuck` suggests the corrected command `sudo apt-get install vim`.",
+      "type": "quickstart",
+      "source_quote": "➜ apt-get install vim\nE: Could not open lock file /var/lib/dpkg/lock - open (13: Permission denied)\n\n➜ fuck\nsudo apt-get install vim [enter/↑/↓/ctrl+c]",
+      "probe_hint": "python3 -c \"from thefuck.rules.sudo import match, get_new_command; from thefuck.types import Command; c=Command('apt-get install vim', 'E: Could not open lock file /var/lib/dpkg/lock - open (13: Permission denied)'); assert match(c); print(get_new_command(c))\""
+    },
+    {
+      "id": "c9",
+      "text": "The thefuck README's Build Status badge (GitHub Actions 'Tests' workflow) asserts that the project's test workflow is currently passing.",
+      "type": "test_ci",
+      "source_quote": "[![Build Status][workflow-badge]][workflow-link]",
+      "probe_hint": "gh api 'repos/nvbn/thefuck/actions/runs?per_page=5' --jq '.workflow_runs[] | \"\\(.name) | \\(.conclusion) | \\(.created_at) | \\(.html_url)\"'"
+    },
+    {
+      "id": "c10",
+      "text": "thefuck can be updated to the latest release with `pip3 install thefuck --upgrade` (latest PyPI release is 3.32, from 2021).",
+      "type": "install",
+      "source_quote": "## Updating\n\n```bash\npip3 install thefuck --upgrade\n```",
+      "probe_hint": "curl -s https://pypi.org/pypi/thefuck/json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['info']['version'], max(d['releases'][d['info']['version']], key=lambda r: r['upload_time'])['upload_time'])\""
+    }
+  ]
+}

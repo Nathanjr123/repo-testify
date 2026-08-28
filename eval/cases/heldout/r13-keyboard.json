@@ -1,0 +1,94 @@
+{
+  "id": "r13-keyboard",
+  "repo": "https://github.com/boppreh/keyboard",
+  "commit": "d232de09bda50ecb5211ebcc59b85bc6da6aaa24",
+  "license": "MIT",
+  "bucket": "HARD",
+  "buyer_question": "We want the keyboard library for cross-platform hotkeys (Windows, Linux, and ideally macOS). The feature list and tests look reassuring — but do passing tests actually prove the OS integration works, and are the platform and dependency claims true?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package keyboard installs from PyPI with the exact command `pip install keyboard`.",
+      "type": "install",
+      "source_quote": "Install the [PyPI package](https://pypi.python.org/pypi/keyboard/):\n\n    pip install keyboard",
+      "probe_hint": "Fresh venv, `pip install keyboard`, exit code 0, `import keyboard` succeeds (import on Linux without root may still work; hooking will not)."
+    },
+    {
+      "id": "c2",
+      "text": "The library works with Windows and Linux (Linux requires sudo/root), with experimental OS X (macOS) support.",
+      "type": "environment",
+      "source_quote": "- Works with **Windows** and **Linux** (requires sudo), with experimental **OS X** support (thanks @glitchassassin!).",
+      "probe_hint": "Per-OS smoke test: register a hook and send/receive a synthetic key event. On macOS expect breakage in practice — letters unrecognized (#604), ctrl broken (#605), segfault (#619). On Linux confirm root requirement by running with and without sudo."
+    },
+    {
+      "id": "c3",
+      "text": "The library has zero dependencies: installation pulls in no other packages.",
+      "type": "environment",
+      "source_quote": "- **Zero dependencies**. Trivial to install and deploy, just copy the files.",
+      "probe_hint": "`pip install keyboard` in a fresh venv and list installed packages. Note the contradiction at the pinned SHA: setup.py declares install_requires=[\"pyobjc; sys_platform=='darwin'\"], so on macOS it is NOT zero-dependency."
+    },
+    {
+      "id": "c4",
+      "text": "The library supports both Python 2 and Python 3.",
+      "type": "environment",
+      "source_quote": "- **Python 2 and 3**.",
+      "probe_hint": "`python2 -c 'import keyboard'` (if a py2 interpreter is available) and same on current python3; check for py3-only syntax in the source at the pinned SHA."
+    },
+    {
+      "id": "c5",
+      "text": "The library is pure Python with no C modules to be compiled.",
+      "type": "environment",
+      "source_quote": "- **Pure Python**, no C modules to be compiled.",
+      "probe_hint": "Install and verify no build step occurs (wheel is py-none-any) and the installed package contains only .py files."
+    },
+    {
+      "id": "c6",
+      "text": "The library is 'Tested and documented' — it ships a test suite whose passing validates the library's functionality.",
+      "type": "test_ci",
+      "source_quote": "- Tested and documented.",
+      "probe_hint": "HARD CASE: run the test suite (python -m pytest / keyboard/_*_tests). It passes on any machine, including headless CI, because the tests mock the OS event layer (fake scan-code tables and injected event queues) — a green suite does NOT verify real Windows/Linux/macOS hook integration. Verdict on 'tested' must distinguish unit-tested-with-mocks from OS-integration-tested (macOS is claimed supported yet broken per #604/#605/#619 while those same tests pass)."
+    },
+    {
+      "id": "c7",
+      "text": "Run standalone, `python -m keyboard > events.txt` writes one JSON object per keyboard event, e.g. {\"event_type\": \"down\", \"scan_code\": 25, \"name\": \"p\", ...}, and `python -m keyboard < events.txt` replays them.",
+      "type": "quickstart",
+      "source_quote": "# Save JSON events to a file until interrupted:\npython -m keyboard > events.txt\n\ncat events.txt\n# {\"event_type\": \"down\", \"scan_code\": 25, \"name\": \"p\", \"time\": 1622447562.2994788, \"is_keypad\": false}",
+      "probe_hint": "On Linux as root with a real or uinput virtual keyboard: run `python -m keyboard`, inject key events, verify JSON lines with event_type/scan_code/name fields; then replay from file."
+    },
+    {
+      "id": "c8",
+      "text": "`keyboard.write('...')` types an arbitrary string by simulating key presses.",
+      "type": "interface",
+      "source_quote": "keyboard.write('The quick brown fox jumps over the lazy dog.')",
+      "probe_hint": "On a supported OS with privileges: focus a text sink (or hook events) and call keyboard.write; verify the emitted event sequence spells the string."
+    },
+    {
+      "id": "c9",
+      "text": "`keyboard.add_hotkey('ctrl+shift+a', print, args=('triggered', 'hotkey'))` registers a global hotkey that fires the callback when the combination is pressed, and complex multi-step hotkeys like 'ctrl+shift+m, ctrl+space' are supported.",
+      "type": "interface",
+      "source_quote": "- Complex hotkey support (e.g. `ctrl+shift+m, ctrl+space`) with controllable timeout.",
+      "probe_hint": "Register the hotkey, synthesize the combination with keyboard.send/press, assert the callback ran (this loopback works because send injects into the same hook layer)."
+    },
+    {
+      "id": "c10",
+      "text": "On Linux the library avoids depending on X by reading raw device files (/dev/input/input*), which is why root is required.",
+      "type": "environment",
+      "source_quote": "- To avoid depending on X, the Linux parts reads raw device files (`/dev/input/input*`) but this requires root.",
+      "probe_hint": "On headless Linux (no X) as root, verify hooks work; as non-root verify a permission error on /dev/input."
+    },
+    {
+      "id": "c11",
+      "text": "The project banner states it is currently unmaintained ('you might encounter some friction and limited features using it').",
+      "type": "environment",
+      "source_quote": "**This project is currently unmaintained. It works for many cases, and I wish to pick it up again in the future, but you might encounter some friction and limited features using it.**",
+      "probe_hint": "Check commit/issue-response activity via gh api (last substantive commit vs open-issue growth); banner is a disclosure to weigh against the feature list above it."
+    },
+    {
+      "id": "c12",
+      "text": "Key suppression/blocking is only available on Windows.",
+      "type": "interface",
+      "source_quote": "- Key suppression/blocking only available on Windows. [#22](https://github.com/boppreh/keyboard/issues/22)",
+      "probe_hint": "On Linux, call a hook with suppress=True and verify events are not actually blocked (or that the option errors); on Windows verify suppression works."
+    }
+  ]
+}

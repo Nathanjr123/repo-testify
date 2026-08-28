@@ -1,0 +1,87 @@
+{
+  "id": "r01-humanize",
+  "repo": "https://github.com/python-humanize/humanize",
+  "commit": "ce4147b6c8f8a132f772be0929d58305eb22c5d9",
+  "license": "MIT",
+  "bucket": "A",
+  "buyer_question": "We want to embed humanize in our reporting product's number/date formatting layer — do the README's install instructions, Python-version support, and example outputs actually hold on a current interpreter?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package 'humanize' can be installed from PyPI with the command `python3 -m pip install --upgrade humanize`, after which `import humanize` succeeds.",
+      "type": "install",
+      "source_quote": "### From PyPI\n\n```bash\npython3 -m pip install --upgrade humanize\n```",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/python -m pip install --upgrade humanize && /tmp/v/bin/python -c 'import humanize; print(humanize.__version__)'"
+    },
+    {
+      "id": "c2",
+      "text": "The package 'humanize' can be installed from source by cloning https://github.com/python-humanize/humanize and running `python3 -m pip install -e .` in the clone.",
+      "type": "install",
+      "source_quote": "### From source\n\n```bash\ngit clone https://github.com/python-humanize/humanize\ncd humanize\npython3 -m pip install -e .\n```",
+      "probe_hint": "git clone --depth 1 https://github.com/python-humanize/humanize /tmp/hz && cd /tmp/hz && python3 -m pip install -e . && python3 -c 'import humanize'"
+    },
+    {
+      "id": "c3",
+      "text": "The 'humanize' package's README displays a PyPI supported-Python-versions badge, asserting that the versions shown by pypi.org metadata (currently requires-python >=3.10) are the supported versions.",
+      "type": "environment",
+      "source_quote": "[![Supported Python versions](https://img.shields.io/pypi/pyversions/humanize.svg?logo=python&logoColor=FFE873)](https://pypi.org/project/humanize/)",
+      "probe_hint": "curl -s https://pypi.org/pypi/humanize/json | python3 -c \"import json,sys; print(json.load(sys.stdin)['info']['requires_python'])\""
+    },
+    {
+      "id": "c4",
+      "text": "In Python with the 'humanize' package installed, `humanize.intcomma(12345)` returns the string '12,345'.",
+      "type": "quickstart",
+      "source_quote": ">>> humanize.intcomma(12345)\n'12,345'",
+      "probe_hint": "python3 -c \"import humanize; assert humanize.intcomma(12345) == '12,345', humanize.intcomma(12345)\""
+    },
+    {
+      "id": "c5",
+      "text": "In Python with the 'humanize' package installed, `humanize.intword(123455913)` returns the string '123.5 million'.",
+      "type": "quickstart",
+      "source_quote": ">>> humanize.intword(123455913)\n'123.5 million'",
+      "probe_hint": "python3 -c \"import humanize; assert humanize.intword(123455913) == '123.5 million', humanize.intword(123455913)\""
+    },
+    {
+      "id": "c6",
+      "text": "In Python with the 'humanize' package installed, `humanize.naturaldelta(datetime.timedelta(seconds=1001))` returns the string '16 minutes'.",
+      "type": "quickstart",
+      "source_quote": ">>> humanize.naturaldelta(dt.timedelta(seconds=1001))\n'16 minutes'",
+      "probe_hint": "python3 -c \"import humanize, datetime as dt; assert humanize.naturaldelta(dt.timedelta(seconds=1001)) == '16 minutes', humanize.naturaldelta(dt.timedelta(seconds=1001))\""
+    },
+    {
+      "id": "c7",
+      "text": "In Python with the 'humanize' package installed, `humanize.naturalsize(1_000_000)` returns '1.0 MB' and `humanize.naturalsize(1_000_000, binary=True)` returns '976.6 KiB'.",
+      "type": "quickstart",
+      "source_quote": ">>> humanize.naturalsize(1_000_000)\n'1.0 MB'\n>>> humanize.naturalsize(1_000_000, binary=True)\n'976.6 KiB'",
+      "probe_hint": "python3 -c \"import humanize; assert humanize.naturalsize(1_000_000) == '1.0 MB'; assert humanize.naturalsize(1_000_000, binary=True) == '976.6 KiB'\""
+    },
+    {
+      "id": "c8",
+      "text": "In Python with the 'humanize' package installed, `humanize.fractional(1/3)` returns the string '1/3'.",
+      "type": "quickstart",
+      "source_quote": ">>> humanize.fractional(1/3)\n'1/3'",
+      "probe_hint": "python3 -c \"import humanize; assert humanize.fractional(1/3) == '1/3', humanize.fractional(1/3)\""
+    },
+    {
+      "id": "c9",
+      "text": "In Python with the 'humanize' package installed, `humanize.scientific(0.3)` returns the string '3.00 x 10⁻¹' (with Unicode superscript exponent).",
+      "type": "quickstart",
+      "source_quote": ">>> humanize.scientific(0.3)\n'3.00 x 10⁻¹'",
+      "probe_hint": "python3 -c \"import humanize; assert humanize.scientific(0.3) == '3.00 x 10\\u207b\\u00b9', repr(humanize.scientific(0.3))\""
+    },
+    {
+      "id": "c10",
+      "text": "The 'humanize' package ships a Russian locale: after `humanize.i18n.activate('ru_RU')`, `humanize.naturaltime(datetime.timedelta(seconds=3))` returns '3 секунды назад', and `humanize.i18n.deactivate()` restores '3 seconds ago'.",
+      "type": "interface",
+      "source_quote": ">>> _t = humanize.i18n.activate(\"ru_RU\")\n>>> humanize.naturaltime(dt.timedelta(seconds=3))\n'3 секунды назад'",
+      "probe_hint": "python3 -c \"import humanize, datetime as dt; humanize.i18n.activate('ru_RU'); r=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.deactivate(); assert r == '3 секунды назад', repr(r)\""
+    },
+    {
+      "id": "c11",
+      "text": "The GitHub Actions 'Test' workflow badge in the humanize README asserts that the Test workflow on python-humanize/humanize is currently passing.",
+      "type": "test_ci",
+      "source_quote": "[![GitHub Actions status](https://github.com/python-humanize/humanize/workflows/Test/badge.svg)](https://github.com/python-humanize/humanize/actions)",
+      "probe_hint": "gh api 'repos/python-humanize/humanize/actions/runs?branch=main&per_page=5' --jq '.workflow_runs[] | \"\\(.name) \\(.conclusion)\"'"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": "r02-python-tabulate",
+  "repo": "https://github.com/astanin/python-tabulate",
+  "commit": "268615a5c27dc40e5c22454c07b44d5c50410da0",
+  "license": "MIT",
+  "bucket": "A",
+  "buyer_question": "We plan to standardize on tabulate for CLI table output across our internal tools — do the README's install story (library + command-line utility), example outputs, and performance claims hold up?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package 'tabulate' can be installed from PyPI with `pip install tabulate`, after which `from tabulate import tabulate` succeeds.",
+      "type": "install",
+      "source_quote": "To install the Python library and the command line utility, run:\n\n```shell\npip install tabulate\n```",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install tabulate && /tmp/v/bin/python -c 'from tabulate import tabulate; import tabulate as t; print(t.__version__)'"
+    },
+    {
+      "id": "c2",
+      "text": "Installing the 'tabulate' package with pip on Linux also installs a command-line utility named `tabulate` onto the PATH (in the environment's bin directory).",
+      "type": "install",
+      "source_quote": "The command line utility will be installed as `tabulate` to `bin` on\nLinux (e.g. `/usr/bin`); or as `tabulate.exe` to `Scripts` in your\nPython installation on Windows",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install tabulate && test -x /tmp/v/bin/tabulate && printf '1 2\\n3 4\\n' | /tmp/v/bin/tabulate"
+    },
+    {
+      "id": "c3",
+      "text": "Setting the environment variable TABULATE_INSTALL=lib-only during `pip install tabulate` installs only the library, without the `tabulate` command-line script.",
+      "type": "install",
+      "source_quote": "To install just the library on Unix-like operating systems:\n\n```shell\nTABULATE_INSTALL=lib-only pip install tabulate\n```",
+      "probe_hint": "python3 -m venv /tmp/v2 && TABULATE_INSTALL=lib-only /tmp/v2/bin/pip install --no-cache-dir --no-binary tabulate tabulate && ls /tmp/v2/bin/ | grep -c tabulate; echo 'expect 0 scripts if claim holds'"
+    },
+    {
+      "id": "c4",
+      "text": "The 'tabulate' package is a Python 3 library (no Python 2 support); its current PyPI release declares requires-python >=3.10.",
+      "type": "environment",
+      "source_quote": "Tabulate is a Python3 library.",
+      "probe_hint": "curl -s https://pypi.org/pypi/tabulate/json | python3 -c \"import json,sys; print(json.load(sys.stdin)['info']['requires_python'])\""
+    },
+    {
+      "id": "c5",
+      "text": "In Python with 'tabulate' installed, `print(tabulate([[\"Sun\",696000,1989100000],[\"Earth\",6371,5973.6],[\"Moon\",1737,73.5],[\"Mars\",3390,641.85]]))` prints a simple-format table whose first data line is 'Sun    696000     1.9891e+09'.",
+      "type": "quickstart",
+      "source_quote": ">>> print(tabulate(table))\n-----  ------  -------------\nSun    696000     1.9891e+09\nEarth    6371  5973.6\nMoon     1737    73.5\nMars     3390   641.85\n-----  ------  -------------",
+      "probe_hint": "python3 -c \"from tabulate import tabulate; out=tabulate([['Sun',696000,1989100000],['Earth',6371,5973.6],['Moon',1737,73.5],['Mars',3390,641.85]]); print(out); assert 'Sun    696000     1.9891e+09' in out\""
+    },
+    {
+      "id": "c6",
+      "text": "In Python with 'tabulate' installed, calling tabulate with headers=\"firstrow\" on [[\"Name\",\"Age\"],[\"Alice\",24],[\"Bob\",19]] uses the first row as the header, producing lines 'Name      Age' and 'Alice      24'.",
+      "type": "interface",
+      "source_quote": ">>> print(tabulate([[\"Name\",\"Age\"],[\"Alice\",24],[\"Bob\",19]],\n...                headers=\"firstrow\"))\nName      Age\n------  -----\nAlice      24\nBob        19",
+      "probe_hint": "python3 -c \"from tabulate import tabulate; out=tabulate([['Name','Age'],['Alice',24],['Bob',19]], headers='firstrow'); print(out); assert out.splitlines()[0]=='Name      Age' and 'Alice      24' in out\""
+    },
+    {
+      "id": "c7",
+      "text": "In Python with 'tabulate' installed, passing a dict of iterables with headers=\"keys\" uses the dictionary keys as column headers: tabulate({\"Name\": [\"Alice\", \"Bob\"], \"Age\": [24, 19]}, headers=\"keys\") starts with 'Name      Age'.",
+      "type": "interface",
+      "source_quote": ">>> print(tabulate({\"Name\": [\"Alice\", \"Bob\"],\n...                 \"Age\": [24, 19]}, headers=\"keys\"))\nName      Age\n------  -----\nAlice      24\nBob        19",
+      "probe_hint": "python3 -c \"from tabulate import tabulate; out=tabulate({'Name':['Alice','Bob'],'Age':[24,19]}, headers='keys'); print(out); assert out.splitlines()[0]=='Name      Age'\""
+    },
+    {
+      "id": "c8",
+      "text": "The `tabulate` command-line utility's --help output lists 'github', 'grid', 'html', 'latex', 'pipe', 'rst', 'simple', and 'tsv' among the supported output formats for the -f/--format option.",
+      "type": "interface",
+      "source_quote": "Supported output formats: asciidoc, colon_grid, double_grid, double_outline,\nfancy_grid, fancy_outline, github, grid, heavy_grid, heavy_outline, html, jira,\nlatex, latex_booktabs, latex_longtable, latex_raw, mediawiki, mixed_grid, mixed_outline,\nmoinmoin, orgtbl, outline, pipe, plain, presto, pretty, psql, rounded_grid,\nrounded_outline, rst, simple, simple_grid, simple_outline, textile, tsv, unsafehtml.",
+      "probe_hint": "tabulate --help 2>&1 | tr ',' '\\n' | grep -E 'github|grid|html|latex|pipe|rst|simple|tsv' | head"
+    },
+    {
+      "id": "c9",
+      "text": "Installing the extra `pip install tabulate[widechars]` enables wide-character (East-Asian) alignment support via the wcwidth dependency.",
+      "type": "install",
+      "source_quote": "pip install tabulate[widechars]",
+      "probe_hint": "python3 -m venv /tmp/v3 && /tmp/v3/bin/pip install 'tabulate[widechars]' && /tmp/v3/bin/python -c 'import wcwidth; print(\"wcwidth ok\")'"
+    },
+    {
+      "id": "c10",
+      "text": "The python-tabulate README's GitHub Actions badge (workflows/tabulate.yml) asserts that the repository's CI workflow on astanin/python-tabulate is currently passing.",
+      "type": "test_ci",
+      "source_quote": "[![python-tabulate](https://github.com/astanin/python-tabulate/actions/workflows/tabulate.yml/badge.svg)](https://github.com/astanin/python-tabulate/actions/workflows/tabulate.yml)",
+      "probe_hint": "gh api 'repos/astanin/python-tabulate/actions/runs?branch=master&per_page=5' --jq '.workflow_runs[] | \"\\(.name) \\(.conclusion) \\(.created_at)\"'"
+    },
+    {
+      "id": "c11",
+      "text": "In a mini-benchmark on a 10x10 table of mixed text and numeric data, the tabulate library formats the table faster than PrettyTable and texttable (README cites tabulate 0.10.0 at 553.4 μs vs PrettyTable 3.17.0 at 468.0 μs and texttable 1.7.0 at 1071.4 μs on Python 3.13.7/Windows 11 — note the table itself shows PrettyTable FASTER than tabulate).",
+      "type": "quantitative",
+      "source_quote": "`tabulate` appears to be faster than `PrettyTable` and `texttable`.\nThe following mini-benchmark was run in Python 3.13.7 on Windows 11 (x64):",
+      "probe_hint": "pip install tabulate prettytable texttable && python3 - <<'EOF'\nimport timeit\nsetup='''\nfrom tabulate import tabulate\nimport prettytable, texttable\ntable=[[\"a\",1.5]*5]*10\n'''\nprint('tabulate', timeit.timeit('tabulate(table)', setup, number=1000))\nEOF"
+    }
+  ]
+}

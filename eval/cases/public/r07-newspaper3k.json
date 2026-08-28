@@ -1,0 +1,87 @@
+{
+  "id": "r07-newspaper3k",
+  "repo": "https://github.com/codelucas/newspaper",
+  "commit": "1618b547f31c2d1fd19ae3b6afd8f7542dd02074",
+  "license": "MIT",
+  "bucket": "C",
+  "buyer_question": "We are acquiring a news-monitoring pipeline built on newspaper3k — does the library still install and import cleanly on a current Python with current lxml, is its CI badge meaningful, and do the README's scraping examples still work?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "Installing the package with `pip3 install newspaper3k` on a current Python yields a working library: `import newspaper` and `from newspaper import Article` succeed.",
+      "type": "install",
+      "source_quote": "Run ✅ ``pip3 install newspaper3k`` ✅",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install newspaper3k && /tmp/v/bin/python -c 'from newspaper import Article; print(\"ok\")'  # expect ImportError from lxml.html.clean with lxml>=5.2"
+    },
+    {
+      "id": "c2",
+      "text": "Newspaper (newspaper3k) is a Python 3 library; the python2 branch is deprecated and the python2 package on PyPI is named 'newspaper', not 'newspaper3k'.",
+      "type": "environment",
+      "source_quote": "**Newspaper is a Python3 library**! Or, view our **deprecated and buggy** `Python2 branch`_",
+      "probe_hint": "curl -s https://pypi.org/pypi/newspaper3k/json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['info']['version'], [c for c in d['info']['classifiers'] if 'Python' in c])\""
+    },
+    {
+      "id": "c3",
+      "text": "The newspaper README displays a Travis CI build-status badge served from travis-ci.org, asserting a live, passing CI build for codelucas/newspaper.",
+      "type": "test_ci",
+      "source_quote": ".. image:: https://travis-ci.org/codelucas/newspaper.svg\n        :target: http://travis-ci.org/codelucas/newspaper/\n        :alt: Build status",
+      "probe_hint": "curl -sIL https://travis-ci.org/codelucas/newspaper.svg | head -5  # travis-ci.org was shut down in 2021; check what the badge actually serves"
+    },
+    {
+      "id": "c4",
+      "text": "With newspaper3k installed, downloading and parsing the URL http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/ via Article(url); article.download(); article.parse() yields article.authors == ['Leigh Ann Caldwell', 'John Honway'] and article.publish_date == datetime.datetime(2013, 12, 30, 0, 0).",
+      "type": "quickstart",
+      "source_quote": ">>> article.parse()\n\n    >>> article.authors\n    ['Leigh Ann Caldwell', 'John Honway']\n\n    >>> article.publish_date\n    datetime.datetime(2013, 12, 30, 0, 0)",
+      "probe_hint": "python3 -c \"from newspaper import Article; a=Article('http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'); a.download(); a.parse(); print(a.authors, a.publish_date)\""
+    },
+    {
+      "id": "c5",
+      "text": "With newspaper3k installed and NLP corpora available, calling article.nlp() after download() and parse() populates article.keywords (a list of keyword strings) and article.summary (a summary string).",
+      "type": "interface",
+      "source_quote": ">>> article.nlp()\n\n    >>> article.keywords\n    ['New Years', 'resolution', ...]\n\n    >>> article.summary\n    'The study shows that 93% of people ...'",
+      "probe_hint": "python3 -c \"from newspaper import Article; a=Article('<any live article url>'); a.download(); a.parse(); a.nlp(); assert a.keywords and a.summary\"  # will raise if nltk punkt corpora not downloaded"
+    },
+    {
+      "id": "c6",
+      "text": "The NLP corpora required by newspaper3k can be installed by piping the repository script to python3: `curl https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py | python3`.",
+      "type": "install",
+      "source_quote": "$ curl https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py | python3",
+      "probe_hint": "curl -sf https://raw.githubusercontent.com/codelucas/newspaper/master/download_corpora.py | python3"
+    },
+    {
+      "id": "c7",
+      "text": "On Debian/Ubuntu, the README's listed image-processing prerequisite `sudo apt-get install libjpeg-dev zlib1g-dev libpng12-dev` works as written (i.e. the package libpng12-dev is installable).",
+      "type": "install",
+      "source_quote": "- If you are on Python 3 install the distribution wide requirements::\n\n    $ sudo apt-get install libjpeg-dev zlib1g-dev libpng12-dev",
+      "probe_hint": "docker run --rm ubuntu:24.04 bash -c 'apt-get update -qq && apt-cache show libpng12-dev' # package removed after Ubuntu 16.04; README itself notes a fallback"
+    },
+    {
+      "id": "c8",
+      "text": "With newspaper3k importable, `newspaper.languages()` prints the table of available input language codes (ar, be, bg, da, de, el, en, es, ...).",
+      "type": "interface",
+      "source_quote": ">>> import newspaper\n    >>> newspaper.languages()\n\n    Your available languages are:\n    input code      full name",
+      "probe_hint": "python3 -c \"import newspaper; newspaper.languages()\""
+    },
+    {
+      "id": "c9",
+      "text": "newspaper3k provides a multi-threaded article download framework importable as `from newspaper import news_pool`.",
+      "type": "interface",
+      "source_quote": "- Multi-threaded article download framework",
+      "probe_hint": "python3 -c \"from newspaper import news_pool; print(type(news_pool))\""
+    },
+    {
+      "id": "c10",
+      "text": "With newspaper3k installed, `newspaper.build('http://cnn.com')` returns a Source object whose .articles list contains Article objects with populated .url attributes.",
+      "type": "quickstart",
+      "source_quote": ">>> cnn_paper = newspaper.build('http://cnn.com')\n\n    >>> for article in cnn_paper.articles:\n    >>>     print(article.url)",
+      "probe_hint": "python3 -c \"import newspaper; p=newspaper.build('http://cnn.com', memoize_articles=False); print(len(p.articles), p.articles[0].url if p.articles else 'EMPTY')\""
+    },
+    {
+      "id": "c11",
+      "text": "The newspaper README claims the Swiftproxy residential-proxy service offers '80M+ residential IPs across 195+ countries' and 'a 99.89% success rate' for use with newspaper3k pipelines.",
+      "type": "quantitative",
+      "source_quote": "`Swiftproxy`_ — 80M+ residential IPs across 195+ countries, a 99.89% success rate, non-expiring traffic, and a free trial so you can pressure-test it before paying.",
+      "probe_hint": "No executable probe: vendor marketing claim embedded in the README; verify only that the claim is unsubstantiated third-party advertising (curl the vendor page and note absence of methodology)"
+    }
+  ]
+}
