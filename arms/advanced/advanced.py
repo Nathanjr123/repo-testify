@@ -52,10 +52,14 @@ def stage_execute(case, probes, run_dir):
     subprocess.run(["git", "-C", str(ROOT), "-c", "user.email=p.szczepanik94@gmail.com",
                     "-c", "user.name=Nathanjr123", "commit", "-qm", f"probes: {case['id']}"], check=False)
     subprocess.run(["git", "-C", str(ROOT), "push", "-q"], check=True)
-    r = gh(["workflow", "run", "probe.yml", "--ref", "master", "-f",
-            f"probes_path=eval/probes/{case['id']}.json", "--repo", GHREPO])
-    if r.returncode != 0:
-        raise RuntimeError("dispatch failed: " + r.stderr[:300])
+    for attempt in range(4):  # GitHub returned 504 on dispatch once (r05, sweep1); transient, retry
+        r = gh(["workflow", "run", "probe.yml", "--ref", "master", "-f",
+                f"probes_path=eval/probes/{case['id']}.json", "--repo", GHREPO])
+        if r.returncode == 0:
+            break
+        time.sleep(30 * (attempt + 1))
+    else:
+        raise RuntimeError("dispatch failed after retries: " + r.stderr[:300])
     time.sleep(20)
     rid = gh(["run", "list", "--repo", GHREPO, "--workflow", "probe", "--limit", "1",
               "--json", "databaseId,status", "--jq", ".[0].databaseId"]).stdout.strip()

@@ -1,0 +1,76 @@
+r01-humanize.json: ok wall=49.74s
+r02-python-tabulate.json: ok wall=69.58s
+r04-schedule.json: ok wall=39.61s
+r05-records.json: ok wall=40.07s
+r07-newspaper3k.json: ok wall=76.86s
+r09-pydub.json: ok wall=51.37s
+r11-gpt-2.json: ok wall=44.54s
+{
+ "id": "baseline-v2-n1-1787943377",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.095,
+   "confident_wrong": 0.813,
+   "evidence_valid": 0.332,
+   "coverage": 1.0,
+   "score_error": 0.811
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.529,
+  "n_cases": 7
+ }
+}
+r01-humanize.json: ok wall=59.31s
+r02-python-tabulate.json: ok wall=51.27s
+r04-schedule.json: ok wall=48.7s
+r05-records.json: ok wall=42.31s
+r07-newspaper3k.json: ok wall=66.0s
+r09-pydub.json: ok wall=51.7s
+r11-gpt-2.json: ok wall=41.12s
+{
+ "id": "baseline-v2-n2-1787943738",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.088,
+   "confident_wrong": 0.783,
+   "evidence_valid": 0.324,
+   "coverage": 1.0,
+   "score_error": 0.745
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.51,
+  "n_cases": 7
+ }
+}
+r01-humanize.json: ok wall=203.63s
+r02-python-tabulate.json: ok wall=369.42s
+r04-schedule.json: ok wall=315.49s
+r05-records.json: arm_error wall=172.07s
+r07-newspaper3k.json: ok wall=826.67s
+r09-pydub.json: ok wall=377.19s
+r11-gpt-2.json: ok wall=609.52s
+{
+ "id": "advanced-v1-1787946612",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.622,
+   "confident_wrong": 0.765,
+   "evidence_valid": 1.0,
+   "coverage": 1.0,
+   "score_error": 0.803
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.81,
+  "n_cases": 6
+ }
+}
+SWEEP1_DONE

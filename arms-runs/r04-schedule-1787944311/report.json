@@ -1,0 +1,282 @@
+{
+ "repo": "https://github.com/dbader/schedule",
+ "overall_score": 75,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "phase_a: 'Downloading schedule-1.2.2-py3-none-any.whl (12 kB) ... Successfully installed schedule-1.2.2'; stdout 'schedule==1.2.2' + exit_code 0"
+    },
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "'import schedule' then 'registered jobs: 1' + exit_code 0"
+    },
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "stderr 'AttributeError: module 'schedule' has no attribute '__version__'' (import itself succeeded; failure is on a nonexistent attribute, not on import) + exit_code 0 (via trailing || echo)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "ci.yml:17: python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12'] (matrix declares the versions) but output truncated, no per-version test execution shown, and exit_code 2"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "badge.svg renders 'no status' (not 'passing'); grep -q 'passing' failed + exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "'schedule==1.2.2' / 'extra_packages=0' / 'Requires: (empty) confirmed' / '80K site-packages/schedule' + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "'registered jobs: 1' + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "'next_run: 2026-08-29 10:30:00' / 'ok' + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "'pytz absent (fresh env confirmed)' then 'RESULT: raised ModuleNotFoundError: No module named 'pytz'' + exit_code 1"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "'next_run: 2026-08-28 19:15:17' / 'ok' (second==17 asserted) + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "'job invoked 1 time(s) after 1.2s' (and not before due) + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "'PyPI latest: 1.2.2' / '1.2.2 uploaded: 2024-05-25T18:41:59' + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [
+  "c2"
+ ],
+ "run_id": "33202898441",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787944311",
+ "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims."
+}

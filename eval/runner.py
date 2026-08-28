@@ -2,7 +2,7 @@
   run.sh <case.json>  -> writes output JSON to stdout (may include {"usage": {"cost_usd":..,"tokens":..}})
 Ablations: ADVANCED_DISABLE=<flag> env reaches the arm's code."""
 import argparse, json, os, pathlib, subprocess, sys, time
-from .scorer import score, SANITY_CASE
+from .scorer import score, SANITY_CASE, WEIGHTS
 from .aggregate import aggregate
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -55,6 +55,9 @@ def main():
         results[c.name] = r
         if r["status"] == "ok":
             per_case.append(r)
+        elif r["status"] in ("arm_error", "invalid_output"):
+            zero = {"rows": {k: 0.0 for k in WEIGHTS}, "gates": {"valid_report": False, "no_fabricated_evidence": True}}
+            per_case.append(zero)  # a crashed arm is a failed submission for that case: scored 0, never hidden
         print(f"{c.name}: {r['status']} wall={r['wall_s']}s", file=sys.stderr)
         if r["status"] == "limit_blocked":
             print("USAGE LIMIT — halting sweep; rerun later resumes cleanly (partial entry flagged)", file=sys.stderr)
@@ -71,7 +74,7 @@ def main():
              "wall_total_s": round(sum(r["wall_s"] for r in results.values()), 1),
              "per_case": results,
              "limit_blocked": any(r["status"] == "limit_blocked" for r in results.values()),
-             "partial": len(per_case) < len(cases)}
+             "partial": any(r["status"] == "limit_blocked" for r in results.values())}
     PROOF.parent.mkdir(exist_ok=True)
     proof = json.loads(PROOF.read_text()) if PROOF.exists() else []
     proof.append(entry)

@@ -1,1 +1,0 @@
-python3 -m pip show humanize | grep -E '^(Name|Version):' && python3 -c "import humanize; print('import OK, humanize', humanize.__version__)"

@@ -1,1 +1,0 @@
-python3 -c "import humanize; r=humanize.intword(123455913); print(repr(r)); assert r == '123.5 million', repr(r)"
