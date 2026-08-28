@@ -1,0 +1,9 @@
+name: repro
+on: [push, workflow_dispatch]
+jobs:
+  level1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the shipped image and run the Level-1 reproduction inside it
+        run: docker build -q -t repo-testify . && docker run --rm repo-testify
