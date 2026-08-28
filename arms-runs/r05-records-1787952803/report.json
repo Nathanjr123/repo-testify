@@ -1,0 +1,308 @@
+{
+ "repo": "https://github.com/kennethreitz/records",
+ "overall_score": 50,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "no probe transcript present; no exit_code available"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  }
+ ],
+ "escalations": [
+  "c1",
+  "c2",
+  "c3",
+  "c4",
+  "c5",
+  "c6",
+  "c7",
+  "c8",
+  "c9",
+  "c10",
+  "c11"
+ ],
+ "run_id": "none",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787952803",
+ "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
+}

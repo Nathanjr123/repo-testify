@@ -1,5 +1,5 @@
 # micro1 Agentic Workflows Hackathon — working rules (read every session)
-Deadline: Sun 2026-08-30 23:59 UTC. Rubric /100: Engineering 30, E2E Quality 20 ("would sign their name to it", must NOT read AI-generated), Problem & User Value 15, Measured Improvement 15, Reproducibility 15, Hot Take 5.
+Deadline: **Mon 2026-08-31 18:00 UTC** (verified on the official HackerEarth page 2026-08-28 late evening: "Aug 28 – Aug 31, 3:00 PM – 6:00 PM UTC"; was Sun 23:59). Internal target: submission-complete Sun night; Monday = buffer for polish and the final proof run, never new scope. Rubric /100: Engineering 30, E2E Quality 20 ("would sign their name to it", must NOT read AI-generated), Problem & User Value 15, Measured Improvement 15, Reproducibility 15, Hot Take 5.
 
 ## The 12 laws
 1. Scorer + cases + replay BEFORE any solution code. Freeze, commit the hash.
