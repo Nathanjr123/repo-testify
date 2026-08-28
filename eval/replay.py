@@ -12,6 +12,10 @@ proof = json.loads((ROOT / "proof" / "build_proof.json").read_text())
 e = next(x for x in proof if x["id"] == a.run)
 per = []
 for cname, r in e["per_case"].items():
+    if r["status"] in ("arm_error", "invalid_output"):  # crash-as-zero, same as the runner — never hidden
+        from eval.scorer import WEIGHTS
+        per.append((cname, {"rows": {k: 0.0 for k in WEIGHTS}, "gates": {"valid_report": False, "no_fabricated_evidence": True}, "status": r["status"], "settled_fraction": 0.0}))
+        continue
     if r["status"] != "ok" or "output" not in r: continue
     cp = next(ROOT.glob(f"eval/cases/*/{cname}"))
     s = score(json.loads(cp.read_text()), r["output"]); s["output"] = r["output"]; s["status"] = "ok"; s["wall_s"] = r["wall_s"]
