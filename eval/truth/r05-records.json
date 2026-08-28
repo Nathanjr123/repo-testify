@@ -1,0 +1,17 @@
+{
+ "provisional": true,
+ "verdicts": {
+  "c1": "verified",
+  "c2": "refuted",
+  "c3": "verified",
+  "c4": "refuted",
+  "c5": "unverifiable",
+  "c6": "verified",
+  "c7": "verified",
+  "c8": "verified",
+  "c9": "refuted",
+  "c10": "verified",
+  "c11": "verified"
+ },
+ "reviewer_score": 40
+}
