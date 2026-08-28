@@ -1,0 +1,152 @@
+{
+ "case_id": "r02-python-tabulate",
+ "repo": "https://github.com/astanin/python-tabulate",
+ "commit": "268615a5c27dc40e5c22454c07b44d5c50410da0",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --quiet tabulate"
+   ],
+   "commands": [
+    "/tmp/v/bin/python - <<'EOF' || echo \"VERDICT_LINE: FAIL import or install crashed\"\ntry:\n    from tabulate import tabulate\n    import tabulate as t\n    print('observed: tabulate version', t.__version__, 'callable', callable(tabulate))\n    print('VERDICT_LINE: PASS pip install tabulate + from tabulate import tabulate ok, version', t.__version__)\nexcept Exception as e:\n    print('observed:', repr(e))\n    print('VERDICT_LINE: FAIL from tabulate import tabulate raised', type(e).__name__)\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --quiet tabulate"
+   ],
+   "commands": [
+    "ls -l /tmp/v/bin/tabulate 2>&1",
+    "if test -x /tmp/v/bin/tabulate; then OUT=$(printf '1 2\\n3 4\\n' | /tmp/v/bin/tabulate 2>&1); RC=$?; echo \"observed: rc=$RC output=$(echo \"$OUT\" | tr '\\n' '|')\"; if [ $RC -eq 0 ] && echo \"$OUT\" | grep -q '^ *1 *2'; then echo 'VERDICT_LINE: PASS bin/tabulate exists, executable, formats stdin'; else echo 'VERDICT_LINE: FAIL bin/tabulate exists but did not format stdin'; fi; else echo 'observed: no /tmp/v/bin/tabulate'; echo 'VERDICT_LINE: FAIL no tabulate script installed to venv bin'; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v2",
+    "TABULATE_INSTALL=lib-only /tmp/v2/bin/pip install --quiet tabulate"
+   ],
+   "commands": [
+    "/tmp/v2/bin/python -c 'import tabulate; print(\"observed: library importable, version\", tabulate.__version__)' || echo 'observed: library NOT importable'",
+    "N=$(ls /tmp/v2/bin 2>/dev/null | grep -c '^tabulate$'); echo \"observed: tabulate scripts in venv bin = $N (README says lib-only should install none)\"; if [ \"$N\" -eq 0 ]; then echo 'VERDICT_LINE: PASS TABULATE_INSTALL=lib-only suppressed the CLI script'; else echo 'VERDICT_LINE: FAIL TABULATE_INSTALL=lib-only ignored; bin/tabulate still installed (pyproject has no such hook)'; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (network?)\"\nimport json, urllib.request\ntry:\n    req = urllib.request.Request('https://pypi.org/pypi/tabulate/json', headers={'User-Agent': 'claim-probe'})\n    with urllib.request.urlopen(req, timeout=30) as r:\n        status = r.status\n        info = json.load(r)['info']\nexcept Exception as e:\n    print('observed: pypi fetch failed', repr(e))\n    print('VERDICT_LINE: FAIL could not fetch PyPI metadata')\n    raise SystemExit(0)\nrp = info.get('requires_python')\npy2 = [c for c in info.get('classifiers', []) if 'Python :: 2' in c]\nprint('observed: http', status, 'version', info.get('version'), 'requires_python', repr(rp), 'py2 classifiers', py2)\nif rp and rp.replace(' ', '') == '>=3.10' and not py2:\n    print('VERDICT_LINE: PASS PyPI release', info.get('version'), 'declares requires_python >=3.10, no Python 2 classifiers')\nelif rp and rp.replace(' ', '').startswith('>=3') and not py2:\n    print('VERDICT_LINE: FAIL Python3-only holds but requires_python is', rp, 'not >=3.10 (README/pyproject at pinned commit vs published release differ)')\nelse:\n    print('VERDICT_LINE: FAIL requires_python', rp, 'py2 classifiers', py2)\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet tabulate"
+   ],
+   "commands": [
+    "python3 - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed\"\nfrom tabulate import tabulate\ntable = [[\"Sun\",696000,1989100000],[\"Earth\",6371,5973.6],\n         [\"Moon\",1737,73.5],[\"Mars\",3390,641.85]]\nout = tabulate(table)\nprint(out)\nlines = out.splitlines()\nexpected = ['-----  ------  -------------',\n            'Sun    696000     1.9891e+09',\n            'Earth    6371  5973.6',\n            'Moon     1737    73.5',\n            'Mars     3390   641.85',\n            '-----  ------  -------------']\nprint('observed: first data line =', repr(lines[1]) if len(lines) > 1 else None)\nif lines == expected:\n    print('VERDICT_LINE: PASS output matches README simple-format table exactly')\nelif len(lines) > 1 and lines[1] == 'Sun    696000     1.9891e+09':\n    print('VERDICT_LINE: PASS first data line matches; other lines differ from README:', [l for l in lines if l not in expected])\nelse:\n    print('VERDICT_LINE: FAIL first data line differs from README')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet tabulate"
+   ],
+   "commands": [
+    "python3 - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed\"\nfrom tabulate import tabulate\nout = tabulate([[\"Name\",\"Age\"],[\"Alice\",24],[\"Bob\",19]],\n               headers=\"firstrow\")\nprint(out)\nlines = out.splitlines()\nexpected = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19']\nprint('observed: lines =', lines)\nif lines == expected:\n    print('VERDICT_LINE: PASS headers=firstrow output matches README exactly')\nelif lines and lines[0] == 'Name      Age' and 'Alice      24' in lines:\n    print('VERDICT_LINE: PASS header and Alice lines match README; other lines differ')\nelse:\n    print('VERDICT_LINE: FAIL header line or Alice line differs from README')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet tabulate"
+   ],
+   "commands": [
+    "python3 - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed\"\nfrom tabulate import tabulate\nout = tabulate({\"Name\": [\"Alice\", \"Bob\"],\n                \"Age\": [24, 19]}, headers=\"keys\")\nprint(out)\nlines = out.splitlines()\nexpected = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19']\nprint('observed: lines =', lines)\nif lines == expected:\n    print('VERDICT_LINE: PASS dict-of-iterables with headers=keys matches README exactly')\nelif lines and lines[0] == 'Name      Age':\n    print('VERDICT_LINE: PASS header line matches README (keys used as headers); body differs:', lines[1:])\nelse:\n    print('VERDICT_LINE: FAIL first line is not \"Name      Age\"')\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet tabulate"
+   ],
+   "commands": [
+    "python3 - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed\"\nimport re, shutil, subprocess\nexe = shutil.which('tabulate')\nprint('observed: tabulate on PATH =', exe)\nif not exe:\n    print('VERDICT_LINE: FAIL tabulate CLI not on PATH')\n    raise SystemExit(0)\np = subprocess.run([exe, '--help'], capture_output=True, text=True, timeout=30)\ntxt = p.stdout + p.stderr\nprint(txt)\nwanted = ['github', 'grid', 'html', 'latex', 'pipe', 'rst', 'simple', 'tsv']\nmissing = [f for f in wanted if not re.search(r'(?<![\\w])' + f + r'(?![\\w])', txt)]\nprint('observed: rc', p.returncode, 'missing formats', missing)\nif p.returncode == 0 and not missing:\n    print('VERDICT_LINE: PASS --help lists all 8 named formats')\nelse:\n    print('VERDICT_LINE: FAIL --help rc', p.returncode, 'missing', missing)\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "python3 -m venv /tmp/v3",
+    "/tmp/v3/bin/pip install --quiet 'tabulate[widechars]'"
+   ],
+   "commands": [
+    "/tmp/v3/bin/python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed\"\ntry:\n    import wcwidth\nexcept ImportError as e:\n    print('observed: wcwidth missing', e)\n    print('VERDICT_LINE: FAIL tabulate[widechars] did not install wcwidth')\n    raise SystemExit(0)\nimport tabulate as t\nfrom tabulate import tabulate\nout = tabulate([['\\u65e5\\u672c\\u8a9e', 1], ['ab', 2]])\nprint(out)\nlines = out.splitlines()\nw = [wcwidth.wcswidth(l) for l in lines]\nprint('observed: wcwidth', wcwidth.__version__, 'WIDE_CHARS_MODE', getattr(t, 'WIDE_CHARS_MODE', None), 'display widths per line', w)\nif getattr(t, 'WIDE_CHARS_MODE', False) and len(set(w)) == 1:\n    print('VERDICT_LINE: PASS wcwidth installed and CJK row aligns by display width')\nelse:\n    print('VERDICT_LINE: FAIL wcwidth present but wide-char alignment not in effect, widths', w)\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (network?)\"\nimport json, urllib.request, urllib.error\nUA = {'User-Agent': 'claim-probe', 'Accept': 'application/vnd.github+json'}\nbadge_url = 'https://github.com/astanin/python-tabulate/actions/workflows/tabulate.yml/badge.svg'\nstatus = None; body = ''\ntry:\n    with urllib.request.urlopen(urllib.request.Request(badge_url, headers=UA), timeout=30) as r:\n        status = r.status; body = r.read().decode('utf-8', 'replace')\nexcept urllib.error.HTTPError as e:\n    status = e.code\nexcept Exception as e:\n    print('observed: badge fetch error', repr(e))\nbadge_word = 'passing' if 'passing' in body else ('failing' if 'failing' in body else ('no status' if 'no status' in body else 'unknown'))\nprint('observed: badge http', status, 'badge text =', badge_word, 'svg bytes', len(body))\napi_url = 'https://api.github.com/repos/astanin/python-tabulate/actions/workflows/tabulate.yml/runs?branch=master&status=completed&per_page=3'\nlatest = None\ntry:\n    with urllib.request.urlopen(urllib.request.Request(api_url, headers=UA), timeout=30) as r:\n        runs = json.load(r).get('workflow_runs', [])\n    for run in runs:\n        print('observed: run', run.get('run_number'), run.get('head_sha', '')[:8], run.get('conclusion'), run.get('created_at'))\n    latest = runs[0].get('conclusion') if runs else None\nexcept Exception as e:\n    print('observed: GitHub API unavailable', repr(e))\nif status == 200 and badge_word == 'passing' and latest in (None, 'success'):\n    print('VERDICT_LINE: PASS badge renders \"passing\"' + (' and latest completed master run is success' if latest else ' (API corroboration unavailable)'))\nelif status == 200 and badge_word == 'passing':\n    print('VERDICT_LINE: FAIL badge says passing but latest completed master run conclusion is', latest)\nelse:\n    print('VERDICT_LINE: FAIL badge http', status, 'text', badge_word, 'latest run', latest)\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "setup": [
+    "pip install --quiet tabulate prettytable texttable"
+   ],
+   "commands": [
+    "python3 - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed\"\nimport timeit, importlib.metadata as md\nfrom tabulate import tabulate\nimport prettytable, texttable\nheaders = ['col%d' % i for i in range(10)]\ntable = [['some text'] + list(range(i, i + 9)) for i in range(10)]  # 10x10 mixed text/numeric, as in benchmark/benchmark.py\ndef run_tabulate():\n    return tabulate(table, headers)\ndef run_prettytable():\n    pt = prettytable.PrettyTable(headers)\n    for r in table:\n        pt.add_row(r)\n    return pt.get_string()\ndef run_texttable():\n    tt = texttable.Texttable()\n    tt.add_rows([headers] + table)\n    return tt.draw()\nN = 2000\nres = {}\nfor name, fn in [('tabulate', run_tabulate), ('prettytable', run_prettytable), ('texttable', run_texttable)]:\n    fn()\n    best = min(timeit.repeat(fn, number=N, repeat=3)) / N * 1e6\n    res[name] = best\n    print('observed: %-12s %-8s %8.1f us/call' % (name, md.version(name), best))\nfaster_tt = res['tabulate'] < res['texttable']\nfaster_pt = res['tabulate'] < res['prettytable']\nprint('observed: tabulate faster than texttable =', faster_tt, '; faster than prettytable =', faster_pt)\nif faster_tt and faster_pt:\n    print('VERDICT_LINE: PASS tabulate %.1fus beats prettytable %.1fus and texttable %.1fus' % (res['tabulate'], res['prettytable'], res['texttable']))\nelif faster_tt:\n    print('VERDICT_LINE: FAIL tabulate %.1fus beats texttable %.1fus but NOT prettytable %.1fus (matches README own table)' % (res['tabulate'], res['texttable'], res['prettytable']))\nelse:\n    print('VERDICT_LINE: FAIL tabulate %.1fus slower than prettytable %.1fus and texttable %.1fus' % (res['tabulate'], res['prettytable'], res['texttable']))\nEOF"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
