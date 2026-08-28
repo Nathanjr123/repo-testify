@@ -28,3 +28,52 @@ r01-humanize.json: ok wall=36.41s
 r02-python-tabulate.json: ok wall=58.29s
 r04-schedule.json: ok wall=45.74s
 r05-records.json: ok wall=48.0s
+r07-newspaper3k.json: ok wall=49.01s
+r09-pydub.json: ok wall=52.87s
+r11-gpt-2.json: ok wall=46.3s
+{
+ "id": "baseline-n2-1787936880",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.101,
+   "confident_wrong": 0.752,
+   "evidence_valid": 0.279,
+   "coverage": 1.0,
+   "score_error": 0.797
+  },
+  "gates": {
+   "no_fabricated_evidence": 0.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.0,
+  "n_cases": 7
+ }
+}
+run 2 done: 17:08
+r01-humanize.json: ok wall=39.4s
+r02-python-tabulate.json: ok wall=49.81s
+r04-schedule.json: ok wall=39.33s
+r05-records.json: ok wall=42.28s
+r07-newspaper3k.json: arm_error wall=3.59s
+r09-pydub.json: arm_error wall=3.51s
+r11-gpt-2.json: arm_error wall=4.18s
+{
+ "id": "baseline-n3-1787937063",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.025,
+   "confident_wrong": 1.0,
+   "evidence_valid": 0.466,
+   "coverage": 1.0,
+   "score_error": 0.835
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.576,
+  "n_cases": 4
+ }
+}
+run 3 done: 17:11
+ALL_DONE

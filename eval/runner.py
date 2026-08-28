@@ -27,7 +27,7 @@ def run_case(arm, case_path):
         return {"status": "invalid_output", "raw_stdout": p.stdout[-2000:], "wall_s": wall}
     case = json.loads(pathlib.Path(case_path).read_text())
     s = score(case, out)
-    return {"status": "ok", "wall_s": wall, "usage": out.get("usage", {}), **s}
+    return {"status": "ok", "wall_s": wall, "usage": out.get("usage", {}), "output": out, **s}
 
 def main():
     ap = argparse.ArgumentParser()

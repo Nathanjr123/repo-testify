@@ -328,6 +328,260 @@
      "no_fabricated_evidence": false
     }
    }
-  }
+  },
+  "discarded": "scorer changed mid-sweep (macro-F1->accuracy, gate fix); rows incomparable; outputs were not persisted so cannot be rescored (CHANGELOG iteration 4)"
+ },
+ {
+  "id": "baseline-n2-1787936880",
+  "arm": "baseline",
+  "label": "baseline-n2",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "02e87c0",
+  "ts": "2026-08-28T17:08:00Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.101,
+    "confident_wrong": 0.752,
+    "evidence_valid": 0.279,
+    "coverage": 1.0,
+    "score_error": 0.797
+   },
+   "gates": {
+    "no_fabricated_evidence": 0.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.0,
+   "n_cases": 7
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 336.6,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 36.41,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.188,
+     "coverage": 1.0,
+     "score_error": 0.7
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r02-python-tabulate.json": {
+    "status": "ok",
+    "wall_s": 58.29,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.514,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.435,
+     "coverage": 1.0,
+     "score_error": 0.77
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r04-schedule.json": {
+    "status": "ok",
+    "wall_s": 45.74,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.182,
+     "coverage": 1.0,
+     "score_error": 1.0
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r05-records.json": {
+    "status": "ok",
+    "wall_s": 48.0,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.056,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.714,
+     "coverage": 1.0,
+     "score_error": 0.98
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r07-newspaper3k.json": {
+    "status": "ok",
+    "wall_s": 49.01,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.3,
+     "confident_wrong": 0.909,
+     "evidence_valid": 0.267,
+     "coverage": 1.0,
+     "score_error": 0.85
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r09-pydub.json": {
+    "status": "ok",
+    "wall_s": 52.87,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.167,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.409,
+     "coverage": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r11-gpt-2.json": {
+    "status": "ok",
+    "wall_s": 46.3,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.25,
+     "confident_wrong": 0.4,
+     "evidence_valid": 0.308,
+     "coverage": 1.0,
+     "score_error": 0.9
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   }
+  },
+  "discarded": "scorer changed mid-sweep (macro-F1->accuracy, gate fix); rows incomparable; outputs were not persisted so cannot be rescored (CHANGELOG iteration 4)"
+ },
+ {
+  "id": "baseline-n3-1787937063",
+  "arm": "baseline",
+  "label": "baseline-n3",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "02e87c0",
+  "ts": "2026-08-28T17:11:03Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.025,
+    "confident_wrong": 1.0,
+    "evidence_valid": 0.466,
+    "coverage": 1.0,
+    "score_error": 0.835
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.576,
+   "n_cases": 4
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 182.1,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 39.4,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.933,
+     "coverage": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r02-python-tabulate.json": {
+    "status": "ok",
+    "wall_s": 49.81,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.091,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.667,
+     "coverage": 1.0,
+     "score_error": 0.77
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r04-schedule.json": {
+    "status": "ok",
+    "wall_s": 39.33,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.263,
+     "coverage": 1.0,
+     "score_error": 1.0
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r05-records.json": {
+    "status": "ok",
+    "wall_s": 42.28,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.091,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.667,
+     "coverage": 1.0,
+     "score_error": 0.98
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    }
+   },
+   "r07-newspaper3k.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+    "wall_s": 3.59
+   },
+   "r09-pydub.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+    "wall_s": 3.51
+   },
+   "r11-gpt-2.json": {
+    "status": "arm_error",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+    "wall_s": 4.18
+   }
+  },
+  "discarded": "scorer changed mid-sweep (macro-F1->accuracy, gate fix); rows incomparable; outputs were not persisted so cannot be rescored (CHANGELOG iteration 4)"
  }
 ]
