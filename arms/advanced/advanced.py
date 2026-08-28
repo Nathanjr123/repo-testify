@@ -135,7 +135,12 @@ def adjudicate_batch(case, probe_log, k):
 {FEWSHOT}
 Claims: {claims}
 Probe transcripts (probe p-cN corresponds to claim cN): {json.dumps(slim)[:60000]}
-Rules: verdict from the transcript alone; quote the exit code you rely on; missing/ambiguous evidence -> unverifiable + low. Reply ONLY JSON:
+Rules: verdict from the transcript alone; quote the exit code you rely on; missing/ambiguous evidence -> unverifiable + low.
+v3 rules (from the audited public-split failures):
+ (a) A probe's own `VERDICT_LINE: PASS/FAIL` is its conclusion — follow it unless you quote contrary evidence from the same transcript.
+ (b) The claim is judged AS WRITTEN in the README. If a documented prerequisite (install line, pinned dependency, required tool) fails as written, every claim that depends on it is REFUTED (high), not unverifiable — "could be made to work" is not the question.
+ (c) If a probe's setup installed a package or applied a fix the README does not document, the claim is UNVERIFIABLE-as-written (low) and must say what was added.
+Reply ONLY JSON:
 {{"claims": [{{"id": "cN", "verdict": "verified|refuted|unverifiable", "confidence": "high|low", "evidence": [{{"kind": "command", "ref": "p-cN", "excerpt": "<quoted output line + exit_code N>"}}]}}]}}
 Claims again: {claims}"""
     votes = []
