@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-# ADVANCED — every component behind a flag; honor ADVANCED_DISABLE=<flag> for ablations.
-echo '{"error": "advanced not implemented"}' >&2; exit 1
+set -euo pipefail
+python3 "$(dirname "$0")/advanced.py" "$1"
