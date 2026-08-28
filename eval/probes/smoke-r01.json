@@ -1,0 +1,21 @@
+{
+ "case_id": "r01-humanize-smoke",
+ "repo": "https://github.com/python-humanize/humanize",
+ "commit": "ce4147b6c8f8a132f772be0929d58305eb22c5d9",
+ "probes": [
+  {
+   "id": "smoke-install",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq && apt-get install -y -qq git >/dev/null",
+    "python3 -m pip install --quiet --upgrade humanize"
+   ],
+   "commands": [
+    "python3 -c \"import humanize; print('humanize', humanize.__version__); print(humanize.naturalsize(1000000))\""
+   ],
+   "timeout_s": 60
+  }
+ ]
+}
