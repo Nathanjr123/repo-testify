@@ -53,7 +53,25 @@ A reproducible repro of the primary mode: case `r07-newspaper3k`, claims c8/c9, 
 Claim *discovery* is not on the scored path — the claim list per repository is fixed so two people scoring the same run get the same number; the extractor exists for real-world use but its recall is not evaluated here. No embedding retrieval, no conversing agents, no ungrounded self-review passes (DESIGN.md explains why). No Windows or macOS execution: verdicts are Linux verdicts.
 
 ## Reproduction guide
-_(exact commands, versions, runtime, cost — filled at the final proof run)_
+Three levels, from a clean clone. Level 1 needs only Python 3.10+ and reproduces every number in this README from the shipped proof; Level 2 re-runs the sandbox probes on GitHub Actions (needs a fork + `gh` login); Level 3 re-runs the LLM arms (needs a Claude Code login — the arms call `claude -p`).
+
+**Level 1 — verify and regenerate the results (≈10 s, $0)**
+```
+git clone <this repo> && cd repo-testify
+make test      # case-contract validator (14 cases) + aggregate self-test + scorer sanity cell
+make report    # RESULTS.md regenerated from proof/build_proof.json
+python3 eval/render_readme.py          # README tables regenerated from proof (diff should be empty)
+python3 -m eval.replay --run <id>      # re-score any run id's persisted outputs; asserts it reproduces the stored raw
+```
+Every table row carries its proof id, git hash and UTC timestamp; `replay` re-scores persisted arm outputs through the current scorer and fails loudly on drift.
+
+**Level 2 — re-execute the probes (≈2–15 min per repo on ubuntu-latest, $0 on public repos)**
+Fork, `gh workflow run probe.yml -f probes_path=eval/probes/r01-humanize.json`, download the artifact: per-probe `cmd.txt`, `stdout.log`, `stderr.log`, `exit_code`, `phase_a.log`. Images are `python:3.X-slim` by tag; a pinned digest is recorded in each probe artifact's phase-A log. Probe specs for every case are committed under `eval/probes/`.
+
+**Level 3 — re-run the arms** (`make baseline`, `make advanced`, `make ablate`; each appends to the proof)
+Requires `claude` on PATH (or `CLAUDE_BIN`) and `gh auth login` with `workflow` scope. Measured cost: baseline ≈0.9 min/repo, 1 model call; pipeline v2 ≈13 min/repo wall (mostly CI wait), 4–5 model calls (plan, up to one repair, three adjudication votes). Token spend is not metered by the CLI on a subscription; call counts are in the proof entries.
+
+Data: `eval/cases/{public,heldout}/*.json` (claims + pinned commits, public GitHub repositories only), `eval/truth/*.json` (audited verdicts; `provisional: true` until the human audit closes). Versions: Python 3.12 locally, `python:3.11-slim`/`3.12-slim`/`3.13-slim` in probes, ubuntu-latest runners, Claude Code 2.1.250.
 
 ## Agents, tools, provenance
 Coding agent: Claude Code (claude-fable-5) for authoring; the pipeline's LLM calls use the same model via `claude -p`. Trajectories for every session are in traces/, failures included, human checkpoints marked. Pre-existing before kickoff: the problem-agnostic harness (Makefile, eval/ skeleton, trace exporter). Everything else was built during the competition.

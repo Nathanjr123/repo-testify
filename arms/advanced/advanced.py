@@ -1,3 +1,8 @@
+# PROVENANCE — read before modifying.
+# Written during the competition (2026-08-28/31) by Claude Code (claude-fable-5) under Nathan Obiekwe's
+# direction; every design decision it encodes is recorded in DESIGN.md / DECISIONS.md / CHANGELOG.md, and the
+# session trajectory that produced it is in traces/. Pre-existing before kickoff: only the problem-agnostic
+# skeleton (Makefile targets, eval/ layout, trace exporter). Human review: Nathan audits truth files and results.
 """Advanced arm — code-orchestrated pipeline (see DESIGN.md).
 Stages: map -> plan -> execute (GH Actions, deterministic) -> adjudicate (k=3 vote) -> report.
 Flags via ADVANCED_DISABLE (comma-separated): execution | k3 | notes | retry
