@@ -1,0 +1,296 @@
+{
+ "repo": "https://github.com/jiaaro/pydub",
+ "overall_score": 82,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3.11.16 / VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable + exit_code 0 (phase_a: Successfully installed pydub-0.25.1)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "Python 3.13.15 / File \"/repo/pydub/utils.py\", line 17, in <module>: import pyaudioop as audioop / ModuleNotFoundError: No module named 'pyaudioop' / VERDICT_LINE: FAIL from pydub import AudioSegment raises on Python 3.13 + exit_code 0 (0 only because of the trailing `|| echo`; the python -c import itself raised)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "observed: ffmpeg on PATH = None avconv = None | out.wav frames = 16000 rate = 8000 duration_s = 2.0 / VERDICT_LINE: PASS from_wav + export(format=wav) round-trip produced a valid 2.0s WAV with no ffmpeg/avconv on PATH + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "verified",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errno 2] No such file or directory: 'ffprobe' + exit_code 0 (from_mp3 does fail without ffmpeg/avconv, which is what the claim states; the probe's own VERDICT_LINE was FAIL only because the error names ffprobe rather than ffmpeg; the 'works WITH ffmpeg installed' half was not executed, hence low confidence)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=master svg contains passing = False / page http = 200 final url = https://app.travis-ci.com/jiaaro/pydub still on travis-ci.org = False / VERDICT_LINE: FAIL travis-ci.org badge/page does not show a live passing build + exit_code 0 (travis-ci.org redirects to travis-ci.com and the served badge SVG does not read 'passing')"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "observed: badge http = 200 svg says passing = True | api http = 200 last master build status = success finished = 2026-03-19T21:42:16.1769953+00:00 age_days = 161 / VERDICT_LINE: PASS appveyor master build passing and last build within 365 days + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDICT_LINE: PASS README slicing snippet run verbatim: 10s + 5s slices, concat duration_seconds == 15.0 + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PASS seg+6 raises dBFS by ~6.0 and seg-3 lowers by ~3.0 (tolerance 0.1 dB) + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav', '-i', '/tmp/tmp2tp_6vp6', '-acodec', 'libvorbis', '-f', 'ogg', '/tmp/tmpz1g4xvr2']) / VERDICT_LINE: PASS export(format=ogg) with no codec builds converter command with -acodec libvorbis + exit_code 0 (ffmpeg absent so no file written; the codec default itself is directly observed in the built command)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len(audio_segment) == 7000 for a 7 s WAV (milliseconds) + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "observed: original raw_data unchanged after reverse() = True | reversed differs = True | reverse(reverse) == original = True | new object = True / VERDICT_LINE: PASS song.reverse() returns a new reversed segment; song.raw_data byte-identical before/after + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [],
+ "run_id": "33212005473",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787951776",
+ "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+}

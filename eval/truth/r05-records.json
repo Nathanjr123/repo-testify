@@ -5,7 +5,7 @@
   "c2": "refuted",
   "c3": "verified",
   "c4": "refuted",
-  "c5": "unverifiable",
+  "c5": "refuted",
   "c6": "verified",
   "c7": "verified",
   "c8": "verified",
@@ -13,5 +13,8 @@
   "c10": "verified",
   "c11": "verified"
  },
- "reviewer_score": 40
+ "reviewer_score": 40,
+ "audit_notes": {
+  "c5": "was unverifiable; Executed: Database.transaction() returns _GeneratorContextManager with no commit/rollback; documented `t.commit()` raises (advanced-v2 p-c5). Draft had guessed unverifiable."
+ }
 }

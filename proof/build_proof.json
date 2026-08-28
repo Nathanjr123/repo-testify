@@ -5286,7 +5286,2183 @@
   "partial": false
  },
  {
-  "id": "baseline-v2-n1-rescored-1787946942",
+  "id": "advanced-v2-1787952546",
+  "arm": "advanced",
+  "label": "advanced-v2",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "d1a29a8",
+  "ts": "2026-08-28T21:29:06Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.698,
+    "confident_wrong": 0.887,
+    "evidence_valid": 1.0,
+    "score_error": 0.777
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.808,
+   "n_cases": 7,
+   "settled_fraction": 0.904,
+   "capped": false
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 5554.0,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 1171.88,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/python-humanize/humanize",
+     "overall_score": 91,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "phase_a_tail: 'Successfully installed humanize-4.16.0'; stdout: 'HUMANIZE_VERSION 4.16.0' / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "phase_a_tail: \"Cloning into '/tmp/humanize'...\"; stdout: 'HUMANIZE_FILE /tmp/humanize/src/humanize/__init__.py' / 'HUMANIZE_VERSION 4.16.1.dev9' / 'PROBE_OK' (import resolves to the editable clone); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "stdout: 'REQUIRES_PYTHON >=3.10' with classifiers Python 3.10 through 3.15; assert requires_python=='>=3.10' passed; 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stdout: \"RESULT '12,345'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "stdout: \"RESULT '123.5 million'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "stdout: \"RESULT '17 minutes'\"; stderr: \"AssertionError: '17 minutes'\" (claim says '16 minutes'; humanize 4.16.0 on the probe's Python returns '17 minutes' for 1001 seconds); exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "stdout: \"RESULT '1.0 MB' '976.6 KiB'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "stdout: \"RESULT '1/3'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "stdout: \"RESULT '3.00 x 10\u207b\u00b9'\" / 'PROBE_OK' (assert against '3.00 x 10\\u207b\\u00b9' passed); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "stdout: \"RESULT '3 seconds ago' '3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b \u043d\u0430\u0437\u0430\u0434' '3 seconds ago'\" / 'PROBE_OK' (before/activate('ru_RU')/deactivate all matched asserts); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "stdout: 'RUN ce4147b6c8f8 2026-08-01T09:18:47Z success' ... 'LATEST_CONCLUSION success' / 'PROBE_OK' (five most recent completed Test runs all success); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33206171217",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787946992",
+     "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.99
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0
+   },
+   "r02-python-tabulate.json": {
+    "status": "ok",
+    "wall_s": 283.75,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/astanin/python-tabulate",
+     "overall_score": 82,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "observed: tabulate version 0.10.0 callable True / VERDICT_LINE: PASS pip install tabulate + from tabulate import tabulate ok, version 0.10.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "-rwxr-xr-x 1 root root 211 Aug 28 20:18 /tmp/v/bin/tabulate / observed: rc=0 output=-  -|1  2|3  4|-  -| + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "observed: tabulate scripts in venv bin = 1 (README says lib-only should install none) / VERDICT_LINE: FAIL TABULATE_INSTALL=lib-only ignored; bin/tabulate still installed + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "observed: http 200 version 0.10.0 requires_python '>=3.10' py2 classifiers [] + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "observed: first data line = 'Sun    696000     1.9891e+09' / VERDICT_LINE: PASS output matches README simple-format table exactly + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] / VERDICT_LINE: PASS dict-of-iterables with headers=keys matches README exactly + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "-f FMT, --format FMT      set output table format; supported formats: plain, simple, grid, fancy_grid, pipe, orgtbl, rst, mediawiki, html, latex, latex_raw, latex_booktabs, latex_longtable, tsv (default: simple) + exit_code 0 \u2014 'github' is absent from the format list; the probe's word-regex matched 'github' only in the 'See also https://github.com/astanin/python-tabulate' URL line, so its PASS verdict line is a probe false positive. The other 7 named formats are present."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "observed: wcwidth 0.8.3 WIDE_CHARS_MODE True display widths per line [9, 9, 9, 9] / VERDICT_LINE: PASS wcwidth installed and CJK row aligns by display width + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "observed: badge http 200 badge text = passing svg bytes 2276 / observed: run 272 268615a5 success 2026-03-11T08:43:01Z + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "observed: tabulate     0.10.0      478.1 us/call / observed: prettytable  3.18.0      501.5 us/call / observed: texttable    1.7.0       952.8 us/call + exit_code 0 \u2014 tabulate was faster in this single run, but the PrettyTable margin is ~5% with no variance reported, PrettyTable version (3.18.0) differs from the README's 3.17.0, and the README's own table shows PrettyTable faster; treat the tabulate-vs-PrettyTable ordering as within benchmark noise."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33207614025",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787948164",
+     "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.818,
+     "confident_wrong": 0.909,
+     "evidence_valid": 1.0,
+     "score_error": 0.97
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0
+   },
+   "r04-schedule.json": {
+    "status": "ok",
+    "wall_s": 1244.93,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/dbader/schedule",
+     "overall_score": 75,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "phase_a_tail: 'Successfully installed schedule-1.2.2'; stderr: \"AttributeError: module 'schedule' has no attribute '__version__'\" (import itself succeeded; failure is only on the __version__ attribute); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "stdout shows only 'python-version: 3.11' for needs/docs/formatting/setuppy jobs; the test matrix section is truncated ('h\\nci.yml-40-...'), no 'matrix has X'/'MISSING X' lines, no pytest output, no 'test suite PASSES on 3.12' line; exit_code 2"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "stdout: 'no status' (badge SVG renders 'no status', not 'passing'; grep -q 'passing' failed); exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stdout: 'schedule==1.2.2' / 'extra_packages=0' / 'Requires: (empty) confirmed' / '80K .../site-packages/schedule'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "stdout: 'registered jobs: 1'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "stdout: 'next_run: 2026-08-29 10:30:00' / 'ok'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "stdout: 'pytz absent (fresh env confirmed)' / \"RESULT: raised ModuleNotFoundError: No module named 'pytz'\"; exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "stdout: 'next_run: 2026-08-28 20:28:17' / 'ok' (second==17 asserted); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "stdout: 'job invoked 1 time(s) after 1.2s' (and not invoked before due); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "stdout: 'PyPI latest: 1.2.2' / '1.2.2 uploaded: 2024-05-25T18:41:59'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c2"
+     ],
+     "run_id": "33207924062",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787948448",
+     "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.9,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.9
+   },
+   "r05-records.json": {
+    "status": "ok",
+    "wall_s": 449.4,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/kennethreitz/records",
+     "overall_score": 73,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "OBSERVED records=0.6.0 pandas=3.0.5 tablib=3.10.0 / VERDICT_LINE: PASS pip install records[pandas] ok; import records ok; records 0.6.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "OBSERVED postgres://   -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres / VERDICT_LINE: FAIL postgres:// scheme rejected by SQLAlchemy 2.0.52 (control postgresql:// -> ModuleNotFoundError psycopg2, i.e. scheme accepted, only driver missing) + exit_code 0 (script's own FAIL verdict line; exit 0 due to || echo wrapper)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "OBSERVED rows[0] = <Record {\"username\": \"model-t\", \"active\": 1, \"name\": \"Henry Ford\"}> / OBSERVED iterated = [('model-t', 'Henry Ford'), ('model-a', 'Henry Ford II')] / VERDICT_LINE: PASS rows[0], iteration, row.name / row[\"name\"] / row[2] all work on SQLite + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stderr: sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked [SQL: insert into t values (?)] [parameters: [(2,), (3,)]] / stdout: VERDICT_LINE: FAIL probe crashed (see traceback) + exit_code 0 (from || echo wrapper). Probe crashed at db.bulk_query before the close+reopen durability check ran; the lock error is suggestive of an uncommitted transaction but the durability claim itself was never measured -> escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "OBSERVED transaction object = _GeneratorContextManager has commit/rollback = False False / stderr: AttributeError: '_GeneratorContextManager' object has no attribute 'commit' / VERDICT_LINE: FAIL Database.transaction()/commit() raised + exit_code 0 (from || echo wrapper; traceback is the evidence)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "OBSERVED first() = <Record {\"a\": 1}> Record / OBSERVED all() = list 2 ['Record', 'Record'] / VERDICT_LINE: PASS first() -> Record, all() -> list of 2 Records + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "OBSERVED csv = 'username,active\\r\\nmodel-t,1\\r\\n' / VERDICT_LINE: PASS export(\"csv\") returns header row + data row as CSV text + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "OBSERVED type = pandas.DataFrame shape = (1, 2) / VERDICT_LINE: PASS export(\"df\") returns pandas.DataFrame shape (1,2) with correct columns + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "OBSERVED mssql+pyodbc://u:p@h/db -> ModuleNotFoundError: No module named 'pyodbc' / OBSERVED mssql+pymssql://u:p@h/db -> ModuleNotFoundError: No module named 'pymssql' / OBSERVED: no MS-SQL server available in sandbox; end-to-end SELECT NOT executed (partial verification only) + exit_code 0. Only dialect wiring observed; the claim (queries run against MS-SQL with a driver) was not exercised -> escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "OBSERVED pypi status=200 name=records version=0.6.0 / OBSERVED badge status=200 contains_version=True len=1275 / VERDICT_LINE: PASS records published on PyPI, latest 0.6.0 matches setup.py; badge HTTP 200 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "OBSERVED db.db_url = sqlite:///:memory: / OBSERVED select 1 -> 1 / OBSERVED no-env control: ValueError You must provide a db_url. / VERDICT_LINE: PASS records.Database() reads $DATABASE_URL and runs a query + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c4",
+      "c9"
+     ],
+     "run_id": "33209465292",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787949693",
+     "memo_md": "7 verified, 2 refuted, 2 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.727,
+     "confident_wrong": 0.909,
+     "evidence_valid": 1.0,
+     "score_error": 0.67
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.818
+   },
+   "r07-newspaper3k.json": {
+    "status": "ok",
+    "wall_s": 1634.19,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/codelucas/newspaper",
+     "overall_score": 41,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Python 3.12.14 ... pip_rc=0, newspaper3k==0.2.8, lxml==6.1.2 installed; then `import newspaper` -> \"ImportError: lxml.html.clean module is now a separate project lxml_html_clean. Install lxml[html-clean] or lxml_html_clean directly.\" + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "newspaper3k 0.2.8 classifiers ['Programming Language :: Python :: 3'] C2_PY3_OK; PyPI 'newspaper' 0.1.0.7 exists C2_PY2PKG_OK; python-2-head branch HTTP 200 C2_BRANCH_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "http=200 final_url=https://api.travis-ci.com/codelucas/newspaper.svg (travis-ci.org redirects to .com); badge SVG 730 bytes, grey #9f9f9f fill; BADGE_IS_SVG BADGE_NOT_PASSING BADGE_NEGATIVE_TEXT + exit_code 0 (badge does not say 'passing')"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "html_len 102350; title 'New Year, new laws: Obamacare, pot, guns and drones'; authors ['Cnn Wire']; publish_date datetime.datetime(2013, 12, 30, 0, 0); AssertionError: ('authors mismatch', ['Cnn Wire']) + exit_code 1 (date matches, authors do not)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "tokenizers/punkt -> /root/nltk_data/tokenizers/punkt; corpora/stopwords present; text_len 1053; a.nlp() -> \"Resource 'punkt_tab' not found. Please use the NLTK Downloader to obtain the resource\" + exit_code 1 (keywords/summary never populated with the repo-documented corpora installed)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "bare interpreter: ModuleNotFoundError: No module named 'nltk' bare_rc=1; after pip install newspaper3k: Downloading brown/punkt/maxent_treebank_pos_tagger/movie_reviews/wordnet/stopwords, Finished. after_install_rc=0; nltk.data.find: MISSING corpora/wordnet, AssertionError: ['corpora/wordnet'] + exit_code 1 (5 of 6 corpora resolvable; wordnet not; script needs nltk preinstalled)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "Debian 13 (trixie), update_rc=0; verbatim install rc=100; \"E: Package 'libpng12-dev' has no installation candidate\"; apt-cache policy libpng12-dev Candidate: (none); README fallback (libpng-dev 1.6.48) rc=0; C7_FAIL_AS_WRITTEN (probe wrapper exit_code 0; relied-on apt-get install rc=100)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "rc=0; 'Your available languages are:' HEADER_OK; has ar be bg da de el en es; language rows: 38; C8_OK + exit_code 0 (note: probe pre-installed lxml[html_clean] to get past the c1 import failure)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "<class 'newspaper.mthreading.NewsPool'> newspaper.mthreading; methods ['config', 'join', 'pool', 'set']; 'Thread' present in mthreading source; C9_OK + exit_code 0 (note: probe pre-installed lxml[html_clean])"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "{'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', ...], 'article_types': ['Article'], 'secs': 1.9} build_rc=0; C10_OK 378 articles + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "README.rst line 251: \"80M+ residential IPs across 195+ countries\" and \"99.89% success rate\" (text present); vendor page mentions_99.89=5 methodology_words=0; C11_NO_EXECUTABLE_TRUTH + exit_code 0 \u2014 third-party marketing figure, no artifact substantiates it; escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c11"
+     ],
+     "run_id": "33209972786",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787950142",
+     "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.727,
+     "confident_wrong": 0.818,
+     "evidence_valid": 1.0,
+     "score_error": 0.79
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.909
+   },
+   "r09-pydub.json": {
+    "status": "ok",
+    "wall_s": 446.24,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/jiaaro/pydub",
+     "overall_score": 82,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3.11.16 / VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable + exit_code 0 (phase_a: Successfully installed pydub-0.25.1)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "Python 3.13.15 / File \"/repo/pydub/utils.py\", line 17, in <module>: import pyaudioop as audioop / ModuleNotFoundError: No module named 'pyaudioop' / VERDICT_LINE: FAIL from pydub import AudioSegment raises on Python 3.13 + exit_code 0 (0 only because of the trailing `|| echo`; the python -c import itself raised)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "observed: ffmpeg on PATH = None avconv = None | out.wav frames = 16000 rate = 8000 duration_s = 2.0 / VERDICT_LINE: PASS from_wav + export(format=wav) round-trip produced a valid 2.0s WAV with no ffmpeg/avconv on PATH + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errno 2] No such file or directory: 'ffprobe' + exit_code 0 (from_mp3 does fail without ffmpeg/avconv, which is what the claim states; the probe's own VERDICT_LINE was FAIL only because the error names ffprobe rather than ffmpeg; the 'works WITH ffmpeg installed' half was not executed, hence low confidence)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=master svg contains passing = False / page http = 200 final url = https://app.travis-ci.com/jiaaro/pydub still on travis-ci.org = False / VERDICT_LINE: FAIL travis-ci.org badge/page does not show a live passing build + exit_code 0 (travis-ci.org redirects to travis-ci.com and the served badge SVG does not read 'passing')"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "observed: badge http = 200 svg says passing = True | api http = 200 last master build status = success finished = 2026-03-19T21:42:16.1769953+00:00 age_days = 161 / VERDICT_LINE: PASS appveyor master build passing and last build within 365 days + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDICT_LINE: PASS README slicing snippet run verbatim: 10s + 5s slices, concat duration_seconds == 15.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PASS seg+6 raises dBFS by ~6.0 and seg-3 lowers by ~3.0 (tolerance 0.1 dB) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav', '-i', '/tmp/tmp2tp_6vp6', '-acodec', 'libvorbis', '-f', 'ogg', '/tmp/tmpz1g4xvr2']) / VERDICT_LINE: PASS export(format=ogg) with no codec builds converter command with -acodec libvorbis + exit_code 0 (ffmpeg absent so no file written; the codec default itself is directly observed in the built command)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len(audio_segment) == 7000 for a 7 s WAV (milliseconds) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "observed: original raw_data unchanged after reverse() = True | reversed differs = True | reverse(reverse) == original = True | new object = True / VERDICT_LINE: PASS song.reverse() returns a new reversed segment; song.raw_data byte-identical before/after + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33212005473",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787951776",
+     "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.909,
+     "confident_wrong": 0.909,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0
+   },
+   "r11-gpt-2.json": {
+    "status": "ok",
+    "wall_s": 323.61,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/openai/gpt-2",
+     "overall_score": 65,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "\"ERROR: No matching distribution found for tensorflow==1.12.0\" / \"observed pip rc=1 python=3.11.16\" (available versions listed start at 2.12.0rc0); probe wrapper exit_code 0, inner pip rc=1. GPU variant not probed; CPU command as written fails on python:3.11-slim."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "\"error: command 'gcc' failed: No such file or directory\" / \"ERROR: Failed building wheel for regex\" / \"observed pip rc=1; missing: gcc\"; probe wrapper exit_code 0, inner pip rc=1. Command fails in clean python:3.11-slim because regex==2017.4.5 is sdist-only and needs a compiler; low confidence because a toolchain-equipped env was not probed."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "\"observed download rc=0\" / \"observed files ['checkpoint', 'encoder.json', 'hparams.json']\" with model.ckpt.data-00000-of-00001 497759232 bytes in models/124M; exit_code 0. Only 124M probed; 355M/774M/1558M not exercised."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "\"ModuleNotFoundError: No module named 'tensorflow'\" / \"VERDICT_LINE: FAIL cannot run generate_unconditional_samples.py ... README prerequisite unmet\"; exit_code 0. Script never executed because the TF 1.12.0 prerequisite (c1) could not be installed on this python; sample generation itself was not observed \u2014 escalate (needs a TF-1.x-capable environment, e.g. the Docker path)."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "\"ModuleNotFoundError: No module named 'tensorflow'\" / \"VERDICT_LINE: FAIL cannot run interactive_conditional_samples.py --top_k 40 ... README prerequisite unmet\"; exit_code 0. Script never ran; no generated output observed \u2014 escalate."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "\"observed docker binary: none\" / \"Dockerfile.cpu: FROM tensorflow/tensorflow:1.12.0-py3 -> hub tag lookup status 200\" / \"Dockerfile.gpu: FROM tensorflow/tensorflow:1.12.0-gpu-py3 -> hub tag lookup status 200\"; exit_code 0. Dockerfiles exist and base tags resolve, but `docker build` was not executed, so 'builds an image from which the samples can be run' is unobserved \u2014 escalate to a docker-capable runner."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "\"observed status 200 archived= True pushed_at= 2024-08-14T10:50:53Z\" / \"VERDICT_LINE: PASS GitHub API reports archived=true for openai/gpt-2\"; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "\"observed status 200 bytes 4975 first line: # GPT-2 model card\" at pinned SHA 9b63575; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "phase_a: \"README.md:11: *Note that our original parameter counts were wrong ... small referred to as 117M and medium referred to as 345M.*\" / \"observed 124M: ... computed params 124.4M\" / \"observed 355M: ... computed params 354.8M\"; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "phase_a: \"DEVELOPERS.md:58:export PYTHONIOENCODING=UTF-8\" / \"observed WITHOUT var (C locale, coercion off): rc=1 ... UnicodeEncodeError: 'ascii' codec can't encode\" / \"observed WITH var: rc=0 utf-8 \u00e9\u2014\u4e2d\"; exit_code 0. Documented and effective; note the instruction is in DEVELOPERS.md and modern Python usually coerces to UTF-8 without it."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c4",
+      "c5",
+      "c6"
+     ],
+     "run_id": "33212514162",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952223",
+     "memo_md": "5 verified, 2 refuted, 3 escalated of 10 claims."
+    },
+    "rows": {
+     "verdict_acc": 0.5,
+     "confident_wrong": 0.9,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.7
+   }
+  },
+  "limit_blocked": false,
+  "partial": false
+ },
+ {
+  "id": "baseline-v2-n1-rescored-1787952712",
   "arm": "baseline",
   "label": "baseline-v2-n1-rescored",
   "disable": null,
@@ -5296,7 +7472,7 @@
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
   "agg": {
    "rows": {
-    "verdict_acc": 0.081,
+    "verdict_acc": 0.074,
     "confident_wrong": 0.771,
     "evidence_valid": 0.26,
     "score_error": 0.811
@@ -5927,7 +8103,7 @@
    },
    "r05-records.json": {
     "rows": {
-     "verdict_acc": 0.091,
+     "verdict_acc": 0.0,
      "confident_wrong": 1.0,
      "evidence_valid": 0.765,
      "score_error": 0.95
@@ -6692,7 +8868,7 @@
   "rescored_from": "baseline-v2-n1-1787943377"
  },
  {
-  "id": "baseline-v2-n2-rescored-1787946943",
+  "id": "baseline-v2-n2-rescored-1787952712",
   "arm": "baseline",
   "label": "baseline-v2-n2-rescored",
   "disable": null,
@@ -6702,7 +8878,7 @@
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
   "agg": {
    "rows": {
-    "verdict_acc": 0.074,
+    "verdict_acc": 0.066,
     "confident_wrong": 0.783,
     "evidence_valid": 0.246,
     "score_error": 0.745
@@ -6711,10 +8887,10 @@
     "no_fabricated_evidence": 1.0,
     "valid_report": 1.0
    },
-   "raw": 0.35,
+   "raw": 0.347,
    "n_cases": 7,
    "settled_fraction": 0.148,
-   "capped": true
+   "capped": false
   },
   "human_time_s": null,
   "cost_usd": 0,
@@ -7337,7 +9513,7 @@
    },
    "r05-records.json": {
     "rows": {
-     "verdict_acc": 0.091,
+     "verdict_acc": 0.0,
      "confident_wrong": 1.0,
      "evidence_valid": 0.65,
      "score_error": 0.92
@@ -8090,7 +10266,7 @@
   "rescored_from": "baseline-v2-n2-1787943738"
  },
  {
-  "id": "advanced-v1-rescored-1787946943",
+  "id": "advanced-v1-rescored-1787952712",
   "arm": "advanced",
   "label": "advanced-v1-rescored",
   "disable": null,
@@ -9980,5 +12156,4345 @@
   "limit_blocked": false,
   "partial": false,
   "rescored_from": "advanced-v1-1787946612"
+ },
+ {
+  "id": "advanced-v2-rescored-1787952712",
+  "arm": "advanced",
+  "label": "advanced-v2-rescored",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "d1a29a8",
+  "ts": "2026-08-28T21:29:06Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.712,
+    "confident_wrong": 0.901,
+    "evidence_valid": 1.0,
+    "score_error": 0.777
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.817,
+   "n_cases": 7,
+   "settled_fraction": 0.904,
+   "capped": false
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 5554.0,
+  "per_case": {
+   "r01-humanize.json": {
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.99
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0,
+    "output": {
+     "repo": "https://github.com/python-humanize/humanize",
+     "overall_score": 91,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "phase_a_tail: 'Successfully installed humanize-4.16.0'; stdout: 'HUMANIZE_VERSION 4.16.0' / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "phase_a_tail: \"Cloning into '/tmp/humanize'...\"; stdout: 'HUMANIZE_FILE /tmp/humanize/src/humanize/__init__.py' / 'HUMANIZE_VERSION 4.16.1.dev9' / 'PROBE_OK' (import resolves to the editable clone); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "stdout: 'REQUIRES_PYTHON >=3.10' with classifiers Python 3.10 through 3.15; assert requires_python=='>=3.10' passed; 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stdout: \"RESULT '12,345'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "stdout: \"RESULT '123.5 million'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "stdout: \"RESULT '17 minutes'\"; stderr: \"AssertionError: '17 minutes'\" (claim says '16 minutes'; humanize 4.16.0 on the probe's Python returns '17 minutes' for 1001 seconds); exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "stdout: \"RESULT '1.0 MB' '976.6 KiB'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "stdout: \"RESULT '1/3'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "stdout: \"RESULT '3.00 x 10\u207b\u00b9'\" / 'PROBE_OK' (assert against '3.00 x 10\\u207b\\u00b9' passed); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "stdout: \"RESULT '3 seconds ago' '3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b \u043d\u0430\u0437\u0430\u0434' '3 seconds ago'\" / 'PROBE_OK' (before/activate('ru_RU')/deactivate all matched asserts); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "stdout: 'RUN ce4147b6c8f8 2026-08-01T09:18:47Z success' ... 'LATEST_CONCLUSION success' / 'PROBE_OK' (five most recent completed Test runs all success); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33206171217",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787946992",
+     "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims."
+    },
+    "status": "ok",
+    "wall_s": 1171.88
+   },
+   "r02-python-tabulate.json": {
+    "rows": {
+     "verdict_acc": 0.818,
+     "confident_wrong": 0.909,
+     "evidence_valid": 1.0,
+     "score_error": 0.97
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0,
+    "output": {
+     "repo": "https://github.com/astanin/python-tabulate",
+     "overall_score": 82,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "observed: tabulate version 0.10.0 callable True / VERDICT_LINE: PASS pip install tabulate + from tabulate import tabulate ok, version 0.10.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "-rwxr-xr-x 1 root root 211 Aug 28 20:18 /tmp/v/bin/tabulate / observed: rc=0 output=-  -|1  2|3  4|-  -| + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "observed: tabulate scripts in venv bin = 1 (README says lib-only should install none) / VERDICT_LINE: FAIL TABULATE_INSTALL=lib-only ignored; bin/tabulate still installed + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "observed: http 200 version 0.10.0 requires_python '>=3.10' py2 classifiers [] + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "observed: first data line = 'Sun    696000     1.9891e+09' / VERDICT_LINE: PASS output matches README simple-format table exactly + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] / VERDICT_LINE: PASS dict-of-iterables with headers=keys matches README exactly + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "-f FMT, --format FMT      set output table format; supported formats: plain, simple, grid, fancy_grid, pipe, orgtbl, rst, mediawiki, html, latex, latex_raw, latex_booktabs, latex_longtable, tsv (default: simple) + exit_code 0 \u2014 'github' is absent from the format list; the probe's word-regex matched 'github' only in the 'See also https://github.com/astanin/python-tabulate' URL line, so its PASS verdict line is a probe false positive. The other 7 named formats are present."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "observed: wcwidth 0.8.3 WIDE_CHARS_MODE True display widths per line [9, 9, 9, 9] / VERDICT_LINE: PASS wcwidth installed and CJK row aligns by display width + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "observed: badge http 200 badge text = passing svg bytes 2276 / observed: run 272 268615a5 success 2026-03-11T08:43:01Z + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "observed: tabulate     0.10.0      478.1 us/call / observed: prettytable  3.18.0      501.5 us/call / observed: texttable    1.7.0       952.8 us/call + exit_code 0 \u2014 tabulate was faster in this single run, but the PrettyTable margin is ~5% with no variance reported, PrettyTable version (3.18.0) differs from the README's 3.17.0, and the README's own table shows PrettyTable faster; treat the tabulate-vs-PrettyTable ordering as within benchmark noise."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33207614025",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787948164",
+     "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+    },
+    "status": "ok",
+    "wall_s": 283.75
+   },
+   "r04-schedule.json": {
+    "rows": {
+     "verdict_acc": 0.9,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.9,
+    "output": {
+     "repo": "https://github.com/dbader/schedule",
+     "overall_score": 75,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "phase_a_tail: 'Successfully installed schedule-1.2.2'; stderr: \"AttributeError: module 'schedule' has no attribute '__version__'\" (import itself succeeded; failure is only on the __version__ attribute); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "stdout shows only 'python-version: 3.11' for needs/docs/formatting/setuppy jobs; the test matrix section is truncated ('h\\nci.yml-40-...'), no 'matrix has X'/'MISSING X' lines, no pytest output, no 'test suite PASSES on 3.12' line; exit_code 2"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "stdout: 'no status' (badge SVG renders 'no status', not 'passing'; grep -q 'passing' failed); exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stdout: 'schedule==1.2.2' / 'extra_packages=0' / 'Requires: (empty) confirmed' / '80K .../site-packages/schedule'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "stdout: 'registered jobs: 1'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "stdout: 'next_run: 2026-08-29 10:30:00' / 'ok'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "stdout: 'pytz absent (fresh env confirmed)' / \"RESULT: raised ModuleNotFoundError: No module named 'pytz'\"; exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "stdout: 'next_run: 2026-08-28 20:28:17' / 'ok' (second==17 asserted); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "stdout: 'job invoked 1 time(s) after 1.2s' (and not invoked before due); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "stdout: 'PyPI latest: 1.2.2' / '1.2.2 uploaded: 2024-05-25T18:41:59'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c2"
+     ],
+     "run_id": "33207924062",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787948448",
+     "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims."
+    },
+    "status": "ok",
+    "wall_s": 1244.93
+   },
+   "r05-records.json": {
+    "rows": {
+     "verdict_acc": 0.818,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.67
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.818,
+    "output": {
+     "repo": "https://github.com/kennethreitz/records",
+     "overall_score": 73,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "OBSERVED records=0.6.0 pandas=3.0.5 tablib=3.10.0 / VERDICT_LINE: PASS pip install records[pandas] ok; import records ok; records 0.6.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "OBSERVED postgres://   -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres / VERDICT_LINE: FAIL postgres:// scheme rejected by SQLAlchemy 2.0.52 (control postgresql:// -> ModuleNotFoundError psycopg2, i.e. scheme accepted, only driver missing) + exit_code 0 (script's own FAIL verdict line; exit 0 due to || echo wrapper)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "OBSERVED rows[0] = <Record {\"username\": \"model-t\", \"active\": 1, \"name\": \"Henry Ford\"}> / OBSERVED iterated = [('model-t', 'Henry Ford'), ('model-a', 'Henry Ford II')] / VERDICT_LINE: PASS rows[0], iteration, row.name / row[\"name\"] / row[2] all work on SQLite + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stderr: sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked [SQL: insert into t values (?)] [parameters: [(2,), (3,)]] / stdout: VERDICT_LINE: FAIL probe crashed (see traceback) + exit_code 0 (from || echo wrapper). Probe crashed at db.bulk_query before the close+reopen durability check ran; the lock error is suggestive of an uncommitted transaction but the durability claim itself was never measured -> escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "OBSERVED transaction object = _GeneratorContextManager has commit/rollback = False False / stderr: AttributeError: '_GeneratorContextManager' object has no attribute 'commit' / VERDICT_LINE: FAIL Database.transaction()/commit() raised + exit_code 0 (from || echo wrapper; traceback is the evidence)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "OBSERVED first() = <Record {\"a\": 1}> Record / OBSERVED all() = list 2 ['Record', 'Record'] / VERDICT_LINE: PASS first() -> Record, all() -> list of 2 Records + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "OBSERVED csv = 'username,active\\r\\nmodel-t,1\\r\\n' / VERDICT_LINE: PASS export(\"csv\") returns header row + data row as CSV text + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "OBSERVED type = pandas.DataFrame shape = (1, 2) / VERDICT_LINE: PASS export(\"df\") returns pandas.DataFrame shape (1,2) with correct columns + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "OBSERVED mssql+pyodbc://u:p@h/db -> ModuleNotFoundError: No module named 'pyodbc' / OBSERVED mssql+pymssql://u:p@h/db -> ModuleNotFoundError: No module named 'pymssql' / OBSERVED: no MS-SQL server available in sandbox; end-to-end SELECT NOT executed (partial verification only) + exit_code 0. Only dialect wiring observed; the claim (queries run against MS-SQL with a driver) was not exercised -> escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "OBSERVED pypi status=200 name=records version=0.6.0 / OBSERVED badge status=200 contains_version=True len=1275 / VERDICT_LINE: PASS records published on PyPI, latest 0.6.0 matches setup.py; badge HTTP 200 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "OBSERVED db.db_url = sqlite:///:memory: / OBSERVED select 1 -> 1 / OBSERVED no-env control: ValueError You must provide a db_url. / VERDICT_LINE: PASS records.Database() reads $DATABASE_URL and runs a query + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c4",
+      "c9"
+     ],
+     "run_id": "33209465292",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787949693",
+     "memo_md": "7 verified, 2 refuted, 2 escalated of 11 claims."
+    },
+    "status": "ok",
+    "wall_s": 449.4
+   },
+   "r07-newspaper3k.json": {
+    "rows": {
+     "verdict_acc": 0.727,
+     "confident_wrong": 0.818,
+     "evidence_valid": 1.0,
+     "score_error": 0.79
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.909,
+    "output": {
+     "repo": "https://github.com/codelucas/newspaper",
+     "overall_score": 41,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Python 3.12.14 ... pip_rc=0, newspaper3k==0.2.8, lxml==6.1.2 installed; then `import newspaper` -> \"ImportError: lxml.html.clean module is now a separate project lxml_html_clean. Install lxml[html-clean] or lxml_html_clean directly.\" + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "newspaper3k 0.2.8 classifiers ['Programming Language :: Python :: 3'] C2_PY3_OK; PyPI 'newspaper' 0.1.0.7 exists C2_PY2PKG_OK; python-2-head branch HTTP 200 C2_BRANCH_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "http=200 final_url=https://api.travis-ci.com/codelucas/newspaper.svg (travis-ci.org redirects to .com); badge SVG 730 bytes, grey #9f9f9f fill; BADGE_IS_SVG BADGE_NOT_PASSING BADGE_NEGATIVE_TEXT + exit_code 0 (badge does not say 'passing')"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "html_len 102350; title 'New Year, new laws: Obamacare, pot, guns and drones'; authors ['Cnn Wire']; publish_date datetime.datetime(2013, 12, 30, 0, 0); AssertionError: ('authors mismatch', ['Cnn Wire']) + exit_code 1 (date matches, authors do not)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "tokenizers/punkt -> /root/nltk_data/tokenizers/punkt; corpora/stopwords present; text_len 1053; a.nlp() -> \"Resource 'punkt_tab' not found. Please use the NLTK Downloader to obtain the resource\" + exit_code 1 (keywords/summary never populated with the repo-documented corpora installed)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "bare interpreter: ModuleNotFoundError: No module named 'nltk' bare_rc=1; after pip install newspaper3k: Downloading brown/punkt/maxent_treebank_pos_tagger/movie_reviews/wordnet/stopwords, Finished. after_install_rc=0; nltk.data.find: MISSING corpora/wordnet, AssertionError: ['corpora/wordnet'] + exit_code 1 (5 of 6 corpora resolvable; wordnet not; script needs nltk preinstalled)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "Debian 13 (trixie), update_rc=0; verbatim install rc=100; \"E: Package 'libpng12-dev' has no installation candidate\"; apt-cache policy libpng12-dev Candidate: (none); README fallback (libpng-dev 1.6.48) rc=0; C7_FAIL_AS_WRITTEN (probe wrapper exit_code 0; relied-on apt-get install rc=100)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "rc=0; 'Your available languages are:' HEADER_OK; has ar be bg da de el en es; language rows: 38; C8_OK + exit_code 0 (note: probe pre-installed lxml[html_clean] to get past the c1 import failure)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "<class 'newspaper.mthreading.NewsPool'> newspaper.mthreading; methods ['config', 'join', 'pool', 'set']; 'Thread' present in mthreading source; C9_OK + exit_code 0 (note: probe pre-installed lxml[html_clean])"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "{'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', ...], 'article_types': ['Article'], 'secs': 1.9} build_rc=0; C10_OK 378 articles + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "README.rst line 251: \"80M+ residential IPs across 195+ countries\" and \"99.89% success rate\" (text present); vendor page mentions_99.89=5 methodology_words=0; C11_NO_EXECUTABLE_TRUTH + exit_code 0 \u2014 third-party marketing figure, no artifact substantiates it; escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c11"
+     ],
+     "run_id": "33209972786",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787950142",
+     "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims."
+    },
+    "status": "ok",
+    "wall_s": 1634.19
+   },
+   "r09-pydub.json": {
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0,
+    "output": {
+     "repo": "https://github.com/jiaaro/pydub",
+     "overall_score": 82,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3.11.16 / VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable + exit_code 0 (phase_a: Successfully installed pydub-0.25.1)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "Python 3.13.15 / File \"/repo/pydub/utils.py\", line 17, in <module>: import pyaudioop as audioop / ModuleNotFoundError: No module named 'pyaudioop' / VERDICT_LINE: FAIL from pydub import AudioSegment raises on Python 3.13 + exit_code 0 (0 only because of the trailing `|| echo`; the python -c import itself raised)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "observed: ffmpeg on PATH = None avconv = None | out.wav frames = 16000 rate = 8000 duration_s = 2.0 / VERDICT_LINE: PASS from_wav + export(format=wav) round-trip produced a valid 2.0s WAV with no ffmpeg/avconv on PATH + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errno 2] No such file or directory: 'ffprobe' + exit_code 0 (from_mp3 does fail without ffmpeg/avconv, which is what the claim states; the probe's own VERDICT_LINE was FAIL only because the error names ffprobe rather than ffmpeg; the 'works WITH ffmpeg installed' half was not executed, hence low confidence)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=master svg contains passing = False / page http = 200 final url = https://app.travis-ci.com/jiaaro/pydub still on travis-ci.org = False / VERDICT_LINE: FAIL travis-ci.org badge/page does not show a live passing build + exit_code 0 (travis-ci.org redirects to travis-ci.com and the served badge SVG does not read 'passing')"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "observed: badge http = 200 svg says passing = True | api http = 200 last master build status = success finished = 2026-03-19T21:42:16.1769953+00:00 age_days = 161 / VERDICT_LINE: PASS appveyor master build passing and last build within 365 days + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDICT_LINE: PASS README slicing snippet run verbatim: 10s + 5s slices, concat duration_seconds == 15.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PASS seg+6 raises dBFS by ~6.0 and seg-3 lowers by ~3.0 (tolerance 0.1 dB) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav', '-i', '/tmp/tmp2tp_6vp6', '-acodec', 'libvorbis', '-f', 'ogg', '/tmp/tmpz1g4xvr2']) / VERDICT_LINE: PASS export(format=ogg) with no codec builds converter command with -acodec libvorbis + exit_code 0 (ffmpeg absent so no file written; the codec default itself is directly observed in the built command)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len(audio_segment) == 7000 for a 7 s WAV (milliseconds) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "observed: original raw_data unchanged after reverse() = True | reversed differs = True | reverse(reverse) == original = True | new object = True / VERDICT_LINE: PASS song.reverse() returns a new reversed segment; song.raw_data byte-identical before/after + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33212005473",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787951776",
+     "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+    },
+    "status": "ok",
+    "wall_s": 446.24
+   },
+   "r11-gpt-2.json": {
+    "rows": {
+     "verdict_acc": 0.5,
+     "confident_wrong": 0.9,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.7,
+    "output": {
+     "repo": "https://github.com/openai/gpt-2",
+     "overall_score": 65,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "\"ERROR: No matching distribution found for tensorflow==1.12.0\" / \"observed pip rc=1 python=3.11.16\" (available versions listed start at 2.12.0rc0); probe wrapper exit_code 0, inner pip rc=1. GPU variant not probed; CPU command as written fails on python:3.11-slim."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "\"error: command 'gcc' failed: No such file or directory\" / \"ERROR: Failed building wheel for regex\" / \"observed pip rc=1; missing: gcc\"; probe wrapper exit_code 0, inner pip rc=1. Command fails in clean python:3.11-slim because regex==2017.4.5 is sdist-only and needs a compiler; low confidence because a toolchain-equipped env was not probed."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "\"observed download rc=0\" / \"observed files ['checkpoint', 'encoder.json', 'hparams.json']\" with model.ckpt.data-00000-of-00001 497759232 bytes in models/124M; exit_code 0. Only 124M probed; 355M/774M/1558M not exercised."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "\"ModuleNotFoundError: No module named 'tensorflow'\" / \"VERDICT_LINE: FAIL cannot run generate_unconditional_samples.py ... README prerequisite unmet\"; exit_code 0. Script never executed because the TF 1.12.0 prerequisite (c1) could not be installed on this python; sample generation itself was not observed \u2014 escalate (needs a TF-1.x-capable environment, e.g. the Docker path)."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "\"ModuleNotFoundError: No module named 'tensorflow'\" / \"VERDICT_LINE: FAIL cannot run interactive_conditional_samples.py --top_k 40 ... README prerequisite unmet\"; exit_code 0. Script never ran; no generated output observed \u2014 escalate."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "\"observed docker binary: none\" / \"Dockerfile.cpu: FROM tensorflow/tensorflow:1.12.0-py3 -> hub tag lookup status 200\" / \"Dockerfile.gpu: FROM tensorflow/tensorflow:1.12.0-gpu-py3 -> hub tag lookup status 200\"; exit_code 0. Dockerfiles exist and base tags resolve, but `docker build` was not executed, so 'builds an image from which the samples can be run' is unobserved \u2014 escalate to a docker-capable runner."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "\"observed status 200 archived= True pushed_at= 2024-08-14T10:50:53Z\" / \"VERDICT_LINE: PASS GitHub API reports archived=true for openai/gpt-2\"; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "\"observed status 200 bytes 4975 first line: # GPT-2 model card\" at pinned SHA 9b63575; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "phase_a: \"README.md:11: *Note that our original parameter counts were wrong ... small referred to as 117M and medium referred to as 345M.*\" / \"observed 124M: ... computed params 124.4M\" / \"observed 355M: ... computed params 354.8M\"; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "phase_a: \"DEVELOPERS.md:58:export PYTHONIOENCODING=UTF-8\" / \"observed WITHOUT var (C locale, coercion off): rc=1 ... UnicodeEncodeError: 'ascii' codec can't encode\" / \"observed WITH var: rc=0 utf-8 \u00e9\u2014\u4e2d\"; exit_code 0. Documented and effective; note the instruction is in DEVELOPERS.md and modern Python usually coerces to UTF-8 without it."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c4",
+      "c5",
+      "c6"
+     ],
+     "run_id": "33212514162",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952223",
+     "memo_md": "5 verified, 2 refuted, 3 escalated of 10 claims."
+    },
+    "status": "ok",
+    "wall_s": 323.61
+   }
+  },
+  "limit_blocked": false,
+  "partial": false,
+  "rescored_from": "advanced-v2-1787952546"
+ },
+ {
+  "id": "ablate-k1-1787952712",
+  "arm": "advanced",
+  "label": "ablate-k1",
+  "disable": "k3(replayed from votes[0])",
+  "cases_dir": "eval/cases/public",
+  "git": "d1a29a8",
+  "ts": "2026-08-28T21:29:06Z",
+  "cmd": "python3 eval/ablate_k1.py advanced-v2-rescored",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.691,
+    "confident_wrong": 0.867,
+    "evidence_valid": 1.0,
+    "score_error": 0.777
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.801,
+   "n_cases": 7,
+   "settled_fraction": 0.917,
+   "capped": false
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 5554.0,
+  "per_case": {
+   "r01-humanize.json": {
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.99
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0,
+    "status": "ok",
+    "output": {
+     "repo": "https://github.com/python-humanize/humanize",
+     "overall_score": 91,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "phase_a_tail: 'Successfully installed humanize-4.16.0'; stdout: 'HUMANIZE_VERSION 4.16.0' / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "phase_a_tail: \"Cloning into '/tmp/humanize'...\"; stdout: 'HUMANIZE_FILE /tmp/humanize/src/humanize/__init__.py' / 'HUMANIZE_VERSION 4.16.1.dev9' / 'PROBE_OK' (import resolves to the editable clone); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "stdout: 'REQUIRES_PYTHON >=3.10' with classifiers Python 3.10 through 3.15; assert requires_python=='>=3.10' passed; 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stdout: \"RESULT '12,345'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "stdout: \"RESULT '123.5 million'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "stdout: \"RESULT '17 minutes'\"; stderr: \"AssertionError: '17 minutes'\" (claim says '16 minutes'; humanize 4.16.0 on the probe's Python returns '17 minutes' for 1001 seconds); exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "stdout: \"RESULT '1.0 MB' '976.6 KiB'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "stdout: \"RESULT '1/3'\" / 'PROBE_OK'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "stdout: \"RESULT '3.00 x 10\u207b\u00b9'\" / 'PROBE_OK' (assert against '3.00 x 10\\u207b\\u00b9' passed); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "stdout: \"RESULT '3 seconds ago' '3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b \u043d\u0430\u0437\u0430\u0434' '3 seconds ago'\" / 'PROBE_OK' (before/activate('ru_RU')/deactivate all matched asserts); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "stdout: 'RUN ce4147b6c8f8 2026-08-01T09:18:47Z success' ... 'LATEST_CONCLUSION success' / 'PROBE_OK' (five most recent completed Test runs all success); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33206171217",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787946992",
+     "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims."
+    },
+    "wall_s": 1171.88
+   },
+   "r02-python-tabulate.json": {
+    "rows": {
+     "verdict_acc": 0.818,
+     "confident_wrong": 0.909,
+     "evidence_valid": 1.0,
+     "score_error": 0.97
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0,
+    "status": "ok",
+    "output": {
+     "repo": "https://github.com/astanin/python-tabulate",
+     "overall_score": 82,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "observed: tabulate version 0.10.0 callable True / VERDICT_LINE: PASS pip install tabulate + from tabulate import tabulate ok, version 0.10.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "-rwxr-xr-x 1 root root 211 Aug 28 20:18 /tmp/v/bin/tabulate / observed: rc=0 output=-  -|1  2|3  4|-  -| + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "observed: tabulate scripts in venv bin = 1 (README says lib-only should install none) / VERDICT_LINE: FAIL TABULATE_INSTALL=lib-only ignored; bin/tabulate still installed + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "observed: http 200 version 0.10.0 requires_python '>=3.10' py2 classifiers [] + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "observed: first data line = 'Sun    696000     1.9891e+09' / VERDICT_LINE: PASS output matches README simple-format table exactly + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] / VERDICT_LINE: PASS dict-of-iterables with headers=keys matches README exactly + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "-f FMT, --format FMT      set output table format; supported formats: plain, simple, grid, fancy_grid, pipe, orgtbl, rst, mediawiki, html, latex, latex_raw, latex_booktabs, latex_longtable, tsv (default: simple) + exit_code 0 \u2014 'github' is absent from the format list; the probe's word-regex matched 'github' only in the 'See also https://github.com/astanin/python-tabulate' URL line, so its PASS verdict line is a probe false positive. The other 7 named formats are present."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "observed: wcwidth 0.8.3 WIDE_CHARS_MODE True display widths per line [9, 9, 9, 9] / VERDICT_LINE: PASS wcwidth installed and CJK row aligns by display width + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "observed: badge http 200 badge text = passing svg bytes 2276 / observed: run 272 268615a5 success 2026-03-11T08:43:01Z + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "observed: tabulate     0.10.0      478.1 us/call / observed: prettytable  3.18.0      501.5 us/call / observed: texttable    1.7.0       952.8 us/call + exit_code 0 \u2014 tabulate was faster in this single run, but the PrettyTable margin is ~5% with no variance reported, PrettyTable version (3.18.0) differs from the README's 3.17.0, and the README's own table shows PrettyTable faster; treat the tabulate-vs-PrettyTable ordering as within benchmark noise."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33207614025",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787948164",
+     "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+    },
+    "wall_s": 283.75
+   },
+   "r04-schedule.json": {
+    "rows": {
+     "verdict_acc": 0.9,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.9,
+    "status": "ok",
+    "output": {
+     "repo": "https://github.com/dbader/schedule",
+     "overall_score": 75,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "phase_a_tail: 'Successfully installed schedule-1.2.2'; stderr: \"AttributeError: module 'schedule' has no attribute '__version__'\" (import itself succeeded; failure is only on the __version__ attribute); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "stdout shows only 'python-version: 3.11' for needs/docs/formatting/setuppy jobs; the test matrix section is truncated ('h\\nci.yml-40-...'), no 'matrix has X'/'MISSING X' lines, no pytest output, no 'test suite PASSES on 3.12' line; exit_code 2"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "stdout: 'no status' (badge SVG renders 'no status', not 'passing'; grep -q 'passing' failed); exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stdout: 'schedule==1.2.2' / 'extra_packages=0' / 'Requires: (empty) confirmed' / '80K .../site-packages/schedule'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "stdout: 'registered jobs: 1'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "stdout: 'next_run: 2026-08-29 10:30:00' / 'ok'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "stdout: 'pytz absent (fresh env confirmed)' / \"RESULT: raised ModuleNotFoundError: No module named 'pytz'\"; exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "stdout: 'next_run: 2026-08-28 20:28:17' / 'ok' (second==17 asserted); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "stdout: 'job invoked 1 time(s) after 1.2s' (and not invoked before due); exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "stdout: 'PyPI latest: 1.2.2' / '1.2.2 uploaded: 2024-05-25T18:41:59'; exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c2"
+     ],
+     "run_id": "33207924062",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787948448",
+     "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims."
+    },
+    "wall_s": 1244.93
+   },
+   "r05-records.json": {
+    "rows": {
+     "verdict_acc": 0.818,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.67
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.818,
+    "status": "ok",
+    "output": {
+     "repo": "https://github.com/kennethreitz/records",
+     "overall_score": 73,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "OBSERVED records=0.6.0 pandas=3.0.5 tablib=3.10.0 / VERDICT_LINE: PASS pip install records[pandas] ok; import records ok; records 0.6.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "OBSERVED postgres://   -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres / VERDICT_LINE: FAIL postgres:// scheme rejected by SQLAlchemy 2.0.52 (control postgresql:// -> ModuleNotFoundError psycopg2, i.e. scheme accepted, only driver missing) + exit_code 0 (script's own FAIL verdict line; exit 0 due to || echo wrapper)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "OBSERVED rows[0] = <Record {\"username\": \"model-t\", \"active\": 1, \"name\": \"Henry Ford\"}> / OBSERVED iterated = [('model-t', 'Henry Ford'), ('model-a', 'Henry Ford II')] / VERDICT_LINE: PASS rows[0], iteration, row.name / row[\"name\"] / row[2] all work on SQLite + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "stderr: sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked [SQL: insert into t values (?)] [parameters: [(2,), (3,)]] / stdout: VERDICT_LINE: FAIL probe crashed (see traceback) + exit_code 0 (from || echo wrapper). Probe crashed at db.bulk_query before the close+reopen durability check ran; the lock error is suggestive of an uncommitted transaction but the durability claim itself was never measured -> escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "OBSERVED transaction object = _GeneratorContextManager has commit/rollback = False False / stderr: AttributeError: '_GeneratorContextManager' object has no attribute 'commit' / VERDICT_LINE: FAIL Database.transaction()/commit() raised + exit_code 0 (from || echo wrapper; traceback is the evidence)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "OBSERVED first() = <Record {\"a\": 1}> Record / OBSERVED all() = list 2 ['Record', 'Record'] / VERDICT_LINE: PASS first() -> Record, all() -> list of 2 Records + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "OBSERVED csv = 'username,active\\r\\nmodel-t,1\\r\\n' / VERDICT_LINE: PASS export(\"csv\") returns header row + data row as CSV text + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "OBSERVED type = pandas.DataFrame shape = (1, 2) / VERDICT_LINE: PASS export(\"df\") returns pandas.DataFrame shape (1,2) with correct columns + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "OBSERVED mssql+pyodbc://u:p@h/db -> ModuleNotFoundError: No module named 'pyodbc' / OBSERVED mssql+pymssql://u:p@h/db -> ModuleNotFoundError: No module named 'pymssql' / OBSERVED: no MS-SQL server available in sandbox; end-to-end SELECT NOT executed (partial verification only) + exit_code 0. Only dialect wiring observed; the claim (queries run against MS-SQL with a driver) was not exercised -> escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "OBSERVED pypi status=200 name=records version=0.6.0 / OBSERVED badge status=200 contains_version=True len=1275 / VERDICT_LINE: PASS records published on PyPI, latest 0.6.0 matches setup.py; badge HTTP 200 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "OBSERVED db.db_url = sqlite:///:memory: / OBSERVED select 1 -> 1 / OBSERVED no-env control: ValueError You must provide a db_url. / VERDICT_LINE: PASS records.Database() reads $DATABASE_URL and runs a query + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c4",
+      "c9"
+     ],
+     "run_id": "33209465292",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787949693",
+     "memo_md": "7 verified, 2 refuted, 2 escalated of 11 claims."
+    },
+    "wall_s": 449.4
+   },
+   "r07-newspaper3k.json": {
+    "rows": {
+     "verdict_acc": 0.636,
+     "confident_wrong": 0.727,
+     "evidence_valid": 1.0,
+     "score_error": 0.79
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0,
+    "status": "ok",
+    "output": {
+     "repo": "https://github.com/codelucas/newspaper",
+     "overall_score": 41,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Python 3.12.14 ... pip_rc=0, newspaper3k==0.2.8, lxml==6.1.2 installed; then `import newspaper` -> \"ImportError: lxml.html.clean module is now a separate project lxml_html_clean. Install lxml[html-clean] or lxml_html_clean directly.\" + exit_code 1"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "newspaper3k 0.2.8 classifiers ['Programming Language :: Python :: 3'] C2_PY3_OK; PyPI 'newspaper' 0.1.0.7 exists C2_PY2PKG_OK; python-2-head branch HTTP 200 C2_BRANCH_OK + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "http=200 final_url=https://api.travis-ci.com/codelucas/newspaper.svg (travis-ci.org redirects to .com); badge SVG 730 bytes, grey #9f9f9f fill; BADGE_IS_SVG BADGE_NOT_PASSING BADGE_NEGATIVE_TEXT + exit_code 0 (badge does not say 'passing')"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "html_len 102350; title 'New Year, new laws: Obamacare, pot, guns and drones'; authors ['Cnn Wire']; publish_date datetime.datetime(2013, 12, 30, 0, 0); AssertionError: ('authors mismatch', ['Cnn Wire']) + exit_code 1 (date matches, authors do not)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "tokenizers/punkt -> /root/nltk_data/tokenizers/punkt; corpora/stopwords present; text_len 1053; a.nlp() -> \"Resource 'punkt_tab' not found. Please use the NLTK Downloader to obtain the resource\" + exit_code 1 (keywords/summary never populated with the repo-documented corpora installed)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "bare interpreter: ModuleNotFoundError: No module named 'nltk' bare_rc=1; after pip install newspaper3k: Downloading brown/punkt/maxent_treebank_pos_tagger/movie_reviews/wordnet/stopwords, Finished. after_install_rc=0; nltk.data.find: MISSING corpora/wordnet, AssertionError: ['corpora/wordnet'] + exit_code 1 (5 of 6 corpora resolvable; wordnet not; script needs nltk preinstalled)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "Debian 13 (trixie), update_rc=0; verbatim install rc=100; \"E: Package 'libpng12-dev' has no installation candidate\"; apt-cache policy libpng12-dev Candidate: (none); README fallback (libpng-dev 1.6.48) rc=0; C7_FAIL_AS_WRITTEN (probe wrapper exit_code 0; relied-on apt-get install rc=100)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "rc=0; 'Your available languages are:' HEADER_OK; has ar be bg da de el en es; language rows: 38; C8_OK + exit_code 0 (note: probe pre-installed lxml[html_clean] to get past the c1 import failure)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "<class 'newspaper.mthreading.NewsPool'> newspaper.mthreading; methods ['config', 'join', 'pool', 'set']; 'Thread' present in mthreading source; C9_OK + exit_code 0 (note: probe pre-installed lxml[html_clean])"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "{'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', ...], 'article_types': ['Article'], 'secs': 1.9} build_rc=0; C10_OK 378 articles + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "README.rst line 251: \"80M+ residential IPs across 195+ countries\" and \"99.89% success rate\" (text present); vendor page mentions_99.89=5 methodology_words=0; C11_NO_EXECUTABLE_TRUTH + exit_code 0 \u2014 third-party marketing figure, no artifact substantiates it; escalate to human"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c11"
+     ],
+     "run_id": "33209972786",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787950142",
+     "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims."
+    },
+    "wall_s": 1634.19
+   },
+   "r09-pydub.json": {
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0,
+    "status": "ok",
+    "output": {
+     "repo": "https://github.com/jiaaro/pydub",
+     "overall_score": 82,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3.11.16 / VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable + exit_code 0 (phase_a: Successfully installed pydub-0.25.1)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "Python 3.13.15 / File \"/repo/pydub/utils.py\", line 17, in <module>: import pyaudioop as audioop / ModuleNotFoundError: No module named 'pyaudioop' / VERDICT_LINE: FAIL from pydub import AudioSegment raises on Python 3.13 + exit_code 0 (0 only because of the trailing `|| echo`; the python -c import itself raised)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "observed: ffmpeg on PATH = None avconv = None | out.wav frames = 16000 rate = 8000 duration_s = 2.0 / VERDICT_LINE: PASS from_wav + export(format=wav) round-trip produced a valid 2.0s WAV with no ffmpeg/avconv on PATH + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errno 2] No such file or directory: 'ffprobe' + exit_code 0 (from_mp3 does fail without ffmpeg/avconv, which is what the claim states; the probe's own VERDICT_LINE was FAIL only because the error names ffprobe rather than ffmpeg; the 'works WITH ffmpeg installed' half was not executed, hence low confidence)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=master svg contains passing = False / page http = 200 final url = https://app.travis-ci.com/jiaaro/pydub still on travis-ci.org = False / VERDICT_LINE: FAIL travis-ci.org badge/page does not show a live passing build + exit_code 0 (travis-ci.org redirects to travis-ci.com and the served badge SVG does not read 'passing')"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "observed: badge http = 200 svg says passing = True | api http = 200 last master build status = success finished = 2026-03-19T21:42:16.1769953+00:00 age_days = 161 / VERDICT_LINE: PASS appveyor master build passing and last build within 365 days + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDICT_LINE: PASS README slicing snippet run verbatim: 10s + 5s slices, concat duration_seconds == 15.0 + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PASS seg+6 raises dBFS by ~6.0 and seg-3 lowers by ~3.0 (tolerance 0.1 dB) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav', '-i', '/tmp/tmp2tp_6vp6', '-acodec', 'libvorbis', '-f', 'ogg', '/tmp/tmpz1g4xvr2']) / VERDICT_LINE: PASS export(format=ogg) with no codec builds converter command with -acodec libvorbis + exit_code 0 (ffmpeg absent so no file written; the codec default itself is directly observed in the built command)"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len(audio_segment) == 7000 for a 7 s WAV (milliseconds) + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c11",
+         "excerpt": "observed: original raw_data unchanged after reverse() = True | reversed differs = True | reverse(reverse) == original = True | new object = True / VERDICT_LINE: PASS song.reverse() returns a new reversed segment; song.raw_data byte-identical before/after + exit_code 0"
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [],
+     "run_id": "33212005473",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787951776",
+     "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+    },
+    "wall_s": 446.24
+   },
+   "r11-gpt-2.json": {
+    "rows": {
+     "verdict_acc": 0.5,
+     "confident_wrong": 0.9,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.7,
+    "status": "ok",
+    "output": {
+     "repo": "https://github.com/openai/gpt-2",
+     "overall_score": 65,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c1",
+         "excerpt": "\"ERROR: No matching distribution found for tensorflow==1.12.0\" / \"observed pip rc=1 python=3.11.16\" (available versions listed start at 2.12.0rc0); probe wrapper exit_code 0, inner pip rc=1. GPU variant not probed; CPU command as written fails on python:3.11-slim."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c2",
+         "excerpt": "\"error: command 'gcc' failed: No such file or directory\" / \"ERROR: Failed building wheel for regex\" / \"observed pip rc=1; missing: gcc\"; probe wrapper exit_code 0, inner pip rc=1. Command fails in clean python:3.11-slim because regex==2017.4.5 is sdist-only and needs a compiler; low confidence because a toolchain-equipped env was not probed."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "high"
+        },
+        {
+         "verdict": "refuted",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c3",
+         "excerpt": "\"observed download rc=0\" / \"observed files ['checkpoint', 'encoder.json', 'hparams.json']\" with model.ckpt.data-00000-of-00001 497759232 bytes in models/124M; exit_code 0. Only 124M probed; 355M/774M/1558M not exercised."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c4",
+         "excerpt": "\"ModuleNotFoundError: No module named 'tensorflow'\" / \"VERDICT_LINE: FAIL cannot run generate_unconditional_samples.py ... README prerequisite unmet\"; exit_code 0. Script never executed because the TF 1.12.0 prerequisite (c1) could not be installed on this python; sample generation itself was not observed \u2014 escalate (needs a TF-1.x-capable environment, e.g. the Docker path)."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c5",
+         "excerpt": "\"ModuleNotFoundError: No module named 'tensorflow'\" / \"VERDICT_LINE: FAIL cannot run interactive_conditional_samples.py --top_k 40 ... README prerequisite unmet\"; exit_code 0. Script never ran; no generated output observed \u2014 escalate."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c6",
+         "excerpt": "\"observed docker binary: none\" / \"Dockerfile.cpu: FROM tensorflow/tensorflow:1.12.0-py3 -> hub tag lookup status 200\" / \"Dockerfile.gpu: FROM tensorflow/tensorflow:1.12.0-gpu-py3 -> hub tag lookup status 200\"; exit_code 0. Dockerfiles exist and base tags resolve, but `docker build` was not executed, so 'builds an image from which the samples can be run' is unobserved \u2014 escalate to a docker-capable runner."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        },
+        {
+         "verdict": "unverifiable",
+         "confidence": "low"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c7",
+         "excerpt": "\"observed status 200 archived= True pushed_at= 2024-08-14T10:50:53Z\" / \"VERDICT_LINE: PASS GitHub API reports archived=true for openai/gpt-2\"; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c8",
+         "excerpt": "\"observed status 200 bytes 4975 first line: # GPT-2 model card\" at pinned SHA 9b63575; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c9",
+         "excerpt": "phase_a: \"README.md:11: *Note that our original parameter counts were wrong ... small referred to as 117M and medium referred to as 345M.*\" / \"observed 124M: ... computed params 124.4M\" / \"observed 355M: ... computed params 354.8M\"; exit_code 0."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "p-c10",
+         "excerpt": "phase_a: \"DEVELOPERS.md:58:export PYTHONIOENCODING=UTF-8\" / \"observed WITHOUT var (C locale, coercion off): rc=1 ... UnicodeEncodeError: 'ascii' codec can't encode\" / \"observed WITH var: rc=0 utf-8 \u00e9\u2014\u4e2d\"; exit_code 0. Documented and effective; note the instruction is in DEVELOPERS.md and modern Python usually coerces to UTF-8 without it."
+        }
+       ],
+       "votes": [
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        },
+        {
+         "verdict": "verified",
+         "confidence": "high"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c4",
+      "c5",
+      "c6"
+     ],
+     "run_id": "33212514162",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952223",
+     "memo_md": "5 verified, 2 refuted, 3 escalated of 10 claims."
+    },
+    "wall_s": 323.61
+   }
+  },
+  "limit_blocked": false,
+  "partial": false,
+  "rescored_from": "advanced-v2-rescored-1787952712"
  }
 ]
