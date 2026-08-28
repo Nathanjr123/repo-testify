@@ -1,0 +1,20 @@
+name: probe
+on:
+  workflow_dispatch:
+    inputs:
+      probes_path:
+        description: "Path to probes JSON (committed under eval/probes/)"
+        required: true
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run probes (deterministic, no LLM)
+        run: python3 eval/probe_runner.py "${{ inputs.probes_path }}" probes_out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: probes-${{ github.run_id }}
+          path: probes_out/
+          retention-days: 30
