@@ -1,0 +1,87 @@
+{
+  "id": "r08-maya",
+  "repo": "https://github.com/kennethreitz/maya",
+  "commit": "9766619d007caf553357db6dba5485fb36ed4edd",
+  "license": "MIT",
+  "bucket": "C",
+  "buyer_question": "A codebase we are buying uses maya for all datetime handling — does it still install on a modern Python given its pinned dependencies, is its CI badge trustworthy, and do the documented examples behave as shown?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package 'maya' installs successfully with `pip install maya` on a current Python (its dependency set — humanize, pytz, dateparser, tzlocal, pendulum>=2.0.2, snaptime — resolves and builds), after which `import maya` succeeds.",
+      "type": "install",
+      "source_quote": "Installation is easy, with:\n\n    $ pip install maya",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install maya && /tmp/v/bin/python -c 'import maya; print(maya.__version__ if hasattr(maya,\"__version__\") else \"ok\")'"
+    },
+    {
+      "id": "c2",
+      "text": "The maya README's GitHub Actions badge ('Continuous Integration and Deployment', pointing at github.com/timofurrer/maya) asserts passing CI for the maya project hosted at kennethreitz/maya.",
+      "type": "test_ci",
+      "source_quote": ".. image:: https://github.com/timofurrer/maya/workflows/Continuous%20Integration%20and%20Deployment/badge.svg\n    :target: https://github.com/timofurrer/maya/actions",
+      "probe_hint": "gh api 'repos/kennethreitz/maya/actions/runs?per_page=3' --jq '.workflow_runs | length'; gh api 'repos/timofurrer/maya/actions/runs?per_page=3' --jq '.workflow_runs[] | \"\\(.conclusion) \\(.created_at)\"'"
+    },
+    {
+      "id": "c3",
+      "text": "In Python with 'maya' installed, `maya.now()` returns a MayaDT object (repr like <MayaDT epoch=...>).",
+      "type": "quickstart",
+      "source_quote": ">>> now = maya.now()\n    <MayaDT epoch=1481850660.9>",
+      "probe_hint": "python3 -c \"import maya; n=maya.now(); assert type(n).__name__=='MayaDT', repr(n); print(repr(n))\""
+    },
+    {
+      "id": "c4",
+      "text": "In Python with 'maya' installed, `maya.when('tomorrow')` parses the human phrase and returns a MayaDT roughly one day in the future, and `.slang_date()` on it returns the string 'tomorrow'.",
+      "type": "quickstart",
+      "source_quote": ">>> tomorrow = maya.when('tomorrow')\n    <MayaDT epoch=1481919067.23>\n\n    >>> tomorrow.slang_date()\n    'tomorrow'",
+      "probe_hint": "python3 -c \"import maya; t=maya.when('tomorrow'); assert t.slang_date()=='tomorrow', t.slang_date()\""
+    },
+    {
+      "id": "c5",
+      "text": "In Python with 'maya' installed, a MayaDT exposes symmetric ISO 8601 and RFC 2822 export: `.iso8601()` returns a string like '2017-02-10T22:17:01.445418Z' and `.rfc2822()` returns a string like 'Fri, 10 Feb 2017 22:17:01 GMT', with matching MayaDT.from_iso8601 / MayaDT.from_rfc2822 constructors.",
+      "type": "interface",
+      "source_quote": "# Also: MayaDT.from_iso8601(...)\n    >>> tomorrow.iso8601()\n    '2017-02-10T22:17:01.445418Z'\n\n    # Also: MayaDT.from_rfc2822(...)\n    >>> tomorrow.rfc2822()\n    'Fri, 10 Feb 2017 22:17:01 GMT'",
+      "probe_hint": "python3 -c \"import maya; n=maya.now(); s=n.iso8601(); r=maya.MayaDT.from_iso8601(s); assert abs(r.epoch-n.epoch)<1; assert 'GMT' in n.rfc2822()\""
+    },
+    {
+      "id": "c6",
+      "text": "In Python with 'maya' installed, `maya.parse('2016-12-16 18:23:45.423992+00:00').datetime(to_timezone='US/Eastern', naive=True)` returns the naive datetime datetime.datetime(2016, 12, 16, 13, 23, 45, 423992).",
+      "type": "quickstart",
+      "source_quote": ">>> scraped = '2016-12-16 18:23:45.423992+00:00'\n    >>> maya.parse(scraped).datetime(to_timezone='US/Eastern', naive=True)\n    datetime.datetime(2016, 12, 16, 13, 23, 45, 423992)",
+      "probe_hint": "python3 -c \"import maya, datetime; d=maya.parse('2016-12-16 18:23:45.423992+00:00').datetime(to_timezone='US/Eastern', naive=True); assert d==datetime.datetime(2016,12,16,13,23,45,423992), d\""
+    },
+    {
+      "id": "c7",
+      "text": "In Python with 'maya' installed, snap modifiers work: `maya.when('Mon, 21 Feb 1994 21:21:42 GMT').snap('@d+3h').rfc2822()` returns 'Mon, 21 Feb 1994 03:00:00 GMT' (requires the snaptime dependency).",
+      "type": "interface",
+      "source_quote": ">>> dt = maya.when('Mon, 21 Feb 1994 21:21:42 GMT')\n    >>> dt.snap('@d+3h').rfc2822()\n    'Mon, 21 Feb 1994 03:00:00 GMT'",
+      "probe_hint": "python3 -c \"import maya; dt=maya.when('Mon, 21 Feb 1994 21:21:42 GMT'); r=dt.snap('@d+3h').rfc2822(); assert r=='Mon, 21 Feb 1994 03:00:00 GMT', r\""
+    },
+    {
+      "id": "c8",
+      "text": "In Python with 'maya' installed, timezone-aware snapping works: `maya.when('Mon, 21 Feb 1994 21:21:42 GMT').snap_tz('+3h@d', 'Australia/Perth').rfc2822()` returns 'Mon, 21 Feb 1994 16:00:00 GMT'.",
+      "type": "interface",
+      "source_quote": ">>> dt = maya.when('Mon, 21 Feb 1994 21:21:42 GMT')\n    >>> dt.snap_tz('+3h@d', 'Australia/Perth').rfc2822()\n\t'Mon, 21 Feb 1994 16:00:00 GMT'",
+      "probe_hint": "python3 -c \"import maya; dt=maya.when('Mon, 21 Feb 1994 21:21:42 GMT'); r=dt.snap_tz('+3h@d','Australia/Perth').rfc2822(); assert r=='Mon, 21 Feb 1994 16:00:00 GMT', r\""
+    },
+    {
+      "id": "c9",
+      "text": "In Python with 'maya' installed, MayaDT supports dates before Jan 1 1970 via negative epoch integers: `maya.MayaDT(-86400)` yields a MayaDT for Dec 31 1969.",
+      "type": "interface",
+      "source_quote": "- This library is based around epoch time, but dates before Jan 1 1970 are indeed supported, via negative integers.",
+      "probe_hint": "python3 -c \"import maya; m=maya.MayaDT(-86400); assert m.year==1969 and m.month==12 and m.day==31, (m.year,m.month,m.day)\""
+    },
+    {
+      "id": "c10",
+      "text": "In Python with 'maya' installed, `from maya import MayaInterval` works and MayaInterval(start=maya.now(), end=maya.now().add(hours=1)) constructs an interval object representing a one-hour event.",
+      "type": "interface",
+      "source_quote": ">>> from maya import MayaInterval\n\n    # Create an event that is one hour long, starting now.\n    >>> event_start = maya.now()\n    >>> event_end = event_start.add(hours=1)\n\n    >>> event = MayaInterval(start=event_start, end=event_end)",
+      "probe_hint": "python3 -c \"import maya; from maya import MayaInterval; s=maya.now(); e=s.add(hours=1); iv=MayaInterval(start=s, end=e); print(iv.duration)\""
+    },
+    {
+      "id": "c11",
+      "text": "The maya README's PyPI badge asserts that 'maya' is published on PyPI (latest release 0.6.1).",
+      "type": "quantitative",
+      "source_quote": ".. image:: https://img.shields.io/pypi/v/maya.svg\n    :target: https://pypi.python.org/pypi/maya",
+      "probe_hint": "curl -s https://pypi.org/pypi/maya/json | python3 -c \"import json,sys; print(json.load(sys.stdin)['info']['version'])\""
+    }
+  ]
+}

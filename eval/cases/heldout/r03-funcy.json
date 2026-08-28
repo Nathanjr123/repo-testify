@@ -1,0 +1,80 @@
+{
+  "id": "r03-funcy",
+  "repo": "https://github.com/Suor/funcy",
+  "commit": "19e9617383cd48dfbc4074dab11df9157ece98b0",
+  "license": "BSD-3-Clause",
+  "bucket": "A",
+  "buyer_question": "We are considering funcy as a utility dependency in a Python 3.12 codebase — is the README's stated Python support accurate and do its overview examples actually run as shown?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package 'funcy' can be installed from PyPI with `pip install funcy`, after which `import funcy` succeeds.",
+      "type": "install",
+      "source_quote": "Installation\n-------------\n\n::\n\n    pip install funcy",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install funcy && /tmp/v/bin/python -c 'import funcy; print(funcy.__version__)'"
+    },
+    {
+      "id": "c2",
+      "text": "The 'funcy' package works with Python 3.4 and all later Python 3 versions, and with PyPy3.",
+      "type": "environment",
+      "source_quote": "Works with Python 3.4+ and pypy3.",
+      "probe_hint": "curl -s https://pypi.org/pypi/funcy/json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['info']['requires_python']); print([c for c in d['info']['classifiers'] if 'Python ::' in c])\"; # plus: attempt install on py3.4 container and on current python"
+    },
+    {
+      "id": "c3",
+      "text": "In Python with 'funcy' installed, `funcy.walk(str.upper, {'a', 'b'})` returns the set {'A', 'B'} (walk preserves the collection type).",
+      "type": "quickstart",
+      "source_quote": "walk(str.upper, {'a', 'b'})            # {'A', 'B'}",
+      "probe_hint": "python3 -c \"from funcy import walk; r=walk(str.upper, {'a','b'}); assert r == {'A','B'} and isinstance(r, set), r\""
+    },
+    {
+      "id": "c4",
+      "text": "In Python with 'funcy' installed, `funcy.select(funcy.even, {1,2,3,10,20})` returns the set {2, 10, 20}.",
+      "type": "quickstart",
+      "source_quote": "select(even, {1,2,3,10,20})                  # {2,10,20}",
+      "probe_hint": "python3 -c \"from funcy import select, even; r=select(even, {1,2,3,10,20}); assert r == {2,10,20}, r\""
+    },
+    {
+      "id": "c5",
+      "text": "In Python with 'funcy' installed, `funcy.lsplit(funcy.odd, range(5))` returns the tuple ([1, 3], [0, 2, 4]).",
+      "type": "quickstart",
+      "source_quote": "lsplit(odd, range(5))       # ([1, 3], [0, 2, 4])",
+      "probe_hint": "python3 -c \"from funcy import lsplit, odd; r=lsplit(odd, range(5)); assert tuple(r) == ([1,3],[0,2,4]), r\""
+    },
+    {
+      "id": "c6",
+      "text": "In Python with 'funcy' installed, `list(funcy.chunks(2, range(5)))` yields [[0, 1], [2, 3], [4]].",
+      "type": "quickstart",
+      "source_quote": "chunks(2, range(5))         # iter: [0, 1], [2, 3], [4]",
+      "probe_hint": "python3 -c \"from funcy import chunks; r=list(chunks(2, range(5))); assert r == [[0,1],[2,3],[4]], r\""
+    },
+    {
+      "id": "c7",
+      "text": "In Python with 'funcy' installed, `funcy.curry(operator.add)(1)(2)` returns 3.",
+      "type": "interface",
+      "source_quote": "curry(add)(1)(2)            # 3",
+      "probe_hint": "python3 -c \"from operator import add; from funcy import curry; assert curry(add)(1)(2) == 3\""
+    },
+    {
+      "id": "c8",
+      "text": "In Python with 'funcy' installed, `funcy.walk_values(funcy.silent(int), {'a': '1', 'b': 'no'})` returns {'a': 1, 'b': None} (silent swallows the ValueError and yields None).",
+      "type": "interface",
+      "source_quote": "walk_values(silent(int), {'a': '1', 'b': 'no'})\n    # => {'a': 1, 'b': None}",
+      "probe_hint": "python3 -c \"from funcy import walk_values, silent; r=walk_values(silent(int), {'a':'1','b':'no'}); assert r == {'a':1,'b':None}, r\""
+    },
+    {
+      "id": "c9",
+      "text": "The funcy repository's test suite can be run by installing `pip install -r test_requirements.txt` and then invoking `pytest`, and the tests pass on a current default Python.",
+      "type": "test_ci",
+      "source_quote": "To run the tests using your default python:\n\n::\n\n    pip install -r test_requirements.txt\n    pytest",
+      "probe_hint": "git clone --depth 1 https://github.com/Suor/funcy /tmp/funcy && cd /tmp/funcy && pip install -r test_requirements.txt && pytest"
+    },
+    {
+      "id": "c10",
+      "text": "The funcy README's Build Status badge (GitHub Actions workflows/test.yml, master branch) asserts that funcy's CI test workflow is currently passing on master.",
+      "type": "test_ci",
+      "source_quote": ".. |Build Status| image:: https://github.com/Suor/funcy/actions/workflows/test.yml/badge.svg\n   :target: https://github.com/Suor/funcy/actions/workflows/test.yml?query=branch%3Amaster",
+      "probe_hint": "gh api 'repos/Suor/funcy/actions/runs?branch=master&per_page=5' --jq '.workflow_runs[] | \"\\(.name) \\(.conclusion) \\(.created_at) \\(.html_url)\"'"
+    }
+  ]
+}

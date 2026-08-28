@@ -1,0 +1,87 @@
+{
+  "id": "r14-simplejson",
+  "repo": "https://github.com/simplejson/simplejson",
+  "commit": "fbc057f87cc0aade75752acbc1a6713fb18199c0",
+  "license": "MIT",
+  "bucket": "HARD",
+  "buyer_question": "We currently use stdlib json. simplejson advertises itself as 'fast' with a C extension for 'a serious speed boost' — is that actually faster than the stdlib json shipped with our Python today, and are the compatibility claims (3.9+, 3.14 free-threaded, Python 2.7 wheel) real?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package simplejson installs from PyPI with `pip install simplejson` and `import simplejson` then works on Python 3.9+.",
+      "type": "install",
+      "source_quote": "simplejson is a simple, fast, complete, correct and extensible\nJSON <http://json.org> encoder and decoder for Python 3.9+",
+      "probe_hint": "Fresh venv on current Python: `pip install simplejson`, then `python -c \"import simplejson; print(simplejson.dumps({'a':1}))\"` expecting {\"a\": 1}."
+    },
+    {
+      "id": "c2",
+      "text": "simplejson is fast, and includes an optional C extension providing 'a serious speed boost' — implying encode/decode meaningfully faster than pure-Python operation and competitive with or better than stdlib json.",
+      "type": "quantitative",
+      "source_quote": "It is pure Python code\nwith no dependencies, but includes an optional C extension\nfor a serious speed boost.",
+      "probe_hint": "Benchmark on one machine, same interpreter: timeit dumps/loads of (a) a large nested dict/list document and (b) many small documents, comparing simplejson-with-C-extension vs simplejson pure-Python (simplejson._toggle_speedups(False) or py impl) vs stdlib json. Report x-factors. The C-vs-pure-simplejson boost is the literal claim; the buyer-relevant comparison is vs stdlib json (which has its own C accelerator and often wins)."
+    },
+    {
+      "id": "c3",
+      "text": "simplejson is pure Python code with no dependencies.",
+      "type": "environment",
+      "source_quote": "It is pure Python code\nwith no dependencies, but includes an optional C extension\nfor a serious speed boost.",
+      "probe_hint": "pip install in a clean venv and confirm no other distributions are installed. Note the internal tension: the same sentence claims 'pure Python' AND a bundled C extension — wheels ship compiled _speedups; 'pure Python' is only true of the fallback path. Verify import succeeds with the C extension disabled/absent."
+    },
+    {
+      "id": "c4",
+      "text": "This version is tested with Python 3.14, including free-threaded builds, and maintains backwards compatibility with Python 3.9+.",
+      "type": "test_ci",
+      "source_quote": "This version is tested\nwith Python 3.14 (including free-threaded builds) and maintains\nbackwards compatibility with Python 3.9+.",
+      "probe_hint": "Inspect .github/workflows at the pinned SHA for a 3.14 (and 3.14t free-threaded) matrix entry and check the latest run status; optionally run the test suite on a 3.14 interpreter."
+    },
+    {
+      "id": "c5",
+      "text": "A legacy Python 2.7 wheel of simplejson is also published (legacy support for Python 2.7).",
+      "type": "environment",
+      "source_quote": "with legacy support for Python 2.7.  It is pure Python code",
+      "probe_hint": "Query PyPI JSON API for the latest simplejson release and check for a cp27/py2 wheel filename among the published files."
+    },
+    {
+      "id": "c6",
+      "text": "The RawJSON example works exactly as printed: dumps({\"status\": \"ok\", \"data\": RawJSON('{\"a\": 1, \"b\": 2}')}) outputs {\"status\": \"ok\", \"data\": {\"a\": 1, \"b\": 2}}.",
+      "type": "quickstart",
+      "source_quote": "    print(dumps(payload))\n    # Output: {\"status\": \"ok\", \"data\": {\"a\": 1, \"b\": 2}}",
+      "probe_hint": "Run the exact snippet from the README (`from simplejson import dumps, RawJSON`) and compare stdout literally, including key order and spacing."
+    },
+    {
+      "id": "c7",
+      "text": "RawJSON embedding works in both the C-extension and pure-Python encoder paths.",
+      "type": "interface",
+      "source_quote": "``RawJSON`` allows embedding pre-encoded JSON strings into output without\nre-encoding them.",
+      "probe_hint": "Run the c6 snippet twice: once normally (C speedups active) and once with speedups disabled (simplejson._toggle_speedups(False) or SIMPLEJSON_PURE env), asserting identical output."
+    },
+    {
+      "id": "c8",
+      "text": "The encoder can serialize arbitrary objects without their cooperation via the `default` kwarg to dumps.",
+      "type": "interface",
+      "source_quote": "The encoder can be specialized to provide serialization in any kind of\nsituation, without any special support by the objects to be serialized\n(somewhat like pickle). This is best done with the ``default`` kwarg\nto dumps.",
+      "probe_hint": "dumps(CustomClass(), default=lambda o: {'x': o.x}) should succeed and emit the transformed dict."
+    },
+    {
+      "id": "c9",
+      "text": "The decoder can post-process JSON objects via the `object_hook` or `object_pairs_hook` kwargs.",
+      "type": "interface",
+      "source_quote": "It can also be specialized to post-process JSON\nobjects with the ``object_hook`` or ``object_pairs_hook`` kwargs.",
+      "probe_hint": "loads('{\"a\": 1}', object_pairs_hook=collections.OrderedDict) returns an OrderedDict; object_hook receives each decoded dict."
+    },
+    {
+      "id": "c10",
+      "text": "Documentation is available online at https://simplejson.readthedocs.io/.",
+      "type": "interface",
+      "source_quote": "The latest documentation for simplejson can be read online here:\nhttps://simplejson.readthedocs.io/",
+      "probe_hint": "HTTP GET the URL, expect 200 and a docs page for the current version."
+    },
+    {
+      "id": "c11",
+      "text": "A very old Python 2.2-compatible fork exists on the `python2.2` branch of the repository (unmaintained, last resort).",
+      "type": "environment",
+      "source_quote": "there is a\nvery old fork of simplejson in the `python2.2`_ branch that supports\nPython 2.2.",
+      "probe_hint": "gh api repos/simplejson/simplejson/branches/python2.2 returns 200."
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": "r05-records",
+  "repo": "https://github.com/kennethreitz/records",
+  "commit": "ea4273695cee6da42edf1cb294d1f2a4505470fc",
+  "license": "ISC",
+  "bucket": "B",
+  "buyer_question": "We are evaluating records as the SQL layer for an internal analytics tool — do its connection-string examples, transaction API, and export features still work against a current SQLAlchemy, or will writes silently be lost?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package 'records' with pandas support can be installed with the recommended command `pipenv install records[pandas]` (equivalently `pip install \"records[pandas]\"`), after which `import records` succeeds.",
+      "type": "install",
+      "source_quote": "Of course, the recommended installation method is\n[pipenv](http://pipenv.org):\n\n    $ pipenv install records[pandas]\n    ✨🍰✨",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install 'records[pandas]' && /tmp/v/bin/python -c 'import records; print(records.__version__)'"
+    },
+    {
+      "id": "c2",
+      "text": "In Python with 'records' installed, a database connection can be opened with a 'postgres://' URL scheme exactly as shown: `records.Database('postgres://...')`.",
+      "type": "quickstart",
+      "source_quote": "import records\n\ndb = records.Database('postgres://...')",
+      "probe_hint": "python3 -c \"import records; records.Database('postgres://user:pw@localhost/db')\"  # SQLAlchemy>=1.4 removed the postgres:// alias; expect sqlalchemy.exc.NoSuchModuleError if stale"
+    },
+    {
+      "id": "c3",
+      "text": "In Python with 'records' installed, `db.query('select ...')` against a SQLite database returns rows that can be indexed (`rows[0]`) and iterated, with fields accessible as `row.name`, `row['name']`, and by integer index.",
+      "type": "quickstart",
+      "source_quote": "rows = db.query('select * from active_users')    # or db.query_file('sqls/active-users.sql')\n```\n\nGrab one row at a time:\n\n``` python\n>>> rows[0]",
+      "probe_hint": "python3 -c \"import records; db=records.Database('sqlite:///:memory:'); db.query('create table t (name text)'); db.query('insert into t values (:n)', n='x'); rows=db.query('select * from t'); r=rows[0]; assert r.name=='x' and r['name']=='x' and r[0]=='x'\""
+    },
+    {
+      "id": "c4",
+      "text": "In Python with 'records' installed, INSERT/UPDATE statements executed via `db.query(...)` (and `db.bulk_query(...)`) are durably committed to the database — data written through records is not lost when the connection closes.",
+      "type": "interface",
+      "source_quote": "-   Bulk actions: `Database.bulk_query()` &\n    `Database.bulk_query_file()`.",
+      "probe_hint": "python3 -c \"import records, os; p='/tmp/r.db'; os.path.exists(p) and os.remove(p); db=records.Database('sqlite:///'+p); db.query('create table t (x int)'); db.query('insert into t values (1)'); db.close(); db2=records.Database('sqlite:///'+p); print(db2.query('select count(*) c from t')[0].c)\"  # expect 1; 0 means data loss"
+    },
+    {
+      "id": "c5",
+      "text": "In Python with 'records' installed, transactions work via the documented API `t = Database.transaction(); t.commit()`.",
+      "type": "interface",
+      "source_quote": "-   Transactions: `t = Database.transaction(); t.commit()`.",
+      "probe_hint": "python3 -c \"import records; db=records.Database('sqlite:///:memory:'); t=db.transaction(); t.commit()\""
+    },
+    {
+      "id": "c6",
+      "text": "In Python with 'records' installed, query results expose `rows.first()` returning a single Record, and `rows.all()` returning a list of Records.",
+      "type": "interface",
+      "source_quote": "If you're only expecting one result:\n\n``` python\n>>> rows.first()\n<Record {\"username\": ...}>",
+      "probe_hint": "python3 -c \"import records; db=records.Database('sqlite:///:memory:'); db.query('create table t (a int)'); db.query('insert into t values (1)'); rows=db.query('select * from t'); assert rows.first().a==1; rows2=db.query('select * from t'); assert len(rows2.all())==1\""
+    },
+    {
+      "id": "c7",
+      "text": "In Python with 'records' installed, `rows.export('csv')` returns the result set serialized as CSV text with a header row.",
+      "type": "interface",
+      "source_quote": ">>> print(rows.export('csv'))\nusername,active,name,user_email,timezone\nmodel-t,True,Henry Ford,model-t@gmail.com,2016-02-06 22:28:23.894202",
+      "probe_hint": "python3 -c \"import records; db=records.Database('sqlite:///:memory:'); db.query('create table t (a int)'); db.query('insert into t values (1)'); out=db.query('select * from t').export('csv'); assert out.strip().splitlines()[0]=='a', out\""
+    },
+    {
+      "id": "c8",
+      "text": "In Python with 'records' and pandas installed, `rows.export('df')` returns a pandas DataFrame of the result set.",
+      "type": "interface",
+      "source_quote": "**Pandas DataFrame**\n\n``` python\n>>> rows.export('df')\n    username  active       name        user_email                   timezone\n0    model-t    True Henry Ford model-t@gmail.com 2016-02-06 22:28:23.894202",
+      "probe_hint": "python3 -c \"import records, pandas; db=records.Database('sqlite:///:memory:'); db.query('create table t (a int)'); db.query('insert into t values (1)'); df=db.query('select * from t').export('df'); assert type(df).__name__=='DataFrame'\""
+    },
+    {
+      "id": "c9",
+      "text": "The 'records' package supports MS-SQL databases (with an appropriate driver installed): a records.Database using an mssql+pyodbc/pymssql URL can run queries that work through plain SQLAlchemy.",
+      "type": "interface",
+      "source_quote": "*Database support includes RedShift, Postgres, MySQL, SQLite, Oracle,\nand MS-SQL (drivers not included).*",
+      "probe_hint": "docker run mssql or skip; minimal: python3 -c \"import records; records.Database('mssql+pymssql://u:p@h/db')\" against a test server and run a simple SELECT; compare with raw sqlalchemy (see issue #193)"
+    },
+    {
+      "id": "c10",
+      "text": "The records README's PyPI badge asserts that 'records' is published on PyPI (latest release 0.6.0).",
+      "type": "quantitative",
+      "source_quote": "[![image](https://img.shields.io/pypi/v/records.svg)](https://pypi.python.org/pypi/records)",
+      "probe_hint": "curl -s https://pypi.org/pypi/records/json | python3 -c \"import json,sys; print(json.load(sys.stdin)['info']['version'])\""
+    },
+    {
+      "id": "c11",
+      "text": "In Python with 'records' installed, `records.Database()` with no argument reads the connection URL from the $DATABASE_URL environment variable.",
+      "type": "interface",
+      "source_quote": "-   `$DATABASE_URL` environment variable support.",
+      "probe_hint": "DATABASE_URL='sqlite:///:memory:' python3 -c \"import records; db=records.Database(); db.query('select 1 as x')\""
+    }
+  ]
+}
