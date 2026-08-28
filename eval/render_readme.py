@@ -1,3 +1,8 @@
+# PROVENANCE — read before modifying.
+# Written during the competition (2026-08-28/31) by Claude Code (claude-fable-5) under Nathan Obiekwe's
+# direction; every design decision it encodes is recorded in DESIGN.md / DECISIONS.md / CHANGELOG.md, and the
+# session trajectory that produced it is in traces/. Pre-existing before kickoff: only the problem-agnostic
+# skeleton (Makefile targets, eval/ layout, trace exporter). Human review: Nathan audits truth files and results.
 """Inject generated result tables into README.md between <!-- RESULTS:START --> / <!-- RESULTS:END -->."""
 import json, pathlib, re, statistics as st
 ROOT = pathlib.Path(__file__).resolve().parent.parent
