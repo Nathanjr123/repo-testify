@@ -1,0 +1,299 @@
+{
+ "repo": "https://github.com/kennethreitz/records",
+ "overall_score": 73,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "OBSERVED records=0.6.0 pandas=3.0.5 tablib=3.10.0 / VERDICT_LINE: PASS pip install records[pandas] ok; import records ok; records 0.6.0 + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "OBSERVED postgres://   -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres / VERDICT_LINE: FAIL postgres:// scheme rejected by SQLAlchemy 2.0.52 (control postgresql:// -> ModuleNotFoundError psycopg2, i.e. scheme accepted, only driver missing) + exit_code 0 (script's own FAIL verdict line; exit 0 due to || echo wrapper)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "OBSERVED rows[0] = <Record {\"username\": \"model-t\", \"active\": 1, \"name\": \"Henry Ford\"}> / OBSERVED iterated = [('model-t', 'Henry Ford'), ('model-a', 'Henry Ford II')] / VERDICT_LINE: PASS rows[0], iteration, row.name / row[\"name\"] / row[2] all work on SQLite + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "stderr: sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked [SQL: insert into t values (?)] [parameters: [(2,), (3,)]] / stdout: VERDICT_LINE: FAIL probe crashed (see traceback) + exit_code 0 (from || echo wrapper). Probe crashed at db.bulk_query before the close+reopen durability check ran; the lock error is suggestive of an uncommitted transaction but the durability claim itself was never measured -> escalate to human"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "OBSERVED transaction object = _GeneratorContextManager has commit/rollback = False False / stderr: AttributeError: '_GeneratorContextManager' object has no attribute 'commit' / VERDICT_LINE: FAIL Database.transaction()/commit() raised + exit_code 0 (from || echo wrapper; traceback is the evidence)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "OBSERVED first() = <Record {\"a\": 1}> Record / OBSERVED all() = list 2 ['Record', 'Record'] / VERDICT_LINE: PASS first() -> Record, all() -> list of 2 Records + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "OBSERVED csv = 'username,active\\r\\nmodel-t,1\\r\\n' / VERDICT_LINE: PASS export(\"csv\") returns header row + data row as CSV text + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "OBSERVED type = pandas.DataFrame shape = (1, 2) / VERDICT_LINE: PASS export(\"df\") returns pandas.DataFrame shape (1,2) with correct columns + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "unverifiable",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "OBSERVED mssql+pyodbc://u:p@h/db -> ModuleNotFoundError: No module named 'pyodbc' / OBSERVED mssql+pymssql://u:p@h/db -> ModuleNotFoundError: No module named 'pymssql' / OBSERVED: no MS-SQL server available in sandbox; end-to-end SELECT NOT executed (partial verification only) + exit_code 0. Only dialect wiring observed; the claim (queries run against MS-SQL with a driver) was not exercised -> escalate to human"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "OBSERVED pypi status=200 name=records version=0.6.0 / OBSERVED badge status=200 contains_version=True len=1275 / VERDICT_LINE: PASS records published on PyPI, latest 0.6.0 matches setup.py; badge HTTP 200 + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "OBSERVED db.db_url = sqlite:///:memory: / OBSERVED select 1 -> 1 / OBSERVED no-env control: ValueError You must provide a db_url. / VERDICT_LINE: PASS records.Database() reads $DATABASE_URL and runs a query + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [
+  "c4",
+  "c9"
+ ],
+ "run_id": "33209465292",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787949693",
+ "memo_md": "7 verified, 2 refuted, 2 escalated of 11 claims."
+}

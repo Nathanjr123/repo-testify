@@ -6,12 +6,15 @@
   "c3": "verified",
   "c4": "verified",
   "c5": "refuted",
-  "c6": "refuted",
+  "c6": "verified",
   "c7": "verified",
   "c8": "verified",
   "c9": "verified",
   "c10": "verified",
   "c11": "verified"
  },
- "reviewer_score": 62
+ "reviewer_score": 62,
+ "audit_notes": {
+  "c6": "was refuted; Executed with network: AppVeyor API last master build status=success finished 2026-03-19 (161 days), badge svg 'passing' (advanced-v2 p-c6). Draft had assumed a stale mirage; the claim as written is true."
+ }
 }

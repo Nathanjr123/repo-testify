@@ -1,0 +1,27 @@
+r01-humanize.json: ok wall=1171.88s
+r02-python-tabulate.json: ok wall=283.75s
+r04-schedule.json: ok wall=1244.93s
+r05-records.json: ok wall=449.4s
+r07-newspaper3k.json: ok wall=1634.19s
+r09-pydub.json: ok wall=446.24s
+r11-gpt-2.json: ok wall=323.61s
+{
+ "id": "advanced-v2-1787952546",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.698,
+   "confident_wrong": 0.887,
+   "evidence_valid": 1.0,
+   "score_error": 0.777
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.808,
+  "n_cases": 7,
+  "settled_fraction": 0.904,
+  "capped": false
+ }
+}
+SWEEP2_DONE

@@ -1,0 +1,296 @@
+{
+ "repo": "https://github.com/astanin/python-tabulate",
+ "overall_score": 82,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "observed: tabulate version 0.10.0 callable True / VERDICT_LINE: PASS pip install tabulate + from tabulate import tabulate ok, version 0.10.0 + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "-rwxr-xr-x 1 root root 211 Aug 28 20:18 /tmp/v/bin/tabulate / observed: rc=0 output=-  -|1  2|3  4|-  -| + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "observed: tabulate scripts in venv bin = 1 (README says lib-only should install none) / VERDICT_LINE: FAIL TABULATE_INSTALL=lib-only ignored; bin/tabulate still installed + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "observed: http 200 version 0.10.0 requires_python '>=3.10' py2 classifiers [] + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "observed: first data line = 'Sun    696000     1.9891e+09' / VERDICT_LINE: PASS output matches README simple-format table exactly + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] / VERDICT_LINE: PASS dict-of-iterables with headers=keys matches README exactly + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "-f FMT, --format FMT      set output table format; supported formats: plain, simple, grid, fancy_grid, pipe, orgtbl, rst, mediawiki, html, latex, latex_raw, latex_booktabs, latex_longtable, tsv (default: simple) + exit_code 0 \u2014 'github' is absent from the format list; the probe's word-regex matched 'github' only in the 'See also https://github.com/astanin/python-tabulate' URL line, so its PASS verdict line is a probe false positive. The other 7 named formats are present."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "observed: wcwidth 0.8.3 WIDE_CHARS_MODE True display widths per line [9, 9, 9, 9] / VERDICT_LINE: PASS wcwidth installed and CJK row aligns by display width + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "observed: badge http 200 badge text = passing svg bytes 2276 / observed: run 272 268615a5 success 2026-03-11T08:43:01Z + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "verified",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "observed: tabulate     0.10.0      478.1 us/call / observed: prettytable  3.18.0      501.5 us/call / observed: texttable    1.7.0       952.8 us/call + exit_code 0 \u2014 tabulate was faster in this single run, but the PrettyTable margin is ~5% with no variance reported, PrettyTable version (3.18.0) differs from the README's 3.17.0, and the README's own table shows PrettyTable faster; treat the tabulate-vs-PrettyTable ordering as within benchmark noise."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "low"
+    }
+   ]
+  }
+ ],
+ "escalations": [],
+ "run_id": "33207614025",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787948164",
+ "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims."
+}
