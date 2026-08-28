@@ -4,14 +4,19 @@
   "c1": "refuted",
   "c2": "verified",
   "c3": "refuted",
-  "c4": "unverifiable",
-  "c5": "unverifiable",
+  "c4": "refuted",
+  "c5": "refuted",
   "c6": "verified",
   "c7": "refuted",
   "c8": "refuted",
   "c9": "refuted",
-  "c10": "unverifiable",
+  "c10": "verified",
   "c11": "unverifiable"
  },
- "reviewer_score": 20
+ "reviewer_score": 20,
+ "audit_notes": {
+  "c4": "was unverifiable; README example output stale: executed authors == ['Cnn Wire'], README states a different author (advanced-v1 p-c4 AssertionError authors mismatch).",
+  "c5": "was unverifiable; nlp() raises LookupError on current nltk despite punkt+stopwords present (advanced-v1 p-c5 stderr) \u2014 the README's download_corpora path no longer suffices.",
+  "c10": "was unverifiable; Live probe with network built Source(cnn.com): 369 article urls (advanced-v1 p-c10). Draft had marked unverifiable."
+ }
 }

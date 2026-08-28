@@ -3,7 +3,7 @@
  "verdicts": {
   "c1": "verified",
   "c2": "verified",
-  "c3": "unverifiable",
+  "c3": "refuted",
   "c4": "verified",
   "c5": "verified",
   "c6": "verified",
@@ -13,5 +13,8 @@
   "c10": "verified",
   "c11": "refuted"
  },
- "reviewer_score": 85
+ "reviewer_score": 85,
+ "audit_notes": {
+  "c3": "was unverifiable; TABULATE_INSTALL=lib-only has no effect: console script present in both venvs (advanced-v1 p-c3, executed)."
+ }
 }
