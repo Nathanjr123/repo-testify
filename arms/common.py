@@ -15,3 +15,34 @@ def resolve_claude() -> str:
     if cands:
         return cands[0]
     raise FileNotFoundError("claude CLI not found; set CLAUDE_BIN")
+
+import subprocess, sys, time
+
+class LimitBlocked(RuntimeError):
+    """Usage/rate limit: an INFRASTRUCTURE condition, never a verdict. Arms exit 75 (EX_TEMPFAIL)."""
+
+LIMIT_MARKERS = ("rate limit", "usage limit", "429", "overloaded", "limit reached", "try again later", "out of extra usage")
+
+def llm(prompt, model="claude-fable-5", retries=2, backoff=(60, 300)):
+    """claude -p with limit detection. Empty stdout is treated as a limit signal (observed 2026-08-28:
+    the CLI returned empty output for 3 consecutive calls when the session limit hit)."""
+    claude = resolve_claude()
+    for i in range(retries + 1):
+        r = subprocess.run([claude, "-p", prompt, "--model", model], capture_output=True, text=True, timeout=600)
+        out = (r.stdout or "").strip()
+        blob = (out + " " + (r.stderr or "")).lower()
+        limited = (not out) or any(m in blob for m in LIMIT_MARKERS)
+        if r.returncode == 0 and out and not limited:
+            return out
+        if limited and i < retries:
+            time.sleep(backoff[min(i, len(backoff) - 1)]); continue
+        if limited:
+            raise LimitBlocked(f"claude -p blocked (empty/limit) after {retries+1} tries: {(r.stderr or '')[:200]}")
+        raise RuntimeError(f"llm failed rc={r.returncode}: {(r.stderr or '')[:300]}")
+
+def exit_if_limited(fn):
+    """Run fn(); on LimitBlocked exit 75 so the runner marks the case limit_blocked and halts the sweep."""
+    try:
+        return fn()
+    except LimitBlocked as e:
+        print(f"LIMIT_BLOCKED: {e}", file=sys.stderr); sys.exit(75)
