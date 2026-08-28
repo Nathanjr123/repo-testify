@@ -5286,7 +5286,7 @@
   "partial": false
  },
  {
-  "id": "baseline-v2-n1-rescored-1787946905",
+  "id": "baseline-v2-n1-rescored-1787946942",
   "arm": "baseline",
   "label": "baseline-v2-n1-rescored",
   "disable": null,
@@ -6692,7 +6692,7 @@
   "rescored_from": "baseline-v2-n1-1787943377"
  },
  {
-  "id": "baseline-v2-n2-rescored-1787946905",
+  "id": "baseline-v2-n2-rescored-1787946943",
   "arm": "baseline",
   "label": "baseline-v2-n2-rescored",
   "disable": null,
@@ -8090,7 +8090,7 @@
   "rescored_from": "baseline-v2-n2-1787943738"
  },
  {
-  "id": "advanced-v1-rescored-1787946905",
+  "id": "advanced-v1-rescored-1787946943",
   "arm": "advanced",
   "label": "advanced-v1-rescored",
   "disable": null,
@@ -8100,18 +8100,18 @@
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
   "agg": {
    "rows": {
-    "verdict_acc": 0.757,
-    "confident_wrong": 0.905,
-    "evidence_valid": 1.0,
-    "score_error": 0.803
+    "verdict_acc": 0.481,
+    "confident_wrong": 0.572,
+    "evidence_valid": 0.621,
+    "score_error": 0.506
    },
    "gates": {
     "no_fabricated_evidence": 1.0,
-    "valid_report": 1.0
+    "valid_report": 0.8571428571428571
    },
-   "raw": 0.842,
-   "n_cases": 6,
-   "settled_fraction": 0.844,
+   "raw": 0.455,
+   "n_cases": 7,
+   "settled_fraction": 0.723,
    "capped": false
   },
   "human_time_s": null,
@@ -9040,6 +9040,20 @@
     },
     "status": "ok",
     "wall_s": 315.49
+   },
+   "r05-records.json": {
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 0.0,
+     "evidence_valid": 0.0,
+     "score_error": 0.0
+    },
+    "gates": {
+     "valid_report": false,
+     "no_fabricated_evidence": true
+    },
+    "status": "arm_error",
+    "settled_fraction": 0.0
    },
    "r07-newspaper3k.json": {
     "rows": {
