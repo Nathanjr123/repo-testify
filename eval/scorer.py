@@ -54,14 +54,15 @@ def score(case: dict, output: dict) -> dict:
     pred = {cid: c.get("verdict") for cid, c in rep_claims.items()}
 
     ev_total = ev_ok = 0
-    run_dir = pathlib.Path(output.get("_run_dir", "."))  # runner injects; refs checked against it
+    run_dir = pathlib.Path(output.get("_run_dir", "."))  # local artifacts, if still present
+    idx = output.get("_evidence_index")  # portable: {"probes": [...], "text": "<cmds+filenames>"} — makes replay self-contained
     for c in rep_claims.values():
         for e in c.get("evidence", []):
             ev_total += 1
             ref = str(e.get("ref", ""))
             if e.get("kind") in ("file", "command"):
                 clog = (run_dir / "commands.log")
-                text = clog.read_text(errors="replace") if clog.exists() else ""
+                text = idx["text"] if idx else (clog.read_text(errors="replace") if clog.exists() else "")
                 probe_hit = re.search(r"\bp-c\d+\b", ref) and re.search(r"\bp-c\d+\b", ref).group(0) in text
                 ev_ok += bool(probe_hit or ref in text or (run_dir / ref).exists()
                               or any(run_dir.rglob(pathlib.Path(ref).name)) if ref else False)

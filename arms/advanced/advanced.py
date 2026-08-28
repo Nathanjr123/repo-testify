@@ -215,8 +215,10 @@ Reply ONLY JSON: {{"probes": [...same schema...]}}"""
     n_ver = sum(v["verdict"] == "verified" for v in verdicts)
     n_ref = sum(v["verdict"] == "refuted" for v in verdicts)
     score = round(100 * (n_ver + 0.5 * (len(verdicts) - n_ver - n_ref)) / max(1, len(verdicts)))
+    idx_text = "\n".join(f'{p["probe"]} {p["cmd.txt"][:400]} {" ".join(k for k in ("cmd.txt","exit_code","stdout.log","stderr.log","phase_a.log") if p.get(k))}' for p in probe_log)
     report = {"repo": case["repo"], "overall_score": score, "claims": verdicts,
               "escalations": esc, "run_id": rid, "_run_dir": str(run_dir),
+              "_evidence_index": {"probes": [p["probe"] for p in probe_log], "text": idx_text},
               "memo_md": f"{n_ver} verified, {n_ref} refuted, {len(esc)} escalated of {len(verdicts)} claims."}
     (run_dir / "report.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report))
