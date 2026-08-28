@@ -41,10 +41,12 @@ See RESULTS.md (generated). Primary metric: macro-F1 of per-claim verdicts again
 CHANGELOG.md — one row per experiment, evidence-linked, removed experiments included.
 
 ## Main failure mode
-_(filled from measurement)_
+**The sandbox being helpful corrupts the verdict.** Reading the 15 remaining disagreements between pipeline v2 and audited truth (all from recorded probe output — CHANGELOG "Truth audit 2"), the largest class was not wrong execution but *lenient* execution: the planner quietly added a dependency the README never mentions (`lxml_html_clean` for newspaper3k) so that `import newspaper` succeeded, and the adjudicator then verified two downstream claims that fail *as written*; in three other cases a documented prerequisite failed to install (`tensorflow==1.12.0`) and the adjudicator abstained instead of refuting the claims that depend on it. Both are the same error: the pipeline answered "could this be made to work?" when the buyer asked "does it work as promised?". The fix is a rule, not a model: probes may only use steps the README documents, and a documented prerequisite that fails as written refutes everything downstream. A secondary mode — the adjudicator contradicting the probe's own `VERDICT_LINE: PASS` once in 75 claims — is why the verdict line exists at all: the interface, not the model, carries the reliability.
+
+A reproducible repro of the primary mode: case `r07-newspaper3k`, claims c8/c9, proof `advanced-v2` — compare the probe's phase-A install log against the README's install line.
 
 ## Hot take
-_(measured before it is written)_
+**A green CI badge is a Goodharted proxy for "the README is true", and the honest repos prove it.** On the public split, every repository whose test/CI claims fully verified — the ones a buyer would trust on sight — still had at least one refuted README claim (2 of 2; heldout results extend the count). humanize's own doctest promises `'16 minutes'` and returns `'17 minutes'`; tabulate documents an install switch that does nothing and a benchmark table that contradicts its prose. Tests verify what the maintainers chose to test; the README is written for readers, drifts silently, and is never executed — until something executes it. The practical lesson for building agents: the cheapest reliable component in this pipeline was not the model or the votes (k=1 vs k=3 sat inside the noise floor) but **an execution result the model could not argue with**. Give an agent a verifier and it becomes careful; give it a README and it becomes confident.
 
 ## What we did not attempt
 Claim *discovery* is not on the scored path — the claim list per repository is fixed so two people scoring the same run get the same number; the extractor exists for real-world use but its recall is not evaluated here. No embedding retrieval, no conversing agents, no ungrounded self-review passes (DESIGN.md explains why). No Windows or macOS execution: verdicts are Linux verdicts.
