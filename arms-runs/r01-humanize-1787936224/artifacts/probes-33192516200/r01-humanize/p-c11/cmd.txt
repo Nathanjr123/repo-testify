@@ -1,0 +1,11 @@
+grep -o 'passing\|failing\|no status' /tmp/badge.svg | head -1 && grep -q 'passing' /tmp/badge.svg && python3 - <<'EOF'
+import json, os
+if not os.path.exists('/tmp/runs.json'):
+    print('no API data; badge SVG check above is the verdict')
+    raise SystemExit(0)
+runs = [r for r in json.load(open('/tmp/runs.json'))['workflow_runs'] if r['name'] == 'Test' and r['status'] == 'completed']
+assert runs, 'no completed Test runs on main in last 50 push runs'
+for r in runs[:5]:
+    print(r['head_sha'][:7], r['created_at'], r['conclusion'])
+assert runs[0]['conclusion'] == 'success', 'latest Test run on main: ' + str(runs[0]['conclusion'])
+EOF

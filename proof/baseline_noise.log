@@ -1,1 +1,30 @@
 r01-humanize.json: ok wall=43.45s
+r02-python-tabulate.json: ok wall=58.62s
+r04-schedule.json: ok wall=41.39s
+r05-records.json: ok wall=40.83s
+r07-newspaper3k.json: ok wall=56.07s
+r09-pydub.json: ok wall=54.44s
+r11-gpt-2.json: ok wall=40.98s
+{
+ "id": "baseline-n1-1787936544",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.086,
+   "confident_wrong": 0.636,
+   "evidence_valid": 0.213,
+   "coverage": 1.0,
+   "score_error": 0.781
+  },
+  "gates": {
+   "no_fabricated_evidence": 0.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.0,
+  "n_cases": 7
+ }
+}
+run 1 done: 17:02
+r01-humanize.json: ok wall=36.41s
+r02-python-tabulate.json: ok wall=58.29s
+r04-schedule.json: ok wall=45.74s
+r05-records.json: ok wall=48.0s

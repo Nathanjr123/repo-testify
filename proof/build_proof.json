@@ -59,7 +59,8 @@
     "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.04
    }
-  }
+  },
+  "discarded": "infra fault: claude CLI absent from PATH (CHANGELOG iteration 2)"
  },
  {
   "id": "baseline-n2-1787936020",
@@ -121,7 +122,8 @@
     "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.11
    }
-  }
+  },
+  "discarded": "infra fault: claude CLI absent from PATH (CHANGELOG iteration 2)"
  },
  {
   "id": "baseline-n3-1787936029",
@@ -182,6 +184,149 @@
     "status": "arm_error",
     "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.13
+   }
+  },
+  "discarded": "infra fault: claude CLI absent from PATH (CHANGELOG iteration 2)"
+ },
+ {
+  "id": "baseline-n1-1787936544",
+  "arm": "baseline",
+  "label": "baseline-n1",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "00126a7",
+  "ts": "2026-08-28T17:02:24Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.086,
+    "confident_wrong": 0.636,
+    "evidence_valid": 0.213,
+    "coverage": 1.0,
+    "score_error": 0.781
+   },
+   "gates": {
+    "no_fabricated_evidence": 0.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.0,
+   "n_cases": 7
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 335.8,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 43.45,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.143,
+     "coverage": 1.0,
+     "score_error": 0.7
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r02-python-tabulate.json": {
+    "status": "ok",
+    "wall_s": 58.62,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.222,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.409,
+     "coverage": 1.0,
+     "score_error": 0.7
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r04-schedule.json": {
+    "status": "ok",
+    "wall_s": 41.39,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 0.8,
+     "evidence_valid": 0.231,
+     "coverage": 1.0,
+     "score_error": 1.0
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r05-records.json": {
+    "status": "ok",
+    "wall_s": 40.83,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.056,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.706,
+     "coverage": 1.0,
+     "score_error": 0.95
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r07-newspaper3k.json": {
+    "status": "ok",
+    "wall_s": 56.07,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.321,
+     "confident_wrong": 0.636,
+     "evidence_valid": 0.238,
+     "coverage": 1.0,
+     "score_error": 0.88
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r09-pydub.json": {
+    "status": "ok",
+    "wall_s": 54.44,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.241,
+     "confident_wrong": 1.0,
+     "evidence_valid": 0.1,
+     "coverage": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
+   },
+   "r11-gpt-2.json": {
+    "status": "ok",
+    "wall_s": 40.98,
+    "usage": {},
+    "rows": {
+     "verdict_acc": 0.25,
+     "confident_wrong": 0.3,
+     "evidence_valid": 0.235,
+     "coverage": 1.0,
+     "score_error": 0.9
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": false
+    }
    }
   }
  }

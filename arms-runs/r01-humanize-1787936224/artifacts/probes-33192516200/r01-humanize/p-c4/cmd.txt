@@ -1,0 +1,1 @@
+python3 -c "import humanize; r=humanize.intcomma(12345); print(repr(r)); assert r == '12,345', repr(r)"

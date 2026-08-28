@@ -1,0 +1,90 @@
+[
+ {
+  "probe": "p-c1",
+  "cmd.txt": "python3 -m pip show humanize | grep -E '^(Name|Version):' && python3 -c \"import humanize; print('import OK, humanize', humanize.__version__)\"",
+  "exit_code": "0",
+  "stdout.log": "Name: humanize\nVersion: 4.16.0\nimport OK, humanize 4.16.0\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 4.5 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nUnable to find image 'python:3.11-slim' locally\n3.11-slim: Pulling from library/python\n6310eb16bf42: Pulling fs layer\n87e1b7cce023: Pulling fs layer\nc86306e32cd0: Pulling fs layer\na14578096eda: Pulling fs layer\na14578096eda: Waiting\n87e1b7cce023: Verifying Checksum\n87e1b7cce023: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\n6310eb16bf42: Verifying Checksum\n6310eb16bf42: Download complete\na14578096eda: Verifying Checksum\na14578096eda: Download complete\n6310eb16bf42: Pull complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c10",
+  "cmd.txt": "ls -l \"$(python3 -c 'import humanize,os;print(os.path.dirname(humanize.__file__))')/locale/ru_RU/LC_MESSAGES/\" && python3 -c \"import humanize, datetime as dt; b=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.activate('ru_RU'); r=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.deactivate(); a=humanize.naturaltime(dt.timedelta(seconds=3)); print(ascii((b, r, a))); assert b == '3 seconds ago', ascii(b); assert r == '3 \\u0441\\u0435\\u043a\\u0443\\u043d\\u0434\\u044b \\u043d\\u0430\\u0437\\u0430\\u0434', ascii(r); assert a == '3 seconds ago', ascii(a)\"",
+  "exit_code": "0",
+  "stdout.log": "total 16\n-rw-r--r-- 1 root root 4538 Aug 28 17:00 humanize.mo\n-rw-r--r-- 1 root root 7913 Aug 28 17:00 humanize.po\n('3 seconds ago', '3 \\u0441\\u0435\\u043a\\u0443\\u043d\\u0434\\u044b \\u043d\\u0430\\u0437\\u0430\\u0434', '3 seconds ago')\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 2.0 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c11",
+  "cmd.txt": "grep -o 'passing\\|failing\\|no status' /tmp/badge.svg | head -1 && grep -q 'passing' /tmp/badge.svg && python3 - <<'EOF'\nimport json, os\nif not os.path.exists('/tmp/runs.json'):\n    print('no API data; badge SVG check above is the verdict')\n    raise SystemExit(0)\nruns = [r for r in json.load(open('/tmp/runs.json'))['workflow_runs'] if r['name'] == 'Test' and r['status'] == 'completed']\nassert runs, 'no completed Test runs on main in last 50 push runs'\nfor r in runs[:5]:\n    print(r['head_sha'][:7], r['created_at'], r['conclusion'])\nassert runs[0]['conclusion'] == 'success', 'latest Test run on main: ' + str(runs[0]['conclusion'])\nEOF",
+  "exit_code": "0",
+  "stdout.log": "passing\nce4147b 2026-08-01T09:18:47Z success\n8a01306 2026-08-01T07:49:24Z success\n9140152 2026-08-01T07:49:09Z success\n42b4a1d 2026-07-25T13:58:41Z success\nc3a124c 2026-07-06T21:53:40Z success\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\n"
+ },
+ {
+  "probe": "p-c2",
+  "cmd.txt": "cd / && python3 -c \"import humanize; print('import OK, humanize', humanize.__version__, 'from', humanize.__file__)\" && cd / && python3 -c \"import humanize; assert humanize.__file__.startswith('/tmp/humanize/'), 'not an editable install: ' + humanize.__file__\"",
+  "exit_code": "0",
+  "stdout.log": "import OK, humanize 4.16.1.dev9 from /tmp/humanize/src/humanize/__init__.py\n",
+  "stderr.log": "",
+  "phase_a.log": "ce4147b6c8f8a132f772be0929d58305eb22c5d9\nObtaining file:///tmp/humanize\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Checking if build backend supports build_editable: started\n  Checking if build backend supports build_editable: finished with status 'done'\n  Getting requirements to build editable: started\n  Getting requirements to build editable: finished with status 'done'\n  Installing backend dependencies: started\n  Installing backend dependencies: finished with status 'done'\n  Preparing editable metadata (pyproject.toml): started\n  Preparing editable metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: humanize\n  Building editable for humanize (pyproject.toml): started\n  Building editable for humanize (pyproject.toml): finished with status 'done'\n  Created wheel for humanize: filename=humanize-4.16.1.dev9-py3-none-any.whl size=4395 sha256=a16d60cdf132c5428c776cd4dfa373fee851b8337e0cc6b0c4022bc7a5c003f2\n  Stored in directory: /tmp/pip-ephem-wheel-cache-p6s4l1u2/wheels/05/f0/80/637c6fc852ffa3cf42250232efbcafd8b2f8f0581662e1cc97\nSuccessfully built humanize\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.1.dev9\n\n--stderr--\ndebconf: unable to initialize frontend: Dialog\ndebconf: (TERM is not set, so the dialog frontend is not usable.)\ndebconf: falling back to frontend: Readline\ndebconf: unable to initialize frontend: Readline\ndebconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 31.)\ndebconf: falling back to frontend: Teletype\ndebconf: unable to initialize frontend: Teletype\ndebconf: (This frontend requires a controlling tty.)\ndebconf: falling back to frontend: Noninteractive\nCloning into '/tmp/humanize'...\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c3",
+  "cmd.txt": "python3 -c \"import json; i=json.load(open('/tmp/pypi.json'))['info']; print('pypi version', i['version'], 'requires_python', i['requires_python']); print([c for c in i['classifiers'] if c.startswith('Programming Language :: Python :: 3.')]); assert i['requires_python']=='>=3.10', i['requires_python']\" && python3 -c \"import sys, humanize; assert sys.version_info[:2]==(3,10), sys.version; print('import OK on lowest advertised version', sys.version.split()[0], 'humanize', humanize.__version__)\"",
+  "exit_code": "0",
+  "stdout.log": "pypi version 4.16.0 requires_python >=3.10\n['Programming Language :: Python :: 3.10', 'Programming Language :: Python :: 3.11', 'Programming Language :: Python :: 3.12', 'Programming Language :: Python :: 3.13', 'Programming Language :: Python :: 3.14', 'Programming Language :: Python :: 3.15']\nimport OK on lowest advertised version 3.10.21 humanize 4.16.0\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl (137 kB)\n     \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 4.2 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nUnable to find image 'python:3.10-slim' locally\n3.10-slim: Pulling from library/python\n6310eb16bf42: Already exists\n5466a598b0f9: Pulling fs layer\n4f9c6a734391: Pulling fs layer\nbbfc75a06bd2: Pulling fs layer\nbbfc75a06bd2: Verifying Checksum\nbbfc75a06bd2: Download complete\n5466a598b0f9: Verifying Checksum\n5466a598b0f9: Download complete\n4f9c6a734391: Verifying Checksum\n4f9c6a734391: Download complete\n5466a598b0f9: Pull complete\n4f9c6a734391: Pull complete\nbbfc75a06bd2: Pull complete\nDigest: sha256:38758a82a44d1acb9bae3dd5f7d2a55452fb44a5ceca7c4589f360f2c4aa3d0c\nStatus: Downloaded newer image for python:3.10-slim\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 23.0.1 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c4",
+  "cmd.txt": "python3 -c \"import humanize; r=humanize.intcomma(12345); print(repr(r)); assert r == '12,345', repr(r)\"",
+  "exit_code": "0",
+  "stdout.log": "'12,345'\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 4.8 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c5",
+  "cmd.txt": "python3 -c \"import humanize; r=humanize.intword(123455913); print(repr(r)); assert r == '123.5 million', repr(r)\"",
+  "exit_code": "0",
+  "stdout.log": "'123.5 million'\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 762.3 kB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c6",
+  "cmd.txt": "python3 -c \"import humanize, datetime as dt; r=humanize.naturaldelta(dt.timedelta(seconds=1001)); print(repr(r)); assert r == '16 minutes', repr(r)\"",
+  "exit_code": "1",
+  "stdout.log": "'17 minutes'\n",
+  "stderr.log": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAssertionError: '17 minutes'\n",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 4.6 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c7",
+  "cmd.txt": "python3 -c \"import humanize; a=humanize.naturalsize(1_000_000); b=humanize.naturalsize(1_000_000, binary=True); print(repr(a), repr(b)); assert a == '1.0 MB', repr(a); assert b == '976.6 KiB', repr(b)\"",
+  "exit_code": "0",
+  "stdout.log": "'1.0 MB' '976.6 KiB'\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 6.0 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c8",
+  "cmd.txt": "python3 -c \"import humanize; r=humanize.fractional(1/3); print(repr(r)); assert r == '1/3', repr(r)\"",
+  "exit_code": "0",
+  "stdout.log": "'1/3'\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 1.5 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c9",
+  "cmd.txt": "python3 -c \"import humanize; r=humanize.scientific(0.3); print(ascii(r)); assert r == '3.00 x 10\\u207b\\u00b9', ascii(r)\"",
+  "exit_code": "0",
+  "stdout.log": "'3.00 x 10\\u207b\\xb9'\n",
+  "stderr.log": "",
+  "phase_a.log": "Collecting humanize\n  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)\nDownloading humanize-4.16.0-py3-none-any.whl (137 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 137.2/137.2 kB 4.6 MB/s eta 0:00:00\nInstalling collected packages: humanize\nSuccessfully installed humanize-4.16.0\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ }
+]

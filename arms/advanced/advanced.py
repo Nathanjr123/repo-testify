@@ -128,6 +128,38 @@ Claim: {claim['text']}"""
         best["confidence"] = "low"
     return best
 
+def adjudicate_batch(case, probe_log, k):
+    """One LLM call per vote covering ALL claims (usage economy: 11x fewer calls than per-claim)."""
+    claims = json.dumps([{"id": c["id"], "text": c["text"]} for c in case["claims"]])
+    slim = [{"probe": p["probe"], "cmd": p["cmd.txt"][:600], "exit_code": p["exit_code"].strip(),
+             "stdout": p["stdout.log"][:700], "stderr": p["stderr.log"][-500:], "phase_a_tail": p["phase_a.log"][-300:]}
+            for p in probe_log]
+    prompt = f"""You adjudicate repository claims from EXECUTION EVIDENCE only.
+{FEWSHOT}
+Claims: {claims}
+Probe transcripts (probe p-cN corresponds to claim cN): {json.dumps(slim)[:60000]}
+Rules: verdict from the transcript alone; quote the exit code you rely on; missing/ambiguous evidence -> unverifiable + low. Reply ONLY JSON:
+{{"claims": [{{"id": "cN", "verdict": "verified|refuted|unverifiable", "confidence": "high|low", "evidence": [{{"kind": "command", "ref": "p-cN", "excerpt": "<quoted output line + exit_code N>"}}]}}]}}
+Claims again: {claims}"""
+    votes = []
+    for _ in range(k):
+        try:
+            votes.append({v["id"]: v for v in jparse(llm(prompt))["claims"]})
+        except Exception:
+            pass
+    out = []
+    for c in case["claims"]:
+        vs = [v[c["id"]] for v in votes if c["id"] in v]
+        if not vs:
+            out.append({"id": c["id"], "verdict": "unverifiable", "confidence": "low", "evidence": []}); continue
+        tally = {}
+        for v in vs: tally[v["verdict"]] = tally.get(v["verdict"], 0) + 1
+        win = max(tally, key=tally.get)
+        best = dict(next(v for v in vs if v["verdict"] == win))
+        if tally[win] < len(vs): best["confidence"] = "low"
+        out.append(best)
+    return out
+
 def crosscheck(verdicts, commands_log_text):
     """Code-checked evidence: a quoted exit code must appear in the recorded log (DESIGN stage 5)."""
     for v in verdicts:
@@ -153,8 +185,7 @@ def main():
         probe_log, rid = stage_execute(case, probes, run_dir)
     k = 1 if "k3" in DISABLE else 3
     clog_text = (run_dir / "commands.log").read_text() if probe_log else ""
-    verdicts = [adjudicate_claim(case, c, [p for p in probe_log if c["id"] in p.get("probe", "")] or probe_log, k)
-                for c in case["claims"]]
+    verdicts = adjudicate_batch(case, probe_log, k)
     verdicts = crosscheck(verdicts, clog_text)
     esc = [v["id"] for v in verdicts if v["verdict"] == "unverifiable"]
     n_ver = sum(v["verdict"] == "verified" for v in verdicts)

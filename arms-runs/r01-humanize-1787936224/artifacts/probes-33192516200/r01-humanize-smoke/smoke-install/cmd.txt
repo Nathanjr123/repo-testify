@@ -1,0 +1,1 @@
+python3 -c "import humanize; print('humanize', humanize.__version__); print(humanize.naturalsize(1000000))"
