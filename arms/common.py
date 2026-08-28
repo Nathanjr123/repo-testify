@@ -28,7 +28,10 @@ class LimitBlocked(RuntimeError):
 
 LIMIT_MARKERS = ("rate limit", "usage limit", "429", "overloaded", "limit reached", "try again later", "out of extra usage")
 
+CALLS = {"n": 0}
+
 def llm(prompt, model="claude-fable-5", retries=2, backoff=(60, 300)):
+    CALLS["n"] += 1
     """claude -p with limit detection. Empty stdout is treated as a limit signal (observed 2026-08-28:
     the CLI returned empty output for 3 consecutive calls when the session limit hit)."""
     claude = resolve_claude()

@@ -36,7 +36,7 @@ def main():
     out = llm(prompt)
     start, end = out.find("{"), out.rfind("}")
     report = json.loads(out[start:end + 1])
-    report.setdefault("usage", {})
+    report.setdefault("usage", {}); report["llm_calls"] = 1
     print(json.dumps(report))
 
 exit_if_limited(main)
