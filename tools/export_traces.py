@@ -1,0 +1,37 @@
+"""Claude Code session jsonl -> traces/<session>.md, rows rendered as
+Step NN — Model Thinking / Tool Call: <name> / Tool Result. Keeps failures. Run: make traces
+Mark human checkpoints by searching for your own interjections (role=user mid-session)."""
+import json, pathlib, sys, glob, os
+SRC = os.environ.get("CLAUDE_PROJ", os.path.expanduser("~/.claude/projects"))
+DST = pathlib.Path(__file__).resolve().parent.parent / "traces"
+def render(path):
+    name = pathlib.Path(path).stem
+    out, step = [f"# Trajectory {name}\n"], 0
+    for line in open(path, encoding="utf-8", errors="replace"):
+        try: j = json.loads(line)
+        except json.JSONDecodeError: continue
+        msg = j.get("message") or {}
+        role, content = msg.get("role"), msg.get("content")
+        if not role: continue
+        step += 1
+        if isinstance(content, str):
+            out.append(f"## Step {step} — {role}\n{content[:4000]}\n")
+            continue
+        for b in content or []:
+            t = b.get("type")
+            if t == "text":
+                out.append(f"## Step {step} — {role} text\n{b['text'][:4000]}\n")
+            elif t == "thinking":
+                out.append(f"## Step {step} — Model Thinking\n{b.get('thinking','')[:2000]}\n")
+            elif t == "tool_use":
+                out.append(f"## Step {step} — Tool Call: {b.get('name')}\n```json\n{json.dumps(b.get('input',{}))[:2000]}\n```\n")
+            elif t == "tool_result":
+                c = b.get("content"); c = json.dumps(c) if not isinstance(c, str) else c
+                out.append(f"## Step {step} — Tool Result\n```\n{c[:2000]}\n```\n")
+    (DST / f"{name}.md").write_text("\n".join(out))
+    print(f"traces/{name}.md ({step} steps)")
+if __name__ == "__main__":
+    files = sys.argv[1:] or sorted(glob.glob(f"{SRC}/*micro1*/*.jsonl")) or []
+    if not files: sys.exit(f"no jsonl found under {SRC} (pass paths explicitly)")
+    DST.mkdir(exist_ok=True)
+    for f in files: render(f)
