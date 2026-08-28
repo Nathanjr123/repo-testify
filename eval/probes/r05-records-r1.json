@@ -1,0 +1,150 @@
+{
+ "case_id": "r05-records",
+ "repo": "https://github.com/kennethreitz/records",
+ "commit": "ea4273695cee6da42edf1cb294d1f2a4505470fc",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas]\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL pip install records[pandas] or import records failed (see above)\"\nimport importlib.metadata as m\nimport records, pandas, tablib\nv = m.version('records')\nprint('OBSERVED records=%s pandas=%s tablib=%s' % (v, pandas.__version__, m.version('tablib')))\nprint('VERDICT_LINE: PASS pip install records[pandas] ok; import records ok; records', v)\nEOF"
+   ]
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed before classifying postgres:// error\"\nimport records, sqlalchemy\nprint('sqlalchemy', sqlalchemy.__version__)\ndef probe(url):\n    try:\n        records.Database(url); return 'OK'\n    except Exception as e:\n        return type(e).__name__ + ': ' + str(e)[:160]\na = probe('postgres://user:pw@localhost/db')\nb = probe('postgresql://user:pw@localhost/db')\nprint('OBSERVED postgres://   ->', a)\nprint('OBSERVED postgresql:// ->', b)\nscheme_ok = (a == 'OK') or ('psycopg2' in a) or ('No module named' in a and 'dialects' not in a)\nif scheme_ok:\n    print('VERDICT_LINE: PASS postgres:// scheme accepted (only the driver is missing, as README states)')\nelse:\n    print('VERDICT_LINE: FAIL postgres:// scheme rejected by SQLAlchemy %s: %s' % (sqlalchemy.__version__, a[:90]))\nEOF"
+   ]
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL row indexing/iteration/field access raised (see traceback)\"\nimport records\ndb = records.Database('sqlite:///:memory:')\ndb.query('create table active_users (username text, active int, name text)')\ndb.query('insert into active_users values (:u, :a, :n)', u='model-t', a=1, n='Henry Ford')\ndb.query('insert into active_users values (:u, :a, :n)', u='model-a', a=0, n='Henry Ford II')\nrows = db.query('select * from active_users')\nr = rows[0]\nprint('OBSERVED rows[0] =', repr(r))\nassert r.name == 'Henry Ford', r.name\nassert r['name'] == 'Henry Ford', r['name']\nassert r[2] == 'Henry Ford', r[2]\nseen = [(x.username, x.name) for x in rows]\nprint('OBSERVED iterated =', seen)\nassert len(seen) == 2, seen\nprint('VERDICT_LINE: PASS rows[0], iteration, row.name / row[\"name\"] / row[2] all work on SQLite')\nEOF"
+   ]
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "rm -f /tmp/r.db",
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (see traceback)\"\nimport records, sqlalchemy\nprint('sqlalchemy', sqlalchemy.__version__)\ndb = records.Database('sqlite:////tmp/r.db')\ndb.query('create table t (x int)')\ndb.query('insert into t values (:x)', x=1)\ndb.bulk_query('insert into t values (:x)', [{'x': 2}, {'x': 3}])\nsame = db.query('select count(*) c from t')[0].c\nprint('OBSERVED count via same Database object =', same)\ndb.close()\ndb2 = records.Database('sqlite:////tmp/r.db')\nafter = db2.query('select count(*) c from t')[0].c\nprint('OBSERVED count after close+reopen = %s (expected 3)' % after)\nif after == 3:\n    print('VERDICT_LINE: PASS 3 rows written via query+bulk_query survive close/reopen')\nelse:\n    print('VERDICT_LINE: FAIL only %s of 3 rows persisted after close/reopen (writes not committed)' % after)\nEOF"
+   ]
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "rm -f /tmp/t.db",
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL Database.transaction()/commit() raised (see traceback)\"\nimport records\ndb = records.Database('sqlite:////tmp/t.db')\ndb.query('create table t (x int)')\nt = db.transaction()\nprint('OBSERVED transaction object =', type(t).__name__, 'has commit/rollback =', hasattr(t, 'commit'), hasattr(t, 'rollback'))\ndb.query('insert into t values (1)')\nt.commit()\nt2 = db.transaction()\ndb.query('insert into t values (2)')\nt2.rollback()\ndb.close()\ndb2 = records.Database('sqlite:////tmp/t.db')\nvals = sorted(r.x for r in db2.query('select x from t'))\nprint('OBSERVED rows after commit(1)/rollback(2) then reopen =', vals, '(expected [1])')\nif vals == [1]:\n    print('VERDICT_LINE: PASS t=db.transaction(); t.commit() works and scopes db.query writes (rollback discards)')\nelif 1 in vals:\n    print('VERDICT_LINE: FAIL commit() API runs but transaction does not scope db.query writes: rows=%s' % vals)\nelse:\n    print('VERDICT_LINE: FAIL committed row missing after reopen: rows=%s' % vals)\nEOF"
+   ]
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL rows.first()/rows.all() raised or returned wrong types (see traceback)\"\nimport records\ndb = records.Database('sqlite:///:memory:')\ndb.query('create table t (a int)')\ndb.query('insert into t values (1)'); db.query('insert into t values (2)')\nf = db.query('select * from t order by a').first()\nprint('OBSERVED first() =', repr(f), type(f).__name__)\nassert isinstance(f, records.Record) and f.a == 1\na = db.query('select * from t').all()\nprint('OBSERVED all() =', type(a).__name__, len(a), [type(x).__name__ for x in a])\nassert isinstance(a, list) and len(a) == 2 and all(isinstance(x, records.Record) for x in a)\nprint('VERDICT_LINE: PASS first() -> Record, all() -> list of 2 Records')\nEOF"
+   ]
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL rows.export('csv') raised or output malformed (see above)\"\nimport records\ndb = records.Database('sqlite:///:memory:')\ndb.query('create table t (username text, active int)')\ndb.query(\"insert into t values ('model-t', 1)\")\nout = db.query('select * from t').export('csv')\nlines = out.strip().splitlines()\nprint('OBSERVED csv =', repr(out))\nassert lines[0] == 'username,active', lines[0]\nassert lines[1] == 'model-t,1', lines[1]\nprint('VERDICT_LINE: PASS export(\"csv\") returns header row + data row as CSV text')\nEOF"
+   ]
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL rows.export('df') raised or did not return a DataFrame (see above)\"\nimport records, pandas\ndb = records.Database('sqlite:///:memory:')\ndb.query('create table t (username text, active int)')\ndb.query(\"insert into t values ('model-t', 1)\")\ndf = db.query('select * from t').export('df')\nprint('OBSERVED type =', type(df).__module__ + '.' + type(df).__name__, 'shape =', getattr(df, 'shape', None))\nprint(df)\nassert isinstance(df, pandas.DataFrame) and df.shape == (1, 2) and list(df.columns) == ['username', 'active']\nprint('VERDICT_LINE: PASS export(\"df\") returns pandas.DataFrame shape (1,2) with correct columns')\nEOF"
+   ]
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed while checking mssql dialect wiring\"\nimport records, sqlalchemy\nimport sqlalchemy.dialects.mssql as mssql\nprint('sqlalchemy', sqlalchemy.__version__, 'mssql dialect module ok')\ndef probe(url):\n    try:\n        records.Database(url); return 'OK'\n    except Exception as e:\n        return type(e).__name__ + ': ' + str(e)[:140]\nres = {u: probe(u) for u in ('mssql+pyodbc://u:p@h/db', 'mssql+pymssql://u:p@h/db')}\nfor u, r in res.items(): print('OBSERVED', u, '->', r)\nprint('OBSERVED: no MS-SQL server available in sandbox; end-to-end SELECT NOT executed (partial verification only)')\ndriver_only = all(r == 'OK' or ('No module named' in r and 'dialects' not in r) for r in res.values())\nif driver_only:\n    print('VERDICT_LINE: PASS partial: records passes mssql URLs to SQLAlchemy mssql dialect; only driver missing (README: drivers not included); no server to run queries')\nelse:\n    print('VERDICT_LINE: FAIL mssql URL rejected at dialect level, not driver level: %s' % list(res.values()))\nEOF"
+   ]
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "timeout_s": 120,
+   "setup": [],
+   "commands": [
+    "python - <<'EOF' || echo \"VERDICT_LINE: FAIL could not fetch PyPI/badge (network error or non-200)\"\nimport json, urllib.request\ndef get(url):\n    req = urllib.request.Request(url, headers={'User-Agent': 'probe/1'})\n    with urllib.request.urlopen(req, timeout=30) as r:\n        return r.status, r.read()\ns, body = get('https://pypi.org/pypi/records/json')\ninfo = json.loads(body)['info']\nprint('OBSERVED pypi status=%s name=%s version=%s' % (s, info['name'], info['version']))\nbs, bbody = get('https://img.shields.io/pypi/v/records.svg')\nbtxt = bbody.decode('utf-8', 'replace')\nprint('OBSERVED badge status=%s contains_version=%s len=%d' % (bs, info['version'] in btxt, len(btxt)))\nassert s == 200 and info['name'].lower() == 'records'\nif info['version'] == '0.6.0':\n    print('VERDICT_LINE: PASS records published on PyPI, latest 0.6.0 matches setup.py; badge HTTP %s' % bs)\nelse:\n    print('VERDICT_LINE: FAIL records is on PyPI but latest is %s, not 0.6.0 (pinned commit setup.py says 0.6.0)' % info['version'])\nEOF"
+   ]
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "install-only",
+   "timeout_s": 120,
+   "setup": [
+    "pip install -q \"records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip\" 2>&1 | tail -3"
+   ],
+   "commands": [
+    "DATABASE_URL='sqlite:///:memory:' python - <<'EOF' || echo \"VERDICT_LINE: FAIL records.Database() did not use \\$DATABASE_URL (see traceback)\"\nimport os, records\nprint('DATABASE_URL =', os.environ.get('DATABASE_URL'))\ndb = records.Database()\nprint('OBSERVED db.db_url =', getattr(db, 'db_url', None))\nv = db.query('select 1 as x')[0].x\nprint('OBSERVED select 1 ->', v)\nassert v == 1\ndel os.environ['DATABASE_URL']\ntry:\n    records.Database(); print('OBSERVED no-env control: no error raised')\nexcept Exception as e:\n    print('OBSERVED no-env control:', type(e).__name__, str(e)[:80])\nprint('VERDICT_LINE: PASS records.Database() reads $DATABASE_URL and runs a query')\nEOF"
+   ]
+  }
+ ]
+}
