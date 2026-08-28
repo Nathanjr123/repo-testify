@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
-# BASELINE — strongest obvious weak strategy (direct prompt / general agent / script / manual).
-# Input: $1 = case JSON path. Output: result JSON on stdout. FRIDAY FILL.
-echo '{"error": "baseline not implemented"}' >&2; exit 1
+# BASELINE: one-shot LLM with README + file tree only. No execution, no iteration.
+# Usage: run.sh <case.json>  -> report JSON on stdout
+set -euo pipefail
+CASE="$1"
+python3 "$(dirname "$0")/baseline.py" "$CASE"
