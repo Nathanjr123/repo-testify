@@ -38,7 +38,10 @@ def stage_plan(case, repo_map, notes):
     prompt = f"""You design sandbox probes to verify repository claims by EXECUTION.
 Repo {case['repo']} @ {case['commit']}. Environment facts so far: {json.dumps(notes)}
 Manifests: {json.dumps(repo_map['manifests'])[:6000]}
-For EACH claim below, emit ONE probe: a bash command sequence that would settle it in a fresh python container. Rules: probe must terminate <=120s; prefer the claim's own words (install its way, run its snippet verbatim from the README); for python-version claims pick image accordingly (python:3.X-slim); no GPU; pip installs go in "setup", checks go in "commands"; expected-output checks compare with grep/python asserts.
+For EACH claim below, emit ONE probe: a bash command sequence that would settle it in a fresh python container. Rules: probe must terminate <=120s; prefer the claim's own words (install its way, run its snippet verbatim from the README); for python-version claims pick image accordingly (python:3.X-slim); no GPU; pip installs go in "setup", checks go in "commands"; expected-output checks compare with python asserts.
+INTERFACE CONTRACT: the LAST line every probe prints must be exactly `VERDICT_LINE: PASS <short reason>` or `VERDICT_LINE: FAIL <short reason>` (use `|| echo "VERDICT_LINE: FAIL ..."`), so the adjudicator reads one line, not a dump. Print the key observed value on the line before it.
+NETWORK: default "none". For claims about badges/URLs/CI status/remote resources set "network": "on" and check with python urllib (no curl in slim images): status code + a distinctive substring; a dead badge host or 404 is evidence.
+Do NOT add dependencies the README does not mention to make a claim pass; if the claim only works with an extra package, the probe should FAIL as written and print what was missing.
 Claims: {claims}
 README (for verbatim snippets): {repo_map['readme'][:15000]}
 Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image": "python:3.11-slim", "network": "none|install-only", "setup": [..], "commands": [..], "timeout_s": 120}}]}}"""
@@ -46,7 +49,8 @@ Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image"
 
 def stage_execute(case, probes, run_dir):
     spec = {"case_id": case["id"], "repo": case["repo"], "commit": case["commit"], "probes": probes}
-    pf = ROOT / "eval" / "probes" / f"{case['id']}.json"
+    n = len(list((ROOT / "eval" / "probes").glob(f"{case['id']}*.json")))
+    pf = ROOT / "eval" / "probes" / (f"{case['id']}.json" if n == 0 else f"{case['id']}-r{n}.json")
     pf.write_text(json.dumps(spec, indent=1))
     subprocess.run(["git", "-C", str(ROOT), "add", str(pf)], check=True)
     subprocess.run(["git", "-C", str(ROOT), "-c", "user.email=p.szczepanik94@gmail.com",
@@ -54,7 +58,7 @@ def stage_execute(case, probes, run_dir):
     subprocess.run(["git", "-C", str(ROOT), "push", "-q"], check=True)
     for attempt in range(4):  # GitHub returned 504 on dispatch once (r05, sweep1); transient, retry
         r = gh(["workflow", "run", "probe.yml", "--ref", "master", "-f",
-                f"probes_path=eval/probes/{case['id']}.json", "--repo", GHREPO])
+                f"probes_path={pf.relative_to(ROOT)}", "--repo", GHREPO])
         if r.returncode == 0:
             break
         time.sleep(30 * (attempt + 1))
@@ -120,8 +124,12 @@ Claim: {claim['text']}"""
 def adjudicate_batch(case, probe_log, k):
     """One LLM call per vote covering ALL claims (usage economy: 11x fewer calls than per-claim)."""
     claims = json.dumps([{"id": c["id"], "text": c["text"]} for c in case["claims"]])
-    slim = [{"probe": p["probe"], "cmd": p["cmd.txt"][:600], "exit_code": p["exit_code"].strip(),
-             "stdout": p["stdout.log"][:700], "stderr": p["stderr.log"][-500:], "phase_a_tail": p["phase_a.log"][-300:]}
+    def tail_with_verdict(s, n):
+        lines = s.strip().splitlines()
+        vl = [l for l in lines if "VERDICT_LINE:" in l]
+        return (s[-n:] + ("\n" + vl[-1] if vl and vl[-1] not in s[-n:] else ""))
+    slim = [{"probe": p["probe"], "cmd": p["cmd.txt"][:700], "exit_code": p["exit_code"].strip(),
+             "stdout": tail_with_verdict(p["stdout.log"], 1400), "stderr": p["stderr.log"][-600:], "phase_a_tail": p["phase_a.log"][-400:]}
             for p in probe_log]
     prompt = f"""You adjudicate repository claims from EXECUTION EVIDENCE only.
 {FEWSHOT}
@@ -173,6 +181,22 @@ def main():
     else:
         probes = stage_plan(case, repo_map, notes)
         probe_log, rid = stage_execute(case, probes, run_dir)
+        if "retry" not in DISABLE:
+            broken = [p for p in probe_log if p["cmd.txt"].startswith("PHASE_A_FAILED")]
+            if broken:  # ONE repair round (DESIGN: self-repair plateaus after 2; budget allows 1): environment failed, not the claim
+                errs = {b["probe"]: b["phase_a.log"][-500:] for b in broken}
+                fix_prompt = f"""These probe SETUP steps failed in a fresh container (environment problem, before the claim was tested). Repair each probe's setup/commands ONCE so the claim itself gets tested; keep the claim's own install method; each retry must CHANGE the command. Failures: {json.dumps(errs)[:6000]}
+Original probes: {json.dumps([p for p in probes if p['id'] in errs])[:6000]}
+Reply ONLY JSON: {{"probes": [...same schema...]}}"""
+                try:
+                    repaired = jparse(llm(fix_prompt))["probes"]
+                    notes["repair_round"] = list(errs)
+                    log2, rid2 = stage_execute(case, repaired, run_dir)
+                    fixed = {p["probe"]: p for p in log2}
+                    probe_log = [fixed.get(p["probe"], p) for p in probe_log]
+                    rid = f"{rid}+{rid2}"
+                except Exception as e:
+                    notes["repair_round_error"] = str(e)[:200]
     k = 1 if "k3" in DISABLE else 3
     clog_text = (run_dir / "commands.log").read_text() if probe_log else ""
     verdicts = adjudicate_batch(case, probe_log, k)

@@ -1,5 +1,5 @@
 """ONE aggregate function. The grader, the report and replay all call THIS (never a copy)."""
-from .scorer import WEIGHTS
+from .scorer import WEIGHTS, SETTLED_MIN, SETTLED_CAP
 
 def tail(vals):
     if not vals:
@@ -18,4 +18,9 @@ def aggregate(per_case: list[dict]) -> dict:
     raw = sum(WEIGHTS[n] * rows[n] for n in WEIGHTS)
     for g, frac in gates.items():
         raw *= frac
-    return {"rows": rows, "gates": gates, "raw": round(raw, 3), "n_cases": len(per_case)}
+    settled = sum(c.get("settled_fraction", 0.0) for c in per_case) / len(per_case) if per_case else 0.0
+    capped = settled < SETTLED_MIN and raw > SETTLED_CAP
+    if capped:
+        raw = SETTLED_CAP
+    return {"rows": rows, "gates": gates, "raw": round(raw, 3), "n_cases": len(per_case),
+            "settled_fraction": round(settled, 3), "capped": capped}

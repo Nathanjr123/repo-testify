@@ -15,13 +15,14 @@ Bands to be set AFTER measuring row distributions on the first baseline run (law
 """
 import json, pathlib, re
 
-WEIGHTS = {
-    "verdict_acc":     0.30,  # per-claim accuracy vs ground truth (suite-level macro-F1 lives in report.py)
+WEIGHTS = {  # v2 (2026-08-28, after first row-distribution measurement — see CHANGELOG iteration 6)
+    "verdict_acc":     0.45,  # per-claim accuracy vs ground truth; unaddressed claims count as wrong (coverage folded in: it was 1.00 on every case = saturated row)
     "confident_wrong": 0.20,  # 1 - (high-confidence wrong verdicts / claims); abstention is the honest exit
     "evidence_valid":  0.20,  # fraction of verdicts whose evidence refs exist in run artifacts
-    "coverage":        0.15,  # fraction of the case's claims addressed
     "score_error":     0.15,  # 1 - |overall_score - reviewer_score|/100
 }
+SETTLED_MIN, SETTLED_CAP = 0.50, 0.35  # objective = settle claims. If < half are settled (verified/refuted), raw <= 0.35:
+                                       # an arm that abstains on everything must not out-score one that tries (incomplete-objective cap)
 BANDS = {}  # set after first distribution measurement — no dead/saturated/crushed rows
 
 TRUTH_DIR = pathlib.Path(__file__).resolve().parent / "truth"
@@ -71,7 +72,6 @@ def score(case: dict, output: dict) -> dict:
         "verdict_acc": sum(1 for cid in claims if pred.get(cid) == truth["verdicts"].get(cid)) / max(1, len(claims)),
         "confident_wrong": 1.0 - hi_wrong / max(1, len(claims)),
         "evidence_valid": (ev_ok / ev_total) if ev_total else 0.0,
-        "coverage": len(rep_claims) / max(1, len(claims)),
         "score_error": max(0.0, 1.0 - abs(float(output.get("overall_score", 0)) - truth["reviewer_score"]) / 100.0),
     }
     rows = {k: (v if v == v and v is not None else 0.0) for k, v in rows.items()}  # non-finite -> 0
@@ -79,7 +79,9 @@ def score(case: dict, output: dict) -> dict:
         "valid_report": bool(rep_claims),
         "no_fabricated_evidence": not fabricated,
     }
-    return {"rows": {k: round(min(1.0, max(0.0, v)), 3) for k, v in rows.items()}, "gates": gates}
+    settled = sum(1 for v in pred.values() if v in ("verified", "refuted")) / max(1, len(claims))
+    return {"rows": {k: round(min(1.0, max(0.0, v)), 3) for k, v in rows.items()}, "gates": gates,
+            "settled_fraction": round(settled, 3)}
 
 SANITY_CASE = (
     {"id": "_sanity", "repo": "x", "commit": "0", "buyer_question": "q",
@@ -88,5 +90,5 @@ SANITY_CASE = (
      "claims": [{"id": "c1", "verdict": "verified", "confidence": "high", "evidence": [{"kind": "url", "ref": "http://x", "excerpt": ""}]},
                 {"id": "c2", "verdict": "refuted", "confidence": "low", "evidence": [{"kind": "url", "ref": "http://y", "excerpt": ""}]}],
      "escalations": [], "memo_md": "m"},
-    None,  # expected agg filled after truth fixture below is wired in runner --sanity
+    1.0,
 )
