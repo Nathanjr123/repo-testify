@@ -1,5 +1,5 @@
 FROM python:3.12-slim
+RUN apt-get update -qq && apt-get install -y -qq git >/dev/null && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY . .
-RUN pip install --no-cache-dir -r requirements.txt || true
-CMD ["make", "report"]
+CMD ["./repro.sh"]
