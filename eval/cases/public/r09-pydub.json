@@ -1,0 +1,87 @@
+{
+  "id": "r09-pydub",
+  "repo": "https://github.com/jiaaro/pydub",
+  "commit": "103e339d3bc7a9a58a9f1de65f7d8074659b5f5a",
+  "license": "MIT",
+  "bucket": "D",
+  "buyer_question": "We want to adopt pydub for audio slicing/concatenation/export in a service running current Python (3.13). Does it install and work as the README documents, and is the project's CI story real?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package pydub can be installed from PyPI with the exact command `pip install pydub`.",
+      "type": "install",
+      "source_quote": "Installing pydub is easy, but don't forget to install ffmpeg/avlib (the next section in this doc)\n\n    pip install pydub",
+      "probe_hint": "In a fresh venv on the current Python, run `pip install pydub` and check exit code 0."
+    },
+    {
+      "id": "c2",
+      "text": "After `pip install pydub`, the import `from pydub import AudioSegment` succeeds on a current Python interpreter (the README quickstart begins with this import, stating no version restriction).",
+      "type": "quickstart",
+      "source_quote": "```python\nfrom pydub import AudioSegment\n\nsong = AudioSegment.from_wav(\"never_gonna_give_you_up.wav\")\n```",
+      "probe_hint": "On Python 3.13, run `python -c \"from pydub import AudioSegment\"`. Expect failure: stdlib audioop was removed in 3.13 and pydub imports it (issues #863, #867)."
+    },
+    {
+      "id": "c3",
+      "text": "pydub can open and save WAV files with pure Python only, without ffmpeg or libav installed.",
+      "type": "environment",
+      "source_quote": "You can open and save WAV files with pure python. For opening and saving non-wav \nfiles – like mp3 – you'll need [ffmpeg](http://www.ffmpeg.org/) or \n[libav](http://libav.org/).",
+      "probe_hint": "In a container without ffmpeg on Python <=3.12: generate a WAV with the stdlib wave module, then `AudioSegment.from_wav(path)` and `.export(out, format='wav')`; verify the output file is a valid WAV."
+    },
+    {
+      "id": "c4",
+      "text": "Opening non-WAV formats such as mp3 requires ffmpeg or libav to be installed; without them `AudioSegment.from_mp3` fails.",
+      "type": "environment",
+      "source_quote": "For opening and saving non-wav \nfiles – like mp3 – you'll need [ffmpeg](http://www.ffmpeg.org/) or \n[libav](http://libav.org/).",
+      "probe_hint": "Without ffmpeg on PATH, call `AudioSegment.from_mp3` on any mp3 and expect an error mentioning ffmpeg/avconv; then install ffmpeg and expect success."
+    },
+    {
+      "id": "c5",
+      "text": "The Travis CI badge at the top of the README asserts that the master branch currently builds and passes tests on travis-ci.org.",
+      "type": "test_ci",
+      "source_quote": "[![Build Status](https://travis-ci.org/jiaaro/pydub.svg?branch=master)](https://travis-ci.org/jiaaro/pydub)",
+      "probe_hint": "HTTP GET https://travis-ci.org/jiaaro/pydub.svg?branch=master and the linked page; travis-ci.org was shut down in 2021, so the badge asserts CI that no longer exists."
+    },
+    {
+      "id": "c6",
+      "text": "The AppVeyor badge asserts that the master branch currently builds and passes on Windows CI at ci.appveyor.com/project/jiaaro/pydub.",
+      "type": "test_ci",
+      "source_quote": "[![Build status](https://ci.appveyor.com/api/projects/status/gy1ucp9o5khq7fqi/branch/master?svg=true)](https://ci.appveyor.com/project/jiaaro/pydub/branch/master)",
+      "probe_hint": "HTTP GET the badge URL and project page; check whether the project exists and shows a recent (not multi-year-stale) passing build."
+    },
+    {
+      "id": "c7",
+      "text": "Slicing uses milliseconds: for a loaded song, `song[:10*1000]` returns the first 10 seconds and `song[-5000:]` the last 5 seconds, and concatenating a 10 s segment with a 5 s segment gives `duration_seconds == 15.0`.",
+      "type": "quickstart",
+      "source_quote": "```python\n# pydub does things in milliseconds\nten_seconds = 10 * 1000\n\nfirst_10_seconds = song[:ten_seconds]\n\nlast_5_seconds = song[-5000:]\n```",
+      "probe_hint": "On Python <=3.12 with a >=20 s WAV: run the quickstart slicing and `(first_10_seconds + last_5_seconds).duration_seconds`; assert the result equals 15.0."
+    },
+    {
+      "id": "c8",
+      "text": "Adding an integer to an AudioSegment changes gain in dB: `segment + 6` boosts volume by 6 dB and `segment - 3` reduces it by 3 dB.",
+      "type": "interface",
+      "source_quote": "```python\n# boost volume by 6dB\nbeginning = first_10_seconds + 6\n\n# reduce volume by 3dB\nend = last_5_seconds - 3\n```",
+      "probe_hint": "Compare `(seg + 6).dBFS - seg.dBFS` on a tone WAV; assert approximately +6.0."
+    },
+    {
+      "id": "c9",
+      "text": "Exporting with `format=\"ogg\"` and no codec argument defaults to the vorbis (libvorbis) codec.",
+      "type": "interface",
+      "source_quote": "When no codec is specified exporting to `ogg` will _default_ to using `vorbis`\nas a convenience.",
+      "probe_hint": "With ffmpeg installed, `seg.export('out.ogg', format='ogg')`, then probe the file (ffprobe) and assert codec_name == 'vorbis'."
+    },
+    {
+      "id": "c10",
+      "text": "`len(audio_segment)` returns the segment length in milliseconds.",
+      "type": "interface",
+      "source_quote": "# hmm I wonder how long it is... ( len(audio_segment) returns milliseconds )\nplaylist_length = len(playlist) / (1000*60)",
+      "probe_hint": "Load a WAV of known duration N seconds; assert abs(len(seg) - N*1000) <= 1."
+    },
+    {
+      "id": "c11",
+      "text": "AudioSegment objects are immutable: operations like `reverse()` return new objects and never modify the original.",
+      "type": "interface",
+      "source_quote": "AudioSegments are immutable\n\n```python\n# song is not modified\nbackwards = song.reverse()\n```",
+      "probe_hint": "Load a WAV, snapshot `song.raw_data`, call `song.reverse()`, assert `song.raw_data` unchanged and the reversed segment differs."
+    }
+  ]
+}

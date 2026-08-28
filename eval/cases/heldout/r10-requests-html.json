@@ -1,0 +1,87 @@
+{
+  "id": "r10-requests-html",
+  "repo": "https://github.com/psf/requests-html",
+  "commit": "075ac162dc62fc532037df0d98954ab840a97516",
+  "license": "MIT",
+  "bucket": "D",
+  "buyer_question": "We are considering requests-html for scraping JavaScript-heavy pages. Does the advertised 'Full JavaScript support' via render() actually work today on a supported Python, and is the project's CI alive?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package requests-html can be installed with the exact command `pipenv install requests-html` (equivalently `pip install requests-html`).",
+      "type": "install",
+      "source_quote": "Installation\n============\n\n.. code-block:: shell\n\n    $ pipenv install requests-html\n    ✨🍰✨",
+      "probe_hint": "In a fresh venv, `pip install requests-html`; check exit code 0 and that `import requests_html` succeeds."
+    },
+    {
+      "id": "c2",
+      "text": "requests-html supports Python 3.6 and above (i.e. it installs and imports on any Python >= 3.6, including current releases).",
+      "type": "environment",
+      "source_quote": "Only **Python 3.6 and above** is supported.",
+      "probe_hint": "Install and `import requests_html` on the current Python (3.12/3.13); check for install-time or import-time failures from stale pinned dependencies."
+    },
+    {
+      "id": "c3",
+      "text": "The library provides full JavaScript support: calling `r.html.render()` downloads Chromium (via pyppeteer) and renders the page's dynamic JavaScript content.",
+      "type": "interface",
+      "source_quote": "- **Full JavaScript support**! (Using Chromium, thanks to pyppeteer)",
+      "probe_hint": "Run `HTMLSession().get(...)` on a JS-rendered page then `r.html.render()`. Expect failure today: pyppeteer is unmaintained (#573) and render() is broken for many users (#540, #322, #207); the pinned Chromium download endpoint is dead."
+    },
+    {
+      "id": "c4",
+      "text": "The first time `render()` is run it downloads Chromium into the user's home directory (~/.pyppeteer/), and this happens only once.",
+      "type": "environment",
+      "source_quote": "Note, the first time you ever run the ``render()`` method, it will download\nChromium into your home directory (e.g. ``~/.pyppeteer/``). This only happens\nonce.",
+      "probe_hint": "In a clean home dir, call render() and observe whether the Chromium download succeeds; pyppeteer's chromium download URL (storage.googleapis.com chromium-browser-snapshots pin) has been removed."
+    },
+    {
+      "id": "c5",
+      "text": "The Travis CI badge asserts the master branch currently builds and passes on travis-ci.com.",
+      "type": "test_ci",
+      "source_quote": ".. image:: https://travis-ci.com/psf/requests-html.svg?branch=master\n    :target: https://travis-ci.com/psf/requests-html",
+      "probe_hint": "GET the badge URL / target page; travis-ci.com OSS builds ended in 2021, so check whether any recent build exists (repo last pushed 2024)."
+    },
+    {
+      "id": "c6",
+      "text": "A GET request via `HTMLSession` exposes `r.html.links`, which returns the set of all links on the page (anchors excluded).",
+      "type": "quickstart",
+      "source_quote": "Grab a list of all links on the page, as–is (anchors excluded):\n\n.. code-block:: pycon\n\n    >>> r.html.links",
+      "probe_hint": "Serve a small local HTML file with 3 <a href> links via http.server; `HTMLSession().get(url).html.links` should return exactly that set of hrefs (no network flakiness)."
+    },
+    {
+      "id": "c7",
+      "text": "`r.html.search('Python is a {} language')[0]` on the python.org homepage returns the string 'programming'.",
+      "type": "quickstart",
+      "source_quote": ">>> r.html.search('Python is a {} language')[0]\n    programming",
+      "probe_hint": "GET https://python.org/ and run the search; alternatively verify the search() API against a local page containing the sentence, asserting the capture equals 'programming'."
+    },
+    {
+      "id": "c8",
+      "text": "Async is supported: `AsyncHTMLSession().run(coro1, coro2, coro3)` executes multiple async GET requests and returns a list of Response objects.",
+      "type": "interface",
+      "source_quote": ">>> results = asession.run(get_pythonorg, get_reddit, get_google)\n    >>> results # check the requests all returned a 200 (success) code\n    [<Response [200]>, <Response [200]>, <Response [200]>]",
+      "probe_hint": "Run AsyncHTMLSession against three local endpoints; assert a list of 3 responses with status_code 200."
+    },
+    {
+      "id": "c9",
+      "text": "The library works without Requests: `HTML(html=\"<a href='https://httpbin.org'>\").links` returns `{'https://httpbin.org'}`.",
+      "type": "quickstart",
+      "source_quote": ">>> from requests_html import HTML\n    >>> doc = \"\"\"<a href='https://httpbin.org'>\"\"\"\n    >>> html = HTML(html=doc)\n    >>> html.links\n    {'https://httpbin.org'}",
+      "probe_hint": "Run exactly this snippet offline; assert the returned set equals {'https://httpbin.org'}."
+    },
+    {
+      "id": "c10",
+      "text": "XPath selectors are supported via `r.html.xpath(...)`, returning matching Element objects.",
+      "type": "interface",
+      "source_quote": "XPath is also supported:\n\n.. code-block:: pycon\n\n   >>> r.html.xpath('/html/body/div[1]/a')",
+      "probe_hint": "On a local page, `html.xpath('//a')` should return a non-empty list of Element objects with expected href attrs."
+    },
+    {
+      "id": "c11",
+      "text": "CSS selectors are supported via `r.html.find(selector, first=True)`, and element `.text`, `.attrs`, and `.absolute_links` work as shown.",
+      "type": "interface",
+      "source_quote": "Select an element with a CSS Selector:\n\n.. code-block:: pycon\n\n    >>> about = r.html.find('#about', first=True)",
+      "probe_hint": "On a local page with a known #about element, assert find('#about', first=True).text and .attrs match the authored HTML."
+    }
+  ]
+}

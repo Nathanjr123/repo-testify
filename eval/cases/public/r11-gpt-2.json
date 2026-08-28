@@ -1,0 +1,80 @@
+{
+  "id": "r11-gpt-2",
+  "repo": "https://github.com/openai/gpt-2",
+  "commit": "9b63575ef42771a015060c964af2c3da4cf7c8ab",
+  "license": "Modified MIT",
+  "bucket": "E",
+  "buyer_question": "We want to reproduce GPT-2 sample generation from this repo today for a research baseline. Can the documented install path (DEVELOPERS.md) actually be executed on a current machine, and do the model downloads still work?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The documented TensorFlow dependency installs with the exact command `pip3 install tensorflow==1.12.0` (CPU) or `pip3 install tensorflow-gpu==1.12.0` (GPU).",
+      "type": "install",
+      "source_quote": "Install tensorflow 1.12 (with GPU support, if you have a GPU and want everything to run faster)\n```\npip3 install tensorflow==1.12.0\n```",
+      "probe_hint": "In a fresh venv on current Python, run `pip3 install tensorflow==1.12.0`. Expect resolution failure: tensorflow 1.12.0 has no wheels for Python >= 3.8 (issues #231, #329); succeeds only on Python 3.5-3.6 era interpreters."
+    },
+    {
+      "id": "c2",
+      "text": "The remaining Python dependencies install with `pip3 install -r requirements.txt` (fire>=0.1.3, regex==2017.4.5, requests==2.21.0, tqdm==4.31.1).",
+      "type": "install",
+      "source_quote": "Install other python packages:\n```\npip3 install -r requirements.txt\n```",
+      "probe_hint": "Fetch requirements.txt at the pinned SHA and pip-install it on current Python; regex==2017.4.5 is a sdist-only pin that must compile — check whether it builds on a modern toolchain."
+    },
+    {
+      "id": "c3",
+      "text": "Model weights are downloaded by running `python3 download_model.py 124M` (and likewise 355M, 774M, 1558M).",
+      "type": "quickstart",
+      "source_quote": "Download the model data\n```\npython3 download_model.py 124M\npython3 download_model.py 355M\npython3 download_model.py 774M\npython3 download_model.py 1558M\n```",
+      "probe_hint": "Run `python3 download_model.py 124M` (script only needs requests+tqdm) and verify files appear under models/124M and the storage endpoint returns 200."
+    },
+    {
+      "id": "c4",
+      "text": "Unconditional samples are generated from the small model with the exact command `python3 src/generate_unconditional_samples.py | tee /tmp/samples`, which prints generated text samples.",
+      "type": "quickstart",
+      "source_quote": "To generate unconditional samples from the small model:\n```\npython3 src/generate_unconditional_samples.py | tee /tmp/samples\n```",
+      "probe_hint": "Only runnable if c1-c3 succeed (needs TF 1.12 env + downloaded 124M model); expect text samples separated by SAMPLE markers on stdout."
+    },
+    {
+      "id": "c5",
+      "text": "Custom-prompt generation works via `python3 src/interactive_conditional_samples.py --top_k 40`.",
+      "type": "interface",
+      "source_quote": "To give the model custom prompts, you can use:\n```\npython3 src/interactive_conditional_samples.py --top_k 40\n```",
+      "probe_hint": "In the working TF 1.12 environment, pipe a prompt into the script and check that model output follows; gate on c1/c3."
+    },
+    {
+      "id": "c6",
+      "text": "A Docker path exists: `docker build --tag gpt-2 -f Dockerfile.gpu .` (or Dockerfile.cpu) builds an image from which the samples can be run.",
+      "type": "environment",
+      "source_quote": "Build the Dockerfile and tag the created image as `gpt-2`:\n```\ndocker build --tag gpt-2 -f Dockerfile.gpu . # or Dockerfile.cpu\n```",
+      "probe_hint": "Inspect Dockerfile.cpu base image (tensorflow/tensorflow:1.12.0...) and attempt the build; check whether the base tags still pull from Docker Hub."
+    },
+    {
+      "id": "c7",
+      "text": "The repository is archived: code is provided as-is with no updates expected.",
+      "type": "environment",
+      "source_quote": "**Status:** Archive (code is provided as-is, no updates expected)",
+      "probe_hint": "gh api repos/openai/gpt-2 --jq .archived should return true."
+    },
+    {
+      "id": "c8",
+      "text": "A model card with basic model information exists at ./model_card.md in the repository.",
+      "type": "interface",
+      "source_quote": "For basic information, see our [model card](./model_card.md).",
+      "probe_hint": "gh api repos/openai/gpt-2/contents/model_card.md?ref=<pinned SHA> returns 200."
+    },
+    {
+      "id": "c9",
+      "text": "The README notes the originally published parameter counts (117M small, 345M medium) were wrong; the corrected sizes used by the code are 124M and 355M.",
+      "type": "quantitative",
+      "source_quote": "*Note that our original parameter counts were wrong due to an error (in our previous blog posts and paper).  Thus you may have seen small referred to as 117M and medium referred to as 345M.*",
+      "probe_hint": "Check download_model.py / DEVELOPERS.md accept 124M and 355M as model names (not 117M/345M); optionally count parameters from the downloaded checkpoint hparams."
+    },
+    {
+      "id": "c10",
+      "text": "Setting the environment variable PYTHONIOENCODING=UTF-8 is documented as required to handle Unicode output from the sample scripts.",
+      "type": "environment",
+      "source_quote": "Set the environment variable:\n```\nexport PYTHONIOENCODING=UTF-8\n```\nto override the standard stream settings in UTF-8 mode.",
+      "probe_hint": "Check generation runs emit non-ASCII without UnicodeEncodeError when the variable is set; on Python >= 3.7 UTF-8 stdout is typically default, so the instruction is era-specific."
+    }
+  ]
+}

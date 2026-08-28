@@ -1,0 +1,87 @@
+{
+  "id": "r12-awd-lstm-lm",
+  "repo": "https://github.com/salesforce/awd-lstm-lm",
+  "commit": "1d466ec5875675ca6b6f0caacbb741240a29da9e",
+  "license": "BSD-3-Clause",
+  "bucket": "E",
+  "buyer_question": "We want to use awd-lstm-lm as a reproducible language-modeling baseline (the quoted PTB perplexities). Can the documented environment still be built, and are the headline numbers reproducible with the exact commands and seeds in the README?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The codebase requires Python 3 and PyTorch 0.4; installing PyTorch 0.4 is the documented first setup step.",
+      "type": "install",
+      "source_quote": "Python 3 and PyTorch 0.4 are required for the current codebase.",
+      "probe_hint": "Try `pip install torch==0.4.0` (or 0.4.1) on a current Python: no wheels exist for Python >= 3.8, and the repo is archived (no fix coming). Confirm which legacy Python/conda combination would be needed. Related version-rot issues: #88, #103."
+    },
+    {
+      "id": "c2",
+      "text": "Running `./getdata.sh` downloads the Mikolov-preprocessed Penn Treebank and the WikiText-2 datasets and places them in the `data` directory.",
+      "type": "quickstart",
+      "source_quote": "For data setup, run `./getdata.sh`.\nThis script collects the Mikolov pre-processed Penn Treebank and the WikiText-2 datasets and places them in the `data` directory.",
+      "probe_hint": "Run the script (needs only wget/curl + unzip) and verify data/penn/{train,valid,test}.txt and data/wikitext-2/ exist and are non-empty; check the download URLs still resolve."
+    },
+    {
+      "id": "c3",
+      "text": "The exact command `python main.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt` trains a PTB LSTM reaching approximately 61.2 validation / 58.8 test perplexity without finetuning.",
+      "type": "quantitative",
+      "source_quote": "The instruction below trains a PTB model that without finetuning achieves perplexities of approximately `61.2` / `58.8` (validation / testing)",
+      "probe_hint": "Full probe: build the PyTorch 0.4 env, run the command to convergence (500 epochs, ~65 s/epoch on GP100 => ~9 GPU-hours), read final valid/test ppl from the log; assert within ~1.5 ppl of 61.2/58.8."
+    },
+    {
+      "id": "c4",
+      "text": "Applying `finetune.py` with the same hyperparameters then improves the PTB LSTM to approximately 58.8 validation / 56.5 test perplexity.",
+      "type": "quantitative",
+      "source_quote": "with finetuning achieves perplexities of approximately `58.8` / `56.5`",
+      "probe_hint": "After c3, run `python finetune.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt` and compare logged ppl. Note README's own caveat that finetune functionality was 'still [being] worked on' after the PyTorch 0.4 port."
+    },
+    {
+      "id": "c5",
+      "text": "Adding the continuous cache pointer via `python pointer.py --data data/penn --save PTB.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000` reaches approximately 53.2 validation / 52.5 test perplexity.",
+      "type": "quantitative",
+      "source_quote": "and with the continuous cache pointer augmentation achieves perplexities of approximately `53.2` / `52.5`.",
+      "probe_hint": "After c3/c4, run the exact pointer.py command and compare. README's June 2018 update says pointer functionality was still in progress post-port, so the quoted numbers belong to the pre-0.4 codebase."
+    },
+    {
+      "id": "c6",
+      "text": "Exact reproduction of the quoted numbers is disclaimed: the README states the codebase changed during paper writing and results shift across GPUs and seeds; the guide produces results 'largely similar' to those reported.",
+      "type": "quantitative",
+      "source_quote": "The codebase was modified during the writing of the paper, preventing exact reproduction due to minor differences in random seeds or similar.\nWe have also seen exact reproduction numbers change when changing underlying GPU.",
+      "probe_hint": "This bounds the pass criterion for c3-c5: 'approximately' plus this disclaimer means a tolerance band, not exact equality; document the band the buyer should accept."
+    },
+    {
+      "id": "c7",
+      "text": "The QRNN model option is two or more times faster than the cuDNN LSTM in this setup while achieving equivalent or better accuracy.",
+      "type": "quantitative",
+      "source_quote": "The model can be composed of an LSTM or a [Quasi-Recurrent Neural Network](https://github.com/salesforce/pytorch-qrnn/) (QRNN) which is two or more times faster than the cuDNN LSTM in this setup while achieving equivalent or better accuracy.",
+      "probe_hint": "Time one epoch of `main.py --model QRNN ...` vs LSTM on the same GPU (README's own reference: PTB 28 s vs 65 s per epoch); requires the pytorch-qrnn package which is also PyTorch-0.4-era."
+    },
+    {
+      "id": "c8",
+      "text": "Training speed on an NVIDIA Quadro GP100: PTB (batch size 20) LSTM takes 65 seconds per epoch and QRNN 28 seconds per epoch; WikiText-2 LSTM 180 s and QRNN 90 s.",
+      "type": "quantitative",
+      "source_quote": "+ Penn Treebank (batch size 20): LSTM takes 65 seconds per epoch, QRNN takes 28 seconds per epoch\n+ WikiText-2 (batch size 20): LSTM takes 180 seconds per epoch, QRNN takes 90 seconds per epoch",
+      "probe_hint": "Hardware-specific; on other GPUs verify only the LSTM:QRNN ratio (~2.3x), not absolute seconds."
+    },
+    {
+      "id": "c9",
+      "text": "The repository is PyTorch 0.4 compatible 'for most use cases', but pointer, finetune and generate functionalities were still being worked on as of the June 13 2018 update; exact reproducibility requires an older commit (the PyTorch==0.1.12 release).",
+      "type": "environment",
+      "source_quote": "We are still working on `pointer`, `finetune` and `generate` functionalities. ",
+      "probe_hint": "Check git history/branches for the PyTorch==0.1.12 tag; run finetune.py/pointer.py at the pinned HEAD under PyTorch 0.4 and record any crashes (see issue #123 for a reported splitcross.py bug)."
+    },
+    {
+      "id": "c10",
+      "text": "The WikiText-2 LSTM recipe (seed 1882) reaches approximately 68.7/65.6 val/test perplexity without finetuning and 52.2/50.6 with the cache pointer.",
+      "type": "quantitative",
+      "source_quote": "The instruction below trains a PTB model that without finetuning achieves perplexities of approximately `68.7` / `65.6` (validation / testing), with finetuning achieves perplexities of approximately `67.4` / `64.7`, and with the continuous cache pointer augmentation achieves perplexities of approximately `52.2` / `50.6`.",
+      "probe_hint": "Same probe shape as c3-c5 with the WT2 commands; note the copy-paste error in the README ('trains a PTB model' under the WT2 heading)."
+    },
+    {
+      "id": "c11",
+      "text": "The default recurrent dropout variant (weight dropping / DropConnect) still allows use of NVIDIA's cuDNN LSTM implementation, so training uses the fast cuDNN backend when run on CUDA.",
+      "type": "interface",
+      "source_quote": "All the augmentations to the LSTM, including our variant of [DropConnect (Wan et al. 2013)](https://cs.nyu.edu/~wanli/dropc/dropc.pdf) termed weight dropping which adds recurrent dropout, allow for the use of NVIDIA's cuDNN LSTM implementation.",
+      "probe_hint": "In the working env, instantiate the model on CUDA and check torch.backends.cudnn usage / per-epoch time consistent with cuDNN (vs an order-of-magnitude slower naive loop)."
+    }
+  ]
+}
