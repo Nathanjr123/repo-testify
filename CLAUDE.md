@@ -23,3 +23,16 @@ Declare pre-existing vs added; licenses respected; consequential actions sandbox
 
 ## Voice
 micro1 register: judgment, failure taxonomy, verifiers, golden reference, verifiable intermediate steps, tradeoffs, thresholds, truth-vs-taste. Never: annotation, vibe coding, "AI did it", uncalibrated LLM-judge, credentials. Understated; the work is the résumé. Every philosophical claim points at a table.
+
+## THE PROBLEM (locked Fri 2026-08-28): "Make the repo testify"
+Agentic due diligence on GitHub repos. Pipeline components (each behind ADVANCED_DISABLE flag):
+CLAIMS (extract atomic checkable claims from README/docs/badges) -> STATIC (7-axis structured code review) -> EXECUTE (clean-env build/install/quickstart/tests/claim probes) -> EVIDENCE (claim->verdict->artifact ledger; every verdict cites a real artifact) -> CALIBRATE+ABSTAIN (overall score; unverifiable claims escalate to a human, never guessed).
+Baseline arm: one-shot LLM with README + file tree -> same report schema.
+Case = {repo, pinned commit, buyer question, claim list}. 12 repos across buckets: solid-honest / solid-overclaiming / abandoned / green-badge-mirage / research-paper code. Hard case = all visible tests pass, a central README claim is false.
+Ground truth: per-claim hand audit (objective) + Nate's reviewer ranking under a published rubric (subjective — truth-vs-taste DECLARED in DECISIONS.md).
+
+## Compute plan (local disk is CRITICAL: ~400MB free)
+- LOCAL: orchestration, arms via `claude -p` (text-only, low disk), scoring, docs. NO docker builds, NO repo clones beyond the tiniest.
+- BOX (nate@100.112.249.9, key ~/.ssh/id_lbx_gpu): Windows 11, Python 3.11, winget, NO git/docker/WSL. Use for bulk storage/scratch (C: 236GB, F: 2TB) and Python-only jobs. NOT for repo execution truth (Windows failures would corrupt verdicts).
+- EXECUTION TRUTH: Linux + Docker via GitHub Actions runners (free, docker preinstalled, 14GB) — doubles as judge-facing clean-env reproduction. Keep every workflow log as evidence artifacts.
+- POLLER DUTIES (every wakeup): (1) re-read this file top to bottom — it encodes the PDF rubric and standards; (2) `df -h /` — if free < 1GB, stop and clean OUR OWN scratch only (never other projects); (3) check ~/micro1-fec-research/PARKED-QUESTIONS.md for answers Nate left; (4) check background agents; (5) continue highest-value work toward Sun 23:59 UTC.
