@@ -1,6 +1,7 @@
 name: probe
 on:
   push:
+    branches: [master]
     paths: ['eval/probes/**']
   workflow_dispatch:
     inputs:

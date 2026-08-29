@@ -48,27 +48,36 @@ Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image"
     return jparse(llm(prompt))["probes"]
 
 def stage_execute(case, probes, run_dir):
+    """Commit the probe spec to a probes/<case> branch through the GitHub API (no local git, nothing touches master),
+    dispatch the deterministic probe workflow on that branch, wait, download the artifacts."""
     spec = {"case_id": case["id"], "repo": case["repo"], "commit": case["commit"], "probes": probes}
-    n = len(list((ROOT / "eval" / "probes").glob(f"{case['id']}*.json")))
-    pf = ROOT / "eval" / "probes" / (f"{case['id']}.json" if n == 0 else f"{case['id']}-r{n}.json")
-    pf.write_text(json.dumps(spec, indent=1))
-    subprocess.run(["git", "-C", str(ROOT), "add", str(pf)], check=True)
-    subprocess.run(["git", "-C", str(ROOT), "commit", "-qm", f"probes: {case['id']}"], check=False)
-    subprocess.run(["git", "-C", str(ROOT), "push", "-q"], check=True)
-    for attempt in range(4):  # GitHub returned 504 on dispatch once (r05, sweep1); transient, retry
-        r = gh(["workflow", "run", "probe.yml", "--ref", "master", "-f",
-                f"probes_path={pf.relative_to(ROOT)}", "--repo", GHREPO])
+    local = ROOT / "eval" / "probes"; local.mkdir(exist_ok=True)
+    n = len(list(local.glob(f"{case['id']}*.json")))
+    name = f"{case['id']}.json" if n == 0 else f"{case['id']}-r{n}.json"
+    (local / name).write_text(json.dumps(spec, indent=1))  # local copy for the trajectory renderer; committed by a human, never by the arm
+    path = f"eval/probes/{name}"; branch = f"probes/{case['id']}"
+    master = gh(["api", f"repos/{GHREPO}/git/ref/heads/master", "--jq", ".object.sha"]).stdout.strip()
+    gh(["api", "-X", "POST", f"repos/{GHREPO}/git/refs", "-f", f"ref=refs/heads/{branch}", "-f", f"sha={master}"])  # 422 if it exists: fine
+    existing = gh(["api", f"repos/{GHREPO}/contents/{path}?ref={branch}", "--jq", ".sha"])
+    args = ["api", "-X", "PUT", f"repos/{GHREPO}/contents/{path}", "-f", f"message=probes: {case['id']} ({name})",
+            "-f", f"content={base64.b64encode(json.dumps(spec, indent=1).encode()).decode()}", "-f", f"branch={branch}"]
+    if existing.returncode == 0 and existing.stdout.strip():
+        args += ["-f", f"sha={existing.stdout.strip()}"]
+    put = gh(args)
+    if put.returncode != 0:
+        raise RuntimeError("probe spec upload failed: " + put.stderr[:300])
+    for attempt in range(4):  # GitHub returned 504 on dispatch once; transient, retry
+        r = gh(["workflow", "run", "probe.yml", "--ref", branch, "-f", f"probes_path={path}", "--repo", GHREPO])
         if r.returncode == 0:
             break
         time.sleep(30 * (attempt + 1))
     else:
         raise RuntimeError("dispatch failed after retries: " + r.stderr[:300])
     time.sleep(20)
-    rid = gh(["run", "list", "--repo", GHREPO, "--workflow", "probe", "--limit", "1",
-              "--json", "databaseId,status", "--jq", ".[0].databaseId"]).stdout.strip()
+    rid = gh(["run", "list", "--repo", GHREPO, "--workflow", "probe", "--branch", branch, "--limit", "1",
+              "--json", "databaseId", "--jq", ".[0].databaseId"]).stdout.strip()
     for _ in range(60):  # up to 30 min
-        st = gh(["run", "view", rid, "--repo", GHREPO, "--json", "status,conclusion",
-                 "--jq", ".status"]).stdout.strip()
+        st = gh(["run", "view", rid, "--repo", GHREPO, "--json", "status", "--jq", ".status"]).stdout.strip()
         if st == "completed":
             break
         time.sleep(30)
@@ -187,7 +196,7 @@ Reply ONLY JSON: {{"probes": [...same schema...]}}"""
     report = {"repo": case["repo"], "overall_score": score, "claims": verdicts,
               "escalations": esc, "run_id": rid, "_run_dir": str(run_dir),
               "_evidence_index": {"probes": [p["probe"] for p in probe_log], "text": idx_text},
-              "llm_calls": CALLS["n"],
+              "llm_calls": CALLS["n"], "usage": {"cost_usd": CALLS["cost_usd"], "input_tokens": CALLS["input_tokens"], "output_tokens": CALLS["output_tokens"]},
               "memo_md": f"{n_ver} verified, {n_ref} refuted, {len(esc)} escalated of {len(verdicts)} claims."}
     (run_dir / "report.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report))

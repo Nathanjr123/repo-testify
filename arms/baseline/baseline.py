@@ -3,7 +3,7 @@ one claude -p call, emit the report schema. This is the honest 'reasonable basic
 what an engineer does today = read the README and skim the tree, then judge."""
 import json, pathlib, subprocess, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from common import llm, exit_if_limited
+from common import llm, exit_if_limited, CALLS
 
 case = json.loads(pathlib.Path(sys.argv[1]).read_text())
 owner_repo = case["repo"].split("github.com/")[-1].strip("/")
@@ -31,7 +31,8 @@ def main():
     out = llm(prompt)
     start, end = out.find("{"), out.rfind("}")
     report = json.loads(out[start:end + 1])
-    report.setdefault("usage", {}); report["llm_calls"] = 1
+    report["usage"] = {"cost_usd": CALLS["cost_usd"], "input_tokens": CALLS["input_tokens"], "output_tokens": CALLS["output_tokens"]}; report["llm_calls"] = CALLS["n"]
+    report["_evidence_index"] = {"probes": [], "text": "", "tree": "\n".join(paths)}
     print(json.dumps(report))
 
 exit_if_limited(main)

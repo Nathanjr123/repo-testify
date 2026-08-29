@@ -9,7 +9,7 @@ Format: `Step NN — Model Thinking / Tool Call: <tool> / Tool Result`, exported
 ## Authoring agent — sessions
 | file | purpose | steps | outcome |
 |---|---|---|---|
-| `ddf39f00-….md` | main build session: harness → cases → arms → measurements → README (curated, redacted export published with the final submission) | — | shipped everything in this repo |
+| `authoring-session-1.md` | the build session from kickoff onward: harness, cases, arms, measurements, README, the blind review and its fixes (redacted for private paths and personal identifiers; no steps removed) | see file | shipped everything in this repo |
 
 ## Human checkpoints worth reading (search the file for the strings)
 1. **`exit=127`** — the first sandbox run showed green on CI; the human-directed rule "inspect the artifact, not the badge" caught that the probe never ran (no `git` in the slim image). The agent's initial reading trusted the job status.
