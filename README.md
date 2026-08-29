@@ -16,7 +16,7 @@ The format the challenge asks for, public split:
 |---|---|---|---|
 | Primary outcome: per-claim accuracy, 95% Wilson interval | 0.13 (10/75; 0.07 to 0.23) | 0.83 (62/75; 0.73 to 0.90) | +0.69; intervals do not overlap |
 | Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | 0.07 | 0.71 | +0.64 |
-| Composite score (published rubric) | 0.350 | 0.817 | +0.467 |
+| Composite score (published rubric) | 0.284 | 0.584 | +0.300 |
 | Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
 | Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |
 
@@ -24,14 +24,14 @@ Full table:
 
 | arm | claim accuracy (worst-case weighted) | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |
 |---|---|---|---|---|---|---|---|---|---|---|
-| baseline (run 1) | 0.074 | 0.771 | 0.260 | 0.811 | 0.16 | **0.350** (capped) | 1* | 0.9 min | pending audit | 7/7 |
-| baseline (run 2) | 0.066 | 0.783 | 0.246 | 0.745 | 0.15 | **0.347** | 1* | 0.9 min | pending audit | 7/7 |
-| pipeline v1 | 0.481 | 0.572 | 0.621 | 0.506 | 0.72 | **0.455** | 4* | 6.8 min | pending audit | 6/7 |
-| pipeline v2 (public, tuned) | 0.712 | 0.901 | 1.000 | 0.777 | 0.90 | **0.817** | 4* | 13.2 min | pending audit | 7/7 |
-| ablation: k=1 votes | 0.691 | 0.867 | 1.000 | 0.777 | 0.92 | **0.801** | 4* | 13.2 min | pending audit | 7/7 |
+| baseline (run 1) | 0.074 | 0.771 | 0.111 | 0.811 | 0.16 | **0.284** | 1* | 0.9 min | pending audit | 7/7 |
+| baseline (run 2) | 0.066 | 0.783 | 0.070 | 0.745 | 0.15 | **0.267** | 1* | 0.9 min | pending audit | 7/7 |
+| pipeline v1 | 0.481 | 0.572 | 0.345 | 0.506 | 0.72 | **0.408** | 4* | 6.8 min | pending audit | 6/7 |
+| pipeline v2 (public, tuned) | 0.712 | 0.901 | 0.321 | 0.777 | 0.90 | **0.584** | 4* | 13.2 min | pending audit | 7/7 |
+| ablation: k=1 votes | 0.691 | 0.867 | 0.321 | 0.777 | 0.92 | **0.570** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: no execution | 0.007 | 1.000 | 0.000 | 0.712 | 0.00 | **0.044** | 3* | 0.6 min | pending audit | 7/7 |
 
-Baseline-vs-baseline spread (noise floor): **0.003** composite; claim-accuracy spread 0.008.
+Baseline-vs-baseline spread (noise floor): **0.017** composite; claim-accuracy spread 0.008.
 
 \* nominal call count per repository (plan, at most one repair, three votes; baseline 1). Exact counts are persisted for runs from v3 onward.
 <!-- RESULTS:END -->
@@ -40,7 +40,7 @@ Baseline-vs-baseline spread (noise floor): **0.003** composite; claim-accuracy s
 | Criterion | Where it lives |
 |---|---|
 | Problem & User Value | "Who has this problem" and "The bottleneck" below; the buyer question in every case file |
-| Agent Solution & Engineering | DESIGN.md (each component and the evidence for it), arms/PROMPTS.md (the exact instructions each agent gets), the two ablations in the table above |
+| Agent Solution & Engineering | DESIGN.md (each component and the evidence for it), arms/PROMPTS.md (current instructions) and arms/PROMPTS-v2.md (the exact prompts behind the published numbers), the two ablations in the table above |
 | End to End Quality | traces/pipeline/*.md (one finished report per repository), the solution video |
 | Measured Improvement | The table above, HYPOTHESIS.md (pre-registered, outcome recorded), CHANGELOG.md (every experiment with its proof id) |
 | Reproducibility | `./repro.sh` from a clean clone; CI runs it inside the shipped Docker image on every push |
@@ -77,9 +77,11 @@ A repeatable, evidence-linked verdict per claim turns "is this repo any good?" f
 ## The simple baseline and the agent solution
 Baseline: what a diligent engineer does today with an LLM. One prompt with the README and the file tree, asked for the same verdict ledger. No execution. See arms/baseline.
 
-Agent solution: a code-orchestrated pipeline (DESIGN.md). Map the repository. Plan one probe per claim under a fixed contract (the README's own steps only, and a machine-readable VERDICT_LINE at the end). Execute the probes in a two-phase Docker sandbox on GitHub Actions: network on for the install, off for the probe unless the claim is about a URL. One repair round for environment failures. Adjudicate every claim from the transcripts with a three-vote majority. Cross-check each cited exit code against the recorded log. Report, with escalations. Same cases, same claim lists, same output schema for both arms. The only difference in resources is that the pipeline can run code and the baseline cannot; that difference is the thing being measured.
+Agent solution: a code-orchestrated pipeline (DESIGN.md). Map the repository. Plan one probe per claim under a fixed contract (the README's own steps only, and a machine-readable VERDICT_LINE at the end). Execute the probes in a two-phase Docker sandbox on GitHub Actions: network on for the install phase; for the probe phase the planner chooses per probe, and the choice is recorded in each probe spec and shown in the trajectory. In the published v2 runs most probes kept network on, so "offline probes" is a capability of the sandbox, not a property of those runs. One repair round for environment failures. Adjudicate every claim from the transcripts with a three-vote majority. Cross-check each cited exit code against the recorded log. Report, with escalations. Same cases, same claim lists, same output schema for both arms. The only difference in resources is that the pipeline can run code and the baseline cannot; that difference is the thing being measured.
 
 ## Measured improvement
+How ground truth was made, since it decides every number here: each claim's verdict was drafted from third-party evidence (issue links, CI runs, release metadata) before any arm ran; where a recorded probe output later contradicted a draft, the draft was corrected and the correction is logged with the evidence (CHANGELOG, truth audits). Every correction so far went in the pipeline's favour, which is exactly what a skeptic should worry about, so the truth files stay marked `provisional: true` until the reviewer's blind audit closes, and the held-out rows are scored on that audited truth.
+
 The primary metric is per-claim verdict accuracy against audited ground truth, reported as a raw count with a 95% Wilson interval. The full table weights the same metric toward the worst repositories (0.55 mean, 0.30 mean of the worst 30%, 0.15 single worst) so that one bad repository cannot hide behind six good ones; both views are shown. It was pre-registered as macro-F1 and changed to accuracy in iteration 3, because per-case macro-F1 is degenerate on repositories where every claim has the same verdict. The change is disclosed in CHANGELOG.md. Secondary rows: not confidently wrong (abstaining is the honest exit), evidence validity (every cited artifact must exist), and agreement with the reviewer's rubric score.
 
 Cost per task is model calls per repository (baseline 1; pipeline 4 to 5: plan, at most one repair, three votes) plus wall time. CI compute is free on public runners. Human time per task is measured during the human audit, on two repositories timed end to end, and is reported once the audit closes. The held-out split (7 repositories, including two hard cases built for this) is run once after the audit, and the same generator appends its rows to the table.
@@ -122,7 +124,7 @@ Claim discovery is not on the scored path. The claim list per repository is fixe
 ## Reproduction guide
 Three levels, all from a clean clone. Level 1 needs only Python 3.10+ and reproduces every number in this README from the shipped proof. Level 2 re-runs the sandbox probes on GitHub Actions (a fork and a `gh` login). Level 3 re-runs the model arms (a Claude Code login; the arms call `claude -p`).
 
-Level 1, verify and regenerate the results (about 10 seconds, no cost):
+Level 1, verify and regenerate the results (under a second, no cost):
 ```
 git clone https://github.com/Nathanjr123/repo-testify.git && cd repo-testify
 ./repro.sh     # tests, case-contract validator, scorer sanity cell, regenerate RESULTS.md and the README tables
@@ -134,7 +136,7 @@ Every table row carries its proof id, git hash and UTC timestamp. `replay` re-sc
 Expected output of `./repro.sh` (last lines):
 ```
 ok test_perfect ... ok test_crashed_case_is_zero_not_hidden
-14 case files checked / all valid
+20 case files checked / all valid
 sanity cell ok: 1.0
 README results block rendered
 replay ok: advanced-v2-rescored-<ts> raw 0.817
