@@ -59,7 +59,7 @@ Three levels, from a clean clone. Level 1 needs only Python 3.10+ and reproduces
 
 **Level 1 — verify and regenerate the results (≈10 s, $0)**
 ```
-git clone <this repo> && cd repo-testify
+git clone https://github.com/Nathanjr123/repo-testify.git && cd repo-testify
 ./repro.sh     # self-test + case-contract validator + scorer sanity cell + regenerate RESULTS.md and README tables
                # from proof/, then replay one run and assert byte-identical output. Exit 0 = reproduced.
 python3 -m eval.replay --run <id>      # re-score any run id's persisted outputs through the current scorer
