@@ -1,4 +1,5 @@
 # repo-testify — make the repository testify
+[![repro](https://github.com/Nathanjr123/repo-testify/actions/workflows/repro.yml/badge.svg)](https://github.com/Nathanjr123/repo-testify/actions/workflows/repro.yml) [![probe](https://github.com/Nathanjr123/repo-testify/actions/workflows/probe.yml/badge.svg)](https://github.com/Nathanjr123/repo-testify/actions/workflows/probe.yml) ![license](https://img.shields.io/badge/license-MIT-green)
 <!-- Every number in this file is generated from proof/build_proof.json. Hand-typed numbers are a bug. -->
 
 **One line:** most tools *read* a repository and opine. This one extracts the repository's own claims — install commands, quickstart snippets, supported versions, features, benchmarks — and **executes them** in a clean environment, returning a per-claim verdict ledger where every verdict cites a recorded artifact, and anything the sandbox cannot settle is escalated to a human rather than guessed.
