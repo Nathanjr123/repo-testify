@@ -49,7 +49,7 @@ NETWORK: default "none". For claims about badges/URLs/CI status/remote resources
 Do NOT add dependencies the README does not mention to make a claim pass; if the claim only works with an extra package, the probe should FAIL as written and print what was missing.
 Claims: {claims}
 README (for verbatim snippets): {repo_map['readme'][:15000]}
-Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image": "python:3.11-slim", "network": "none|install-only", "setup": [..], "commands": [..], "timeout_s": 120}}]}}"""
+Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image": "python:3.11-slim", "network": "none|on", "setup": [..], "commands": [..], "timeout_s": 120}}]}}"""
     return jparse(llm(prompt))["probes"]
 
 def stage_execute(case, probes, run_dir):
@@ -98,32 +98,6 @@ FEWSHOT = """Examples of good verdicts:
 - Claim "pip install X works": exit_code 0 and import succeeded -> verified/high, evidence command ref.
 - Claim "supports Python 3.12": probe on python:3.12-slim exited 1 with ModuleNotFoundError: imp -> refuted/high.
 - Claim "2x faster than Y": no benchmark was run -> unverifiable/low, escalate; NEVER guess from reputation."""
-
-def adjudicate_claim(case, claim, probe_log, k):
-    votes = []
-    prompt = f"""You adjudicate ONE repository claim from EXECUTION EVIDENCE only.
-{FEWSHOT}
-Claim ({claim['id']}): {claim['text']}
-Probe transcript (cmd, exit codes, output head/tail): {json.dumps(probe_log)[:8000]}
-Rules: verdict from evidence in the transcript alone; quote the exit code you rely on; if evidence is missing or ambiguous -> unverifiable + low confidence. Reply ONLY JSON:
-{{"id": "{claim['id']}", "verdict": "verified|refuted|unverifiable", "confidence": "high|low",
- "evidence": [{{"kind": "command", "ref": "<exact cmd string or probe id>", "excerpt": "<quoted output line + exit code>"}}]}}
-Claim: {claim['text']}"""
-    for _ in range(k):
-        try:
-            votes.append(jparse(llm(prompt)))
-        except Exception:
-            pass
-    if not votes:
-        return {"id": claim["id"], "verdict": "unverifiable", "confidence": "low", "evidence": []}
-    tally = {}
-    for v in votes:
-        tally[v["verdict"]] = tally.get(v["verdict"], 0) + 1
-    win = max(tally, key=tally.get)
-    best = next(v for v in votes if v["verdict"] == win)
-    if tally[win] < len(votes):  # disagreement -> demote confidence (ToE-style)
-        best["confidence"] = "low"
-    return best
 
 def adjudicate_batch(case, probe_log, k):
     """One LLM call per vote covering ALL claims (usage economy: 11x fewer calls than per-claim)."""
