@@ -10868,7 +10868,7 @@
   "partial": true
  },
  {
-  "id": "baseline-v2-n1-rescored-1788021664",
+  "id": "baseline-v2-n1-rescored-1788022402",
   "arm": "baseline",
   "label": "baseline-v2-n1-rescored",
   "disable": null,
@@ -12274,7 +12274,7 @@
   "rescored_from": "baseline-v2-n1-1787943377"
  },
  {
-  "id": "baseline-v2-n2-rescored-1788021664",
+  "id": "baseline-v2-n2-rescored-1788022402",
   "arm": "baseline",
   "label": "baseline-v2-n2-rescored",
   "disable": null,
@@ -12284,7 +12284,7 @@
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
   "agg": {
    "rows": {
-    "verdict_acc": 0.066,
+    "verdict_acc": 0.074,
     "confident_wrong": 0.783,
     "evidence_valid": 0.07,
     "score_error": 0.745
@@ -12293,7 +12293,7 @@
     "no_fabricated_evidence": 0.8571428571428571,
     "valid_report": 1.0
    },
-   "raw": 0.267,
+   "raw": 0.271,
    "n_cases": 7,
    "settled_fraction": 0.148,
    "capped": false
@@ -13502,7 +13502,7 @@
    },
    "r11-gpt-2.json": {
     "rows": {
-     "verdict_acc": 0.3,
+     "verdict_acc": 0.4,
      "confident_wrong": 0.5,
      "evidence_valid": 0.0,
      "score_error": 0.97
@@ -13672,7 +13672,7 @@
   "rescored_from": "baseline-v2-n2-1787943738"
  },
  {
-  "id": "advanced-v1-rescored-1788021664",
+  "id": "advanced-v1-rescored-1788022402",
   "arm": "advanced",
   "label": "advanced-v1-rescored",
   "disable": null,
@@ -13682,8 +13682,8 @@
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
   "agg": {
    "rows": {
-    "verdict_acc": 0.481,
-    "confident_wrong": 0.572,
+    "verdict_acc": 0.493,
+    "confident_wrong": 0.58,
     "evidence_valid": 0.58,
     "score_error": 0.506
    },
@@ -13691,7 +13691,7 @@
     "no_fabricated_evidence": 1.0,
     "valid_report": 0.8571428571428571
    },
-   "raw": 0.448,
+   "raw": 0.454,
    "n_cases": 7,
    "settled_fraction": 0.723,
    "capped": false
@@ -15346,8 +15346,8 @@
    },
    "r11-gpt-2.json": {
     "rows": {
-     "verdict_acc": 0.7,
-     "confident_wrong": 0.9,
+     "verdict_acc": 0.8,
+     "confident_wrong": 1.0,
      "evidence_valid": 1.0,
      "score_error": 0.75
     },
@@ -15658,7 +15658,7 @@
   "rescored_from": "advanced-v1-1787946612"
  },
  {
-  "id": "advanced-v2-rescored-1788021664",
+  "id": "advanced-v2-rescored-1788022402",
   "arm": "advanced",
   "label": "advanced-v2-rescored",
   "disable": null,
@@ -15668,8 +15668,8 @@
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
   "agg": {
    "rows": {
-    "verdict_acc": 0.712,
-    "confident_wrong": 0.901,
+    "verdict_acc": 0.75,
+    "confident_wrong": 0.91,
     "evidence_valid": 1.0,
     "score_error": 0.777
    },
@@ -15677,7 +15677,7 @@
     "no_fabricated_evidence": 1.0,
     "valid_report": 1.0
    },
-   "raw": 0.817,
+   "raw": 0.836,
    "n_cases": 7,
    "settled_fraction": 0.904,
    "capped": false
@@ -17630,8 +17630,8 @@
    },
    "r11-gpt-2.json": {
     "rows": {
-     "verdict_acc": 0.5,
-     "confident_wrong": 0.9,
+     "verdict_acc": 0.6,
+     "confident_wrong": 1.0,
      "evidence_valid": 1.0,
      "score_error": 0.8
     },
@@ -17938,7 +17938,7 @@
   "rescored_from": "advanced-v2-1787952546"
  },
  {
-  "id": "ablate-no-execution-rescored-1788021664",
+  "id": "ablate-no-execution-rescored-1788022402",
   "arm": "advanced",
   "label": "ablate-no-execution-rescored",
   "disable": "execution",
@@ -20120,7 +20120,7 @@
   "rescored_from": "ablate-no-execution-1787952939"
  },
  {
-  "id": "ablate-k1-1788021664",
+  "id": "ablate-k1-1788022402",
   "arm": "advanced",
   "label": "ablate-k1",
   "disable": "k3(replayed from votes[0])",
@@ -20130,8 +20130,8 @@
   "cmd": "python3 eval/ablate_k1.py advanced-v2-rescored",
   "agg": {
    "rows": {
-    "verdict_acc": 0.691,
-    "confident_wrong": 0.867,
+    "verdict_acc": 0.729,
+    "confident_wrong": 0.876,
     "evidence_valid": 1.0,
     "score_error": 0.777
    },
@@ -20139,7 +20139,7 @@
     "no_fabricated_evidence": 1.0,
     "valid_report": 1.0
    },
-   "raw": 0.801,
+   "raw": 0.82,
    "n_cases": 7,
    "settled_fraction": 0.917,
    "capped": false
@@ -22092,8 +22092,8 @@
    },
    "r11-gpt-2.json": {
     "rows": {
-     "verdict_acc": 0.5,
-     "confident_wrong": 0.9,
+     "verdict_acc": 0.6,
+     "confident_wrong": 1.0,
      "evidence_valid": 1.0,
      "score_error": 0.8
     },
@@ -22397,6 +22397,6 @@
   },
   "limit_blocked": false,
   "partial": false,
-  "rescored_from": "advanced-v2-rescored-1788021664"
+  "rescored_from": "advanced-v2-rescored-1788022402"
  }
 ]

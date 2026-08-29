@@ -15,8 +15,8 @@ The format the challenge asks for, public split:
 | Metric | Simple baseline | Agent solution | Change |
 |---|---|---|---|
 | Primary outcome: per-claim accuracy, 95% Wilson interval | 0.13 (10/75; 0.07 to 0.23) | 0.84 (63/75; 0.74 to 0.91) | +0.71; intervals do not overlap |
-| Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | 0.07 | 0.71 | +0.64 |
-| Composite score (published rubric) | 0.284 | 0.817 | +0.533 |
+| Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | 0.07 | 0.75 | +0.68 |
+| Composite score (published rubric) | 0.284 | 0.836 | +0.552 |
 | Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
 | Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |
 
@@ -25,13 +25,13 @@ Full table:
 | arm | claim accuracy (worst-case weighted) | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |
 |---|---|---|---|---|---|---|---|---|---|---|
 | baseline (run 1) | 0.074 | 0.771 | 0.111 | 0.811 | 0.16 | **0.284** | 1* | 0.9 min | pending audit | 7/7 |
-| baseline (run 2) | 0.066 | 0.783 | 0.070 | 0.745 | 0.15 | **0.267** | 1* | 0.9 min | pending audit | 7/7 |
-| pipeline v1 | 0.481 | 0.572 | 0.580 | 0.506 | 0.72 | **0.448** | 4* | 6.8 min | pending audit | 6/7 |
-| pipeline v2 (public, tuned) | 0.712 | 0.901 | 1.000 | 0.777 | 0.90 | **0.817** | 4* | 13.2 min | pending audit | 7/7 |
-| ablation: k=1 votes | 0.691 | 0.867 | 1.000 | 0.777 | 0.92 | **0.801** | 4* | 13.2 min | pending audit | 7/7 |
+| baseline (run 2) | 0.074 | 0.783 | 0.070 | 0.745 | 0.15 | **0.271** | 1* | 0.9 min | pending audit | 7/7 |
+| pipeline v1 | 0.493 | 0.580 | 0.580 | 0.506 | 0.72 | **0.454** | 4* | 6.8 min | pending audit | 6/7 |
+| pipeline v2 (public, tuned) | 0.750 | 0.910 | 1.000 | 0.777 | 0.90 | **0.836** | 4* | 13.2 min | pending audit | 7/7 |
+| ablation: k=1 votes | 0.729 | 0.876 | 1.000 | 0.777 | 0.92 | **0.820** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: no execution | 0.007 | 1.000 | 0.000 | 0.712 | 0.00 | **0.044** | 3* | 0.6 min | pending audit | 7/7 |
 
-Baseline-vs-baseline spread (noise floor): **0.017** composite; claim-accuracy spread 0.008.
+Baseline-vs-baseline spread (noise floor): **0.013** composite; claim-accuracy spread 0.000.
 
 \* nominal call count per repository (plan, at most one repair, three votes; baseline 1). Exact counts are persisted for runs from v3 onward.
 <!-- RESULTS:END -->
@@ -139,7 +139,7 @@ ok test_perfect ... ok test_crashed_case_is_zero_not_hidden
 20 case files checked / all valid
 sanity cell ok: 1.0
 README results block rendered
-replay ok: advanced-v2-rescored-<ts> raw 0.817
+replay ok: advanced-v2-rescored-<ts> raw 0.836
 REPRO OK: README/RESULTS regenerate byte-identically from proof
 ```
 A finished per-repository report looks like `traces/pipeline/r01-humanize.md`: verdict, confidence, votes and the cited artifact for every claim.
