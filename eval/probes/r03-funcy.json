@@ -1,0 +1,138 @@
+{
+ "case_id": "r03-funcy",
+ "repo": "https://github.com/Suor/funcy",
+ "commit": "19e9617383cd48dfbc4074dab11df9157ece98b0",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'import sys, funcy; print(\"installed funcy\", funcy.__version__, \"on python\", sys.version.split()[0])' && echo \"VERDICT_LINE: PASS pip install funcy from PyPI succeeded and import funcy works\" || echo \"VERDICT_LINE: FAIL import funcy failed after pip install funcy\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.4-slim",
+   "network": "on",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'import sys, funcy; from operator import add; from funcy import walk, select, even, curry, lsplit, odd; assert walk(str.upper, {\"a\",\"b\"}) == {\"A\",\"B\"}; assert select(even, {1,2,3,10,20}) == {2,10,20}; assert curry(add)(1)(2) == 3; assert tuple(lsplit(odd, range(5))) == ([1,3],[0,2,4]); print(\"python\", sys.version.split()[0], \"funcy\", funcy.__version__, \"README examples run OK\")' && echo \"VERDICT_LINE: PASS funcy installs and README examples run on Python 3.4 (claimed lower bound); newer CPython covered by other probes, PyPy3 not tested\" || echo \"VERDICT_LINE: FAIL funcy does not install or run on Python 3.4 as claimed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'from funcy import walk; r = walk(str.upper, {\"a\", \"b\"}); print(\"observed\", repr(r), type(r).__name__); assert r == {\"A\", \"B\"} and isinstance(r, set), r' && echo \"VERDICT_LINE: PASS walk(str.upper, {a,b}) returned set {A,B}\" || echo \"VERDICT_LINE: FAIL walk did not return set {A,B}\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'from funcy import select, even; r = select(even, {1,2,3,10,20}); print(\"observed\", repr(r), type(r).__name__); assert r == {2,10,20} and isinstance(r, set), r' && echo \"VERDICT_LINE: PASS select(even, {1,2,3,10,20}) returned set {2,10,20}\" || echo \"VERDICT_LINE: FAIL select(even, ...) did not return {2,10,20}\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'from funcy import lsplit, odd; r = lsplit(odd, range(5)); print(\"observed\", repr(r), type(r).__name__); assert tuple(r) == ([1, 3], [0, 2, 4]), r' && echo \"VERDICT_LINE: PASS lsplit(odd, range(5)) returned ([1, 3], [0, 2, 4])\" || echo \"VERDICT_LINE: FAIL lsplit(odd, range(5)) did not return ([1, 3], [0, 2, 4])\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'from funcy import chunks; it = chunks(2, range(5)); r = list(it); print(\"observed\", repr(r), \"from\", type(it).__name__); assert r == [[0, 1], [2, 3], [4]], r' && echo \"VERDICT_LINE: PASS list(chunks(2, range(5))) == [[0, 1], [2, 3], [4]]\" || echo \"VERDICT_LINE: FAIL chunks(2, range(5)) did not yield [[0,1],[2,3],[4]]\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'from operator import add; from funcy import curry; r = curry(add)(1)(2); print(\"observed\", repr(r)); assert r == 3, r' && echo \"VERDICT_LINE: PASS curry(add)(1)(2) == 3\" || echo \"VERDICT_LINE: FAIL curry(add)(1)(2) != 3\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m pip install --quiet funcy"
+   ],
+   "commands": [
+    "python3 -c 'from funcy import walk_values, silent; r = walk_values(silent(int), {\"a\": \"1\", \"b\": \"no\"}); print(\"observed\", repr(r)); assert r == {\"a\": 1, \"b\": None}, r' && echo \"VERDICT_LINE: PASS walk_values(silent(int), ...) returned {a: 1, b: None}\" || echo \"VERDICT_LINE: FAIL walk_values(silent(int), ...) did not return {a: 1, b: None}\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"https://github.com/Suor/funcy/archive/19e9617383cd48dfbc4074dab11df9157ece98b0.tar.gz\", \"/tmp/funcy.tar.gz\")'",
+    "mkdir -p /tmp/src && tar -xzf /tmp/funcy.tar.gz -C /tmp/src --strip-components=1",
+    "cd /tmp/src && ls test_requirements.txt && cat test_requirements.txt",
+    "cd /tmp/src && python3 -m pip install --quiet -r test_requirements.txt"
+   ],
+   "commands": [
+    "cd /tmp/src && python3 --version && pytest -q > /tmp/pytest.log 2>&1; rc=$?; tail -n 8 /tmp/pytest.log; echo \"pytest exit code $rc\"; if [ $rc -eq 0 ]; then echo \"VERDICT_LINE: PASS pip install -r test_requirements.txt then pytest passed at pinned commit\"; else echo \"VERDICT_LINE: FAIL pytest exited $rc at pinned commit (see tail above)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 -c 'import urllib.request, json; r = urllib.request.urlopen(urllib.request.Request(\"https://github.com/Suor/funcy/actions/workflows/test.yml/badge.svg\", headers={\"User-Agent\": \"probe\"}), timeout=30); svg = r.read().decode(); print(\"badge_http\", r.status, \"passing_in_svg\", \"passing\" in svg, \"failing_in_svg\", \"failing\" in svg); a = urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/Suor/funcy/actions/workflows/test.yml/runs?branch=master&per_page=3\", headers={\"User-Agent\": \"probe\", \"Accept\": \"application/vnd.github+json\"}), timeout=30); d = json.load(a); runs = [(w[\"head_sha\"][:7], w[\"conclusion\"], w[\"created_at\"]) for w in d[\"workflow_runs\"]]; print(\"latest_master_runs\", runs); assert \"passing\" in svg and runs and runs[0][1] == \"success\", (svg[:200], runs)' && echo \"VERDICT_LINE: PASS badge shows passing and latest master test.yml run concluded success\" || echo \"VERDICT_LINE: FAIL badge not passing or latest master test.yml run not success (see values above)\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
