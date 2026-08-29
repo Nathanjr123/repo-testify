@@ -10,8 +10,10 @@ import json, pathlib, sys, glob, os
 SRC = os.environ.get("CLAUDE_PROJ", os.path.expanduser("~/.claude/projects"))
 DST = pathlib.Path(__file__).resolve().parent.parent / "traces"
 import re
-REDACT = [r"/home/nate/micro1-fec-research\S*", r"/home/nate/lbx-rl-tasks-template\S*", r"\S+@\S+\.\S+",
-          r"(?i)alignerr\S*", r"(?i)payreality\S*", r"(?i)neural grid", r"(?i)lbx-rl\S*", r"(?i)labelbox"]
+REDACT = [r"/home/[^/\s]+/[^\s]*", r"\S+@\S+\.\S+"]  # generic: home paths, emails
+_extra = os.environ.get("REDACT_FILE", os.path.expanduser("~/.repo-testify-redact"))
+if os.path.exists(_extra):
+    REDACT += [l.strip() for l in open(_extra) if l.strip() and not l.startswith("#")]
 def redact(s):
     for pat in REDACT:
         s = re.sub(pat, "[redacted: private path/identity]", s)
