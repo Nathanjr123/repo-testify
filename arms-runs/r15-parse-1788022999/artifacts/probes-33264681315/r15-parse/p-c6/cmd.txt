@@ -1,0 +1,9 @@
+cat > /tmp/probe.py <<'EOF'
+from parse import compile
+p = compile("It's {}, I love it!")
+r = p.parse("It's spam, I love it!")
+print('OBSERVED: str(p) =', str(p), '| result =', repr(r))
+assert str(p) == '<Parser "It\'s {}, I love it!">', str(p)
+assert repr(r) == "<Result ('spam',) {}>", repr(r)
+print('VERDICT_LINE: PASS compile() prints <Parser "It\'s {}, I love it!"> and p.parse returns <Result (\'spam\',) {}>')
+EOF && python /tmp/probe.py || echo "VERDICT_LINE: FAIL compiled Parser str or p.parse result differs from README"

@@ -1,0 +1,2 @@
+observed: args = {'<file>': ['file1', 'file2'], '--path': ['./here', './there']}
+VERDICT_LINE: PASS <file> collected to ['file1','file2'] and --path to ['./here','./there']

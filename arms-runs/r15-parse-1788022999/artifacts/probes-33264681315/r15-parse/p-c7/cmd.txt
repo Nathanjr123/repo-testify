@@ -1,0 +1,9 @@
+cat > /tmp/probe.py <<'EOF'
+from parse import parse
+default = parse('SPAM', 'spam')
+strict = parse('SPAM', 'spam', case_sensitive=True)
+print('OBSERVED: default =', repr(default), '| case_sensitive=True ->', repr(strict))
+assert default is not None, 'default match is case sensitive'
+assert strict is None, repr(strict)
+print('VERDICT_LINE: PASS default match is case-insensitive and case_sensitive=True returns None')
+EOF && python /tmp/probe.py || echo "VERDICT_LINE: FAIL case sensitivity behaviour differs from README"

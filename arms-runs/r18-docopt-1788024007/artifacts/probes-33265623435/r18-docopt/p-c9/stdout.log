@@ -1,0 +1,2 @@
+observed: exit 0 | stdout '2.1.0rc1\n' | stderr ''
+VERDICT_LINE: PASS --version printed the supplied version string 2.1.0rc1 and exited 0

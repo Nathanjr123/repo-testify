@@ -1,0 +1,6 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS slugify('This is a test ---') == 'this-is-a-test'" || echo "VERDICT_LINE: FAIL slugify('This is a test ---') did not return 'this-is-a-test' (see observed value above)"
+from slugify import slugify
+r = slugify("This is a test ---")
+print('observed:', repr(r))
+assert r == 'this-is-a-test', r
+EOF

@@ -1,0 +1,18 @@
+python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (raw.githubusercontent.com unreachable)"
+import re, urllib.request
+sha = '7b6d5d96c1995e6dccb39a19a13ba78d7d0a3ee4'
+base = 'https://raw.githubusercontent.com/un33k/python-slugify/%s/' % sha
+setup = urllib.request.urlopen(base + 'setup.py', timeout=30).read().decode()
+cands = [c.strip('"\',') for c in re.findall(r'python_requires\s*=\s*(\S+)', setup)]
+pr = next((c for c in cands if re.search(r'\d', c)), None)
+try:
+    ver = re.search(r'__version__\s*=\s*.([0-9][^\'"]*)', urllib.request.urlopen(base + 'slugify/__version__.py', timeout=30).read().decode()).group(1)
+except Exception as e:
+    ver = 'unknown (%s)' % e
+print('observed: setup.py python_requires', repr(pr), '| package version at pinned commit', ver, '| README matrix says >= 3.7 for slugify >= 7.0.0')
+lo = re.match(r'^>=\s*(\d+)\.(\d+)$', pr or '')
+if lo and (int(lo.group(1)), int(lo.group(2))) == (3, 7):
+    print('VERDICT_LINE: PASS python_requires %s at pinned commit matches README support matrix (>= 3.7)' % pr)
+else:
+    print('VERDICT_LINE: FAIL python_requires is %r at pinned commit (version %s) but README matrix says >= 3.7 for >= 7.0.0' % (pr, ver))
+EOF

@@ -1,0 +1,6 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS --version printed the supplied version string 2.1.0rc1 and exited 0" || echo "VERDICT_LINE: FAIL --version did not print the version and terminate cleanly (see observed line above)"
+import subprocess, sys
+p = subprocess.run([sys.executable, '-c', "from docopt import docopt; docopt('Usage: p [--version]', argv=['--version'], version='2.1.0rc1'); print('NOT TERMINATED')"], capture_output=True, text=True)
+print('observed: exit', p.returncode, '| stdout', repr(p.stdout), '| stderr', repr(p.stderr[-200:]))
+assert p.returncode == 0 and p.stdout.strip() == '2.1.0rc1', p.stdout
+EOF

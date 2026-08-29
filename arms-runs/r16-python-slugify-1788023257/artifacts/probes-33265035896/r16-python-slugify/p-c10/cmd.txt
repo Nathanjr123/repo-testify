@@ -1,0 +1,11 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS max_length / word_boundary / separator examples all match README" || echo "VERDICT_LINE: FAIL a max_length/word_boundary/separator example does not match README (see observed values above)"
+from slugify import slugify
+txt = 'jaja---lol-méméméoo--a'
+r1 = slugify(txt, max_length=9)
+r2 = slugify(txt, max_length=15, word_boundary=True)
+r3 = slugify(txt, max_length=20, word_boundary=True, separator='.')
+print('observed: max_length=9', repr(r1), '| max_length=15,word_boundary', repr(r2), '| max_length=20,word_boundary,sep=.', repr(r3))
+assert r1 == 'jaja-lol', r1
+assert r2 == 'jaja-lol-a', r2
+assert r3 == 'jaja.lol.mememeoo.a', r3
+EOF

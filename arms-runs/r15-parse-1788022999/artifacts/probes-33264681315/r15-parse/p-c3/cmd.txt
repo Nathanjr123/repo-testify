@@ -1,0 +1,8 @@
+cat > /tmp/probe.py <<'EOF'
+from parse import parse
+r = parse("It's {}, I love it!", "It's spam, I love it!")
+print('OBSERVED: repr =', repr(r), '| r[0] =', repr(r[0]) if r is not None else None)
+assert repr(r) == "<Result ('spam',) {}>", repr(r)
+assert r[0] == 'spam', repr(r[0])
+print("VERDICT_LINE: PASS repr is <Result ('spam',) {}> and r[0] == 'spam'")
+EOF && python /tmp/probe.py || echo "VERDICT_LINE: FAIL parse quickstart repr or r[0] did not match README"

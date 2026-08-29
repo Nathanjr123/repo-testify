@@ -1,0 +1,6 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS <file> collected to ['file1','file2'] and --path to ['./here','./there']" || echo "VERDICT_LINE: FAIL repeated argument/option values were not collected as the README states (see observed line above)"
+from docopt import docopt
+a = docopt('Usage: my_program.py <file> <file> --path=<path>...', argv=['file1', 'file2', '--path=./here', '--path=./there'])
+print('observed: args =', dict(a))
+assert a['<file>'] == ['file1', 'file2'] and a['--path'] == ['./here', './there'], a
+EOF

@@ -1,0 +1,8 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS French and Cyrillic README examples match ('c-est-deja-l-ete', 'kompiuter')" || echo "VERDICT_LINE: FAIL French/Cyrillic example does not match README (see observed values above)"
+from slugify import slugify
+r1 = slugify('C\'est déjà l\'été.')
+r2 = slugify('Компьютер')
+print('observed: french', repr(r1), '| cyrillic', repr(r2))
+assert r1 == 'c-est-deja-l-ete', r1
+assert r2 == 'kompiuter', r2
+EOF

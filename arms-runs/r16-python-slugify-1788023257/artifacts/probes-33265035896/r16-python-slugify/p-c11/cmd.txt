@@ -1,0 +1,8 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS stopwords and replacements examples match README" || echo "VERDICT_LINE: FAIL stopwords or replacements example does not match README (see observed values above)"
+from slugify import slugify
+r1 = slugify('the quick brown fox jumps over the lazy dog', stopwords=['the'])
+r2 = slugify('10 | 20 %', replacements=[['|', 'or'], ['%', 'percent']])
+print('observed: stopwords', repr(r1), '| replacements', repr(r2))
+assert r1 == 'quick-brown-fox-jumps-over-lazy-dog', r1
+assert r2 == '10-or-20-percent', r2
+EOF

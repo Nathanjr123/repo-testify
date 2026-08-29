@@ -1,0 +1,35 @@
+python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (unexpected exception while reading .travis.yml / GitHub API / Travis API)"
+import json, os, re, urllib.request, urllib.error
+def get(url, hdr={}):
+    try:
+        r = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'probe', **hdr}), timeout=30)
+        return r.status, r.read().decode(errors='replace')
+    except urllib.error.HTTPError as e:
+        return e.code, e.read().decode(errors='replace')[:200]
+    except Exception as e:
+        return None, repr(e)
+want = {'2.7', '3.4', '3.5', '3.6'}
+travis = open('.travis.yml').read() if os.path.exists('.travis.yml') else ''
+pys = set(re.findall(r'^\s*-\s*["\']?(\d\.\d+)["\']?\s*$', travis, re.M))
+local_wf = os.listdir('.github/workflows') if os.path.isdir('.github/workflows') else []
+print('observed: .travis.yml present =', bool(travis), '| python versions in .travis.yml =', sorted(pys), '| local GH workflows =', local_wf, '| .travis.yml head =', repr(travis[:200]))
+s1, b1 = get('https://api.github.com/repos/docopt/docopt/actions/runs?per_page=1')
+gha_runs = json.loads(b1).get('total_count') if s1 == 200 else (0 if not local_wf else None)
+s2, b2 = get('https://api.travis-ci.com/repo/docopt%2Fdocopt/builds?limit=1&sort_by=id:desc', {'Travis-API-Version': '3'})
+travis_n, latest = None, None
+if s2 == 200:
+    j = json.loads(b2)
+    travis_n = j.get('@pagination', {}).get('count')
+    if j.get('builds'):
+        b = j['builds'][0]
+        latest = (b.get('state'), b.get('finished_at'), (b.get('commit') or {}).get('sha', '')[:7])
+print('observed: GitHub Actions runs =', gha_runs, '(http', s1, ') | travis-ci.com builds =', travis_n, '(http', s2, ') | latest travis build (state, finished, sha) =', latest)
+cfg_ok = want <= pys
+runs = bool(gha_runs) or bool(travis_n)
+if cfg_ok and runs:
+    print('VERDICT_LINE: PASS .travis.yml targets %s and CI has recorded runs (GH Actions %s, travis-ci.com %s, latest %s)' % (sorted(pys), gha_runs, travis_n, latest))
+elif not cfg_ok:
+    print('VERDICT_LINE: FAIL CI config does not target all of 2.7/3.4/3.5/3.6 (found %s)' % sorted(pys))
+else:
+    print('VERDICT_LINE: FAIL .travis.yml targets %s but no CI runs exist: GitHub Actions %s runs (http %s), travis-ci.com http %s builds=%s (travis-ci.org was shut down)' % (sorted(pys), gha_runs, s1, s2, travis_n))
+EOF

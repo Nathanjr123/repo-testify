@@ -1,0 +1,2 @@
+observed: docopt.__version__ = '0.6.2' | dist version 0.6.2 | file /usr/local/lib/python3.11/site-packages/docopt.py | d("Usage: x [-v]", argv=["-v"]) = {'-v': True}
+VERDICT_LINE: PASS pip install docopt==0.6.2 succeeded; from docopt import docopt works and __version__ is 0.6.2 (checked outside the repo dir so the site-packages copy is imported)

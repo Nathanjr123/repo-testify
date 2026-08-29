@@ -1,0 +1,4 @@
+r15-parse.json: ok wall=258.5s
+r16-python-slugify.json: ok wall=465.62s
+r17-pyinquirer.json: arm_error wall=284.77s
+r18-docopt.json: ok wall=562.21s

@@ -1,0 +1,8 @@
+cd /tmp && python - <<'EOF' && echo "VERDICT_LINE: PASS pip install docopt==0.6.2 succeeded; from docopt import docopt works and __version__ is 0.6.2 (checked outside the repo dir so the site-packages copy is imported)" || echo "VERDICT_LINE: FAIL after pip install docopt==0.6.2 the import failed or __version__ != 0.6.2 (see observed line / traceback above)"
+import docopt
+from docopt import docopt as d
+import importlib.metadata as m
+print('observed: docopt.__version__ =', repr(docopt.__version__), '| dist version', m.version('docopt'), '| file', docopt.__file__, '| d("Usage: x [-v]", argv=["-v"]) =', dict(d('Usage: x [-v]', argv=['-v'])))
+assert '/repo' not in docopt.__file__, 'imported the repo copy, not the installed one'
+assert docopt.__version__ == '0.6.2', docopt.__version__
+EOF

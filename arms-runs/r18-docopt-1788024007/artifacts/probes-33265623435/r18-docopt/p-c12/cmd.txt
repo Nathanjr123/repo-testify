@@ -1,0 +1,29 @@
+python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (see traceback above)"
+from docopt import docopt
+usage = '''Usage: my_program.py [--repeatable=<arg> --repeatable=<arg>]
+                     [--another-repeatable=<arg>]...
+                     [--not-repeatable=<arg>]
+
+'''
+body = '''--repeatable=<arg>          [default: ./here ./there]
+--another-repeatable=<arg>  [default: ./here]
+--not-repeatable=<arg>      [default: ./here ./there]
+'''
+exp = {'--repeatable': ['./here', './there'], '--another-repeatable': ['./here'], '--not-repeatable': './here ./there'}
+variants = [('README verbatim', usage + body), ('with indented Options: header', usage + 'Options:\n' + ''.join('  ' + l for l in body.splitlines(True)))]
+res = {}
+for label, doc in variants:
+    try:
+        a = docopt(doc, argv=[])
+        got = {k: a[k] for k in exp}
+    except SystemExit as e:
+        got = 'SystemExit(%r)' % (e.code,)
+    res[label] = (got == exp)
+    print('observed [%s]: %s' % (label, got))
+if res['README verbatim']:
+    print("VERDICT_LINE: PASS README snippet verbatim: repeatable defaults split to ['./here','./there'] / ['./here'], non-repeatable stays './here ./there'")
+elif res['with indented Options: header']:
+    print('VERDICT_LINE: FAIL README snippet verbatim does not parse the defaults at all (values above); the splitting only works when the descriptions sit under an indented Options: header, which the README example omits')
+else:
+    print('VERDICT_LINE: FAIL default-value splitting does not match the README even with an Options: header (values above)')
+EOF

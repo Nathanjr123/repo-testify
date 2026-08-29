@@ -1,0 +1,2 @@
+observed: stopwords 'quick-brown-fox-jumps-over-lazy-dog' | replacements '10-or-20-percent'
+VERDICT_LINE: PASS stopwords and replacements examples match README

@@ -1,0 +1,24 @@
+pytest 9.1.1
+observed: language-agnostic cases in testcases.docopt = 81
+    self.pluginmanager._set_initial_conftests(
+  File "/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py", line 662, in _set_initial_conftests
+    self._loadconftestmodules(
+  File "/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py", line 707, in _loadconftestmodules
+    mod = self._importconftest(
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py", line 783, in _importconftest
+    self.consider_conftest(mod, registration_name=conftestpath_plugin_name)
+  File "/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py", line 870, in consider_conftest
+    self.register(conftestmodule, name=registration_name)
+  File "/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py", line 571, in register
+    plugin_name = super().register(plugin, name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pluggy/_manager.py", line 168, in register
+    self._verify_hook(hook, hookimpl)
+  File "/usr/local/lib/python3.11/site-packages/pluggy/_manager.py", line 343, in _verify_hook
+    raise PluginValidationError(
+pluggy._manager.PluginValidationError: Plugin '/repo/conftest.py' for hook 'pytest_collect_file'
+hookimpl definition: pytest_collect_file(path, parent)
+Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec
+observed: pytest exit 1 | counts {} | last line Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec
+VERDICT_LINE: FAIL pytest exit 1 ({}): Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec
