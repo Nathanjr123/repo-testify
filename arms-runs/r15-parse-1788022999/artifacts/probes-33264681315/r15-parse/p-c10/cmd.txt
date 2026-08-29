@@ -1,0 +1,11 @@
+cat > /tmp/probe.py <<'EOF'
+from parse import parse
+a = parse('{:.2}{:.2}', 'look')
+b = parse('{:4}{:.4}', 'look at that')
+c = parse('{:2d}{:2d}', '0440')
+print('OBSERVED:', repr(a), repr(b), repr(c))
+assert a is not None and a.fixed == ('lo', 'ok'), repr(a)
+assert b is not None and b.fixed == ('look at ', 'that'), repr(b)
+assert c is not None and c.fixed == (4, 40), repr(c)
+print('VERDICT_LINE: PASS precision/width examples give (lo,ok), (look at ,that), (4,40)')
+EOF && python /tmp/probe.py || echo "VERDICT_LINE: FAIL width/precision examples differ from README"

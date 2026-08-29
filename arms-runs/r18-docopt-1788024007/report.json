@@ -1,0 +1,345 @@
+{
+ "repo": "https://github.com/docopt/docopt",
+ "overall_score": 58,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "observed: docopt.__version__ = '0.6.2' | dist version 0.6.2 | file /usr/local/lib/python3.11/site-packages/docopt.py | VERDICT_LINE: PASS pip install docopt==0.6.2 succeeded; from docopt import docopt works and __version__ is 0.6.2 + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "observed: imports = ['re', 'sys'] | non-stdlib = [] | lines = 581; observed: standalone run exit 0 | stdout {'-v': True, '<f>': 'a'} | VERDICT_LINE: PASS docopt.py imports only stdlib modules and parses a pattern when dropped into a bare directory with nothing installed + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "observed: GitHub Actions runs = 0 (http 200 ) | travis-ci.com builds = None (http 404 ) | latest travis build (state, finished, sha) = None; VERDICT_LINE: FAIL .travis.yml targets ['2.7', '3.4', '3.5', '3.6'] but no CI runs exist: GitHub Actions 0 runs (http 200), travis-ci.com http 404 builds=None (travis-ci.org was shut down) + exit_code 0 (probe wrapper); the config targets the interpreters but the 'CI actually runs' half of the claim is false"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "observed: http 200 | final url https://api.travis-ci.com/docopt/docopt.svg?branch=master | badge text ['build', 'build', 'unknown', 'unknown']; VERDICT_LINE: FAIL Travis badge for master renders ['build', 'build', 'unknown', 'unknown'], not passing + exit_code 0 (probe wrapper)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "pluggy._manager.PluginValidationError: Plugin '/repo/conftest.py' for hook 'pytest_collect_file' ... Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec; observed: python setup.py test exit 1 | passed None; VERDICT_LINE: FAIL python setup.py test exit 1 (probe wrapper exit_code 0; the quoted inner exit is 1) - the repo's own conftest.py breaks collection, no tests run"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "pluggy._manager.PluginValidationError: Plugin '/repo/conftest.py' for hook 'pytest_collect_file' ... Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec; observed: pytest exit 1 | counts {}; VERDICT_LINE: FAIL pytest exit 1 ({}) (probe wrapper exit_code 0; the quoted inner pytest exit is 1) - under a current pytest the suite does not even collect"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "observed: exit 0 | stdout {'--drifting': False, '--help': False, '--moored': False, '--speed': '15', '--version': False, '<name>': ['Guardian'], '<x>': '100', '<y>': '150', 'mine': False, 'move': True, 'new': False, 'remove': False, 'set': False, 'ship': True, 'shoot': False}; observed: diff keys = {}; VERDICT_LINE: PASS + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "observed: signature (doc, argv=None, help=True, version=None, options_first=False) | file /repo/docopt.py | version 0.6.2; VERDICT_LINE: PASS docopt.docopt signature is (doc, argv=None, help=True, version=None, options_first=False) + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "observed: exit 0 | stdout '2.1.0rc1\\n' | stderr ''; VERDICT_LINE: PASS --version printed the supplied version string 2.1.0rc1 and exited 0 + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "observed: args = {'-v': 2} | args['-v'] = 2; VERDICT_LINE: PASS argv ['-vv'] against 'Usage: my_program.py [-v | -vv | -vvv]' gives args['-v'] == 2 + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "observed: args = {'<file>': ['file1', 'file2'], '--path': ['./here', './there']}; VERDICT_LINE: PASS <file> collected to ['file1','file2'] and --path to ['./here','./there'] + exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c12",
+   "verdict": "refuted",
+   "confidence": "low",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c12",
+     "excerpt": "observed [README verbatim]: {'--repeatable': [], '--another-repeatable': [], '--not-repeatable': None}; VERDICT_LINE: FAIL README snippet verbatim does not parse the defaults at all; the splitting only works when the descriptions sit under an indented Options: header, which the README example omits + exit_code 0 (probe exit; verdict line is FAIL). Contrary evidence in the same transcript: observed [with indented Options: header]: {'--repeatable': ['./here', './there'], '--another-repeatable': ['./here'], '--not-repeatable': './here ./there'} \u2014 the splitting behaviour exists, but the README's example as written does not exhibit it, hence refuted-as-written with low confidence."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "unverifiable",
+     "confidence": "low"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "low"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [],
+ "run_id": "33265623435",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r18-docopt-1788024007",
+ "_evidence_index": {
+  "probes": [
+   "p-c1",
+   "p-c10",
+   "p-c11",
+   "p-c12",
+   "p-c2",
+   "p-c3",
+   "p-c4",
+   "p-c5",
+   "p-c6",
+   "p-c7",
+   "p-c8",
+   "p-c9"
+  ],
+  "text": "p-c1 cd /tmp && python - <<'EOF' && echo \"VERDICT_LINE: PASS pip install docopt==0.6.2 succeeded; from docopt import docopt works and __version__ is 0.6.2 (checked outside the repo dir so the site-packages copy is imported)\" || echo \"VERDICT_LINE: FAIL after pip install docopt==0.6.2 the import failed or __version__ != 0.6.2 (see observed line / traceback above)\"\nimport docopt\nfrom docopt import docopt as d\nimport importlib.metadata as m\nprint('observed: docopt.__version__ =', repr(docopt.__version__), '| dist version', m.version('docopt'), '| file', docopt.__file__, '| d(\"Usage: x [-v]\", argv=[\"-v\nSTDOUT observed: docopt.__version__ = '0.6.2' | dist version 0.6.2 | file /usr/local/lib/python3.11/site-packages/docopt.py | d(\"Usage: x [-v]\", argv=[\"-v\"]) = {'-v': True}\nVERDICT_LINE: PASS pip install docopt==0.6.2 succeeded; from docopt import docopt works and __version__ is 0.6.2 (checked outside the repo dir so the site-packages copy is imported)\n\nSTDERR \nPHASE_A d0: Pulling fs layer\na14578096eda: Pulling fs layer\na14578096eda: Waiting\n87e1b7cce023: Verifying Checksum\n87e1b7cce023: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\na14578096eda: Verifying Checksum\na14578096eda: Download complete\n6310eb16bf42: Verifying Checksum\n6310eb16bf42: Download complete\n6310eb16bf42: Pull complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\nEXIT 0\np-c10 python - <<'EOF' && echo \"VERDICT_LINE: PASS argv ['-vv'] against 'Usage: my_program.py [-v | -vv | -vvv]' gives args['-v'] == 2\" || echo \"VERDICT_LINE: FAIL repeated flag was not counted as 2 (see observed line above)\"\nfrom docopt import docopt\na = docopt('Usage: my_program.py [-v | -vv | -vvv]', argv=['-vv'])\nprint('observed: args =', dict(a), \"| args['-v'] =\", repr(a['-v']))\nassert a['-v'] == 2, a\nEOF\nSTDOUT observed: args = {'-v': 2} | args['-v'] = 2\nVERDICT_LINE: PASS argv ['-vv'] against 'Usage: my_program.py [-v | -vv | -vvv]' gives args['-v'] == 2\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c11 python - <<'EOF' && echo \"VERDICT_LINE: PASS <file> collected to ['file1','file2'] and --path to ['./here','./there']\" || echo \"VERDICT_LINE: FAIL repeated argument/option values were not collected as the README states (see observed line above)\"\nfrom docopt import docopt\na = docopt('Usage: my_program.py <file> <file> --path=<path>...', argv=['file1', 'file2', '--path=./here', '--path=./there'])\nprint('observed: args =', dict(a))\nassert a['<file>'] == ['file1', 'file2'] and a['--path'] == ['./here', './there'], a\nEOF\nSTDOUT observed: args = {'<file>': ['file1', 'file2'], '--path': ['./here', './there']}\nVERDICT_LINE: PASS <file> collected to ['file1','file2'] and --path to ['./here','./there']\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c12 python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (see traceback above)\"\nfrom docopt import docopt\nusage = '''Usage: my_program.py [--repeatable=<arg> --repeatable=<arg>]\n                     [--another-repeatable=<arg>]...\n                     [--not-repeatable=<arg>]\n\n'''\nbody = '''--repeatable=<arg>          [default: ./here ./there]\n--another-repeatable=<arg>  [default: ./here]\n--not-repeatable=<arg>      [default: ./here ./there]\n'''\nexp = {'--repeatable': ['./here', './there'], '--another-repeatable': ['./here'], '--not-repeatable': './here ./there'}\nvariants = [('README verbati\nSTDOUT observed [README verbatim]: {'--repeatable': [], '--another-repeatable': [], '--not-repeatable': None}\nobserved [with indented Options: header]: {'--repeatable': ['./here', './there'], '--another-repeatable': ['./here'], '--not-repeatable': './here ./there'}\nVERDICT_LINE: FAIL README snippet verbatim does not parse the defaults at all (values above); the splitting only works when the descriptions sit under an indented Options: header, which the README example omits\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c2 mkdir -p /tmp/dropin && cp /repo/docopt.py /tmp/dropin/docopt.py && cd /tmp/dropin && python - <<'EOF' && echo \"VERDICT_LINE: PASS docopt.py imports only stdlib modules and parses a pattern when dropped into a bare directory with nothing installed\" || echo \"VERDICT_LINE: FAIL docopt.py needs a non-stdlib module or failed to run standalone (see observed line / traceback above)\"\nimport ast, sys, subprocess\nsrc = open('docopt.py').read()\nmods = set()\nfor n in ast.walk(ast.parse(src)):\n    if isinstance(n, ast.Import):\n        mods.update(a.name.split('.')[0] for a in n.names)\n    elif isinstance(\nSTDOUT observed: imports = ['re', 'sys'] | non-stdlib = [] | lines = 581\nobserved: standalone run exit 0 | stdout {'-v': True, '<f>': 'a'} | stderr \nVERDICT_LINE: PASS docopt.py imports only stdlib modules and parses a pattern when dropped into a bare directory with nothing installed\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c3 python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (unexpected exception while reading .travis.yml / GitHub API / Travis API)\"\nimport json, os, re, urllib.request, urllib.error\ndef get(url, hdr={}):\n    try:\n        r = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'probe', **hdr}), timeout=30)\n        return r.status, r.read().decode(errors='replace')\n    except urllib.error.HTTPError as e:\n        return e.code, e.read().decode(errors='replace')[:200]\n    except Exception as e:\n        return None, repr(e)\nwant = {'2.7', '3.4', '3.5', '3.6'}\ntravis = open(\nSTDOUT observed: .travis.yml present = True | python versions in .travis.yml = ['2.7', '3.4', '3.5', '3.6'] | local GH workflows = [] | .travis.yml head = 'language: python\\ncache: pip\\npython:\\n  - \"2.7\"\\n  - \"3.4\"\\n  - \"3.5\"\\n  - \"3.6\"\\ninstall: pip install tox tox-travis\\nscript: tox\\n'\nobserved: GitHub Actions runs = 0 (http 200 ) | travis-ci.com builds = None (http 404 ) | latest travis build (state, finished, sha) = None\nVERDICT_LINE: FAIL .travis.yml targets ['2.7', '3.4', '3.5', '3.6'] but no CI runs exist: GitHub Actions 0 runs (http 200), travis-ci.com http 404 builds=None (travis-ci.org was shut down)\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c4 python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed while fetching the Travis badge\"\nimport re, urllib.request, urllib.error\nurl = 'https://travis-ci.org/docopt/docopt.svg?branch=master'\ntry:\n    r = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'probe'}), timeout=30)\n    status, body, final = r.status, r.read().decode(errors='replace'), r.geturl()\nexcept urllib.error.HTTPError as e:\n    status, body, final = e.code, e.read().decode(errors='replace'), e.geturl()\nexcept Exception as e:\n    status, body, final = None, repr(e), url\ntexts = [t.strip() for t in re\nSTDOUT observed: http 200 | final url https://api.travis-ci.com/docopt/docopt.svg?branch=master | badge text ['build', 'build', 'unknown', 'unknown'] | body head <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"98\" height=\"20\"><linearGradient id=\"a\" x2=\"0\" y2=\"100%\"><stop offset=\"0\" \nVERDICT_LINE: FAIL Travis badge for master renders ['build', 'build', 'unknown', 'unknown'], not passing\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c5 python -c \"import setuptools, pytest; print('observed: setuptools', setuptools.__version__, '| pytest', pytest.__version__)\"; python setup.py test > /tmp/c5.txt 2>&1; rc=$?; tail -20 /tmp/c5.txt; python - \"$rc\" <<'EOF'\nimport re, sys\nrc = int(sys.argv[1])\nout = open('/tmp/c5.txt').read()\nm = re.search(r'(\\d+) passed', out)\nlast = [l for l in out.strip().splitlines() if l.strip()][-1:] or ['']\nprint('observed: python setup.py test exit', rc, '| passed', m.group(1) if m else None, '| last line', last[0][:160])\nif rc == 0 and m:\n    print('VERDICT_LINE: PASS python setup.py test exit 0 with %s te\nSTDOUT observed: setuptools 84.0.0 | pytest 9.1.1\n    self.pluginmanager._set_initial_conftests(\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 662, in _set_initial_conftests\n    self._loadconftestmodules(\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 707, in _loadconftestmodules\n    mod = self._importconftest(\n          ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 783, in _importconftest\n    self.consider_conftest(mod, registration_name=conftestpath_plugin_name)\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 870, in consider_conftest\n    self.register(conftestmodule, name=registration_name)\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 571, in register\n    plugin_name = super().register(plugin, name)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/pluggy/_manager.py\", line 168, in register\n    self._verify_hook(hook, hookimpl)\n  File \"/usr/local/lib/python3.11/site-packages/pluggy/_manager.py\", line 343, in _verify_hook\n    raise PluginValidationError(\npluggy._manager.PluginValidationError: Plugin '/repo/conftest.py' for hook 'pytest_collect_file'\nhookimpl definition: pytest_collect_file(path, parent)\nArgument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec\nobserved: python setup.py test exit 1 | passed None | last line Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec\nVERDICT_LINE: FAIL python setup.py test exit 1: Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec\n\nSTDERR \nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\nEXIT 0\np-c6 python -m pytest --version; python -c \"import re; s=open('testcases.docopt').read(); print('observed: language-agnostic cases in testcases.docopt =', len(re.findall(r'^r\\\"\\\"\\\"', s, re.M)))\"; python -m pytest -q > /tmp/c6.txt 2>&1; rc=$?; tail -20 /tmp/c6.txt; python - \"$rc\" <<'EOF'\nimport re, sys\nrc = int(sys.argv[1])\nout = open('/tmp/c6.txt').read()\ncounts = {k: int(v) for v, k in re.findall(r'(\\d+) (passed|failed|error|errors)', out)}\nlast = [l for l in out.strip().splitlines() if l.strip()][-1:] or ['']\nprint('observed: pytest exit', rc, '| counts', counts, '| last line', last[0][:160])\nif \nSTDOUT pytest 9.1.1\nobserved: language-agnostic cases in testcases.docopt = 81\n    self.pluginmanager._set_initial_conftests(\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 662, in _set_initial_conftests\n    self._loadconftestmodules(\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 707, in _loadconftestmodules\n    mod = self._importconftest(\n          ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 783, in _importconftest\n    self.consider_conftest(mod, registration_name=conftestpath_plugin_name)\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 870, in consider_conftest\n    self.register(conftestmodule, name=registration_name)\n  File \"/usr/local/lib/python3.11/site-packages/_pytest/config/__init__.py\", line 571, in register\n    plugin_name = super().register(plugin, name)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/site-packages/pluggy/_manager.py\", line 168, in register\n    self._verify_hook(hook, hookimpl)\n  File \"/usr/local/lib/python3.11/site-packages/pluggy/_manager.py\", line 343, in _verify_hook\n    raise PluginValidationError(\npluggy._manager.PluginValidationError: Plugin '/repo/conftest.py' for hook 'pytest_collect_file'\nhookimpl definition: pytest_collect_file(path, parent)\nArgument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec\nobserved: pytest exit 1 | counts {} | last line Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec\nVERDICT_LINE: FAIL pytest exit 1 ({}): Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec\n\nSTDERR \nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\nEXIT 0\np-c7 python - <<'EOF' && echo \"VERDICT_LINE: PASS examples/naval_fate.py ship Guardian move 100 150 --speed=15 printed exactly the README dictionary\" || echo \"VERDICT_LINE: FAIL naval_fate.py output differs from the README dictionary or the script failed (see observed line above)\"\nimport ast, subprocess, sys\np = subprocess.run([sys.executable, 'examples/naval_fate.py', 'ship', 'Guardian', 'move', '100', '150', '--speed=15'], capture_output=True, text=True)\nprint('observed: exit', p.returncode, '| stdout', p.stdout.strip().replace(chr(10), ' ')[:500], '| stderr', p.stderr.strip()[-200:])\nexp = {'--d\nSTDOUT observed: exit 0 | stdout {'--drifting': False,  '--help': False,  '--moored': False,  '--speed': '15',  '--version': False,  '<name>': ['Guardian'],  '<x>': '100',  '<y>': '150',  'mine': False,  'move': True,  'new': False,  'remove': False,  'set': False,  'ship': True,  'shoot': False} | stderr \nobserved: diff keys = {}\nVERDICT_LINE: PASS examples/naval_fate.py ship Guardian move 100 150 --speed=15 printed exactly the README dictionary\n\nSTDERR \nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\nEXIT 0\np-c8 python - <<'EOF' && echo \"VERDICT_LINE: PASS docopt.docopt signature is (doc, argv=None, help=True, version=None, options_first=False)\" || echo \"VERDICT_LINE: FAIL docopt.docopt signature differs from the README (see observed line above)\"\nimport inspect, docopt\nsig = str(inspect.signature(docopt.docopt))\nprint('observed: signature', sig, '| file', docopt.__file__, '| version', docopt.__version__)\nassert sig == '(doc, argv=None, help=True, version=None, options_first=False)', sig\nEOF\nSTDOUT observed: signature (doc, argv=None, help=True, version=None, options_first=False) | file /repo/docopt.py | version 0.6.2\nVERDICT_LINE: PASS docopt.docopt signature is (doc, argv=None, help=True, version=None, options_first=False)\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c9 python - <<'EOF' && echo \"VERDICT_LINE: PASS --version printed the supplied version string 2.1.0rc1 and exited 0\" || echo \"VERDICT_LINE: FAIL --version did not print the version and terminate cleanly (see observed line above)\"\nimport subprocess, sys\np = subprocess.run([sys.executable, '-c', \"from docopt import docopt; docopt('Usage: p [--version]', argv=['--version'], version='2.1.0rc1'); print('NOT TERMINATED')\"], capture_output=True, text=True)\nprint('observed: exit', p.returncode, '| stdout', repr(p.stdout), '| stderr', repr(p.stderr[-200:]))\nassert p.returncode == 0 and p.stdout.strip() ==\nSTDOUT observed: exit 0 | stdout '2.1.0rc1\\n' | stderr ''\nVERDICT_LINE: PASS --version printed the supplied version string 2.1.0rc1 and exited 0\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0"
+ },
+ "llm_calls": 4,
+ "usage": {
+  "cost_usd": 5.35802,
+  "input_tokens": 908,
+  "output_tokens": 44646
+ },
+ "memo_md": "# Due-diligence memo: https://github.com/docopt/docopt @ 8fea867d4220\nQuestion: Several of our CLI tools pin docopt==0.6.2 \u2014 does the pinned package still install and behave as the README documents on a current Python, is the README's CI badge and 'tested with' statement meaningful today, and can the bundled test suite still be run with the documented commands?\n\n**Bottom line.** 7 of 12 README claims held under execution, 5 were refuted, 0 could not be settled in the sandbox and need a human. Rubric score 58/100.\n\n## Refuted (negotiate on these)\n- **c3** The docopt project tests docopt on Python 2.7, 3.4, 3.5 and 3.6 (its CI configuration targets those interpreters and CI actually runs).\n  Evidence: `p-c3` observed: GitHub Actions runs = 0 (http 200 ) | travis-ci.com builds = None (http 404 ) | latest travis build (state, finished, sha) = None; VERDICT_LINE: FAIL .travis.yml targets ['2.7', '3.4', '3.5', '3.6'] but no CI r\n- **c4** The Travis CI badge at the top of the README (travis-ci.org/docopt/docopt, branch master) asserts that master currently builds and passes on Travis CI.\n  Evidence: `p-c4` observed: http 200 | final url https://api.travis-ci.com/docopt/docopt.svg?branch=master | badge text ['build', 'build', 'unknown', 'unknown']; VERDICT_LINE: FAIL Travis badge for master renders ['build', 'build', 'unkno\n- **c5** In a clone of the repository, `python setup.py test` runs docopt's unit tests.\n  Evidence: `p-c5` pluggy._manager.PluginValidationError: Plugin '/repo/conftest.py' for hook 'pytest_collect_file' ... Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec; observed: python setup.py test \n- **c6** In a clone of the repository, the bundled test suite (test_docopt.py plus the language-agnostic testcases.docopt collected by conftest.py) runs and passes under a current pytest.\n  Evidence: `p-c6` pluggy._manager.PluginValidationError: Plugin '/repo/conftest.py' for hook 'pytest_collect_file' ... Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec; observed: pytest exit 1 | count\n- **c12** A `[default: ./here ./there]` value on a repeatable option is split on whitespace into ['./here', './there'], while the same default on a non-repeatable option stays the string './here ./there'.\n  Evidence: `p-c12` observed [README verbatim]: {'--repeatable': [], '--another-repeatable': [], '--not-repeatable': None}; VERDICT_LINE: FAIL README snippet verbatim does not parse the defaults at all; the splitting only works when the des\n\n## Verified as written\n- **c1** The package can be installed from PyPI with the exact command `pip install docopt==0.6.2`, after which `from docopt import docopt` succeeds \n- **c2** docopt.py is self-contained: the single file at the pinned commit imports only Python standard-library modules and works when dropped into a\n- **c7** Running the README's Naval Fate program (examples/naval_fate.py) as `naval_fate.py ship Guardian move 100 150 --speed=15` returns the dictio\n- **c8** The public API is a single function with signature `docopt(doc, argv=None, help=True, version=None, options_first=False)`.\n- **c9** When `docopt()` is given a version argument and the usage pattern mentions --version, invoking the program with `--version` prints the suppl\n- **c10** For a usage pattern `Usage: my_program.py [-v | -vv | -vvv]`, parsing the argv ['-vv'] yields args['-v'] == 2 (repeated flags are counted).\n- **c11** For a usage pattern `Usage: my_program.py <file> <file> --path=<path>...`, parsing `file1 file2 --path=./here --path=./there` yields args['<\n\nEvery verdict above cites a recorded probe (command, exit code, output) from the CI run named in the report."
+}

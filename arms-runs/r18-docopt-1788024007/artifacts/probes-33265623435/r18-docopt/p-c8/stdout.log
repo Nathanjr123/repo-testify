@@ -1,0 +1,2 @@
+observed: signature (doc, argv=None, help=True, version=None, options_first=False) | file /repo/docopt.py | version 0.6.2
+VERDICT_LINE: PASS docopt.docopt signature is (doc, argv=None, help=True, version=None, options_first=False)

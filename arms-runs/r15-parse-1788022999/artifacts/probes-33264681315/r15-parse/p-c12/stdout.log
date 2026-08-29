@@ -1,0 +1,11 @@
+tests/requirements.txt
+_______________ coverage: platform linux, python 3.11.16-final-0 _______________
+
+Name                Stmts   Miss Branch BrPart  Cover   Missing
+---------------------------------------------------------------
+parse/__init__.py     551     19    244     10    96%   133, 136, 141, 248, 291, 404, 448, 456-460, 473-475, 491, 523->525, 546->548, 640-643, 842->846, 855
+---------------------------------------------------------------
+TOTAL                 551     19    244     10    96%
+======================== 99 passed, 1 skipped in 0.59s =========================
+OBSERVED: developer flow exit code 0
+VERDICT_LINE: PASS pip install -r tests/requirements.txt, pip install -e ., pytest all succeeded

@@ -1,0 +1,6 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS pip install python-slugify; from slugify import slugify and import text_unidecode both succeed" || echo "VERDICT_LINE: FAIL import of slugify or text_unidecode failed after pip install python-slugify (see traceback above)"
+import importlib.metadata as m
+from slugify import slugify
+import text_unidecode
+print('observed: python-slugify', m.version('python-slugify'), '| text-unidecode', m.version('text-unidecode'), '| slugify("Hello World")=', repr(slugify('Hello World')))
+EOF

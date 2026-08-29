@@ -1,0 +1,9 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS examples/naval_fate.py ship Guardian move 100 150 --speed=15 printed exactly the README dictionary" || echo "VERDICT_LINE: FAIL naval_fate.py output differs from the README dictionary or the script failed (see observed line above)"
+import ast, subprocess, sys
+p = subprocess.run([sys.executable, 'examples/naval_fate.py', 'ship', 'Guardian', 'move', '100', '150', '--speed=15'], capture_output=True, text=True)
+print('observed: exit', p.returncode, '| stdout', p.stdout.strip().replace(chr(10), ' ')[:500], '| stderr', p.stderr.strip()[-200:])
+exp = {'--drifting': False, '--help': False, '--moored': False, '--speed': '15', '--version': False, '<name>': ['Guardian'], '<x>': '100', '<y>': '150', 'mine': False, 'move': True, 'new': False, 'remove': False, 'set': False, 'ship': True, 'shoot': False}
+got = ast.literal_eval(p.stdout.strip())
+print('observed: diff keys =', {k: (got.get(k), exp.get(k)) for k in set(got) | set(exp) if got.get(k) != exp.get(k)})
+assert p.returncode == 0 and got == exp
+EOF

@@ -1,0 +1,7 @@
+cat > /tmp/probe.py <<'EOF'
+from parse import findall
+s = ''.join(r[0] for r in findall(">{}<", "<p>the <b>bold</b> text</p>"))
+print('OBSERVED:', repr(s))
+assert s == 'the bold text', repr(s)
+print("VERDICT_LINE: PASS findall join evaluates to 'the bold text'")
+EOF && python /tmp/probe.py || echo "VERDICT_LINE: FAIL findall join did not evaluate to 'the bold text'"

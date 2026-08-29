@@ -1,0 +1,3 @@
+observed [README verbatim]: {'--repeatable': [], '--another-repeatable': [], '--not-repeatable': None}
+observed [with indented Options: header]: {'--repeatable': ['./here', './there'], '--another-repeatable': ['./here'], '--not-repeatable': './here ./there'}
+VERDICT_LINE: FAIL README snippet verbatim does not parse the defaults at all (values above); the splitting only works when the descriptions sit under an indented Options: header, which the README example omits

@@ -22398,5 +22398,1210 @@
   "limit_blocked": false,
   "partial": false,
   "rescored_from": "advanced-v2-rescored-1788022402"
+ },
+ {
+  "id": "baseline-ext-1788022998",
+  "arm": "baseline",
+  "label": "baseline-ext",
+  "disable": null,
+  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "git": "d968bcb",
+  "ts": "2026-08-29T17:03:18Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.079,
+    "confident_wrong": 0.608,
+    "evidence_valid": 0.608,
+    "score_error": 0.452
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 0.8333333333333334
+   },
+   "raw": 0.289,
+   "n_cases": 6,
+   "settled_fraction": 0.088,
+   "capped": false
+  },
+  "human_time_s": null,
+  "cost_usd": 2.9242,
+  "llm_calls": 0.8,
+  "wall_total_s": 726.8,
+  "per_case": {
+   "r15-parse.json": {
+    "status": "ok",
+    "wall_s": 48.29,
+    "usage": {
+     "cost_usd": 0.680924,
+     "input_tokens": 2,
+     "output_tokens": 3861
+    },
+    "output": {
+     "repo": "https://github.com/r1chardj0n3s/parse@8059e320eccf40d750843006dd2ef25197bbff74",
+     "overall_score": 55,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "packaging metadata present; PyPI publication of this commit's version cannot be confirmed from the tree"
+        },
+        {
+         "kind": "file",
+         "ref": "parse/__init__.py",
+         "excerpt": "importable package module exists; import success on a current interpreter is not checkable without running"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "parse/__init__.py",
+         "excerpt": "__all__ contents not visible in the supplied material; README says only parse, search, findall, with_pattern are exported and changelog 1.3 says compile was removed from import *"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> parse(\"It's {}, I love it!\", \"It's spam, I love it!\")\n<Result ('spam',) {}>"
+        },
+        {
+         "kind": "file",
+         "ref": "tests/test_parse.py",
+         "excerpt": "test file exists; its contents were not supplied, so the example's behaviour is unconfirmed"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> search('Age: {:d}\\n', 'Name: Rufus\\nAge: 42\\nColor: red\\n')\n<Result (42,) {}>"
+        },
+        {
+         "kind": "file",
+         "ref": "tests/test_search.py",
+         "excerpt": "search tests exist; contents not supplied"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> ''.join(r[0] for r in findall(\">{}<\", \"<p>the <b>bold</b> text</p>\"))\n'the bold text'"
+        },
+        {
+         "kind": "file",
+         "ref": "tests/test_findall.py",
+         "excerpt": "findall tests exist; contents not supplied"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> p = compile(\"It's {}, I love it!\")\n>>> print(p)\n<Parser \"It's {}, I love it!\">"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "The default behaviour is to match strings case insensitively ... >>> parse('SPAM', 'spam', case_sensitive=True) is None\nTrue"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "1.12.1 Actually use the `case_sensitive` arg in compile"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> r = parse(\"Bring out the holy {item}\", \"Bring out the holy hand grenade\")\n>>> print(r)\n<Result () {'item': 'hand grenade'}>"
+        },
+        {
+         "kind": "file",
+         "ref": "tests/test_result.py",
+         "excerpt": "Result tests exist; contents not supplied"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> parse(\"{:%Y-%m-%d %H:%M:%S}\", \"2023-11-23 12:56:47\")\n<Result (datetime.datetime(2023, 11, 23, 12, 56, 47),) {}>"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "1.20.0 Added support for strptime codes (thanks @bendichter)"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> parse('{:4}{:.4}', 'look at that')    # specifying both\n<Result ('look at ', 'that') {}>\n>>> parse('{:2d}{:2d}', '0440')\n<Result (4, 40) {}>"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "1.9.0 We now honor precision and width specifiers when parsing numbers and strings"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ">>> @with_pattern(r'\\d+')\n... def parse_number(text):\n...    return int(text)\n>>> parse('Answer: {number:Number}', 'Answer: 42', {\"Number\": parse_number})\n<Result () {'number': 42}>"
+        },
+        {
+         "kind": "file",
+         "ref": "tests/test_pattern.py",
+         "excerpt": "pattern/converter tests exist; contents not supplied"
+        }
+       ]
+      },
+      {
+       "id": "c12",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "tests/requirements.txt",
+         "excerpt": "file referenced by the documented flow exists"
+        },
+        {
+         "kind": "file",
+         "ref": "pyproject.toml",
+         "excerpt": "build metadata needed for `pip install -e .` exists"
+        },
+        {
+         "kind": "file",
+         "ref": ".github/workflows/test.yml",
+         "excerpt": "CI workflow exists, but its contents and current status are not visible; pass/fail unknown"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11",
+      "c12"
+     ],
+     "memo_md": "## parse @ 8059e32 \u2014 documentation-only review\n\n**Scope limit.** This memo is based solely on README.rst and the file listing. Nothing was installed, imported or executed, and neither `parse/__init__.py` nor the test files were readable. Consequently no claim can be marked verified or refuted; all twelve are escalated for an execution pass.\n\n**What the documents support.** The repository is structured as a package (`parse/__init__.py`, `.pyi` type stubs, `pyproject.toml`), matching the 1.22.0 changelog entry. The documented test flow references `tests/requirements.txt`, which exists, and there are seven test modules plus a CI workflow (`.github/workflows/test.yml`). Each buyer-relevant example (typed `{:d}` fields, strptime-style `%Y-%m-%d` types, `with_pattern` converters, width/precision, case sensitivity, `import *` export list) appears verbatim in the README and has a corresponding changelog entry (1.20.0, 1.9.0, 1.12.1, 1.3), which is internally consistent.\n\n**What is unknown.** Whether the PyPI release corresponds to this commit; the actual `__all__`; whether doctest-style outputs (exact reprs) still hold on a current interpreter; whether the test suite passes today. The README's copyright line (2012\u20132021) is stale relative to the 1.22.x changelog, a minor documentation-hygiene signal, not a functional finding.\n\n**Recommendation.** Do not rely on this memo for a go/no-go. Run the twelve probe commands in a clean virtual environment on the target interpreter, in particular c9 (strptime types) and c11 (custom converters), which are the features central to a log-ingestion use case, and c12 for suite health. Nothing in the documentation contradicts the claims, but nothing here confirms them either.",
+     "usage": {
+      "cost_usd": 0.680924,
+      "input_tokens": 2,
+      "output_tokens": 3861
+     },
+     "llm_calls": 1,
+     "_evidence_index": {
+      "probes": [],
+      "text": "",
+      "tree": ".git-blame-ignore-revs\n.github\n.github/SECURITY.md\n.github/dependabot.yml\n.github/workflows\n.github/workflows/test.yml\nLICENSE\nREADME.rst\nparse\nparse/__init__.py\nparse/__init__.pyi\npyproject.toml\ntests\ntests/check_typing.py\ntests/requirements.txt\ntests/test_bugs.py\ntests/test_findall.py\ntests/test_parse.py\ntests/test_parsetype.py\ntests/test_pattern.py\ntests/test_result.py\ntests/test_search.py"
+     }
+    },
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.6
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.0
+   },
+   "r16-python-slugify.json": {
+    "status": "ok",
+    "wall_s": 45.99,
+    "usage": {
+     "cost_usd": 0.577157,
+     "input_tokens": 2,
+     "output_tokens": 3758
+    },
+    "output": {
+     "repo": "https://github.com/un33k/python-slugify@7b6d5d96c1995e6dccb39a19a13ba78d7d0a3ee4",
+     "overall_score": 55,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "This module, by default installs and uses text-unidecode"
+        },
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "setup.py present in tree; contents not shown, install_requires not readable"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "pip install python-slugify[unidecode]"
+        },
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "extras_require not visible from tree"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "| `>= 3.7`       | `>= 7.0.0`         |"
+        },
+        {
+         "kind": "url",
+         "ref": "https://pypi.python.org/pypi/python-slugify",
+         "excerpt": "requires_python of the live release cannot be read from the repo"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "python_requires declaration not visible in provided material"
+        },
+        {
+         "kind": "file",
+         "ref": "slugify/__version__.py",
+         "excerpt": "version at pinned commit not shown"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "[status-image]: https://github.com/un33k/python-slugify/actions/workflows/main.yml/badge.svg\n[status-link]: https://github.com/un33k/python-slugify/actions/workflows/ci.yml"
+        },
+        {
+         "kind": "file",
+         "ref": ".github/workflows/main.yml",
+         "excerpt": "badge image reports main.yml, not the linked ci.yml"
+        },
+        {
+         "kind": "file",
+         "ref": ".github/workflows/ci.yml",
+         "excerpt": "separate workflow; its run status is not readable here"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "[coverage-image]: https://coveralls.io/repos/un33k/python-slugify/badge.svg"
+        },
+        {
+         "kind": "url",
+         "ref": "https://coveralls.io/r/un33k/python-slugify",
+         "excerpt": "live percentage requires fetching the badge"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "txt = \"This is a test ---\"\nr = slugify(txt)\nself.assertEqual(r, \"this-is-a-test\")"
+        },
+        {
+         "kind": "file",
+         "ref": "test.py",
+         "excerpt": "README says examples mirror test.py; not executed"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "self.assertEqual(r, \"ying-shi-ma\")"
+        },
+        {
+         "kind": "file",
+         "ref": "slugify/slugify.py",
+         "excerpt": "transliteration depends on installed text-unidecode version; not run"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "self.assertEqual(r, \"c-est-deja-l-ete\")"
+        },
+        {
+         "kind": "file",
+         "ref": "test.py",
+         "excerpt": "not executed"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "r = slugify(txt, max_length=20, word_boundary=True, separator=\".\")\nself.assertEqual(r, \"jaja.lol.mememeoo.a\")"
+        },
+        {
+         "kind": "file",
+         "ref": "test.py",
+         "excerpt": "not executed"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "r = slugify(txt, replacements=[['|', 'or'], ['%', 'percent']])\nself.assertEqual(r, \"10-or-20-percent\")"
+        },
+        {
+         "kind": "file",
+         "ref": "test.py",
+         "excerpt": "not executed"
+        }
+       ]
+      },
+      {
+       "id": "c12",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "With the package, a command line tool called `slugify` is also installed."
+        },
+        {
+         "kind": "file",
+         "ref": "slugify/__main__.py",
+         "excerpt": "CLI module exists; console_scripts entry point in setup.py not visible"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11",
+      "c12"
+     ],
+     "memo_md": "**python-slugify @ 7b6d5d9 \u2014 documentation-only review**\n\nThis assessment is from the README and file tree alone; nothing was installed or executed, so no behavioural claim can be settled here. Everything below is a reading, not a measurement.\n\n**What the tree supports.** The layout is consistent with the README: a `slugify/` package with `__main__.py` (CLI), `py.typed`, `special.py`, a single `test.py`, `setup.py` plus `pyproject.toml`, `tox.ini`, three GitHub workflows (`ci.yml`, `dev.yml`, `main.yml`) and a `CHANGELOG.md`. The README's usage block reads as copied from `test.py` (`self.assertEqual` lines), which is a good sign that the examples are at least tested somewhere, but which tests ran and on which interpreter is unknown.\n\n**One readable defect (c5).** The status badge image is `main.yml/badge.svg` while the badge link goes to `ci.yml`. The green/red pixel a buyer sees therefore describes a different workflow from the one they land on. Whether either is passing today cannot be read off the tree.\n\n**Unverifiable without running (c1\u2013c4, c6\u2013c12).** Install variants and the `[unidecode]` extra depend on `setup.py` contents not shown; the support-matrix row (>=3.7 for >=7.0.0) needs `python_requires` and the version file; the Coveralls figure needs the live badge; the transliteration, `max_length`, stopword, replacement and CLI outputs depend on the installed `text-unidecode` version and the console-script entry point, none of which are visible.\n\n**Recommendation.** Do not accept the badges at face value. Before committing a multi-year CMS dependency, execute the twelve probe commands in a clean venv on the target interpreter, confirm `python_requires` against the matrix, and note that the default backend carries GPL/Artistic dual licensing (the README addresses this, but legal should read it). All twelve claims are escalated to a human runner.",
+     "usage": {
+      "cost_usd": 0.577157,
+      "input_tokens": 2,
+      "output_tokens": 3758
+     },
+     "llm_calls": 1,
+     "_evidence_index": {
+      "probes": [],
+      "text": "",
+      "tree": ".github\n.github/workflows\n.github/workflows/ci.yml\n.github/workflows/dev.yml\n.github/workflows/main.yml\n.gitignore\n.vscode\n.vscode/settings.json\nCHANGELOG.md\nLICENSE\nMANIFEST.in\nREADME.md\ndev.requirements.txt\nformat.sh\npyproject.toml\nsetup.py\nslugify\nslugify/__init__.py\nslugify/__main__.py\nslugify/__version__.py\nslugify/py.typed\nslugify/slugify.py\nslugify/special.py\ntea.yaml\ntest.py\ntox.ini"
+     }
+    },
+    "rows": {
+     "verdict_acc": 0.083,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.83
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.083
+   },
+   "r17-pyinquirer.json": {
+    "status": "arm_error",
+    "stderr": "empty model response for this case while usage was available: LIMIT_BLOCKED: claude -p blocked (empty/limit) after 3 tries: \n",
+    "wall_s": 504.03
+   },
+   "r18-docopt.json": {
+    "status": "ok",
+    "wall_s": 50.63,
+    "usage": {
+     "cost_usd": 0.643409,
+     "input_tokens": 2,
+     "output_tokens": 4026
+    },
+    "output": {
+     "repo": "https://github.com/docopt/docopt@8fea867d4220f1095dae9d6264ec5aa4031fb712",
+     "overall_score": 42,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "pip install docopt==0.6.2"
+        },
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "setup.py present; contents and declared version not visible"
+        },
+        {
+         "kind": "url",
+         "ref": "https://pypi.python.org/pypi/docopt",
+         "excerpt": "PyPI badge target; current install behaviour on a modern interpreter not checkable from text"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "docopt.py",
+         "excerpt": "single top-level module, consistent with the self-contained claim; import list not visible"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "you can just drop docopt.py file into your project--it is self-contained"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": ".travis.yml",
+         "excerpt": "Travis config present; interpreter matrix not visible"
+        },
+        {
+         "kind": "url",
+         "ref": "https://travis-ci.org/docopt/docopt",
+         "excerpt": "travis-ci.org stopped running builds in 2021; the 'tested with' statement can no longer be backed by running CI"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": ".. image:: https://travis-ci.org/docopt/docopt.svg?branch=master"
+        },
+        {
+         "kind": "url",
+         "ref": "https://travis-ci.org/docopt/docopt.svg?branch=master",
+         "excerpt": "badge points at the retired travis-ci.org domain; it cannot assert a current passing build"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "You can run unit tests using the command: python setup.py test"
+        },
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "relies on the setuptools 'test' command, which current setuptools (>=72) no longer provides"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "conftest.py",
+         "excerpt": "custom collector for testcases.docopt; hook signatures used are not visible"
+        },
+        {
+         "kind": "file",
+         "ref": "test_docopt.py",
+         "excerpt": "unit test module present"
+        },
+        {
+         "kind": "file",
+         "ref": "testcases.docopt",
+         "excerpt": "language-agnostic test cases present"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "examples/naval_fate.py",
+         "excerpt": "example script exists; output not executable here"
+        },
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "naval_fate.py ship Guardian move 100 150 --speed=15 ... the return dictionary will be: {...}"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "docopt(doc, argv=None, help=True, version=None, options_first=False)"
+        },
+        {
+         "kind": "file",
+         "ref": "docopt.py",
+         "excerpt": "actual signature lives here; not visible"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "when parser encounters the --version option, it will print the supplied version and terminate"
+        },
+        {
+         "kind": "file",
+         "ref": "docopt.py",
+         "excerpt": "behaviour not checkable without execution"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "args['-v'] will be 2 if program was invoked as my_program -vv"
+        },
+        {
+         "kind": "file",
+         "ref": "examples/counted_example.py",
+         "excerpt": "example covering counted flags exists"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "args['<file>'] == ['file1', 'file2'] and args['--path'] == ['./here', './there']"
+        },
+        {
+         "kind": "file",
+         "ref": "testcases.docopt",
+         "excerpt": "likely contains the repeat cases; contents not visible"
+        }
+       ]
+      },
+      {
+       "id": "c12",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.rst",
+         "excerpt": "If it is repeatable, it will be splited into a list on whitespace"
+        },
+        {
+         "kind": "file",
+         "ref": "docopt.py",
+         "excerpt": "default-splitting logic not visible"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11",
+      "c12"
+     ],
+     "memo_md": "## docopt 0.6.2 @ 8fea867 \u2014 documentation-only review\n\n**What the README and tree let me settle.** The repository layout matches the README: a single `docopt.py`, `setup.py`, `conftest.py` + `test_docopt.py` + `testcases.docopt`, a `.travis.yml`, and the referenced `examples/` (including `naval_fate.py`). Nothing in the tree contradicts the documented layout.\n\n**What is stale on its face.** The README's CI badge and 'tested with Python 2.7, 3.4, 3.5, 3.6' statement both point at travis-ci.org, which has not run builds since 2021. The badge therefore cannot assert a current passing build and the tested-with list describes interpreters that are all end-of-life (c3, c4 marked refuted, low confidence because I could not fetch the badge). The documented test command `python setup.py test` depends on the setuptools `test` command that current setuptools removed (c5 refuted, low confidence; depends on the setuptools version a buyer actually has).\n\n**What I could not settle without running.** Whether `pip install docopt==0.6.2` still installs cleanly on a current Python and reports `__version__ == '0.6.2'` (c1); whether `docopt.py` imports only stdlib (c2); whether the bundled pytest suite still collects under a current pytest, given `conftest.py` predates pytest's collector API changes (c6); and every behavioural claim about the parser (c7\u2013c12). All of these are escalated for execution in a clean environment.\n\n**Buyer-facing read.** Pinning `docopt==0.6.2` is pinning an unmaintained package whose README describes a 2018-era toolchain. The library is small and pure-Python, so it plausibly still works, but neither the badge nor the documented test commands can be relied on as evidence today. Before signing off: run the install probe, run `pytest -q` in a clone, and compare `naval_fate.py` output with the README dictionary. Score reflects unverified core behaviour plus confirmed-stale CI/test documentation.",
+     "usage": {
+      "cost_usd": 0.643409,
+      "input_tokens": 2,
+      "output_tokens": 4026
+     },
+     "llm_calls": 1,
+     "_evidence_index": {
+      "probes": [],
+      "text": "",
+      "tree": ".gitignore\n.travis.yml\nLICENSE-MIT\nMANIFEST.in\nREADME.rst\nconftest.py\ndocopt.py\nexamples\nexamples/arguments_example.py\nexamples/calculator_example.py\nexamples/config_file_example.py\nexamples/counted_example.py\nexamples/git\nexamples/git/git.py\nexamples/git/git_add.py\nexamples/git/git_branch.py\nexamples/git/git_checkout.py\nexamples/git/git_clone.py\nexamples/git/git_commit.py\nexamples/git/git_push.py\nexamples/git/git_remote.py\nexamples/interactive_example.py\nexamples/naval_fate.py\nexamples/odd_even_example.py\nexamples/options_example.py\nexamples/options_shortcut_example.py\nexamples/quick_example.py\nexamples/validation_example.py\nsetup.cfg\nsetup.py\ntest_docopt.py\ntestcases.docopt\ntox.ini"
+     }
+    },
+    "rows": {
+     "verdict_acc": 0.25,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.92
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.25
+   },
+   "r19-nanogpt.json": {
+    "status": "ok",
+    "wall_s": 38.81,
+    "usage": {
+     "cost_usd": 0.577394,
+     "input_tokens": 2,
+     "output_tokens": 3020
+    },
+    "output": {
+     "repo": "https://github.com/karpathy/nanoGPT@3adf61e154c3fe3fca428ad6bc3818b27a3b8291",
+     "overall_score": 48,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/karpathy/nanoGPT/blob/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/README.md#install",
+         "excerpt": "pip install torch numpy transformers datasets tiktoken wandb tqdm"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "data/shakespeare_char/prepare.py",
+         "excerpt": "script present in tree; download/output behaviour not inspectable from tree"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "config/train_shakespeare_char.py",
+         "excerpt": "config file present in tree; contents not shown, README prose only"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/karpathy/nanoGPT/blob/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/README.md#quick-start",
+         "excerpt": "On one A100 GPU this training run takes about 3 minutes and the best validation loss is 1.4697."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "train.py",
+         "excerpt": "train.py and config present; run-to-completion and checkpoint path cannot be confirmed by reading"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/karpathy/nanoGPT/blob/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/README.md#quick-start",
+         "excerpt": "This still runs in about ~3 minutes, but gets us a loss of only 1.88"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "sample.py",
+         "excerpt": "sample.py present; --out_dir/--device behaviour not inspectable"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "model.py",
+         "excerpt": "train.py and model.py present; line counts not visible in tree"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "config/eval_gpt2.py",
+         "excerpt": "eval_gpt2*.py configs present; loss table is README-reported only"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "assets/gpt2_124M_loss.png",
+         "excerpt": "loss curve image present; 4-day / ~2.85 figure is author-reported"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "sample.py",
+         "excerpt": "README documents --init_from, --start, FILE: prefix; flags not confirmable without source"
+        }
+       ]
+      },
+      {
+       "id": "c12",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "https://github.com/karpathy/nanoGPT/blob/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/README.md",
+         "excerpt": "Update Nov 2025 ... nanoGPT (this repo) is now very old and deprecated but I will leave it up for posterity."
+        },
+        {
+         "kind": "url",
+         "ref": "https://github.com/karpathy/nanochat",
+         "excerpt": "successor link given in README; existence not confirmed by reading alone"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+     ],
+     "memo_md": "**nanoGPT @ 3adf61e \u2014 documentation-only review**\n\n**What reading can settle.** The README itself declares the project deprecated (Nov 2025 banner pointing to karpathy/nanochat), so *maintenance status* is answered: this is a frozen reference, not a maintained one (c12 verified from the text; the successor's existence was not fetched). The file tree matches the README's structure: train.py, model.py, sample.py, bench.py, configurator.py, the three data/prepare.py scripts, and all seven config files named in the docs are present. No tests, no CI, no requirements/pyproject pin \u2014 the install line is an unpinned pip command.\n\n**What reading cannot settle.** Every operational and quantitative claim (c1\u2013c11) is unverifiable from documentation: whether the unpinned dependency set installs on a current CPU Python, whether prepare.py still downloads tiny-shakespeare, the actual config values, line counts, the CPU run's wall time and ~1.88 loss, the A100 1.4697 figure, the GPT-2 eval table, and the 8xA100 4-day/2.85 reproduction. The README's timing figures are dated (written around Dec 2022 against PyTorch 2.0 nightlies); the CPU \"~3 minutes\" figure in particular depends on hardware and torch version and should be re-measured, not cited.\n\n**Red flags for the buyer's use case.** (1) Deprecated + unpinned dependencies means the quick start may bit-rot; a pinned environment must be created and tested before the course. (2) Only the Shakespeare-char CPU path is plausibly reproducible without GPUs; the A100 and GPT-2 numbers are author-reported with no artifacts beyond one loss-curve PNG. (3) The README still says \"Still under active development\" above the deprecation banner \u2014 internally inconsistent.\n\n**Recommendation.** Do not cite README numbers directly. Escalate c1\u2013c11 to a human runner: execute the pip install, prepare.py, the CPU training command, and sample.py in a clean environment, record wall time and loss, and cite those. Score reflects a plausible, well-structured but unverified and deprecated codebase.",
+     "usage": {
+      "cost_usd": 0.577394,
+      "input_tokens": 2,
+      "output_tokens": 3020
+     },
+     "llm_calls": 1,
+     "_evidence_index": {
+      "probes": [],
+      "text": "",
+      "tree": ".gitattributes\n.gitignore\nLICENSE\nREADME.md\nassets\nassets/gpt2_124M_loss.png\nassets/nanogpt.jpg\nbench.py\nconfig\nconfig/eval_gpt2.py\nconfig/eval_gpt2_large.py\nconfig/eval_gpt2_medium.py\nconfig/eval_gpt2_xl.py\nconfig/finetune_shakespeare.py\nconfig/train_gpt2.py\nconfig/train_shakespeare_char.py\nconfigurator.py\ndata\ndata/openwebtext\ndata/openwebtext/prepare.py\ndata/openwebtext/readme.md\ndata/shakespeare\ndata/shakespeare/prepare.py\ndata/shakespeare/readme.md\ndata/shakespeare_char\ndata/shakespeare_char/prepare.py\ndata/shakespeare_char/readme.md\nmodel.py\nsample.py\nscaling_laws.ipynb\ntrain.py\ntransformer_sizing.ipynb"
+     }
+    },
+    "rows": {
+     "verdict_acc": 0.417,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.7
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.083
+   },
+   "r20-pyinotify.json": {
+    "status": "ok",
+    "wall_s": 39.08,
+    "usage": {
+     "cost_usd": 0.44529300000000005,
+     "input_tokens": 2,
+     "output_tokens": 3079
+    },
+    "output": {
+     "repo": "https://github.com/seb-m/pyinotify@0f3f8950d12e4a6534320153eed1a90a778da4ae",
+     "overall_score": 35,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "setup.py present at repo root; contents not visible, so whether the sdist builds under a current pip/Python cannot be settled by reading."
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "$ sudo pip install pyinotify"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "python3/pyinotify.py",
+         "excerpt": "A separate python3 tree exists, but its imports are not visible; whether it still imports on a current 3.x (e.g. after stdlib removals in 3.12) cannot be settled without running it."
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "* Python \u2265 2.4 (including Python 3.x)"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "common/inotify_syscalls.c",
+         "excerpt": "Linux inotify syscall shim present, consistent with a Linux-only package, but setup.py's platform check is not visible."
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "* Linux \u2265 2.6.13"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "setup.py",
+         "excerpt": "Exists; whether it imports distutils at top level (absent on Python 3.12+ without setuptools) cannot be read from the tree."
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "# Choose your Python interpreter: either python, python2.7, python3.2,.."
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "python3/pyinotify.py",
+         "excerpt": "Module exists so `python -m pyinotify` is plausible, but a __main__ block and a working import on a current interpreter cannot be confirmed by reading."
+        },
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "$ python -m pyinotify -v /my-dir-to-watch"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "README.md",
+         "excerpt": "* License          : MIT"
+        },
+        {
+         "kind": "file",
+         "ref": "COPYING",
+         "excerpt": "License file present in the tree (text not visible); PyPI metadata half of the claim not checkable from the tree."
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "http://seb-m.github.com/pyinotify",
+         "excerpt": "Legacy github.com Pages hostname (now github.io); resolution cannot be settled without a request. No docs/ or gh-pages content in the tree."
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "url",
+         "ref": "http://github.com/seb-m/pyinotify/wiki",
+         "excerpt": "Wiki existence is a GitHub-side setting, not visible in the file tree."
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "file",
+         "ref": "python3/pyinotify.py",
+         "excerpt": "__version__ not visible from the tree; PyPI release version not checkable without a request."
+        },
+        {
+         "kind": "file",
+         "ref": "old/ChangeLog",
+         "excerpt": "Only historical changelog is present, and it is filed under old/."
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c7",
+      "c8",
+      "c9"
+     ],
+     "memo_md": "**Due-diligence memo: seb-m/pyinotify @ 0f3f895 (documentation-only review)**\n\n**What the docs show.** A small, single-module Linux inotify binding with separate `python2/` and `python3/` trees, a C syscall shim (`common/inotify_syscalls.c`), a `setup.py`, `COPYING`, and a `.travis.yml`. The README is minimal: dependencies, two install paths, one quickstart command, and three links.\n\n**Age signals.** The README's Python examples stop at `python3.2`, the pip link points at the retired `pip-installer.org`, the docs link uses the legacy `github.com` Pages hostname, CI is Travis, and the changelog is filed under `old/`. Nothing in the tree indicates maintenance in the Python 3.12+ era, and there is no `pyproject.toml`.\n\n**Verdicts.** Only the MIT license claim (c6) can be supported from the tree, and only weakly (README + a `COPYING` file whose text I cannot read). Every other claim \u2014 pip install success (c1), `import pyinotify` on a current Python 3 (c2), Linux-only enforcement in `setup.py` (c3), `setup.py install` on current Python (c4), the `-m pyinotify` watcher (c5), both doc links (c7, c8), and the PyPI/`__version__` match (c9) \u2014 requires executing code or fetching URLs, which I could not do. I have marked them unverifiable and escalated them rather than guess.\n\n**Buyer risk to test first.** The single highest-value probe is c2/c5: whether the python3 module still imports on the buyer's target interpreter. A single-file library that has not been touched since the 3.2 era is a plausible candidate for depending on since-removed stdlib modules; if the import fails, the pip claim (c1) may still \"succeed\" while the daemon cannot run. Second: whether `setup.py` needs `distutils`/`setuptools` present (c4). Third: link rot (c7, c8), which affects onboarding rather than runtime.\n\n**Recommendation.** Do not accept the Python-support statement on the README's word. Run the nine probes in a clean venv on the target Python before takeover, and budget for vendoring or patching the module if the import fails.",
+     "usage": {
+      "cost_usd": 0.44529300000000005,
+      "input_tokens": 2,
+      "output_tokens": 3079
+     },
+     "llm_calls": 1,
+     "_evidence_index": {
+      "probes": [],
+      "text": "",
+      "tree": ".gitignore\n.travis.yml\nACKS\nCOPYING\nMANIFEST.in\nREADME.md\ncommon\ncommon/inotify_syscalls.c\nold\nold/ChangeLog\nold/NEWS\npython2\npython2/Makefile\npython2/examples\npython2/examples/autocompile.py\npython2/examples/chain.py\npython2/examples/coalesce.py\npython2/examples/daemon.py\npython2/examples/exclude.lst\npython2/examples/exclude.py\npython2/examples/loop.py\npython2/examples/not_quiet.py\npython2/examples/stats.py\npython2/examples/stats_threaded.py\npython2/examples/tornado_notifier.py\npython2/examples/transient_file.py\npython2/examples/transient_file.sh\npython2/examples/tutorial_asyncnotifier.py\npython2/examples/tutorial_notifier.py\npython2/examples/tutorial_threadednotifier.py\npython2/examples/unicode.py\npython2/pyinotify.py\npython3\npython3/Makefile\npython3/examples\npython3/examples/asyncio_notifier.py\npython3/pyinotify.py\nsetup.py"
+     }
+    },
+    "rows": {
+     "verdict_acc": 0.111,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.9
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.111
+   }
+  },
+  "limit_blocked": false,
+  "partial": false
  }
 ]

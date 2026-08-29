@@ -1,0 +1,10 @@
+cat > /tmp/probe.py <<'EOF'
+from parse import parse
+r = parse("Bring out the holy {item}", "Bring out the holy hand grenade")
+print('OBSERVED: str(r) =', str(r), '| named =', r.named if r is not None else None)
+assert str(r) == "<Result () {'item': 'hand grenade'}>", str(r)
+assert r.named == {'item': 'hand grenade'}, r.named
+assert r['item'] == 'hand grenade', r['item']
+assert 'item' in r
+print('VERDICT_LINE: PASS named field result, .named, [item] and in-operator all match README')
+EOF && python /tmp/probe.py || echo "VERDICT_LINE: FAIL named-field Result behaviour differs from README"

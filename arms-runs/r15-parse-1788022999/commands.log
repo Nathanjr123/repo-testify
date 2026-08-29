@@ -1,0 +1,98 @@
+[
+ {
+  "probe": "p-c1",
+  "cmd.txt": "python -m venv /tmp/v && /tmp/v/bin/pip install -q --disable-pip-version-check parse && /tmp/v/bin/python -c \"import parse; print('OBSERVED: import parse ok, parse.__version__ =', parse.__version__); print('VERDICT_LINE: PASS pip install parse from PyPI succeeded and import parse works')\" || echo \"VERDICT_LINE: FAIL pip install parse or import parse failed in a fresh venv\"",
+  "exit_code": "0",
+  "stdout.log": "OBSERVED: import parse ok, parse.__version__ = 1.22.1\nVERDICT_LINE: PASS pip install parse from PyPI succeeded and import parse works\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nUnable to find image 'python:3.11-slim' locally\n3.11-slim: Pulling from library/python\n6310eb16bf42: Pulling fs layer\n87e1b7cce023: Pulling fs layer\nc86306e32cd0: Pulling fs layer\na14578096eda: Pulling fs layer\na14578096eda: Waiting\n87e1b7cce023: Verifying Checksum\n87e1b7cce023: Download complete\na14578096eda: Verifying Checksum\na14578096eda: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\n6310eb16bf42: Verifying Checksum\n6310eb16bf42: Download complete\n6310eb16bf42: Pull complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\n"
+ },
+ {
+  "probe": "p-c10",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import parse\na = parse('{:.2}{:.2}', 'look')\nb = parse('{:4}{:.4}', 'look at that')\nc = parse('{:2d}{:2d}', '0440')\nprint('OBSERVED:', repr(a), repr(b), repr(c))\nassert a is not None and a.fixed == ('lo', 'ok'), repr(a)\nassert b is not None and b.fixed == ('look at ', 'that'), repr(b)\nassert c is not None and c.fixed == (4, 40), repr(c)\nprint('VERDICT_LINE: PASS precision/width examples give (lo,ok), (look at ,that), (4,40)')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL width/precision examples differ from README\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 11: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c11",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import parse, with_pattern\n@with_pattern(r'\\d+')\ndef parse_number(text):\n    return int(text)\nr = parse('Answer: {number:Number}', 'Answer: 42', {\"Number\": parse_number})\nprint('OBSERVED:', repr(r), '| type =', type(r['number']).__name__ if r is not None else None)\nassert repr(r) == \"<Result () {'number': 42}>\", repr(r)\nassert r['number'] == 42 and type(r['number']) is int\nprint('VERDICT_LINE: PASS with_pattern converter returns <Result () {number: 42}> with int value')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL with_pattern custom type example differs from README\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 11: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c12",
+  "cmd.txt": "cd /tmp/parse-src && ls tests/requirements.txt && python -m venv .venv && .venv/bin/pip install -q --disable-pip-version-check -r tests/requirements.txt && .venv/bin/pip install -q --disable-pip-version-check -e . && .venv/bin/pytest > /tmp/pytest.log 2>&1; rc=$?; tail -n 8 /tmp/pytest.log 2>/dev/null; echo \"OBSERVED: developer flow exit code $rc\"; if [ \"$rc\" -eq 0 ]; then echo \"VERDICT_LINE: PASS pip install -r tests/requirements.txt, pip install -e ., pytest all succeeded\"; else echo \"VERDICT_LINE: FAIL documented developer flow failed with exit $rc (see log tail above)\"; fi",
+  "exit_code": "0",
+  "stdout.log": "tests/requirements.txt\n_______________ coverage: platform linux, python 3.11.16-final-0 _______________\n\nName                Stmts   Miss Branch BrPart  Cover   Missing\n---------------------------------------------------------------\nparse/__init__.py     551     19    244     10    96%   133, 136, 141, 248, 291, 404, 448, 456-460, 473-475, 491, 523->525, 546->548, 640-643, 842->846, 855\n---------------------------------------------------------------\nTOTAL                 551     19    244     10    96%\n======================== 99 passed, 1 skipped in 0.59s =========================\nOBSERVED: developer flow exit code 0\nVERDICT_LINE: PASS pip install -r tests/requirements.txt, pip install -e ., pytest all succeeded\n",
+  "stderr.log": "",
+  "phase_a.log": "source extracted at pinned commit\n\n--stderr--\n"
+ },
+ {
+  "probe": "p-c2",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nimport parse as _m\nns = {}\nexec('from parse import *', ns)\nnames = sorted(k for k in ns if not k.startswith('__'))\nprint('OBSERVED: import * names =', names, '| parse.__all__ =', getattr(_m, '__all__', None))\nassert set(names) == {'parse', 'search', 'findall', 'with_pattern'}, names\nassert 'compile' not in ns, 'compile leaked via import *'\nprint('VERDICT_LINE: PASS import * exports exactly parse, search, findall, with_pattern; compile not exported')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL import * export set differs from parse/search/findall/with_pattern\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 10: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c3",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import parse\nr = parse(\"It's {}, I love it!\", \"It's spam, I love it!\")\nprint('OBSERVED: repr =', repr(r), '| r[0] =', repr(r[0]) if r is not None else None)\nassert repr(r) == \"<Result ('spam',) {}>\", repr(r)\nassert r[0] == 'spam', repr(r[0])\nprint(\"VERDICT_LINE: PASS repr is <Result ('spam',) {}> and r[0] == 'spam'\")\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL parse quickstart repr or r[0] did not match README\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 8: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c4",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import search\nr = search('Age: {:d}\\n', 'Name: Rufus\\nAge: 42\\nColor: red\\n')\nprint('OBSERVED: repr =', repr(r), '| type(r[0]) =', type(r[0]).__name__ if r is not None else None)\nassert repr(r) == '<Result (42,) {}>', repr(r)\nassert r[0] == 42 and isinstance(r[0], int) and not isinstance(r[0], bool), repr(r[0])\nprint('VERDICT_LINE: PASS search returned <Result (42,) {}> with int 42')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL search('Age: {:d}') did not return <Result (42,) {}> with an int\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 8: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c5",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import findall\ns = ''.join(r[0] for r in findall(\">{}<\", \"<p>the <b>bold</b> text</p>\"))\nprint('OBSERVED:', repr(s))\nassert s == 'the bold text', repr(s)\nprint(\"VERDICT_LINE: PASS findall join evaluates to 'the bold text'\")\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL findall join did not evaluate to 'the bold text'\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 7: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c6",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import compile\np = compile(\"It's {}, I love it!\")\nr = p.parse(\"It's spam, I love it!\")\nprint('OBSERVED: str(p) =', str(p), '| result =', repr(r))\nassert str(p) == '<Parser \"It\\'s {}, I love it!\">', str(p)\nassert repr(r) == \"<Result ('spam',) {}>\", repr(r)\nprint('VERDICT_LINE: PASS compile() prints <Parser \"It\\'s {}, I love it!\"> and p.parse returns <Result (\\'spam\\',) {}>')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL compiled Parser str or p.parse result differs from README\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 9: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c7",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import parse\ndefault = parse('SPAM', 'spam')\nstrict = parse('SPAM', 'spam', case_sensitive=True)\nprint('OBSERVED: default =', repr(default), '| case_sensitive=True ->', repr(strict))\nassert default is not None, 'default match is case sensitive'\nassert strict is None, repr(strict)\nprint('VERDICT_LINE: PASS default match is case-insensitive and case_sensitive=True returns None')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL case sensitivity behaviour differs from README\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 9: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c8",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nfrom parse import parse\nr = parse(\"Bring out the holy {item}\", \"Bring out the holy hand grenade\")\nprint('OBSERVED: str(r) =', str(r), '| named =', r.named if r is not None else None)\nassert str(r) == \"<Result () {'item': 'hand grenade'}>\", str(r)\nassert r.named == {'item': 'hand grenade'}, r.named\nassert r['item'] == 'hand grenade', r['item']\nassert 'item' in r\nprint('VERDICT_LINE: PASS named field result, .named, [item] and in-operator all match README')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL named-field Result behaviour differs from README\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 10: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c9",
+  "cmd.txt": "cat > /tmp/probe.py <<'EOF'\nimport datetime as dt\nfrom parse import parse\na = parse(\"{:%Y-%m-%d %H:%M:%S}\", \"2023-11-23 12:56:47\")\nb = parse(\"{:%H:%M}\", \"10:26\")\nc = parse(\"{:%Y/%m/%d}\", \"2023/11/25\")\nprint('OBSERVED:', repr(a), repr(b), repr(c))\nassert a is not None and a[0] == dt.datetime(2023, 11, 23, 12, 56, 47) and type(a[0]) is dt.datetime, repr(a)\nassert b is not None and b[0] == dt.time(10, 26) and type(b[0]) is dt.time, repr(b)\nassert c is not None and c[0] == dt.date(2023, 11, 25) and type(c[0]) is dt.date, repr(c)\nprint('VERDICT_LINE: PASS strptime-style specs yield datetime, time and date as documented')\nEOF && python /tmp/probe.py || echo \"VERDICT_LINE: FAIL strptime-style type specs did not yield the documented datetime/time/date values\"",
+  "exit_code": "0",
+  "stdout.log": "",
+  "stderr.log": "bash: line 12: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ }
+]

@@ -1,0 +1,2 @@
+observed: http 200 | final url https://api.travis-ci.com/docopt/docopt.svg?branch=master | badge text ['build', 'build', 'unknown', 'unknown'] | body head <svg xmlns="http://www.w3.org/2000/svg" width="98" height="20"><linearGradient id="a" x2="0" y2="100%"><stop offset="0" 
+VERDICT_LINE: FAIL Travis badge for master renders ['build', 'build', 'unknown', 'unknown'], not passing

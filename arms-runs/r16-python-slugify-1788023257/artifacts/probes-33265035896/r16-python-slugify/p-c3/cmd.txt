@@ -1,0 +1,12 @@
+python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (pypi.org unreachable or unexpected JSON)"
+import json, re, urllib.request
+d = json.load(urllib.request.urlopen('https://pypi.org/pypi/python-slugify/json', timeout=30))['info']
+rp = (d.get('requires_python') or '').strip()
+print('observed: latest_pypi_version', d['version'], '| requires_python', repr(rp))
+m = re.match(r'^>=\s*(\d+)\.(\d+)', rp)
+lo = (int(m.group(1)), int(m.group(2))) if m else None
+if lo is not None and lo <= (3, 7):
+    print('VERDICT_LINE: PASS latest release %s declares requires_python %r (lower bound <= 3.7 as README matrix says)' % (d['version'], rp))
+else:
+    print('VERDICT_LINE: FAIL latest release %s declares requires_python %r, not >=3.7 as README support matrix says' % (d['version'], rp))
+EOF

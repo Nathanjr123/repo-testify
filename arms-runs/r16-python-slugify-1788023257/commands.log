@@ -1,0 +1,98 @@
+[
+ {
+  "probe": "p-c1",
+  "cmd.txt": "python - <<'EOF' && echo \"VERDICT_LINE: PASS pip install python-slugify; from slugify import slugify and import text_unidecode both succeed\" || echo \"VERDICT_LINE: FAIL import of slugify or text_unidecode failed after pip install python-slugify (see traceback above)\"\nimport importlib.metadata as m\nfrom slugify import slugify\nimport text_unidecode\nprint('observed: python-slugify', m.version('python-slugify'), '| text-unidecode', m.version('text-unidecode'), '| slugify(\"Hello World\")=', repr(slugify('Hello World')))\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: python-slugify 8.0.4 | text-unidecode 1.3 | slugify(\"Hello World\")= 'hello-world'\nVERDICT_LINE: PASS pip install python-slugify; from slugify import slugify and import text_unidecode both succeed\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nUnable to find image 'python:3.11-slim' locally\n3.11-slim: Pulling from library/python\n6310eb16bf42: Pulling fs layer\n87e1b7cce023: Pulling fs layer\nc86306e32cd0: Pulling fs layer\na14578096eda: Pulling fs layer\na14578096eda: Waiting\n87e1b7cce023: Verifying Checksum\n87e1b7cce023: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\n6310eb16bf42: Verifying Checksum\n6310eb16bf42: Download complete\na14578096eda: Verifying Checksum\na14578096eda: Download complete\n6310eb16bf42: Pull complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c10",
+  "cmd.txt": "python - <<'EOF' && echo \"VERDICT_LINE: PASS max_length / word_boundary / separator examples all match README\" || echo \"VERDICT_LINE: FAIL a max_length/word_boundary/separator example does not match README (see observed values above)\"\nfrom slugify import slugify\ntxt = 'jaja---lol-m\u00e9m\u00e9m\u00e9oo--a'\nr1 = slugify(txt, max_length=9)\nr2 = slugify(txt, max_length=15, word_boundary=True)\nr3 = slugify(txt, max_length=20, word_boundary=True, separator='.')\nprint('observed: max_length=9', repr(r1), '| max_length=15,word_boundary', repr(r2), '| max_length=20,word_boundary,sep=.', repr(r3))\nassert r1 == 'jaja-lol', r1\nassert r2 == 'jaja-lol-a', r2\nassert r3 == 'jaja.lol.mememeoo.a', r3\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: max_length=9 'jaja-lol' | max_length=15,word_boundary 'jaja-lol-a' | max_length=20,word_boundary,sep=. 'jaja.lol.mememeoo.a'\nVERDICT_LINE: PASS max_length / word_boundary / separator examples all match README\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c11",
+  "cmd.txt": "python - <<'EOF' && echo \"VERDICT_LINE: PASS stopwords and replacements examples match README\" || echo \"VERDICT_LINE: FAIL stopwords or replacements example does not match README (see observed values above)\"\nfrom slugify import slugify\nr1 = slugify('the quick brown fox jumps over the lazy dog', stopwords=['the'])\nr2 = slugify('10 | 20 %', replacements=[['|', 'or'], ['%', 'percent']])\nprint('observed: stopwords', repr(r1), '| replacements', repr(r2))\nassert r1 == 'quick-brown-fox-jumps-over-lazy-dog', r1\nassert r2 == '10-or-20-percent', r2\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: stopwords 'quick-brown-fox-jumps-over-lazy-dog' | replacements '10-or-20-percent'\nVERDICT_LINE: PASS stopwords and replacements examples match README\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c12",
+  "cmd.txt": "echo \"observed: slugify binary = $(command -v slugify || echo NOT-ON-PATH)\" && out1=$(echo 'Taking input from STDIN' | slugify --stdin 2>&1); echo \"observed stdin: '$out1'\"; out2=$(slugify taking input from the command line 2>&1); echo \"observed argv: '$out2'\"; if [ \"$out1\" = 'taking-input-from-stdin' ] && [ \"$out2\" = 'taking-input-from-the-command-line' ]; then echo 'VERDICT_LINE: PASS slugify CLI installed and both README examples produce the documented output'; else echo \"VERDICT_LINE: FAIL slugify CLI output mismatch: stdin='$out1' argv='$out2'\"; fi",
+  "exit_code": "0",
+  "stdout.log": "observed: slugify binary = /usr/local/bin/slugify\nobserved stdin: 'taking-input-from-stdin'\nobserved argv: 'taking-input-from-the-command-line'\nVERDICT_LINE: PASS slugify CLI installed and both README examples produce the documented output\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c2",
+  "cmd.txt": "python - <<'EOF' && echo \"VERDICT_LINE: PASS python-slugify[unidecode] installs Unidecode alongside slugify\" || echo \"VERDICT_LINE: FAIL unidecode or slugify not importable after pip install python-slugify[unidecode] (see traceback above)\"\nimport importlib.metadata as m\nimport unidecode\nfrom slugify import slugify\nprint('observed: python-slugify', m.version('python-slugify'), '| Unidecode', m.version('Unidecode'), '| slugify(\"Hello World\")=', repr(slugify('Hello World')))\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: python-slugify 8.0.4 | Unidecode 1.4.0 | slugify(\"Hello World\")= 'hello-world'\nVERDICT_LINE: PASS python-slugify[unidecode] installs Unidecode alongside slugify\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c3",
+  "cmd.txt": "python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (pypi.org unreachable or unexpected JSON)\"\nimport json, re, urllib.request\nd = json.load(urllib.request.urlopen('https://pypi.org/pypi/python-slugify/json', timeout=30))['info']\nrp = (d.get('requires_python') or '').strip()\nprint('observed: latest_pypi_version', d['version'], '| requires_python', repr(rp))\nm = re.match(r'^>=\\s*(\\d+)\\.(\\d+)', rp)\nlo = (int(m.group(1)), int(m.group(2))) if m else None\nif lo is not None and lo <= (3, 7):\n    print('VERDICT_LINE: PASS latest release %s declares requires_python %r (lower bound <= 3.7 as README matrix says)' % (d['version'], rp))\nelse:\n    print('VERDICT_LINE: FAIL latest release %s declares requires_python %r, not >=3.7 as README support matrix says' % (d['version'], rp))\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: latest_pypi_version 8.0.4 | requires_python '>=3.7'\nVERDICT_LINE: PASS latest release 8.0.4 declares requires_python '>=3.7' (lower bound <= 3.7 as README matrix says)\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\n"
+ },
+ {
+  "probe": "p-c4",
+  "cmd.txt": "python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (raw.githubusercontent.com unreachable)\"\nimport re, urllib.request\nsha = '7b6d5d96c1995e6dccb39a19a13ba78d7d0a3ee4'\nbase = 'https://raw.githubusercontent.com/un33k/python-slugify/%s/' % sha\nsetup = urllib.request.urlopen(base + 'setup.py', timeout=30).read().decode()\ncands = [c.strip('\"\\',') for c in re.findall(r'python_requires\\s*=\\s*(\\S+)', setup)]\npr = next((c for c in cands if re.search(r'\\d', c)), None)\ntry:\n    ver = re.search(r'__version__\\s*=\\s*.([0-9][^\\'\"]*)', urllib.request.urlopen(base + 'slugify/__version__.py', timeout=30).read().decode()).group(1)\nexcept Exception as e:\n    ver = 'unknown (%s)' % e\nprint('observed: setup.py python_requires', repr(pr), '| package version at pinned commit', ver, '| README matrix says >= 3.7 for slugify >= 7.0.0')\nlo = re.match(r'^>=\\s*(\\d+)\\.(\\d+)$', pr or '')\nif lo and (int(lo.group(1)), int(lo.group(2))) == (3, 7):\n    print('VERDICT_LINE: PASS python_requires %s at pinned commit matches README support matrix (>= 3.7)' % pr)\nelse:\n    print('VERDICT_LINE: FAIL python_requires is %r at pinned commit (version %s) but README matrix says >= 3.7 for >= 7.0.0' % (pr, ver))\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: setup.py python_requires '>=3.10' | package version at pinned commit 8.0.4 | README matrix says >= 3.7 for slugify >= 7.0.0\nVERDICT_LINE: FAIL python_requires is '>=3.10' at pinned commit (version 8.0.4) but README matrix says >= 3.7 for >= 7.0.0\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\n"
+ },
+ {
+  "probe": "p-c5",
+  "cmd.txt": "python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (github.com unreachable)\"\nimport json, re, urllib.request, urllib.error\ndef get(url, accept='*/*'):\n    req = urllib.request.Request(url, headers={'User-Agent': 'probe/1.0', 'Accept': accept})\n    try:\n        r = urllib.request.urlopen(req, timeout=30)\n        return r.status, r.read().decode('utf-8', 'replace')\n    except urllib.error.HTTPError as e:\n        return e.code, e.read().decode('utf-8', 'replace')\ntitles = {}\nfor wf in ('main.yml', 'ci.yml'):\n    st, body = get('https://github.com/un33k/python-slugify/actions/workflows/%s/badge.svg' % wf)\n    t = re.search(r'<title>([^<]*)</title>', body)\n    titles[wf] = (st, t.group(1).strip() if t else None)\n    print('observed: badge', wf, 'http', st, 'title', repr(titles[wf][1]))\nst, body = get('https://api.github.com/repos/un33k/python-slugify/actions/workflows/ci.yml/runs?per_page=5', 'application/vnd.github+json')\nprint('observed: api ci.yml runs http', st)\nif st == 200:\n    runs = [r for r in json.loads(body).get('workflow_runs', []) if r.get('conclusion')]\n    for r in runs[:5]:\n        print('observed: run', r['name'], r['head_branch'], r['event'], r['conclusion'], r['created_at'])\n    if runs and runs[0]['conclusion'] == 'success':\n        print('VERDICT_LINE: PASS ci.yml latest completed run is success (%s %s); badge titles %s' % (runs[0]['head_branch'], runs[0]['created_at'], titles))\n    elif runs:\n        print('VERDICT_LINE: FAIL ci.yml latest completed run conclusion=%s (%s); badge titles %s' % (runs[0]['conclusion'], runs[0]['created_at'], titles))\n    else:\n        print('VERDICT_LINE: FAIL ci.yml exists but has no completed runs; badge titles %s' % titles)\nelif st == 404:\n    print('VERDICT_LINE: FAIL workflow ci.yml not found (404) on un33k/python-slugify; README badge image points at main.yml; badge titles %s' % titles)\nelse:\n    t = titles['ci.yml'][1] or ''\n    if 'passing' in t.lower():\n        print('VERDICT_LINE: PASS api http %s (rate-limited?), ci.yml badge title %r says passing' % (st, t))\n    else:\n        print('VERDICT_LINE: FAIL api http %s and ci.yml badge title %r is not passing' % (st, t))\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: badge main.yml http 200 title 'Main - passing'\nobserved: badge ci.yml http 200 title 'CI - failing'\nobserved: api ci.yml runs http 200\nobserved: run CI ci push failure 2025-11-20T20:37:06Z\nVERDICT_LINE: FAIL ci.yml latest completed run conclusion=failure (2025-11-20T20:37:06Z); badge titles {'main.yml': (200, 'Main - passing'), 'ci.yml': (200, 'CI - failing')}\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\n"
+ },
+ {
+  "probe": "p-c6",
+  "cmd.txt": "python - <<'EOF' || echo \"VERDICT_LINE: FAIL probe crashed (coveralls.io unreachable)\"\nimport re, urllib.request, urllib.error\nreq = urllib.request.Request('https://coveralls.io/repos/un33k/python-slugify/badge.svg', headers={'User-Agent': 'probe/1.0'})\ntry:\n    r = urllib.request.urlopen(req, timeout=30); st, final, body = r.status, r.geturl(), r.read().decode('utf-8', 'replace')\nexcept urllib.error.HTTPError as e:\n    st, final, body = e.code, e.geturl(), e.read().decode('utf-8', 'replace')\nm = re.search(r'(\\d+(?:\\.\\d+)?)\\s*%', body) or re.search(r'coveralls_(\\d+)', final)\npct = float(m.group(1)) if m else None\nprint('observed: http', st, '| final_url', final, '| coverage_pct', pct, '| badge_says_unknown', 'unknown' in body.lower())\nif st == 200 and pct is not None and pct >= 94:\n    print('VERDICT_LINE: PASS coveralls reports %s%% coverage for un33k/python-slugify (README implies ~97%%)' % pct)\nelif st == 200 and pct is not None:\n    print('VERDICT_LINE: FAIL coveralls reports %s%%, not ~97%% as the README badge implies' % pct)\nelse:\n    print('VERDICT_LINE: FAIL coveralls badge http %s with no coverage percentage (unknown or dead badge)' % st)\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: http 200 | final_url https://s3.amazonaws.com/assets.coveralls.io/badges/coveralls_97.svg | coverage_pct 100.0 | badge_says_unknown False\nVERDICT_LINE: PASS coveralls reports 100.0% coverage for un33k/python-slugify (README implies ~97%)\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\n"
+ },
+ {
+  "probe": "p-c7",
+  "cmd.txt": "python - <<'EOF' && echo \"VERDICT_LINE: PASS slugify('This is a test ---') == 'this-is-a-test'\" || echo \"VERDICT_LINE: FAIL slugify('This is a test ---') did not return 'this-is-a-test' (see observed value above)\"\nfrom slugify import slugify\nr = slugify(\"This is a test ---\")\nprint('observed:', repr(r))\nassert r == 'this-is-a-test', r\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: 'this-is-a-test'\nVERDICT_LINE: PASS slugify('This is a test ---') == 'this-is-a-test'\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c8",
+  "cmd.txt": "python - <<'EOF' && echo \"VERDICT_LINE: PASS slugify('\u5f71\u5e2b\u55ce') == 'ying-shi-ma' and allow_unicode=True returns '\u5f71\u5e2b\u55ce' with default text-unidecode backend\" || echo \"VERDICT_LINE: FAIL CJK example does not match README (see observed values above)\"\nfrom slugify import slugify\ntry:\n    import unidecode; backend = 'Unidecode PRESENT (not the default backend)'\nexcept ImportError:\n    import text_unidecode; backend = 'text-unidecode (default)'\nr1 = slugify('\u5f71\u5e2b\u55ce')\nr2 = slugify('\u5f71\u5e2b\u55ce', allow_unicode=True)\nprint('observed: backend', backend, '| default', repr(r1), '| allow_unicode', repr(r2))\nassert r1 == 'ying-shi-ma', r1\nassert r2 == '\u5f71\u5e2b\u55ce', r2\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: backend text-unidecode (default) | default 'ying-shi-ma' | allow_unicode '\u5f71\u5e2b\u55ce'\nVERDICT_LINE: PASS slugify('\u5f71\u5e2b\u55ce') == 'ying-shi-ma' and allow_unicode=True returns '\u5f71\u5e2b\u55ce' with default text-unidecode backend\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ },
+ {
+  "probe": "p-c9",
+  "cmd.txt": "python - <<'EOF' && echo \"VERDICT_LINE: PASS French and Cyrillic README examples match ('c-est-deja-l-ete', 'kompiuter')\" || echo \"VERDICT_LINE: FAIL French/Cyrillic example does not match README (see observed values above)\"\nfrom slugify import slugify\nr1 = slugify('C\\'est d\u00e9j\u00e0 l\\'\u00e9t\u00e9.')\nr2 = slugify('\u041a\u043e\u043c\u043f\u044c\u044e\u0442\u0435\u0440')\nprint('observed: french', repr(r1), '| cyrillic', repr(r2))\nassert r1 == 'c-est-deja-l-ete', r1\nassert r2 == 'kompiuter', r2\nEOF",
+  "exit_code": "0",
+  "stdout.log": "observed: french 'c-est-deja-l-ete' | cyrillic 'kompiuter'\nVERDICT_LINE: PASS French and Cyrillic README examples match ('c-est-deja-l-ete', 'kompiuter')\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n"
+ }
+]

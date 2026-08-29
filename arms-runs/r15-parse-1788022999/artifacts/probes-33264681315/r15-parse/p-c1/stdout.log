@@ -1,0 +1,2 @@
+OBSERVED: import parse ok, parse.__version__ = 1.22.1
+VERDICT_LINE: PASS pip install parse from PyPI succeeded and import parse works

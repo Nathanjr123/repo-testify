@@ -1,0 +1,2 @@
+observed: setup.py python_requires '>=3.10' | package version at pinned commit 8.0.4 | README matrix says >= 3.7 for slugify >= 7.0.0
+VERDICT_LINE: FAIL python_requires is '>=3.10' at pinned commit (version 8.0.4) but README matrix says >= 3.7 for >= 7.0.0

@@ -1,0 +1,2 @@
+observed: max_length=9 'jaja-lol' | max_length=15,word_boundary 'jaja-lol-a' | max_length=20,word_boundary,sep=. 'jaja.lol.mememeoo.a'
+VERDICT_LINE: PASS max_length / word_boundary / separator examples all match README

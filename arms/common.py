@@ -21,7 +21,7 @@ import json, os, subprocess, sys, time
 class LimitBlocked(RuntimeError):
     """Usage/rate limit: an INFRASTRUCTURE condition, never a verdict. Arms exit 75 (EX_TEMPFAIL)."""
 
-LIMIT_MARKERS = ("rate limit", "usage limit", "429", "overloaded", "limit reached", "try again later", "out of extra usage")
+LIMIT_MARKERS = ("rate limit", "rate_limit", "usage limit", "http 429", "status 429", "overloaded", "limit reached", "try again later", "out of extra usage")
 
 CALLS = {"n": 0, "cost_usd": 0.0, "input_tokens": 0, "output_tokens": 0}
 
@@ -32,17 +32,20 @@ def llm(prompt, model="claude-fable-5", retries=2, backoff=(60, 300)):
     claude = resolve_claude()
     for i in range(retries + 1):
         r = subprocess.run([claude, "-p", prompt, "--model", model, "--output-format", "json"], capture_output=True, text=True, timeout=600)
-        out = (r.stdout or "").strip()
+        out = (r.stdout or "").strip(); is_error = False
         try:  # JSON envelope carries the answer plus cost and token usage; fall back to raw text if absent
             env = json.loads(out)
             if isinstance(env, dict) and "result" in env:
                 CALLS["cost_usd"] += float(env.get("total_cost_usd") or 0.0)
                 u = env.get("usage") or {}
                 CALLS["input_tokens"] += int(u.get("input_tokens") or 0); CALLS["output_tokens"] += int(u.get("output_tokens") or 0)
+                is_error = bool(env.get("is_error"))
                 out = str(env["result"]).strip()
         except (ValueError, TypeError):
             pass
-        blob = (out + " " + (r.stderr or "")).lower()
+        # Limit detection looks ONLY at stderr and at an error result, never at the JSON envelope (its token
+        # counts contain digit runs like "429" that produced false limit signals on 2026-08-29).
+        blob = ((out if is_error else "") + " " + (r.stderr or "")).lower()
         limited = (not out) or any(m in blob for m in LIMIT_MARKERS)
         if limited:  # keep the raw envelope for diagnosis (outside the repo)
             try:

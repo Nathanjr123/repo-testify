@@ -1,0 +1,197 @@
+{
+ "case_id": "r17-pyinquirer",
+ "repo": "https://github.com/CITGuru/PyInquirer",
+ "commit": "7637373429bec66788650cda8091b7a6f12929ee",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.12-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --disable-pip-version-check PyInquirer > /tmp/pip_c1.log 2>&1; echo $? > /tmp/pip_c1.rc; true"
+   ],
+   "commands": [
+    "python3 --version",
+    "echo \"pip exit code: $(cat /tmp/pip_c1.rc)\"",
+    "tail -n 15 /tmp/pip_c1.log",
+    "/tmp/v/bin/pip list 2>/dev/null | grep -i -E 'pyinquirer|prompt|pygments' || true",
+    "if [ \"$(cat /tmp/pip_c1.rc)\" = \"0\" ] && /tmp/v/bin/pip show PyInquirer >/dev/null 2>&1; then echo \"VERDICT_LINE: PASS pip install PyInquirer exit 0 on $(python3 --version) with deps $(/tmp/v/bin/pip list 2>/dev/null | grep -i -E 'prompt|pygments' | tr '\\n' ' ')\"; else echo \"VERDICT_LINE: FAIL pip install PyInquirer exit $(cat /tmp/pip_c1.rc) on $(python3 --version): $(grep -i -E 'error|could not' /tmp/pip_c1.log | tail -n 1)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.12-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --disable-pip-version-check PyInquirer > /tmp/pip_c2.log 2>&1; echo $? > /tmp/pip_c2.rc; true"
+   ],
+   "commands": [
+    "python3 --version",
+    "echo \"pip exit code: $(cat /tmp/pip_c2.rc)\"",
+    "/tmp/v/bin/pip show prompt_toolkit 2>/dev/null | grep -i '^version' || echo 'prompt_toolkit: not installed'",
+    "/tmp/v/bin/python -c 'from __future__ import print_function, unicode_literals\nfrom PyInquirer import prompt, print_json\nprint(\"import ok:\", prompt, print_json)' > /tmp/imp.log 2>&1; echo $? > /tmp/imp.rc; true",
+    "tail -n 6 /tmp/imp.log",
+    "if [ \"$(cat /tmp/imp.rc)\" = \"0\" ]; then echo \"VERDICT_LINE: PASS quickstart import succeeds on $(python3 --version) with prompt_toolkit $(/tmp/v/bin/pip show prompt_toolkit 2>/dev/null | grep -i '^version' | cut -d' ' -f2)\"; else echo \"VERDICT_LINE: FAIL quickstart import exit $(cat /tmp/imp.rc) on $(python3 --version): $(tail -n 1 /tmp/imp.log)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.12-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --disable-pip-version-check PyInquirer > /tmp/pip_c3a.log 2>&1; echo $? > /tmp/pip_c3a.rc; true",
+    "/tmp/v/bin/pip install --disable-pip-version-check prompt_toolkit==1.0.14 > /tmp/pip_c3b.log 2>&1; echo $? > /tmp/pip_c3b.rc; true"
+   ],
+   "commands": [
+    "python3 --version",
+    "echo \"pip install PyInquirer exit: $(cat /tmp/pip_c3a.rc); pip install prompt_toolkit==1.0.14 exit: $(cat /tmp/pip_c3b.rc)\"",
+    "tail -n 3 /tmp/pip_c3b.log",
+    "/tmp/v/bin/pip show prompt_toolkit 2>/dev/null | grep -i '^version' || echo 'prompt_toolkit: not installed'",
+    "/tmp/v/bin/python -c 'import prompt_toolkit; print(\"prompt_toolkit\", prompt_toolkit.__version__)\nimport prompt_toolkit.styles.from_dict\nfrom PyInquirer import prompt, print_json\nprint(\"import ok\")' > /tmp/imp3.log 2>&1; echo $? > /tmp/imp3.rc; true",
+    "tail -n 6 /tmp/imp3.log",
+    "if [ \"$(cat /tmp/pip_c3b.rc)\" = \"0\" ] && [ \"$(cat /tmp/imp3.rc)\" = \"0\" ]; then echo \"VERDICT_LINE: PASS prompt_toolkit==1.0.14 installs and PyInquirer imports on $(python3 --version)\"; else echo \"VERDICT_LINE: FAIL prescribed fix prompt_toolkit==1.0.14 (pip exit $(cat /tmp/pip_c3b.rc)) leaves import exit $(cat /tmp/imp3.rc) on $(python3 --version): $(tail -n 1 /tmp/imp3.log)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.12-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --disable-pip-version-check PyInquirer > /tmp/pip_c4.log 2>&1; echo $? > /tmp/pip_c4.rc; true",
+    "printf '%s\\n' 'from __future__ import print_function, unicode_literals' 'from PyInquirer import prompt, print_json' '' 'questions = [' '    {' \"        'type': 'input',\" \"        'name': 'first_name',\" \"        'message': 'What\\\\'s your first name',\" '    }' ']' '' 'answers = prompt(questions)' 'print_json(answers)  # use the answers as input for your app' > /tmp/quickstart.py",
+    "printf '%s\\n' 'import os, pty, sys, time, select' 'pid, fd = pty.fork()' 'if pid == 0:' '    os.execv(\"/tmp/v/bin/python\", [\"/tmp/v/bin/python\", \"/tmp/quickstart.py\"])' 'out = b\"\"; sent = False; t0 = time.time()' 'while time.time() - t0 < 60:' '    r, _, _ = select.select([fd], [], [], 0.5)' '    if r:' '        try:' '            chunk = os.read(fd, 4096)' '        except OSError:' '            break' '        if not chunk: break' '        out += chunk' '    if not sent and b\"first name\" in out:' '        time.sleep(0.5); os.write(fd, b\"Bob\\r\"); sent = True' '_, status = os.waitpid(pid, 0)' 'txt = out.decode(\"utf-8\", \"replace\")' 'print(\"---child output---\"); print(txt[-1500:]); print(\"---end---\")' 'print(\"exit status:\", status, \"prompt seen:\", sent)' 'assert sent, \"prompt text What is your first name never appeared\"' 'assert \"first_name\" in txt and \"Bob\" in txt.split(\"first_name\")[-1], \"answers JSON keyed by first_name with value Bob not printed\"' 'print(\"observed: first_name -> Bob in printed JSON\")' > /tmp/drive.py"
+   ],
+   "commands": [
+    "python3 --version",
+    "echo \"pip exit code: $(cat /tmp/pip_c4.rc)\"",
+    "cat /tmp/quickstart.py",
+    "timeout 90 python3 /tmp/drive.py > /tmp/drive.log 2>&1; echo $? > /tmp/drive.rc; true",
+    "tail -n 25 /tmp/drive.log",
+    "if [ \"$(cat /tmp/drive.rc)\" = \"0\" ]; then echo 'VERDICT_LINE: PASS prompt() returned dict keyed first_name and print_json printed it'; else echo \"VERDICT_LINE: FAIL quickstart snippet under a pty exit $(cat /tmp/drive.rc): $(grep -E 'Error|assert' /tmp/drive.log | tail -n 1)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [],
+   "commands": [
+    "ls -1 examples/ 2>&1 || true",
+    "python3 -c 'import os\nwant=[\"editor.py\",\"expand.py\",\"list.py\",\"password.py\",\"when.py\",\"checkbox.py\",\"confirm.py\",\"hierarchical.py\",\"pizza.py\",\"input.py\",\"rawlist.py\"]\nhave=sorted(os.listdir(\"examples\")) if os.path.isdir(\"examples\") else []\nmissing=[w for w in want if w not in have]\nprint(\"present:\", [w for w in want if w in have])\nprint(\"missing:\", missing)\nassert not missing, missing' && echo 'VERDICT_LINE: PASS all 11 listed example scripts exist under ./examples/' || echo 'VERDICT_LINE: FAIL some listed example scripts are missing from ./examples/ (see missing list above)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.12-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/ve",
+    "/tmp/ve/bin/pip install --disable-pip-version-check -e . > /tmp/pip_c6.log 2>&1; echo $? > /tmp/pip_c6.rc; true"
+   ],
+   "commands": [
+    "python3 --version",
+    "echo \"pip install -e . exit: $(cat /tmp/pip_c6.rc)\"",
+    "tail -n 5 /tmp/pip_c6.log",
+    "/tmp/ve/bin/pip list 2>/dev/null | grep -i -E 'pyinquirer|prompt|pygments' || true",
+    "echo '--- PyInquirer/__init__.py ---'; cat PyInquirer/__init__.py",
+    "/tmp/ve/bin/python -c 'from __future__ import print_function, unicode_literals\nfrom PyInquirer import prompt, print_json\nimport PyInquirer\nprint(\"import ok from\", PyInquirer.__file__)' > /tmp/imp6.log 2>&1; echo $? > /tmp/imp6.rc; true",
+    "tail -n 6 /tmp/imp6.log",
+    "if [ \"$(cat /tmp/pip_c6.rc)\" = \"0\" ] && [ \"$(cat /tmp/imp6.rc)\" = \"0\" ] && grep -q '/repo/' /tmp/imp6.log; then echo \"VERDICT_LINE: PASS pip install -e . succeeds and quickstart import resolves to repo code on $(python3 --version)\"; else echo \"VERDICT_LINE: FAIL pip install -e . exit $(cat /tmp/pip_c6.rc), quickstart import exit $(cat /tmp/imp6.rc): $(tail -n 1 /tmp/imp6.log)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.12-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/ve",
+    "/tmp/ve/bin/pip install --disable-pip-version-check -e . > /tmp/pip_c7.log 2>&1; echo $? > /tmp/pip_c7.rc; true"
+   ],
+   "commands": [
+    "echo \"pip install -e . exit: $(cat /tmp/pip_c7.rc)\"",
+    "ls -1 PyInquirer/prompts/ 2>&1 || true",
+    "python3 -c 'import os\ntypes=[\"input\",\"confirm\",\"list\",\"rawlist\",\"expand\",\"checkbox\",\"password\",\"editor\"]\nhave=sorted(os.listdir(\"PyInquirer/prompts\")) if os.path.isdir(\"PyInquirer/prompts\") else []\nmissing=[t for t in types if t+\".py\" not in have]\nprint(\"prompt modules present:\", [t for t in types if t+\".py\" not in missing])\nprint(\"missing modules:\", missing)\nassert not missing, missing' > /tmp/mods.log 2>&1; echo $? > /tmp/mods.rc; cat /tmp/mods.log; true",
+    "/tmp/ve/bin/python -c 'import importlib\ntypes=[\"input\",\"confirm\",\"list\",\"rawlist\",\"expand\",\"checkbox\",\"password\",\"editor\"]\nbad={}\nfor t in types:\n    try:\n        m=importlib.import_module(\"PyInquirer.prompts.\"+t); assert hasattr(m,\"question\"), \"no question() factory\"\n    except Exception as e:\n        bad[t]=repr(e)[:160]\nprint(\"importable with question():\", [t for t in types if t not in bad])\nprint(\"not importable:\", bad)\nassert not bad, bad' > /tmp/imp7.log 2>&1; echo $? > /tmp/imp7.rc; cat /tmp/imp7.log; true",
+    "if [ \"$(cat /tmp/mods.rc)\" = \"0\" ] && [ \"$(cat /tmp/imp7.rc)\" = \"0\" ]; then echo 'VERDICT_LINE: PASS all 8 question types have an importable prompt module exposing question()'; elif [ \"$(cat /tmp/mods.rc)\" = \"0\" ]; then echo \"VERDICT_LINE: FAIL all 8 prompt modules exist but some do not import from the repo install: $(grep 'not importable' /tmp/imp7.log | cut -c1-200)\"; else echo \"VERDICT_LINE: FAIL prompt modules missing for some documented types: $(grep 'missing modules' /tmp/mods.log)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "grep -n 'travis-ci' README.rst 2>/dev/null || grep -rn 'travis-ci' README* 2>/dev/null || echo 'no travis badge found in README'",
+    "ls .travis.yml 2>/dev/null && head -n 20 .travis.yml || echo 'no .travis.yml in repo'",
+    "python3 -c 'import urllib.request, urllib.error, ssl\nurl=\"https://travis-ci.org/expobrain/PyInquirer.svg?branch=master\"\ntry:\n    r=urllib.request.urlopen(urllib.request.Request(url, headers={\"User-Agent\":\"probe\"}), timeout=30)\n    body=r.read(4000).decode(\"utf-8\",\"replace\"); code=r.getcode(); final=r.geturl()\nexcept urllib.error.HTTPError as e:\n    code=e.code; final=e.geturl(); body=e.read(4000).decode(\"utf-8\",\"replace\")\nexcept Exception as e:\n    code=None; final=url; body=repr(e)\nprint(\"status:\", code, \"final url:\", final)\nprint(\"body head:\", body[:300].replace(\"\\n\",\" \"))\nlow=body.lower()\nprint(\"contains passing:\", \"passing\" in low, \"contains unknown/failing/error:\", any(k in low for k in (\"unknown\",\"failing\",\"error\",\"no longer\")))\nassert code==200 and \"passing\" in low and \"travis-ci.org\" in final, \"badge does not serve a live passing build\"' && echo 'VERDICT_LINE: PASS travis-ci.org badge returns 200 with passing status' || echo 'VERDICT_LINE: FAIL travis-ci.org badge does not report a live passing build (see status/final url/body above; note badge targets expobrain fork, not CITGuru)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.12-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/vt",
+    "/tmp/vt/bin/pip install --disable-pip-version-check --upgrade pip > /dev/null 2>&1; true",
+    "/tmp/vt/bin/pip install --disable-pip-version-check -r requirements.txt > /tmp/req.log 2>&1; echo $? > /tmp/req.rc; true",
+    "/tmp/vt/bin/pip install --disable-pip-version-check -r requirements_dev.txt > /tmp/reqdev.log 2>&1; echo $? > /tmp/reqdev.rc; true"
+   ],
+   "commands": [
+    "python3 --version",
+    "echo \"requirements.txt install exit: $(cat /tmp/req.rc); requirements_dev.txt install exit: $(cat /tmp/reqdev.rc)\"",
+    "tail -n 3 /tmp/req.log; tail -n 3 /tmp/reqdev.log",
+    "cat requirements_dev.txt 2>/dev/null || echo 'requirements_dev.txt missing'",
+    "ls tests/ 2>&1 | head -n 30",
+    "timeout 100 /tmp/vt/bin/python -m pytest -sv tests/ -p no:cacheprovider > /tmp/pytest.log 2>&1; echo $? > /tmp/pytest.rc; true",
+    "tail -n 25 /tmp/pytest.log",
+    "grep -E '^(=+ .*(passed|failed|error|no tests).*=+)$' /tmp/pytest.log | tail -n 1 || echo 'no pytest summary line'",
+    "if [ \"$(cat /tmp/req.rc)\" = \"0\" ] && [ \"$(cat /tmp/reqdev.rc)\" = \"0\" ] && [ \"$(cat /tmp/pytest.rc)\" = \"0\" ] && grep -q -E '[0-9]+ passed' /tmp/pytest.log; then echo \"VERDICT_LINE: PASS contributor flow installs and pytest tests/ passes on $(python3 --version): $(grep -E '[0-9]+ passed' /tmp/pytest.log | tail -n 1 | tr -d '=')\"; else echo \"VERDICT_LINE: FAIL contributor flow on $(python3 --version): req exit $(cat /tmp/req.rc), req_dev exit $(cat /tmp/reqdev.rc), pytest exit $(cat /tmp/pytest.rc): $(grep -E '(passed|failed|error)' /tmp/pytest.log | tail -n 1 | tr -d '=' | cut -c1-160)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 -c 'import urllib.request, urllib.error, json\nreq=urllib.request.Request(\"https://api.github.com/repos/CITGuru/PyInquirer/issues/159\", headers={\"User-Agent\":\"probe\",\"Accept\":\"application/vnd.github+json\"})\ntry:\n    r=urllib.request.urlopen(req, timeout=30); code=r.getcode(); d=json.load(r)\nexcept urllib.error.HTTPError as e:\n    code=e.code; d={}\nprint(\"status:\", code)\nprint(\"title:\", d.get(\"title\"), \"| state:\", d.get(\"state\"), \"| created:\", d.get(\"created_at\"), \"| closed:\", d.get(\"closed_at\"), \"| is_pull:\", \"pull_request\" in d)\nr2=urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/CITGuru/PyInquirer\", headers={\"User-Agent\":\"probe\"}), timeout=30); m=json.load(r2)\nprint(\"repo pushed_at:\", m.get(\"pushed_at\"), \"| archived:\", m.get(\"archived\"), \"| open_issues:\", m.get(\"open_issues_count\"))\nt=(d.get(\"title\") or \"\").lower()\nassert code==200, \"issue #159 not found\"\nassert any(k in t for k in (\"maintain\",\"successor\",\"looking for\")), \"issue title does not mention maintainer/successor: \"+t\nassert d.get(\"state\")==\"open\", \"issue #159 is \"+str(d.get(\"state\"))' && echo 'VERDICT_LINE: PASS issue #159 exists, is about a successor/maintainer, and is open' || echo 'VERDICT_LINE: FAIL issue #159 does not match claim (see status/title/state above)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "grep -n \"version=\" setup.py",
+    "python3 -c 'import urllib.request, urllib.error, json\nH={\"User-Agent\":\"probe\",\"Accept\":\"application/vnd.github+json\"}\ntry:\n    r=urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/CITGuru/PyInquirer/releases/tags/1.0.3\", headers=H), timeout=30); gh=json.load(r); ghcode=r.getcode()\nexcept urllib.error.HTTPError as e:\n    ghcode=e.code; gh={}\nprint(\"github release 1.0.3 status:\", ghcode, \"| tag:\", gh.get(\"tag_name\"), \"| published:\", gh.get(\"published_at\"))\ntry:\n    r=urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/CITGuru/PyInquirer/releases/latest\", headers=H), timeout=30); latest=json.load(r).get(\"tag_name\")\nexcept urllib.error.HTTPError as e:\n    latest=\"HTTP %d\" % e.code\nprint(\"github latest release tag:\", latest)\np=json.load(urllib.request.urlopen(urllib.request.Request(\"https://pypi.org/pypi/PyInquirer/json\", headers=H), timeout=30))\npv=p[\"info\"][\"version\"]; ups=p[\"releases\"].get(pv, [])\nprint(\"pypi latest version:\", pv, \"| uploaded:\", ups[0][\"upload_time\"] if ups else None, \"| requires_dist:\", p[\"info\"].get(\"requires_dist\"))\nassert ghcode==200 and gh.get(\"tag_name\")==\"1.0.3\", \"GitHub release tag 1.0.3 missing\"\nassert pv==\"1.0.3\", \"PyPI latest is %s not 1.0.3\" % pv\nassert latest==\"1.0.3\", \"GitHub latest release is %s not 1.0.3\" % latest' && echo 'VERDICT_LINE: PASS GitHub release 1.0.3 exists and matches PyPI latest 1.0.3' || echo 'VERDICT_LINE: FAIL release 1.0.3 is not both the GitHub latest release and the PyPI latest version (see values above)'"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}

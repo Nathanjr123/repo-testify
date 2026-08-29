@@ -1,0 +1,6 @@
+python - <<'EOF' && echo "VERDICT_LINE: PASS argv ['-vv'] against 'Usage: my_program.py [-v | -vv | -vvv]' gives args['-v'] == 2" || echo "VERDICT_LINE: FAIL repeated flag was not counted as 2 (see observed line above)"
+from docopt import docopt
+a = docopt('Usage: my_program.py [-v | -vv | -vvv]', argv=['-vv'])
+print('observed: args =', dict(a), "| args['-v'] =", repr(a['-v']))
+assert a['-v'] == 2, a
+EOF
