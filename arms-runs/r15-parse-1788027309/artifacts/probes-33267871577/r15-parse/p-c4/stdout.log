@@ -1,0 +1,2 @@
+repr: <Result (42,) {}> type: int
+VERDICT_LINE: PASS search returns int 42 as README shows

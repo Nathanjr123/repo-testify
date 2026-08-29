@@ -1,2 +1,0 @@
-observed: backend text-unidecode (default) | default 'ying-shi-ma' | allow_unicode '影師嗎'
-VERDICT_LINE: PASS slugify('影師嗎') == 'ying-shi-ma' and allow_unicode=True returns '影師嗎' with default text-unidecode backend

@@ -39,6 +39,7 @@ def stage_plan(case, repo_map, notes):
 Repo {case['repo']} @ {case['commit']}. Environment facts so far: {json.dumps(notes)}
 Manifests: {json.dumps(repo_map['manifests'])[:6000]}
 For EACH claim below, emit ONE probe: a bash command sequence that would settle it in a fresh python container. Rules: probe must terminate <=120s; prefer the claim's own words (install its way, run its snippet verbatim from the README); for python-version claims pick image accordingly (python:3.X-slim); no GPU; pip installs go in "setup", checks go in "commands"; expected-output checks compare with python asserts.
+SHELL RULES: every command runs through `bash -lc` joined with ' && '; NEVER use here-documents (<<EOF) or multi-line python; put Python in `python3 -c '...'` with single quotes (double quotes inside), or write a script with printf '%s' > /tmp/p.py && python3 /tmp/p.py. A probe that cannot run is worthless.
 INTERFACE CONTRACT: the LAST line every probe prints must be exactly `VERDICT_LINE: PASS <short reason>` or `VERDICT_LINE: FAIL <short reason>` (use `|| echo "VERDICT_LINE: FAIL ..."`), so the adjudicator reads one line, not a dump. Print the key observed value on the line before it.
 NETWORK: default "none". For claims about badges/URLs/CI status/remote resources set "network": "on" and check with python urllib (no curl in slim images): status code + a distinctive substring; a dead badge host or 404 is evidence.
 Do NOT add dependencies the README does not mention to make a claim pass; if the claim only works with an extra package, the probe should FAIL as written and print what was missing.
@@ -187,10 +188,14 @@ def main():
         probes = stage_plan(case, repo_map, notes)
         probe_log, rid = stage_execute(case, probes, run_dir)
         if "retry" not in DISABLE:
-            broken = [p for p in probe_log if p["cmd.txt"].startswith("PHASE_A_FAILED")]
+            def malformed(p):
+                err = p.get("stderr.log", ""); out = p.get("stdout.log", "")
+                return ("here-document" in err or "syntax error" in err.lower() or "unexpected EOF" in err) and "VERDICT_LINE" not in out
+            broken = [p for p in probe_log if p["cmd.txt"].startswith("PHASE_A_FAILED") or malformed(p)]
             if broken:  # ONE repair round (DESIGN: self-repair plateaus after 2; budget allows 1): environment failed, not the claim
                 errs = {b["probe"]: b["phase_a.log"][-500:] for b in broken}
-                fix_prompt = f"""These probe SETUP steps failed in a fresh container (environment problem, before the claim was tested). Repair each probe's setup/commands ONCE so the claim itself gets tested; keep the claim's own install method; each retry must CHANGE the command. Failures: {json.dumps(errs)[:6000]}
+                errs = {b["probe"]: (b["phase_a.log"][-500:] if b["cmd.txt"].startswith("PHASE_A_FAILED") else "PROBE DID NOT EXECUTE (shell error): " + b["stderr.log"][-400:]) for b in broken}
+                fix_prompt = f"""These probes failed before the claim was tested: either the SETUP failed in a fresh container, or the probe command itself did not execute (shell syntax, e.g. a here-document inside an && chain). Repair each probe ONCE so the claim itself gets tested; keep the claim's own install method; NEVER use here-documents, use python3 -c '...' or printf a script file; each retry must CHANGE the command. Failures: {json.dumps(errs)[:6000]}
 Original probes: {json.dumps([p for p in probes if p['id'] in errs])[:6000]}
 Reply ONLY JSON: {{"probes": [...same schema...]}}"""
                 try:

@@ -1,0 +1,22 @@
+r15-parse.json: ok wall=294.84s
+r17-pyinquirer.json: ok wall=441.82s
+{
+ "id": "advanced-v3-ext-rerun-1788028046",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.67,
+   "confident_wrong": 0.934,
+   "evidence_valid": 1.0,
+   "score_error": 0.617
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.781,
+  "n_cases": 2,
+  "settled_fraction": 0.909,
+  "capped": false
+ }
+}
+RERUN_DONE

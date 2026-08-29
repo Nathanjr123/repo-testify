@@ -1,2 +1,0 @@
-observed: python-slugify 8.0.4 | text-unidecode 1.3 | slugify("Hello World")= 'hello-world'
-VERDICT_LINE: PASS pip install python-slugify; from slugify import slugify and import text_unidecode both succeed

@@ -1,0 +1,2 @@
+repr: <Result ('spam',) {}>
+VERDICT_LINE: PASS repr and r[0] match README

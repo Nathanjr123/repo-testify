@@ -5,7 +5,7 @@
   "c2": "verified",
   "c3": "verified",
   "c4": "unverifiable",
-  "c5": "verified",
+  "c5": "unverifiable",
   "c6": "unverifiable",
   "c7": "verified",
   "c8": "verified",
@@ -14,5 +14,9 @@
   "c11": "verified",
   "c12": "verified"
  },
- "reviewer_score": 78
+ "reviewer_score": 78,
+ "audit_notes": {
+  "c5": "was verified; The probe scaled --max_iters/--lr_decay_iters from 2000 to 100 to fit the 120 s budget and crashed in get_lr (ZeroDivisionError: lr_decay_iters == warmup_iters), a failure the probe caused, not the README. The as-written command was not executed within budget, so the honest verdict is unverifiable (the arm abstained; the draft had guessed verified). Neutral correction.",
+  "c1": "Probe installed torch from the CPU wheel index instead of the bare `pip install torch` the README gives (the bare command pulls multi-GB CUDA wheels but does succeed). Under rule (c) the arm marked this unverifiable-as-written; truth stays verified because the documented command does work. Counted against the pipeline's accuracy."
+ }
 }

@@ -1,8 +1,0 @@
-cat > /tmp/probe.py <<'EOF'
-from parse import search
-r = search('Age: {:d}\n', 'Name: Rufus\nAge: 42\nColor: red\n')
-print('OBSERVED: repr =', repr(r), '| type(r[0]) =', type(r[0]).__name__ if r is not None else None)
-assert repr(r) == '<Result (42,) {}>', repr(r)
-assert r[0] == 42 and isinstance(r[0], int) and not isinstance(r[0], bool), repr(r[0])
-print('VERDICT_LINE: PASS search returned <Result (42,) {}> with int 42')
-EOF && python /tmp/probe.py || echo "VERDICT_LINE: FAIL search('Age: {:d}') did not return <Result (42,) {}> with an int"

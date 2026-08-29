@@ -1,0 +1,4 @@
+github release tag 1.0.3 exists: True published_at: 2018-11-22T12:33:26Z
+pypi latest version: 1.0.3 uploaded: 2018-11-22T19:22:15 | requires_dist: None
+release exists and matches pypi latest: True
+VERDICT_LINE: PASS GitHub release 1.0.3 exists and PyPI latest is 1.0.3

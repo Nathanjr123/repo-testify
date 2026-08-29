@@ -1,2 +1,0 @@
-observed: french 'c-est-deja-l-ete' | cyrillic 'kompiuter'
-VERDICT_LINE: PASS French and Cyrillic README examples match ('c-est-deja-l-ete', 'kompiuter')

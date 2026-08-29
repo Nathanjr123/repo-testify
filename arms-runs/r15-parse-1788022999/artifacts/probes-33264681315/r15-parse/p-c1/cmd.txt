@@ -1,1 +1,0 @@
-python -m venv /tmp/v && /tmp/v/bin/pip install -q --disable-pip-version-check parse && /tmp/v/bin/python -c "import parse; print('OBSERVED: import parse ok, parse.__version__ =', parse.__version__); print('VERDICT_LINE: PASS pip install parse from PyPI succeeded and import parse works')" || echo "VERDICT_LINE: FAIL pip install parse or import parse failed in a fresh venv"

@@ -1,4 +1,0 @@
-observed: slugify binary = /usr/local/bin/slugify
-observed stdin: 'taking-input-from-stdin'
-observed argv: 'taking-input-from-the-command-line'
-VERDICT_LINE: PASS slugify CLI installed and both README examples produce the documented output

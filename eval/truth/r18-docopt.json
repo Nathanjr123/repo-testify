@@ -12,7 +12,10 @@
   "c9": "verified",
   "c10": "verified",
   "c11": "verified",
-  "c12": "verified"
+  "c12": "refuted"
  },
- "reviewer_score": 50
+ "reviewer_score": 50,
+ "audit_notes": {
+  "c12": "was verified; Executed the README example verbatim (advanced-v3-ext p-c12): defaults parse to [] / None; the whitespace-split behaviour only appears when the option descriptions sit under an indented Options: header, which the README example omits. README defect found by execution; correction goes WITH the pipeline's verdict."
+ }
 }

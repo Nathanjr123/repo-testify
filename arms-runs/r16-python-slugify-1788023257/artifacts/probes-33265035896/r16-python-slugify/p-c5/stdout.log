@@ -1,5 +1,0 @@
-observed: badge main.yml http 200 title 'Main - passing'
-observed: badge ci.yml http 200 title 'CI - failing'
-observed: api ci.yml runs http 200
-observed: run CI ci push failure 2025-11-20T20:37:06Z
-VERDICT_LINE: FAIL ci.yml latest completed run conclusion=failure (2025-11-20T20:37:06Z); badge titles {'main.yml': (200, 'Main - passing'), 'ci.yml': (200, 'CI - failing')}
