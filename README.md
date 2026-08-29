@@ -19,7 +19,7 @@ The format the challenge asks for, public split:
 | Same, public + extension (13 repositories, 143 claims) | 0.15 (22/143; 0.10 to 0.22) | 0.87 (125/143; 0.81 to 0.92) | +0.72 |
 | Composite score (published rubric) | 0.284 | 0.836 | +0.552 |
 | Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
-| Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |
+| Cost per task | 1 model call, 0.9 min, $0.62 of subscription usage (measured on the extension set) | 4 model calls, 13.2 min, $3.47 of subscription usage (measured on the extension set) | +3 calls |
 
 Full table:
 
