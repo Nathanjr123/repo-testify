@@ -19,12 +19,15 @@ def redact(s):
         s = re.sub(pat, "[redacted: private path/identity]", s)
     return s
 
+SINCE = os.environ.get("TRACE_SINCE", "2026-08-28T15:00:00")
+
 def render(path):
     name = pathlib.Path(path).stem
     out, step = [f"# Trajectory {name}\n"], 0
     for line in open(path, encoding="utf-8", errors="replace"):
         try: j = json.loads(line)
         except json.JSONDecodeError: continue
+        if str(j.get("timestamp", "")) and str(j.get("timestamp"))[:19] < SINCE: continue
         msg = j.get("message") or {}
         role, content = msg.get("role"), msg.get("content")
         if not role: continue

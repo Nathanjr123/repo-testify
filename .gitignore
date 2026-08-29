@@ -3,4 +3,5 @@ research/
 __pycache__/
 traces/*.jsonl
 traces/*.md
+!traces/pipeline/*.md
 !traces/README.md

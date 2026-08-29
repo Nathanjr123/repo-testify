@@ -3,6 +3,7 @@
 # Needs only Python 3.10+ (no make, no docker, no credentials).
 set -euo pipefail; cd "$(dirname "$0")"
 python3 -m eval.selftest
+python3 tests/test_scorer.py
 python3 eval/validate_cases.py
 python3 -m eval.runner --arm baseline --cases eval/cases/public --sanity
 python3 -m eval.report > RESULTS.md
