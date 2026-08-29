@@ -3,7 +3,7 @@ import json, pathlib, sys
 ROOT = pathlib.Path(__file__).resolve().parent
 TYPES = {"install", "environment", "quickstart", "interface", "test_ci", "quantitative"}
 errs = []
-cases = sorted((ROOT / "cases").glob("*/r*.json"))
+cases = sorted(p for p in (ROOT / "cases").glob("*/r*.json") if p.parent.name != "self")  # self-run case is not part of the evaluation set
 for f in cases:
     j = json.loads(f.read_text())
     for k in ("id", "repo", "commit", "bucket", "buyer_question", "claims"):
