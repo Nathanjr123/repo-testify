@@ -17021,7 +17021,7 @@
   "label": "ablate-no-execution",
   "disable": "execution",
   "cases_dir": "eval/cases/public",
-  "git": "9ec2ea8",
+  "git": "rewritten",
   "ts": "2026-08-28T21:35:39Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label ablate-no-execution",
   "agg": {
@@ -19200,6 +19200,7 @@
    }
   },
   "limit_blocked": false,
-  "partial": false
+  "partial": false,
+  "git_note": "commit 9ec2ea8 no longer exists after the author-identity history rewrite; run timestamp 2026-08-28T21:35:39Z is authoritative"
  }
 ]

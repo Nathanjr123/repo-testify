@@ -1,0 +1,15 @@
+{
+ "provisional": true,
+ "verdicts": {
+  "c1": "verified",
+  "c2": "refuted",
+  "c3": "verified",
+  "c4": "refuted",
+  "c5": "refuted",
+  "c6": "verified",
+  "c7": "refuted",
+  "c8": "verified",
+  "c9": "verified"
+ },
+ "reviewer_score": 25
+}
