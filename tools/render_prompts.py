@@ -1,4 +1,3 @@
-# PROVENANCE — see arms/common.py header; written during the competition by Claude Code under Nathan Obiekwe's direction.
 """Render arms/PROMPTS.md from the arm sources: every prompt template that shapes an agent, verbatim, selected by name."""
 import pathlib, re
 ROOT = pathlib.Path(__file__).resolve().parent.parent
