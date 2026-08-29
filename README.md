@@ -28,7 +28,7 @@ A repeatable, evidence-linked verdict per claim turns "is this repo good?" from 
 
 ## The baseline and the solution
 **Baseline** — the reasonable basic way a diligent engineer works today with an LLM: one prompt with the README and file tree, asked for the same verdict ledger. No execution.
-**Solution** — a code-orchestrated pipeline (DESIGN.md): map → plan one probe per claim from a fixed toolbox → execute in a two-phase Docker sandbox on GitHub Actions (network for install, none for probes; every run is a public log) → adjudicate each claim from the transcript with a 3-vote majority → cross-check every cited exit code against the recorded log → report with escalations. Same cases, same claim lists, same schema for both arms.
+**Solution** — a code-orchestrated pipeline (DESIGN.md): map → plan one probe per claim under a fixed contract (README's own steps only; a machine-readable `VERDICT_LINE`) → execute in a two-phase Docker sandbox on GitHub Actions (network for install, none for probes unless the claim is about a URL; every run is a public log; one repair round for environment failures) → adjudicate every claim from the transcripts with a 3-vote majority → cross-check every cited exit code against the recorded log → report with escalations. Same cases, same claim lists, same schema for both arms.
 
 ## Measured improvement
 <!-- RESULTS:START -->
