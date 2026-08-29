@@ -10868,7 +10868,7 @@
   "partial": true
  },
  {
-  "id": "baseline-v2-n1-rescored-1788021615",
+  "id": "baseline-v2-n1-rescored-1788021664",
   "arm": "baseline",
   "label": "baseline-v2-n1-rescored",
   "disable": null,
@@ -12274,7 +12274,7 @@
   "rescored_from": "baseline-v2-n1-1787943377"
  },
  {
-  "id": "baseline-v2-n2-rescored-1788021615",
+  "id": "baseline-v2-n2-rescored-1788021664",
   "arm": "baseline",
   "label": "baseline-v2-n2-rescored",
   "disable": null,
@@ -13672,7 +13672,7 @@
   "rescored_from": "baseline-v2-n2-1787943738"
  },
  {
-  "id": "advanced-v1-rescored-1788021616",
+  "id": "advanced-v1-rescored-1788021664",
   "arm": "advanced",
   "label": "advanced-v1-rescored",
   "disable": null,
@@ -13684,14 +13684,14 @@
    "rows": {
     "verdict_acc": 0.481,
     "confident_wrong": 0.572,
-    "evidence_valid": 0.345,
+    "evidence_valid": 0.58,
     "score_error": 0.506
    },
    "gates": {
     "no_fabricated_evidence": 1.0,
     "valid_report": 0.8571428571428571
    },
-   "raw": 0.408,
+   "raw": 0.448,
    "n_cases": 7,
    "settled_fraction": 0.723,
    "capped": false
@@ -13704,7 +13704,7 @@
     "rows": {
      "verdict_acc": 1.0,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.909,
+     "evidence_valid": 1.0,
      "score_error": 0.99
     },
     "gates": {
@@ -14031,7 +14031,7 @@
     "rows": {
      "verdict_acc": 0.727,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.727,
+     "evidence_valid": 0.818,
      "score_error": 0.83
     },
     "gates": {
@@ -14362,7 +14362,7 @@
     "rows": {
      "verdict_acc": 0.9,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.167,
+     "evidence_valid": 1.0,
      "score_error": 0.8
     },
     "gates": {
@@ -14688,7 +14688,7 @@
     "rows": {
      "verdict_acc": 0.727,
      "confident_wrong": 0.818,
-     "evidence_valid": 0.636,
+     "evidence_valid": 1.0,
      "score_error": 0.79
     },
     "gates": {
@@ -15017,7 +15017,7 @@
     "rows": {
      "verdict_acc": 0.727,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.818,
+     "evidence_valid": 1.0,
      "score_error": 0.85
     },
     "gates": {
@@ -15348,7 +15348,7 @@
     "rows": {
      "verdict_acc": 0.7,
      "confident_wrong": 0.9,
-     "evidence_valid": 0.818,
+     "evidence_valid": 1.0,
      "score_error": 0.75
     },
     "gates": {
@@ -15658,7 +15658,7 @@
   "rescored_from": "advanced-v1-1787946612"
  },
  {
-  "id": "advanced-v2-rescored-1788021616",
+  "id": "advanced-v2-rescored-1788021664",
   "arm": "advanced",
   "label": "advanced-v2-rescored",
   "disable": null,
@@ -15670,14 +15670,14 @@
    "rows": {
     "verdict_acc": 0.712,
     "confident_wrong": 0.901,
-    "evidence_valid": 0.321,
+    "evidence_valid": 1.0,
     "score_error": 0.777
    },
    "gates": {
-    "no_fabricated_evidence": 0.8571428571428571,
+    "no_fabricated_evidence": 1.0,
     "valid_report": 1.0
    },
-   "raw": 0.584,
+   "raw": 0.817,
    "n_cases": 7,
    "settled_fraction": 0.904,
    "capped": false
@@ -15690,7 +15690,7 @@
     "rows": {
      "verdict_acc": 1.0,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.091,
+     "evidence_valid": 1.0,
      "score_error": 0.99
     },
     "gates": {
@@ -16344,7 +16344,7 @@
     "rows": {
      "verdict_acc": 0.9,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.1,
+     "evidence_valid": 1.0,
      "score_error": 0.8
     },
     "gates": {
@@ -16646,7 +16646,7 @@
     "rows": {
      "verdict_acc": 0.818,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.909,
+     "evidence_valid": 1.0,
      "score_error": 0.67
     },
     "gates": {
@@ -16976,7 +16976,7 @@
     "rows": {
      "verdict_acc": 0.727,
      "confident_wrong": 0.818,
-     "evidence_valid": 0.818,
+     "evidence_valid": 1.0,
      "score_error": 0.79
     },
     "gates": {
@@ -17632,12 +17632,12 @@
     "rows": {
      "verdict_acc": 0.5,
      "confident_wrong": 0.9,
-     "evidence_valid": 0.0,
+     "evidence_valid": 1.0,
      "score_error": 0.8
     },
     "gates": {
      "valid_report": true,
-     "no_fabricated_evidence": false
+     "no_fabricated_evidence": true
     },
     "settled_fraction": 0.7,
     "output": {
@@ -17938,7 +17938,7 @@
   "rescored_from": "advanced-v2-1787952546"
  },
  {
-  "id": "ablate-no-execution-rescored-1788021616",
+  "id": "ablate-no-execution-rescored-1788021664",
   "arm": "advanced",
   "label": "ablate-no-execution-rescored",
   "disable": "execution",
@@ -20120,7 +20120,7 @@
   "rescored_from": "ablate-no-execution-1787952939"
  },
  {
-  "id": "ablate-k1-1788021616",
+  "id": "ablate-k1-1788021664",
   "arm": "advanced",
   "label": "ablate-k1",
   "disable": "k3(replayed from votes[0])",
@@ -20132,14 +20132,14 @@
    "rows": {
     "verdict_acc": 0.691,
     "confident_wrong": 0.867,
-    "evidence_valid": 0.321,
+    "evidence_valid": 1.0,
     "score_error": 0.777
    },
    "gates": {
-    "no_fabricated_evidence": 0.8571428571428571,
+    "no_fabricated_evidence": 1.0,
     "valid_report": 1.0
    },
-   "raw": 0.57,
+   "raw": 0.801,
    "n_cases": 7,
    "settled_fraction": 0.917,
    "capped": false
@@ -20152,7 +20152,7 @@
     "rows": {
      "verdict_acc": 1.0,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.091,
+     "evidence_valid": 1.0,
      "score_error": 0.99
     },
     "gates": {
@@ -20806,7 +20806,7 @@
     "rows": {
      "verdict_acc": 0.9,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.1,
+     "evidence_valid": 1.0,
      "score_error": 0.8
     },
     "gates": {
@@ -21108,7 +21108,7 @@
     "rows": {
      "verdict_acc": 0.818,
      "confident_wrong": 1.0,
-     "evidence_valid": 0.909,
+     "evidence_valid": 1.0,
      "score_error": 0.67
     },
     "gates": {
@@ -21438,7 +21438,7 @@
     "rows": {
      "verdict_acc": 0.636,
      "confident_wrong": 0.727,
-     "evidence_valid": 0.818,
+     "evidence_valid": 1.0,
      "score_error": 0.79
     },
     "gates": {
@@ -22094,12 +22094,12 @@
     "rows": {
      "verdict_acc": 0.5,
      "confident_wrong": 0.9,
-     "evidence_valid": 0.0,
+     "evidence_valid": 1.0,
      "score_error": 0.8
     },
     "gates": {
      "valid_report": true,
-     "no_fabricated_evidence": false
+     "no_fabricated_evidence": true
     },
     "settled_fraction": 0.7,
     "status": "ok",
@@ -22397,6 +22397,6 @@
   },
   "limit_blocked": false,
   "partial": false,
-  "rescored_from": "advanced-v2-rescored-1788021616"
+  "rescored_from": "advanced-v2-rescored-1788021664"
  }
 ]
