@@ -16,7 +16,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c9** (interface): In Python with 'schedule' installed, `schedule.run_pending()` executes jobs that are due: a job registered with `schedule.every(1).seconds.do(f)` is invoked when run_pending() is called after more than 1 second has elapsed.
 - **c10** (quantitative): The schedule README's PyPI version badge asserts that 'schedule' is published on PyPI (latest release 1.2.2).
 
-## Step 2, PLAN output: 10 probes (committed as `eval/probes/r04-schedule.json`)
+## Step 2, PLAN output: 10 probes (committed as `eval/probes/r04-schedule.json`; matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `python -m venv /tmp/v && /tmp/v/bin/pip install --disable-pip-version-check schedule`

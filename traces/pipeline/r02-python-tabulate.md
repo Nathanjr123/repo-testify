@@ -17,79 +17,97 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (test_ci): The python-tabulate README's GitHub Actions badge (workflows/tabulate.yml) asserts that the repository's CI workflow on astanin/python-tabulate is currently passing.
 - **c11** (quantitative): In a mini-benchmark on a 10x10 table of mixed text and numeric data, the tabulate library formats the table faster than PrettyTable and texttable (README cites tabulate 0.10.0 at 553.4 μs vs PrettyTable 3.17.0 at 468.0 μs and texttable 1.7.0 at 1071.4 μs on Python 3.13.7/Windows 11 — note the table itself shows PrettyTable FASTER than tabulate).
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r02-python-tabulate.json`)
+## Step 2, PLAN output: 11 probes (committed as `eval/probes/r02-python-tabulate-r1.json`; matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -m venv /tmp/v && /tmp/v/bin/pip install --no-cache-dir tabulate`
-  - commands: `/tmp/v/bin/python -c 'from tabulate import tabulate; import tabulate as t; print("tabulate", t.__version__); print(tabulate([[1,2],[3,4]]))' && /tmp/v/bin/pip show tabulate | grep -E '^(Name|Version|Location)'`
+  - setup: `python3 -m venv /tmp/v && /tmp/v/bin/pip install --quiet tabulate`
+  - commands: `/tmp/v/bin/python - <<'EOF' || echo "VERDICT_LINE: FAIL import or install crashed"
+try:
+    from tabulate import tabulate
+    import tabulate as t
+    print('observed: tabulate version', t.__version__, 'callable', callable(tabulate))
+    print('VERDICT_LINE: PASS pip install tabulate + from tabulate`
 - `p-c2` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -m venv /tmp/v && /tmp/v/bin/pip install --no-cache-dir tabulate`
-  - commands: `ls -l /tmp/v/bin/ | grep tabulate && test -x /tmp/v/bin/tabulate && echo 'SCRIPT_PRESENT_IN_BIN=yes' || { echo 'SCRIPT_PRESENT_IN_BIN=no'; exit 1; } && export PATH=/tmp/v/bin:$PATH && command -v tabulate && printf '1 2\n3 4\n' | tabulate && printf '1 2\n3 4\n' | tabulate | grep -qE '^1 +2$' && echo `
+  - setup: `python3 -m venv /tmp/v && /tmp/v/bin/pip install --quiet tabulate`
+  - commands: `ls -l /tmp/v/bin/tabulate 2>&1 && if test -x /tmp/v/bin/tabulate; then OUT=$(printf '1 2\n3 4\n' | /tmp/v/bin/tabulate 2>&1); RC=$?; echo "observed: rc=$RC output=$(echo "$OUT" | tr '\n' '|')"; if [ $RC -eq 0 ] && echo "$OUT" | grep -q '^ *1 *2'; then echo 'VERDICT_LINE: PASS bin/tabulate exists, ex`
 - `p-c3` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -m venv /tmp/v2 && cd /tmp && TABULATE_INSTALL=lib-only /tmp/v2/bin/pip install --no-cache-dir tabulate && python3 -m venv /tmp/v3 && cd /tmp && TABULATE_INSTALL=lib-only /tmp/v3/bin/pip install --no-cache-dir --no-binary tabulate tabulate || echo 'SDIST_INSTALL_FAILED'`
-  - commands: `echo '--- wheel install with TABULATE_INSTALL=lib-only (README literal command) ---' && ls /tmp/v2/bin/ | grep -c '^tabulate$' || true && /tmp/v2/bin/python -c 'import tabulate; print("lib import ok", tabulate.__version__)' && echo '--- sdist (from-source) install with TABULATE_INSTALL=lib-only ---'`
-- `p-c4` image `python:3.10-slim` network `install-only`
-  - setup: `pip install --no-cache-dir tabulate && python3 - <<'EOF' > /tmp/pypi_requires_python.txt || echo 'PYPI_FETCH_FAILED' > /tmp/pypi_requires_python.txt
+  - setup: `python3 -m venv /tmp/v2 && TABULATE_INSTALL=lib-only /tmp/v2/bin/pip install --quiet tabulate`
+  - commands: `/tmp/v2/bin/python -c 'import tabulate; print("observed: library importable, version", tabulate.__version__)' || echo 'observed: library NOT importable' && N=$(ls /tmp/v2/bin 2>/dev/null | grep -c '^tabulate$'); echo "observed: tabulate scripts in venv bin = $N (README says lib-only should install n`
+- `p-c4` image `python:3.11-slim` network `on`
+  - setup: ``
+  - commands: `python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (network?)"
 import json, urllib.request
-req = urllib.request.Request('https://pypi.org/pypi/tabulate/json', headers={'User-Agent': 'probe'})
-d = json.load(urllib.r`
-  - commands: `python3 --version && echo 'PyPI latest version + requires_python:'; cat /tmp/pypi_requires_python.txt && python3 -c "from importlib.metadata import metadata; m=metadata('tabulate'); print('installed', m['Version'], 'Requires-Python:', m['Requires-Python']); assert m['Requires-Python'].strip()=='>=3.`
+try:
+    req = urllib.request.Request('https://pypi.org/pypi/tabulate/json', headers={'User-Agent': 'claim-probe'})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        status = r.status
+   `
 - `p-c5` image `python:3.11-slim` network `install-only`
-  - setup: `pip install --no-cache-dir tabulate`
-  - commands: `python3 - <<'EOF'
+  - setup: `pip install --quiet tabulate`
+  - commands: `python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
 from tabulate import tabulate
 table = [["Sun",696000,1989100000],["Earth",6371,5973.6],
          ["Moon",1737,73.5],["Mars",3390,641.85]]
 out = tabulate(table)
 print(out)
-expected = """-----  ------  -------------
-Sun    696000     1.9891e+09
-Earth    6371  5973.6
-Moon     1737    `
+lines = out.splitlines()
+expected = ['-----  ------  -------------',`
 - `p-c6` image `python:3.11-slim` network `install-only`
-  - setup: `pip install --no-cache-dir tabulate`
-  - commands: `python3 - <<'EOF'
+  - setup: `pip install --quiet tabulate`
+  - commands: `python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
 from tabulate import tabulate
 out = tabulate([["Name","Age"],["Alice",24],["Bob",19]],
                headers="firstrow")
 print(out)
 lines = out.splitlines()
-assert lines[0] == 'Name      Age', repr(lines[0])
-assert 'Alice      24' in lines, lines
-expected = "Name      Age\n------ `
+expected = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19']
+p`
 - `p-c7` image `python:3.11-slim` network `install-only`
-  - setup: `pip install --no-cache-dir tabulate`
-  - commands: `python3 - <<'EOF'
+  - setup: `pip install --quiet tabulate`
+  - commands: `python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
 from tabulate import tabulate
 out = tabulate({"Name": ["Alice", "Bob"],
                 "Age": [24, 19]}, headers="keys")
 print(out)
-assert out.splitlines()[0] == 'Name      Age', repr(out.splitlines()[0])
-expected = "Name      Age\n------  -----\nAlice      24\nBob        19"
-asse`
+lines = out.splitlines()
+expected = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19']
+p`
 - `p-c8` image `python:3.11-slim` network `install-only`
-  - setup: `pip install --no-cache-dir tabulate`
-  - commands: `tabulate --help > /tmp/help.txt 2>&1; echo "exit=$?"; cat /tmp/help.txt && tr ',' '\n' < /tmp/help.txt | tr -d ' .' > /tmp/fmts.txt && missing=0; for f in github grid html latex pipe rst simple tsv; do if grep -qx "$f" /tmp/fmts.txt; then echo "present: $f"; else echo "MISSING: $f"; missing=1; fi; d`
+  - setup: `pip install --quiet tabulate`
+  - commands: `python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
+import re, shutil, subprocess
+exe = shutil.which('tabulate')
+print('observed: tabulate on PATH =', exe)
+if not exe:
+    print('VERDICT_LINE: FAIL tabulate CLI not on PATH')
+    raise SystemExit(0)
+p = subprocess.run([exe, '--help'], captur`
 - `p-c9` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -m venv /tmp/plain && /tmp/plain/bin/pip install --no-cache-dir tabulate && python3 -m venv /tmp/wide && /tmp/wide/bin/pip install --no-cache-dir 'tabulate[widechars]'`
-  - commands: `/tmp/wide/bin/python -c 'import wcwidth; print("wcwidth", wcwidth.__version__)' && /tmp/wide/bin/pip show wcwidth | grep -E '^Version' && /tmp/wide/bin/python - <<'EOF'
-import tabulate
-print('WIDE_CHARS_MODE =', tabulate.WIDE_CHARS_MODE)
-assert tabulate.WIDE_CHARS_MODE is True
-out = tabulate.tabulat`
-- `p-c10` image `python:3.11-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pytest && python3 - <<'EOF'
-import json, urllib.request
-H = {'User-Agent': 'probe', 'Accept': 'application/vnd.github+json'}
-url = 'https://api.github.com/repos/astanin/python-tabulate/actions/workflows/tabulate.yml/runs?per_page=5'
+  - setup: `python3 -m venv /tmp/v3 && /tmp/v3/bin/pip install --quiet 'tabulate[widechars]'`
+  - commands: `/tmp/v3/bin/python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
 try:
-    d = json.load(urllib.request.ur`
-  - commands: `echo '--- GitHub Actions tabulate.yml: latest 5 runs ---'; cat /tmp/ci_runs.txt && grep -q 'conclusion=success' /tmp/ci_runs.txt && echo 'LATEST_RUNS_INCLUDE_SUCCESS' || echo 'NO_SUCCESSFUL_RUN_IN_LATEST_5' && echo '--- independent check: run the test suite at pinned commit 268615a5 (pyproject addop`
+    import wcwidth
+except ImportError as e:
+    print('observed: wcwidth missing', e)
+    print('VERDICT_LINE: FAIL tabulate[widechars] did not install wcwidth')
+    raise SystemExit(0)
+import tabulate as t
+from tabulate im`
+- `p-c10` image `python:3.11-slim` network `on`
+  - setup: ``
+  - commands: `python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (network?)"
+import json, urllib.request, urllib.error
+UA = {'User-Agent': 'claim-probe', 'Accept': 'application/vnd.github+json'}
+badge_url = 'https://github.com/astanin/python-tabulate/actions/workflows/tabulate.yml/badge.svg'
+status = Non`
 - `p-c11` image `python:3.11-slim` network `install-only`
-  - setup: `pip install --no-cache-dir tabulate prettytable texttable`
-  - commands: `python3 -c 'import tabulate, prettytable, texttable, platform; print("tabulate", tabulate.__version__, "prettytable", prettytable.__version__, "texttable", texttable.__version__, "python", platform.python_version())' && python3 - <<'EOF'
-import timeit
-# mirrors the repo's benchmark.py: 10x10 mixed t`
+  - setup: `pip install --quiet tabulate prettytable texttable`
+  - commands: `python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
+import timeit, importlib.metadata as md
+from tabulate import tabulate
+import prettytable, texttable
+headers = ['col%d' % i for i in range(10)]
+table = [['some text'] + list(range(i, i + 9)) for i in range(10)]  # 10x10 mixed text/numeric, `
 
 ## Step 3, EXECUTE on GitHub Actions: run `33207614025` (artifacts: per-probe cmd/stdout/stderr/exit_code)
 

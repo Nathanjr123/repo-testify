@@ -18,7 +18,7 @@ import json, pathlib, re
 WEIGHTS = {  # v2 (2026-08-28, after first row-distribution measurement, see CHANGELOG iteration 6)
     "verdict_acc":     0.45,  # per-claim accuracy vs ground truth; unaddressed claims count as wrong (coverage folded in: it was 1.00 on every case = saturated row)
     "confident_wrong": 0.20,  # 1 - (high-confidence wrong verdicts / claims); abstention is the honest exit
-    "evidence_valid":  0.20,  # fraction of verdicts whose evidence refs exist in run artifacts
+    "evidence_valid":  0.20,  # fraction of evidence items that resolve: command refs must name a recorded probe AND quote text found in its recorded output; file refs must exist in the pinned tree the arm saw
     "score_error":     0.15,  # 1 - |overall_score - reviewer_score|/100
 }
 SETTLED_MIN, SETTLED_CAP = 0.50, 0.35  # objective = settle claims. If < half are settled (verified/refuted), raw <= 0.35:
@@ -49,18 +49,26 @@ def score(case: dict, output: dict) -> dict:
     pred = {cid: c.get("verdict") for cid, c in rep_claims.items()}
 
     ev_total = ev_ok = 0
-    run_dir = pathlib.Path(output.get("_run_dir", "."))  # local artifacts, if still present
-    idx = output.get("_evidence_index")  # portable: {"probes": [...], "text": "<cmds+filenames>"}, makes replay self-contained
+    idx = output.get("_evidence_index") or {}
+    idx_text = idx.get("text", "")           # portable, persisted with the output: probe ids, commands, and output tails
+    tree_text = idx.get("tree", "")          # for arms without execution: the pinned file tree they were shown
+    def excerpt_supported(e):
+        ex = str(e.get("excerpt", "")).strip()
+        # a quoted excerpt must be findable in the recorded outputs (>=12 chars of it, whitespace-insensitive)
+        if len(ex) < 12: return False
+        norm = lambda s: " ".join(s.split())
+        chunks = [c.strip() for c in re.split(r"[/|;]|\.\.\.", ex) if len(c.strip()) >= 12]
+        return any(norm(c)[:60] in norm(idx_text) for c in chunks)
     for c in rep_claims.values():
         for e in c.get("evidence", []):
             ev_total += 1
-            ref = str(e.get("ref", ""))
-            if e.get("kind") in ("file", "command"):
-                clog = (run_dir / "commands.log")
-                text = idx["text"] if idx else (clog.read_text(errors="replace") if clog.exists() else "")
-                probe_hit = re.search(r"\bp-c\d+\b", ref) and re.search(r"\bp-c\d+\b", ref).group(0) in text
-                ev_ok += bool(probe_hit or ref in text or (run_dir / ref).exists()
-                              or any(run_dir.rglob(pathlib.Path(ref).name)) if ref else False)
+            ref = str(e.get("ref", "")); kind = e.get("kind")
+            if kind == "command":
+                m = re.search(r"\bp-c\d+\b", ref)
+                ref_ok = bool(m and m.group(0) in idx_text) or (ref[:60] in idx_text)
+                ev_ok += bool(ref_ok and excerpt_supported(e))
+            elif kind == "file":
+                ev_ok += bool(ref and (ref in tree_text or ref in idx_text))
             else:
                 ev_ok += bool(ref.startswith("http"))
     # Fabrication = evidence asserted but NONE of it resolves to a recorded artifact.

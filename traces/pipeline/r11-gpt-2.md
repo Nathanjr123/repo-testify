@@ -16,38 +16,57 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c9** (quantitative): The README notes the originally published parameter counts (117M small, 345M medium) were wrong; the corrected sizes used by the code are 124M and 355M.
 - **c10** (environment): Setting the environment variable PYTHONIOENCODING=UTF-8 is documented as required to handle Unicode output from the sample scripts.
 
-## Step 2, PLAN output: 10 probes (committed as `eval/probes/r11-gpt-2.json`)
+## Step 2, PLAN output: 10 probes (committed as `eval/probes/r11-gpt-2-r1.json`; matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -m venv /venv`
-  - commands: `. /venv/bin/activate && python -V && pip -V && . /venv/bin/activate && pip3 install tensorflow==1.12.0 > /tmp/tf.log 2>&1; echo "EXIT=$?"; tail -n 6 /tmp/tf.log && . /venv/bin/activate && if grep -q 'No matching distribution found for tensorflow==1.12.0' /tmp/tf.log; then echo "VERDICT: pip3 install`
+  - setup: `python3 -c "import sys;print('python',sys.version.split()[0])"`
+  - commands: `pip3 install tensorflow==1.12.0 > /tmp/tf.log 2>&1; rc=$?; grep -iE 'ERROR|No matching|Could not find|Successfully installed' /tmp/tf.log | tail -3; if [ $rc -eq 0 ]; then python3 -c 'import tensorflow as tf;print("observed tf.__version__=",tf.__version__)' && echo 'VERDICT_LINE: PASS pip3 install t`
 - `p-c2` image `python:3.11-slim` network `install-only`
-  - setup: `apt-get update -qq >/dev/null && apt-get install -y -qq gcc libc6-dev >/dev/null && python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/s`
-  - commands: `cd /w && python3 -V && pip3 install -r requirements.txt > /tmp/req.log 2>&1; echo "EXIT=$?"; grep -iE 'error|failed|Successfully installed' /tmp/req.log | head -n 8 && cd /w && for p in fire regex requests tqdm; do spec=$(grep -i "^$p" requirements.txt); pip3 install "$spec" > /tmp/$p.log 2>&1 && ec`
-- `p-c3` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/src")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w && pip3 install -`
-  - commands: `echo "download_model.py 124M exit=$(cat /tmp/dl.exit) (124 = killed by 95s timeout)"; tail -c 300 /tmp/dl.log; echo && echo '--- storage endpoint HEAD checks (all four documented sizes) ---'; cat /tmp/head.txt && cd /w && for f in checkpoint encoder.json hparams.json model.ckpt.data-00000-of-00001 m`
-- `p-c4` image `python:3.6-slim` network `install-only`
-  - setup: `apt-get update -qq >/dev/null && apt-get install -y -qq gcc libc6-dev >/dev/null && python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/s`
-  - commands: `cat /tmp/tf36.exit /tmp/req36.exit; echo "download exit=$(cat /tmp/dl.exit)"; python3 -c 'import tensorflow as tf; print("tensorflow", tf.__version__)' || echo 'TF IMPORT FAIL' && cd /w && ls models/124M 2>/dev/null | wc -l | xargs -I{} echo 'model files present: {}/7' && cd /w && export PYTHONIOENC`
-- `p-c5` image `python:3.6-slim` network `install-only`
-  - setup: `apt-get update -qq >/dev/null && apt-get install -y -qq gcc libc6-dev >/dev/null && python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/s`
-  - commands: `cat /tmp/tf36.exit /tmp/req36.exit; echo "download exit=$(cat /tmp/dl.exit)"; ls /w/models/124M 2>/dev/null | wc -l | xargs -I{} echo 'model files present: {}/7' && cd /w && python3 src/interactive_conditional_samples.py --help 2>&1 | grep -iE 'top_k|length|nsamples' | head -n 5 || echo 'CLI --help `
-- `p-c6` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/src")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w && python3 -c 'im`
-  - commands: `cd /w && ls -la Dockerfile.cpu Dockerfile.gpu && echo '--- Dockerfile.cpu ---' && cat Dockerfile.cpu && echo '--- Dockerfile.gpu ---' && cat Dockerfile.gpu && echo '--- Docker Hub tag existence for each FROM base ---'; cat /tmp/hub.txt && command -v docker >/dev/null && echo 'docker present' || echo`
-- `p-c7` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -c 'import urllib.request; r=urllib.request.Request("https://api.github.com/repos/openai/gpt-2",headers={"User-Agent":"probe","Accept":"application/vnd.github+json"}); open("/tmp/repo.json","wb").write(urllib.request.urlopen(r).read())'`
-  - commands: `python3 -c 'import json; d=json.load(open("/tmp/repo.json")); print("archived=",d["archived"],"pushed_at=",d["pushed_at"],"default_branch=",d["default_branch"],"open_issues=",d["open_issues_count"])' && python3 -c 'import json,sys; d=json.load(open("/tmp/repo.json")); assert d["archived"] is True, "`
-- `p-c8` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/src")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w && python3 -c 'im`
-  - commands: `echo "GitHub contents API status for model_card.md@pinned SHA: $(cat /tmp/mc_status)" && test -f /w/model_card.md && echo 'model_card.md PRESENT in pinned tree' && wc -lc /w/model_card.md && head -n 12 /w/model_card.md || echo 'model_card.md MISSING in pinned tree' && grep -n 'model_card.md' /w/READ`
-- `p-c9` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/src")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w && python3 -c 'im`
-  - commands: `grep -n -iE '117M|345M|parameter counts were wrong' /w/README.md && echo '--- model names used by code/docs ---'; grep -n -E '124M|355M|117M|345M' /w/DEVELOPERS.md /w/download_model.py /w/Dockerfile.cpu /w/Dockerfile.gpu | head -n 20 && echo '--- download_model.py: how model name is taken (no whitel`
-- `p-c10` image `python:3.11-slim` network `install-only`
-  - setup: `python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/src")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w`
-  - commands: `grep -n -B3 -A4 'PYTHONIOENCODING' /w/DEVELOPERS.md /w/README.md || echo 'PYTHONIOENCODING not documented in DEVELOPERS.md/README.md' && python3 -V; echo '--- case A: C locale, no var, modern defaults (PEP 538/540 locale coercion) ---'; env -i LANG=C /usr/local/bin/python3 -c 'import sys; print("std`
+  - setup: `mkdir -p /w && cd /w && printf 'fire>=0.1.3\nregex==2017.4.5\nrequests==2.21.0\ntqdm==4.31.1\n' > requirements.txt && cat requirements.txt`
+  - commands: `cd /w && pip3 install -r requirements.txt > /tmp/req.log 2>&1; rc=$?; grep -iE 'error|gcc|Successfully installed|Failed building' /tmp/req.log | tail -4; if [ $rc -eq 0 ]; then python3 -c 'import fire,regex,requests,tqdm;print("observed regex",regex.__version__,"requests",requests.__version__,"tqdm"`
+- `p-c3` image `python:3.11-slim` network `on`
+  - setup: `mkdir -p /w && cd /w && python3 -c "import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';open('download_model.py','wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/download_model.py',timeout=30).read())" && head -20 download_model.py && pip3 i`
+  - commands: `cd /w && python3 -c "import urllib.request;r=urllib.request.urlopen(urllib.request.Request('https://openaipublic.blob.core.windows.net/gpt-2/models/124M/hparams.json'),timeout=20);print('observed endpoint status',r.status,r.read()[:80])" || echo 'observed endpoint unreachable' && cd /w && timeout 90`
+- `p-c4` image `python:3.11-slim` network `on`
+  - setup: `mkdir -p /w && cd /w && python3 -c "import urllib.request,os;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[ (os.makedirs(os.path.dirname(p) or '.',exist_ok=True), open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read())) for p in ['d`
+  - commands: `cd /w && python3 -c 'import tensorflow as tf;print("observed tf",tf.__version__)' > /tmp/tfimp.log 2>&1 || { tail -1 /tmp/tfimp.log; echo 'VERDICT_LINE: FAIL cannot run generate_unconditional_samples.py: tensorflow (1.12.0) is not installable/importable on this python, README prerequisite unmet'; ex`
+- `p-c5` image `python:3.11-slim` network `on`
+  - setup: `mkdir -p /w && cd /w && python3 -c "import urllib.request,os;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[ (os.makedirs(os.path.dirname(p) or '.',exist_ok=True), open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read())) for p in ['d`
+  - commands: `cd /w && python3 -c 'import tensorflow as tf;print("observed tf",tf.__version__)' > /tmp/tfimp.log 2>&1 || { tail -1 /tmp/tfimp.log; echo 'VERDICT_LINE: FAIL cannot run interactive_conditional_samples.py --top_k 40: tensorflow (1.12.0) is not installable/importable on this python, README prerequisit`
+- `p-c6` image `python:3.11-slim` network `on`
+  - setup: `mkdir -p /w && cd /w && python3 -c "import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read()) for p in ['Dockerfile.cpu','Dockerfile.gpu']]" && echo '--- Dockerfile.c`
+  - commands: `cd /w && echo "observed docker binary: $(command -v docker || echo none)"; python3 - <<'EOF'
+import re,json,urllib.request
+ok=True
+for f in ['Dockerfile.cpu','Dockerfile.gpu']:
+    m=re.search(r'^FROM\s+(\S+)',open(f).read(),re.M)
+    base=m.group(1); repo,_,tag=base.partition(':'); tag=tag or 'late`
+- `p-c7` image `python:3.11-slim` network `on`
+  - setup: ``
+  - commands: `python3 - <<'EOF'
+import json,urllib.request
+r=urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/openai/gpt-2',headers={'User-Agent':'probe','Accept':'application/vnd.github+json'}),timeout=20)
+d=json.load(r)
+print('observed status',r.status,'archived=',d.get('archived'),'p`
+- `p-c8` image `python:3.11-slim` network `on`
+  - setup: ``
+  - commands: `python3 - <<'EOF'
+import urllib.request
+sha='9b63575ef42771a015060c964af2c3da4cf7c8ab'
+url=f'https://raw.githubusercontent.com/openai/gpt-2/{sha}/model_card.md'
+r=urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'probe'}),timeout=20)
+body=r.read().decode('utf-8','replace')
+pri`
+- `p-c9` image `python:3.11-slim` network `on`
+  - setup: `mkdir -p /w && cd /w && python3 -c "import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read()) for p in ['download_model.py','DEVELOPERS.md','README.md']]" && grep -nE`
+  - commands: `cd /w && python3 - <<'EOF'
+import json,urllib.request,re
+docs=open('download_model.py').read()+open('DEVELOPERS.md').read()+open('README.md').read()
+print('observed doc mentions: 124M' , '124M' in docs, '355M', '355M' in docs, '117M', '117M' in docs, '345M', '345M' in docs)
+assert '124M' in docs and`
+- `p-c10` image `python:3.11-slim` network `on`
+  - setup: `mkdir -p /w && cd /w && python3 -c "import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read()) for p in ['README.md','DEVELOPERS.md']]" && grep -n 'PYTHONIOENCODING' R`
+  - commands: `cd /w && grep -q 'export PYTHONIOENCODING=UTF-8' README.md DEVELOPERS.md && echo 'observed: instruction present in repo docs' || { echo 'observed: instruction absent from README.md/DEVELOPERS.md'; echo 'VERDICT_LINE: FAIL PYTHONIOENCODING instruction not found in docs'; exit 0; }; env -u PYTHONIOENC`
 
 ## Step 3, EXECUTE on GitHub Actions: run `33212514162` (artifacts: per-probe cmd/stdout/stderr/exit_code)
 

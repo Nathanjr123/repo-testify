@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (quickstart): With newspaper3k installed, `newspaper.build('http://cnn.com')` returns a Source object whose .articles list contains Article objects with populated .url attributes.
 - **c11** (quantitative): The newspaper README claims the Swiftproxy residential-proxy service offers '80M+ residential IPs across 195+ countries' and 'a 99.89% success rate' for use with newspaper3k pipelines.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r07-newspaper3k.json`)
+## Step 2, PLAN output: 11 probes (committed as `eval/probes/r07-newspaper3k.json`; matched to this run by its evidence index)
 
 - `p-c1` image `python:3.12-slim` network `install-only`
   - setup: `python3 -m venv /tmp/v && /tmp/v/bin/pip install --quiet newspaper3k 2>&1 | tail -5; echo "pip_rc=${PIPESTATUS[0]}" && /tmp/v/bin/pip freeze | grep -iE '^(newspaper3k|lxml|lxml-html-clean|nltk|Pillow)=' || true`

@@ -17,115 +17,99 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (quantitative): The records README's PyPI badge asserts that 'records' is published on PyPI (latest release 0.6.0).
 - **c11** (interface): In Python with 'records' installed, `records.Database()` with no argument reads the connection URL from the $DATABASE_URL environment variable.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r05-records.json`)
+## Step 2, PLAN output: 11 probes (committed as `eval/probes/r05-records-r1.json`; matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
-  - setup: `python -m venv /tmp/v && /tmp/v/bin/pip install -q "records[pandas]" 2>&1 | tail -n 20`
-  - commands: `/tmp/v/bin/python -c "import records; from importlib.metadata import version; print('records', version('records'))" && /tmp/v/bin/python -c "import pandas; print('pandas', pandas.__version__)" && /tmp/v/bin/python -c "from importlib.metadata import version; assert version('records')=='0.6.0', versio`
+  - setup: `pip install -q "records[pandas]" 2>&1 | tail -3`
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL pip install records[pandas] or import records failed (see above)"
+import importlib.metadata as m
+import records, pandas, tablib
+v = m.version('records')
+print('OBSERVED records=%s pandas=%s tablib=%s' % (v, pandas.__version__, m.version('tablib')))
+print(`
 - `p-c2` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && python - <<'EOF' | tee /tmp/c2.out
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed before classifying postgres:// error"
 import records, sqlalchemy
 print('sqlalchemy', sqlalchemy.__version__)
-for url in ['postgres://user:pw@localhost:5432/db', 'postgresql://user:pw@localhost:5432/db']:
-    scheme = url.split(':')[0]
+def probe(url):
     try:
-        records.Database(url)
-     `
+        records.Database(url); return 'OK'
+    except Exception as e:
+        return type(e).__name__ + ': `
 - `p-c3` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && python - <<'EOF'
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL row indexing/iteration/field access raised (see traceback)"
 import records
-db = records.Database('sqlite:////tmp/fx.db')
-rows = db.query('select * from active_users')
-r = rows[0]
-print(repr(r))
-assert r.name == 'Henry Ford', r.name
-assert r['user_email'] == 'model-t@gmail.com', r['user_email']
-assert r[3] == 'model-t@`
+db = records.Database('sqlite:///:memory:')
+db.query('create table active_users (username text, active int, name text)')
+db.query('insert into active_users values (:u, :a, :n)', u=`
 - `p-c4` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && rm -f /tmp/c4.db && python - <<'EOF'
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `rm -f /tmp/r.db && python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (see traceback)"
 import records, sqlalchemy
 print('sqlalchemy', sqlalchemy.__version__)
-db = records.Database('sqlite:////tmp/c4.db')
-for step, fn in [('create', lambda: db.query('create table t (x int)')),
-                 ('insert via query', lambda: db.`
+db = records.Database('sqlite:////tmp/r.db')
+db.query('create table t (x int)')
+db.query('insert into t values (:x)', x=1)
+db.bulk_que`
 - `p-c5` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && python - <<'EOF'
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `rm -f /tmp/t.db && python - <<'EOF' || echo "VERDICT_LINE: FAIL Database.transaction()/commit() raised (see traceback)"
 import records
-db = records.Database('sqlite:////tmp/c5.db')
-t = db.transaction(); t.commit()
-print('transaction()/commit() OK ->', type(t).__module__ + '.' + type(t).__name__)
-t2 = db.transaction(); t2.rollback()
-print('transaction()/rollback() OK')
-print('C`
+db = records.Database('sqlite:////tmp/t.db')
+db.query('create table t (x int)')
+t = db.transaction()
+print('OBSERVED transaction object =', type(t).__name__, 'has co`
 - `p-c6` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && python - <<'EOF'
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL rows.first()/rows.all() raised or returned wrong types (see traceback)"
 import records
-db = records.Database('sqlite:////tmp/fx.db')
-rows = db.query('select * from active_users order by username desc')
-f = rows.first()
-print(repr(f))
-assert isinstance(f, records.Record), type(f)
-assert f.username == 'tin-lizzie', f.username
-rows2`
+db = records.Database('sqlite:///:memory:')
+db.query('create table t (a int)')
+db.query('insert into t values (1)'); db.query('insert into t values (2)')
+f = db.query('`
 - `p-c7` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && python - <<'EOF'
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL rows.export('csv') raised or output malformed (see above)"
 import records
-db = records.Database('sqlite:////tmp/fx.db')
-rows = db.query('select * from active_users')
-out = rows.export('csv')
-print(out)
-lines = out.strip().splitlines()
-assert lines[0].strip() == 'username,active,name,user_email,timezone', lines[0]
-ass`
+db = records.Database('sqlite:///:memory:')
+db.query('create table t (username text, active int)')
+db.query("insert into t values ('model-t', 1)")
+out = db.query('select * from t').`
 - `p-c8` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q "records[pandas]==0.6.0" && echo pypi-0`
-  - commands: `cat /tmp/records_src && python - <<'EOF'
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL rows.export('df') raised or did not return a DataFrame (see above)"
 import records, pandas
-print('pandas', pandas.__version__)
-db = records.Database('sqlite:////tmp/fx.db')
-rows = db.query('select * from active_users')
-df = rows.export('df')
-print(type(df)); print(df)
-assert isinstance(df, pandas.DataFrame), type(df)
-assert d`
+db = records.Database('sqlite:///:memory:')
+db.query('create table t (username text, active int)')
+db.query("insert into t values ('model-t', 1)")
+df = db.query('se`
 - `p-c9` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && python - <<'EOF'
+  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed while checking mssql dialect wiring"
 import records, sqlalchemy
-url = 'mssql+pymssql://u:p@127.0.0.1:1/db'
-# PARTIAL PROBE: no MS-SQL server is available in a 120s sandbox. This only settles
-# whether the records wrapper resolves the mssql dialect+driver the same way raw SQLAlchemy does.
-res = {`
-- `p-c10` image `python:3.11-slim` network `install-only`
-  - setup: `python - <<'EOF'
-import urllib.request
-urllib.request.urlretrieve('https://pypi.org/pypi/records/json', '/tmp/pypi_records.json')
-print('fetched PyPI metadata during network phase')
-EOF && pip download -q --no-deps --no-binary :all: records==0.6.0 -d /tmp/sdist 2>&1 | tail -n 3 || echo 'sdist downlo`
-  - commands: `python - <<'EOF'
-import json, datetime
-d = json.load(open('/tmp/pypi_records.json'))
-v = d['info']['version']
-rel = d['releases'].get(v, [])
-uploaded = rel[0]['upload_time'] if rel else 'n/a'
-print('PyPI latest version:', v, 'uploaded:', uploaded)
-print('all releases:', sorted(d['releases']))
-assert`
+import sqlalchemy.dialects.mssql as mssql
+print('sqlalchemy', sqlalchemy.__version__, 'mssql dialect module ok')
+def probe(url):
+    try:
+        records.Database(url); return '`
+- `p-c10` image `python:3.11-slim` network `on`
+  - setup: ``
+  - commands: `python - <<'EOF' || echo "VERDICT_LINE: FAIL could not fetch PyPI/badge (network error or non-200)"
+import json, urllib.request
+def get(url):
+    req = urllib.request.Request(url, headers={'User-Agent': 'probe/1'})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.status, r.rea`
 - `p-c11` image `python:3.11-slim` network `install-only`
-  - setup: `pip install -q "records @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.tar.gz" && echo pinned-commit-ea42736 > /tmp/records_src || { echo 'SOURCE INSTALL FROM PINNED COMMIT FAILED (see above)'; pip install -q records==0.6.0 && echo pypi-0.6.0-FALLBACK > /t`
-  - commands: `cat /tmp/records_src && rm -f /tmp/env_url.db && DATABASE_URL='sqlite:////tmp/env_url.db' python - <<'EOF'
-import records, os
+  - setup: `pip install -q "records[pandas] @ https://github.com/kennethreitz/records/archive/ea4273695cee6da42edf1cb294d1f2a4505470fc.zip" 2>&1 | tail -3`
+  - commands: `DATABASE_URL='sqlite:///:memory:' python - <<'EOF' || echo "VERDICT_LINE: FAIL records.Database() did not use \$DATABASE_URL (see traceback)"
+import os, records
+print('DATABASE_URL =', os.environ.get('DATABASE_URL'))
 db = records.Database()
-print('db_url picked up:', db.db_url)
-print(db.query('select 1 as x').first())
-assert db.db_url == os.environ['DATABASE_URL'], db.db_url
-assert os.pat`
+print('OBSERVED db.db_url =', getattr(db, 'db_url', None))
+`
 
 ## Step 3, EXECUTE on GitHub Actions: run `33209465292` (artifacts: per-probe cmd/stdout/stderr/exit_code)
 

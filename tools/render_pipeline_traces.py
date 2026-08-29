@@ -14,10 +14,16 @@ for cname, r in e["per_case"].items():
           f"Repository {case['repo']} @ `{case['commit'][:12]}` · buyer question: _{case['buyer_question']}_\n",
           "## Step 1, instructions\nSee `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:\n"]
     md += [f"- **{c['id']}** ({c['type']}): {c['text']}" for c in case["claims"]]
-    pf = ROOT / "eval" / "probes" / f"{cid}.json"
-    if pf.exists():
+    idx_text = (r.get("output") or {}).get("_evidence_index", {}).get("text", "") if r["status"] == "ok" else ""
+    cands = sorted((ROOT / "eval" / "probes").glob(f"{cid}*.json"))
+    def overlap(pf):
+        ps = json.loads(pf.read_text())["probes"]
+        return sum(1 for p in ps if " && ".join(p["commands"])[:200] in idx_text)
+    pf = max(cands, key=overlap) if cands and idx_text else (cands[0] if cands else None)
+    if pf:
         probes = json.loads(pf.read_text())["probes"]
-        md.append(f"\n## Step 2, PLAN output: {len(probes)} probes (committed as `eval/probes/{cid}.json`)\n")
+        assert not idx_text or overlap(pf) > 0, f"{cid}: no probes file matches the run's evidence index"
+        md.append(f"\n## Step 2, PLAN output: {len(probes)} probes (committed as `eval/probes/{pf.name}`; matched to this run by its evidence index)\n")
         for p in probes:
             md.append(f"- `{p['id']}` image `{p['image']}` network `{p.get('network','none')}`\n  - setup: `{' && '.join(p.get('setup', []))[:300]}`\n  - commands: `{' && '.join(p['commands'])[:300]}`")
     if r["status"] != "ok":

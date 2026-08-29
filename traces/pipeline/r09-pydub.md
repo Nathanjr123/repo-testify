@@ -17,79 +17,92 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (interface): `len(audio_segment)` returns the segment length in milliseconds.
 - **c11** (interface): AudioSegment objects are immutable: operations like `reverse()` return new objects and never modify the original.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r09-pydub.json`)
+## Step 2, PLAN output: 11 probes (committed as `eval/probes/r09-pydub-r1.json`; matched to this run by its evidence index)
 
-- `p-c1` image `python:3.13-slim` network `install-only`
-  - setup: `python -m venv /venv && . /venv/bin/activate && pip install --no-cache-dir pydub > /pip.log 2>&1; echo PIP_RC=$? >> /pip.log`
-  - commands: `python --version && cat /pip.log && grep -q 'PIP_RC=0' /pip.log && . /venv/bin/activate && pip show pydub | grep -E '^(Name|Version):'`
+- `p-c1` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python --version && pip show pydub | head -3 && python -c 'import pydub, sys; print("observed: pydub imported from", pydub.__file__, "on", sys.version.split()[0])' && echo 'VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable' || echo 'VERDICT_LINE: FAIL pip install pydu`
 - `p-c2` image `python:3.13-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub`
-  - commands: `python --version && python -c 'import audioop' > audioop.log 2>&1; echo STDLIB_AUDIOOP_RC=$?; cat audioop.log && python -c "from pydub import AudioSegment" > import.log 2>&1; rc=$?; cat import.log; echo IMPORT_RC=$rc; grep -qi audioop import.log && echo VERDICT_HINT=import_fails_because_audioop_remo`
-- `p-c3` image `python:3.12-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub`
-  - commands: `command -v ffmpeg avconv ffprobe && { echo FFMPEG_PRESENT_PROBE_INVALID; exit 2; } || echo NO_FFMPEG_ON_PATH && python -c "import wave,math,struct; fr=8000; n=fr*20; w=wave.open('in.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000`
-- `p-c4` image `python:3.12-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub && apt-get update -qq && apt-get install -y -qq --no-install-recommends ffmpeg > /dev/null && ffmpeg -loglevel error -y -f lavfi -i 'sine=frequency=440:duration=3' -ac 1 -ar 22050 test.mp3 && ls -l test.mp3`
-  - commands: `command -v ffmpeg && echo FFMPEG_AT=$(command -v ffmpeg) && PATH=/usr/local/bin sh -c 'command -v ffmpeg avconv; echo PATH_WITHOUT_FFMPEG_CHECK_RC=$?' && PATH=/usr/local/bin python -c "import warnings; warnings.simplefilter('always'); from pydub import AudioSegment
-with warnings.catch_warnings(recor`
-- `p-c5` image `python:3.11-slim` network `install-only`
-  - setup: `cat > fetch.py <<'EOF'
-import urllib.request, sys
-url, out = sys.argv[1], sys.argv[2]
-hdr = {'User-Agent': 'claim-probe/1.0', 'Travis-API-Version': '3'}
+  - setup: `pip install pydub`
+  - commands: `python --version && python -c 'from pydub import AudioSegment; import sys; print("observed: from pydub import AudioSegment OK on Python", sys.version.split()[0])' && echo 'VERDICT_LINE: PASS README quickstart import succeeds on Python 3.13' || echo 'VERDICT_LINE: FAIL from pydub import AudioSegment `
+- `p-c3` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python -c '
+import wave, struct, math, shutil
+from pydub import AudioSegment
+def mkwav(p, secs, amp=8000, freq=440, rate=8000):
+    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
+    w.writeframes(b"".join(struct.pack("<h", int(amp*math.sin(2*math.pi*freq*i/rate))) f`
+- `p-c4` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python -c '
+import shutil
+from pydub import AudioSegment
+open("fake.mp3","wb").write(b"\xff\xfb\x90\x00" + b"\x00"*4000)
+print("observed: ffmpeg =", shutil.which("ffmpeg"), "avconv =", shutil.which("avconv"))
 try:
-    r = urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=30)
-    body, code, final = r.read(), r.getcode(), r.geturl()`
-  - commands: `cat travis_badge.log travis_page.log travis_api.log && echo '--- badge svg (first 800 bytes) ---'; head -c 800 travis_badge.svg; echo && echo '--- api json (first 800 bytes) ---'; head -c 800 travis_api.json; echo && grep -qi 'passing' travis_badge.svg && ! grep -qi 'unknown' travis_badge.svg && gre`
-- `p-c6` image `python:3.11-slim` network `install-only`
-  - setup: `cat > fetch.py <<'EOF'
-import urllib.request, sys
-url, out = sys.argv[1], sys.argv[2]
-hdr = {'User-Agent': 'claim-probe/1.0', 'Accept': 'application/json, image/svg+xml, text/html'}
-try:
-    r = urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=30)
-    body, code, final = r.re`
-  - commands: `cat appveyor_badge.log appveyor_api.log && echo '--- badge svg (first 800 bytes) ---'; head -c 800 appveyor_badge.svg; echo && python -c "import json,datetime
-d=json.load(open('appveyor_api.json')); b=d.get('build',{})
-print('status:', b.get('status'), 'finished:', b.get('finished'), 'commit:', b.ge`
-- `p-c7` image `python:3.12-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub && python -c "import wave,math,struct; fr=8000; n=fr*20; w=wave.open('never_gonna_give_you_up.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.`
-  - commands: `python -c "from pydub import AudioSegment
-song = AudioSegment.from_wav('never_gonna_give_you_up.wav')
-# pydub does things in milliseconds
-ten_seconds = 10 * 1000
-first_10_seconds = song[:ten_seconds]
-last_5_seconds = song[-5000:]
-beginning = first_10_seconds + 6
-end = last_5_seconds - 3
-without_the_`
-- `p-c8` image `python:3.12-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub && python -c "import wave,math,struct; fr=8000; n=fr*5; w=wave.open('tone.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.close()"`
-  - commands: `python -c "from pydub import AudioSegment
-seg = AudioSegment.from_wav('tone.wav')
-up = seg + 6
-down = seg - 3
-d_up = up.dBFS - seg.dBFS; d_down = down.dBFS - seg.dBFS
-print('base_dBFS', seg.dBFS, 'plus6_delta', d_up, 'minus3_delta', d_down)
-assert abs(d_up - 6.0) < 0.2, d_up
-assert abs(d_down + 3.0)`
-- `p-c9` image `python:3.12-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub && apt-get update -qq && apt-get install -y -qq --no-install-recommends ffmpeg > /dev/null && python -c "import wave,math,struct; fr=8000; n=fr*3; w=wave.open('tone.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pa`
-  - commands: `ffmpeg -version | head -1 && python -c "from pydub import AudioSegment; song = AudioSegment.from_wav('tone.wav'); song.export('out.ogg', format='ogg'); song.export('out_explicit.ogg', format='ogg', codec='libvorbis'); print('exported')" && ffprobe -v error -select_streams a:0 -show_entries stream=co`
-- `p-c10` image `python:3.12-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub && python -c "import wave,math,struct; fr=8000; n=fr*7; w=wave.open('seven.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr))) for i in range(n))); w.close()"`
-  - commands: `python -c "import wave; w=wave.open('seven.wav','rb'); print('wav_seconds', w.getnframes()/w.getframerate())" && python -c "from pydub import AudioSegment; seg = AudioSegment.from_wav('seven.wav'); n=len(seg); print('len()', n, 'duration_seconds', seg.duration_seconds); assert abs(n - 7*1000) <= 1, `
-- `p-c11` image `python:3.12-slim` network `install-only`
-  - setup: `pip install --no-cache-dir pydub && python -c "import wave,math,struct; fr=8000; n=fr*4; w=wave.open('song.wav','wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr); w.writeframes(b''.join(struct.pack('<h',int(8000*math.sin(2*math.pi*440*i/fr)*math.exp(-i/fr))) for i in range(n))); w.clos`
-  - commands: `python -c "from pydub import AudioSegment
-song = AudioSegment.from_wav('song.wav')
-before = bytes(song.raw_data); before_len = len(song); before_db = song.dBFS
-# song is not modified
-backwards = song.reverse()
-louder = song + 6
-faded = song.fade_in(1000).fade_out(1000)
-clip = song[:1000]
-assert byte`
+    AudioSegment.from_mp3("fake.mp3")
+    print("observed: from_mp3 unexpectedly succe`
+- `p-c5` image `python:3.11-slim` network `on`
+  - setup: ``
+  - commands: `python -c '
+import urllib.request, urllib.error
+def get(u):
+    try:
+        r = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent":"probe"}), timeout=20)
+        return r.status, r.geturl(), r.read(20000).decode("utf-8","replace")
+    except urllib.error.HTTPError as e:
+        `
+- `p-c6` image `python:3.11-slim` network `on`
+  - setup: ``
+  - commands: `python -c '
+import urllib.request, urllib.error, json, datetime
+def get(u):
+    try:
+        r = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent":"probe","Accept":"application/json"}), timeout=20)
+        return r.status, r.read(50000).decode("utf-8","replace")
+    except urlli`
+- `p-c7` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python -c '
+import wave, struct, math
+from pydub import AudioSegment
+def mkwav(p, secs, amp=8000, freq=440, rate=8000):
+    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
+    w.writeframes(b"".join(struct.pack("<h", int(amp*math.sin(2*math.pi*freq*i/rate))) for i in `
+- `p-c8` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python -c '
+import wave, struct, math
+from pydub import AudioSegment
+def mkwav(p, secs, amp=8000, freq=440, rate=8000):
+    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
+    w.writeframes(b"".join(struct.pack("<h", int(amp*math.sin(2*math.pi*freq*i/rate))) for i in `
+- `p-c9` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python -c '
+import wave, struct, math, io, logging, shutil, subprocess
+from pydub import AudioSegment
+def mkwav(p, secs, amp=8000, freq=440, rate=8000):
+    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
+    w.writeframes(b"".join(struct.pack("<h", int(amp*math.sin(2`
+- `p-c10` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python -c '
+import wave, struct, math
+from pydub import AudioSegment
+def mkwav(p, secs, amp=8000, freq=440, rate=8000):
+    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
+    w.writeframes(b"".join(struct.pack("<h", int(amp*math.sin(2*math.pi*freq*i/rate))) for i in `
+- `p-c11` image `python:3.11-slim` network `install-only`
+  - setup: `pip install pydub`
+  - commands: `python -c '
+import wave, struct, math
+from pydub import AudioSegment
+def mkwav(p, secs, amp=8000, freq=440, rate=8000):
+    n = rate*secs
+    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
+    w.writeframes(b"".join(struct.pack("<h", int(amp*(i/n)*math.sin(2*math.pi*`
 
 ## Step 3, EXECUTE on GitHub Actions: run `33212005473` (artifacts: per-probe cmd/stdout/stderr/exit_code)
 

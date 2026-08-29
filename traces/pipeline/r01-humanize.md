@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (interface): The 'humanize' package ships a Russian locale: after `humanize.i18n.activate('ru_RU')`, `humanize.naturaltime(datetime.timedelta(seconds=3))` returns '3 секунды назад', and `humanize.i18n.deactivate()` restores '3 seconds ago'.
 - **c11** (test_ci): The GitHub Actions 'Test' workflow badge in the humanize README asserts that the Test workflow on python-humanize/humanize is currently passing.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r01-humanize.json`)
+## Step 2, PLAN output: 11 probes (committed as `eval/probes/r01-humanize.json`; matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `python3 -m venv /tmp/v && /tmp/v/bin/python -m pip install --upgrade humanize`

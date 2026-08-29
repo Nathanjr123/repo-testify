@@ -17,7 +17,7 @@ def row(label, name):
 hdr = "| arm | claim accuracy (worst-case weighted) | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |\n|---|---|---|---|---|---|---|---|---|---|---|"
 rows = [row("baseline-v2-n1-rescored", "baseline (run 1)"), row("baseline-v2-n2-rescored", "baseline (run 2)"),
         row("advanced-v1-rescored", "pipeline v1"), row("advanced-v2-rescored", "pipeline v2 (public, tuned)"),
-        row("ablate-k1", "ablation: k=1 votes"), row("ablate-no-execution", "ablation: no execution"),
+        row("ablate-k1", "ablation: k=1 votes"), row("ablate-no-execution-rescored", "ablation: no execution"),
         row("baseline-heldout", "baseline (held-out, run once)"), row("advanced-v3-heldout", "pipeline v3 (held-out, run once)")]
 b = [latest[l]["agg"]["raw"] for l in ("baseline-v2-n1-rescored", "baseline-v2-n2-rescored") if l in latest]
 floor = f"Baseline-vs-baseline spread (noise floor): **{max(b)-min(b):.3f}** composite; claim-accuracy spread {abs(latest['baseline-v2-n1-rescored']['agg']['rows']['verdict_acc']-latest['baseline-v2-n2-rescored']['agg']['rows']['verdict_acc']):.3f}." if len(b) == 2 else ""
