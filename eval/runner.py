@@ -20,6 +20,11 @@ def run_case(arm, case_path):
                        capture_output=True, text=True, timeout=1800)
     wall = round(time.monotonic() - t0, 2)
     if p.returncode == 75:
+        # The arm saw empty/limit-like responses. Distinguish a real usage limit (halt the sweep) from a
+        # case-specific empty response (score that case as an arm error and keep going) with one cheap probe.
+        probe = subprocess.run(["bash", str(ROOT / "tools" / "limit_probe.sh")], capture_output=True, text=True, timeout=120)
+        if probe.returncode == 0:
+            return {"status": "arm_error", "stderr": "empty model response for this case while usage was available: " + p.stderr[-300:], "wall_s": wall}
         return {"status": "limit_blocked", "stderr": p.stderr[-500:], "wall_s": wall}
     if p.returncode != 0:
         return {"status": "arm_error", "stderr": p.stderr[-2000:], "wall_s": wall}
