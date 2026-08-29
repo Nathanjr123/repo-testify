@@ -14,7 +14,7 @@ The format the challenge asks for, public split:
 
 | Metric | Simple baseline | Agent solution | Change |
 |---|---|---|---|
-| Primary outcome: claim accuracy | 0.07 | 0.71 | +0.64 (10x) |
+| Primary outcome: claim accuracy (raw count, 95% Wilson interval) | 0.07 (10/75, 0.07 to 0.23) | 0.71 (62/75, 0.73 to 0.90) | +0.64 (10x); intervals do not overlap |
 | Composite score (published rubric) | 0.350 | 0.817 | +0.467 |
 | Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
 | Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |

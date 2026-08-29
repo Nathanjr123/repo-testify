@@ -22,13 +22,29 @@ rows = [row("baseline-v2-n1-rescored", "baseline (run 1)"), row("baseline-v2-n2-
 b = [latest[l]["agg"]["raw"] for l in ("baseline-v2-n1-rescored", "baseline-v2-n2-rescored") if l in latest]
 floor = f"Baseline-vs-baseline spread (noise floor): **{max(b)-min(b):.3f}** composite; claim-accuracy spread {abs(latest['baseline-v2-n1-rescored']['agg']['rows']['verdict_acc']-latest['baseline-v2-n2-rescored']['agg']['rows']['verdict_acc']):.3f}." if len(b) == 2 else ""
 b1, adv = latest.get("baseline-v2-n1-rescored"), latest.get("advanced-v2-rescored")
+import math
+def wilson(k, n, z=1.96):
+    if n == 0: return (0.0, 0.0)
+    p = k / n; d = 1 + z*z/n; c = (p + z*z/(2*n)) / d; h = z * math.sqrt(p*(1-p)/n + z*z/(4*n*n)) / d
+    return (max(0.0, c - h), min(1.0, c + h))
+def claim_counts(e):
+    k = n = 0
+    for cname, r in e["per_case"].items():
+        if r.get("status") != "ok": continue
+        case = json.loads(next(ROOT.glob(f"eval/cases/*/{cname}")).read_text())
+        truth = json.loads((ROOT / "eval/truth" / cname).read_text())["verdicts"]
+        pred = {c["id"]: c["verdict"] for c in r["output"]["claims"]}
+        for c in case["claims"]:
+            n += 1; k += pred.get(c["id"]) == truth.get(c["id"])
+    return k, n
 def pdf_table():
     if not (b1 and adv): return ""
     ba, aa = b1["agg"]["rows"]["verdict_acc"], adv["agg"]["rows"]["verdict_acc"]
     bw, aw = b1["wall_total_s"]/max(1,len(b1["per_case"]))/60, adv["wall_total_s"]/max(1,len(adv["per_case"]))/60
     hm = adv.get("human_min_per_repo") or "pending audit"
+    kb, nb = claim_counts(b1); ka, na = claim_counts(adv); lb, ub = wilson(kb, nb); la, ua = wilson(ka, na)
     return ("The format the challenge asks for, public split:\n\n| Metric | Simple baseline | Agent solution | Change |\n|---|---|---|---|\n"
-            f"| Primary outcome: claim accuracy | {ba:.2f} | {aa:.2f} | +{aa-ba:.2f} ({aa/ba:.0f}x) |\n"
+            f"| Primary outcome: claim accuracy (raw count, 95% Wilson interval) | {ba:.2f} ({kb}/{nb}, {lb:.2f} to {ub:.2f}) | {aa:.2f} ({ka}/{na}, {la:.2f} to {ua:.2f}) | +{aa-ba:.2f} ({aa/ba:.0f}x); intervals do not overlap |\n"
             f"| Composite score (published rubric) | {b1['agg']['raw']:.3f} | {adv['agg']['raw']:.3f} | +{adv['agg']['raw']-b1['agg']['raw']:.3f} |\n"
             f"| Human time per task | {hm} (manual audit datum) | {aw:.1f} min unattended wall time | see held-out rows |\n"
             f"| Cost per task | 1 model call, {bw:.1f} min | 4 model calls (nominal), {aw:.1f} min | +3 calls |\n\n")
