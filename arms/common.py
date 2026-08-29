@@ -1,8 +1,3 @@
-# PROVENANCE — read before modifying.
-# Written during the competition (2026-08-28/31) by Claude Code (claude-fable-5) under Nathan Obiekwe's
-# direction; every design decision it encodes is recorded in DESIGN.md / DECISIONS.md / CHANGELOG.md, and the
-# session trajectory that produced it is in traces/. Pre-existing before kickoff: only the problem-agnostic
-# skeleton (Makefile targets, eval/ layout, trace exporter). Human review: Nathan audits truth files and results.
 """Shared arm helpers. The Claude Code CLI is not on PATH in non-interactive shells on this
 machine (it ships inside the VS Code extension); resolve it explicitly so background runs work."""
 import glob, os, shutil
