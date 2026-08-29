@@ -1,0 +1,182 @@
+{
+ "case_id": "r17-pyinquirer",
+ "repo": "https://github.com/CITGuru/PyInquirer",
+ "commit": "7637373429bec66788650cda8091b7a6f12929ee",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --quiet --upgrade pip"
+   ],
+   "commands": [
+    "python3 --version",
+    "/tmp/v/bin/pip install PyInquirer > /tmp/pip.log 2>&1; rc=$?; tail -15 /tmp/pip.log; echo \"pip exit: $rc\"; /tmp/v/bin/pip list 2>/dev/null | grep -i -E 'pyinquirer|prompt|pygments'; test $rc -eq 0 && echo \"VERDICT_LINE: PASS pip install PyInquirer exited 0 on $(python3 --version)\" || echo \"VERDICT_LINE: FAIL pip install PyInquirer exited $rc\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --quiet PyInquirer"
+   ],
+   "commands": [
+    "python3 --version",
+    "/tmp/v/bin/python -c 'import prompt_toolkit; print(\"installed prompt_toolkit\", prompt_toolkit.__version__)' || echo 'prompt_toolkit itself does not import'",
+    "/tmp/v/bin/python -c 'from PyInquirer import prompt, print_json; print(\"import ok:\", prompt, print_json)' > /tmp/imp.log 2>&1; rc=$?; tail -5 /tmp/imp.log; echo \"import exit: $rc\"; test $rc -eq 0 && echo 'VERDICT_LINE: PASS from PyInquirer import prompt, print_json succeeded after pip install PyInquirer' || echo \"VERDICT_LINE: FAIL quickstart import failed on $(python3 --version): $(tail -1 /tmp/imp.log)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --quiet PyInquirer",
+    "/tmp/v/bin/pip install --quiet prompt_toolkit==1.0.14"
+   ],
+   "commands": [
+    "python3 --version",
+    "/tmp/v/bin/pip show prompt_toolkit | grep -i version",
+    "echo 'from_dict.py line 9:'; sed -n 9p /tmp/v/lib/python3.11/site-packages/prompt_toolkit/styles/from_dict.py",
+    "/tmp/v/bin/python -c 'import prompt_toolkit.styles.from_dict; from PyInquirer import prompt, print_json; print(\"import ok\")' > /tmp/imp.log 2>&1; rc=$?; tail -4 /tmp/imp.log; echo \"import exit: $rc\"; test $rc -eq 0 && echo 'VERDICT_LINE: PASS prompt_toolkit==1.0.14 makes PyInquirer importable' || echo \"VERDICT_LINE: FAIL prescribed prompt_toolkit==1.0.14 still fails on $(python3 --version): $(tail -1 /tmp/imp.log)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.9-slim",
+   "network": "on",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install --quiet PyInquirer",
+    "printf '%s\\n' 'from __future__ import print_function, unicode_literals' 'from PyInquirer import prompt, print_json' 'questions = [{\"type\": \"input\", \"name\": \"first_name\", \"message\": \"What is your first name\"}]' 'answers = prompt(questions)' 'print_json(answers)' > /tmp/q.py",
+    "printf '%s\\n' 'import os, pty, sys, time, select' 'pid, fd = pty.fork()' 'if pid == 0:' '    os.execv(\"/tmp/v/bin/python\", [\"/tmp/v/bin/python\", \"/tmp/q.py\"])' 'out = b\"\"' 'def rd(t):' '    global out' '    end = time.time() + t' '    while time.time() < end:' '        r, _, _ = select.select([fd], [], [], 0.2)' '        if r:' '            try:' '                d = os.read(fd, 4096)' '            except OSError:' '                return' '            if not d:' '                return' '            out += d' 'rd(4)' 'try:' '    os.write(fd, b\"Bob\\r\")' 'except OSError:' '    pass' 'rd(6)' 'try:' '    os.kill(pid, 9)' 'except OSError:' '    pass' 'os.waitpid(pid, 0)' 's = out.decode(errors=\"replace\")' 'print(\"--- child output ---\")' 'print(s)' 'print(\"--- end ---\")' 'ok = \"first_name\" in s and \"Bob\" in s' 'print(\"observed first_name and Bob in print_json output:\", ok)' 'sys.exit(0 if ok else 1)' > /tmp/d.py"
+   ],
+   "commands": [
+    "python3 --version",
+    "/tmp/v/bin/python -c 'from PyInquirer import prompt, print_json; print(\"premise: import ok\")' || echo 'premise: PyInquirer not importable on this interpreter'",
+    "timeout 60 python3 /tmp/d.py && echo 'VERDICT_LINE: PASS quickstart prompt() returned dict keyed first_name and print_json printed it (Python 3.9, pty-driven)' || echo 'VERDICT_LINE: FAIL quickstart did not print JSON with first_name/Bob (see child output above)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request, tarfile; urllib.request.urlretrieve(\"https://github.com/CITGuru/PyInquirer/archive/7637373429bec66788650cda8091b7a6f12929ee.tar.gz\", \"/tmp/src.tgz\"); tarfile.open(\"/tmp/src.tgz\").extractall(\"/tmp\")'",
+    "mv /tmp/PyInquirer-7637373429bec66788650cda8091b7a6f12929ee /tmp/pyinq"
+   ],
+   "commands": [
+    "ls /tmp/pyinq/examples",
+    "cd /tmp/pyinq && python3 -c 'import os; want=[\"editor.py\",\"expand.py\",\"list.py\",\"password.py\",\"when.py\",\"checkbox.py\",\"confirm.py\",\"hierarchical.py\",\"pizza.py\",\"input.py\",\"rawlist.py\"]; missing=[f for f in want if not os.path.isfile(\"examples/\"+f)]; print(\"missing examples:\", missing); assert not missing' && echo 'VERDICT_LINE: PASS all 11 listed example scripts exist under ./examples at the pinned commit' || echo 'VERDICT_LINE: FAIL some listed example scripts are missing from ./examples (see missing list)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request, tarfile; urllib.request.urlretrieve(\"https://github.com/CITGuru/PyInquirer/archive/7637373429bec66788650cda8091b7a6f12929ee.tar.gz\", \"/tmp/src.tgz\"); tarfile.open(\"/tmp/src.tgz\").extractall(\"/tmp\")'",
+    "mv /tmp/PyInquirer-7637373429bec66788650cda8091b7a6f12929ee /tmp/pyinq",
+    "cd /tmp/pyinq && python3 -m venv .v && .v/bin/pip install --quiet --upgrade pip"
+   ],
+   "commands": [
+    "cd /tmp/pyinq && .v/bin/pip install -e . > /tmp/pip.log 2>&1; rc=$?; tail -5 /tmp/pip.log; echo \"pip install -e . exit: $rc\"; test $rc -eq 0 || { echo 'VERDICT_LINE: FAIL pip install -e . failed'; exit 1; }",
+    "cd /tmp/pyinq && .v/bin/pip show prompt_toolkit | grep -i version; echo '--- PyInquirer/__init__.py ---'; cat PyInquirer/__init__.py",
+    "cd /tmp && /tmp/pyinq/.v/bin/python -c 'from PyInquirer import prompt, print_json; print(\"import ok:\", prompt, print_json)' > /tmp/imp.log 2>&1; rc=$?; tail -4 /tmp/imp.log; echo \"import exit: $rc\"; test $rc -eq 0 && echo 'VERDICT_LINE: PASS pip install -e . yields importable prompt and print_json from repository code' || echo \"VERDICT_LINE: FAIL from-source install: quickstart import fails: $(tail -1 /tmp/imp.log)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request, tarfile; urllib.request.urlretrieve(\"https://github.com/CITGuru/PyInquirer/archive/7637373429bec66788650cda8091b7a6f12929ee.tar.gz\", \"/tmp/src.tgz\"); tarfile.open(\"/tmp/src.tgz\").extractall(\"/tmp\")'",
+    "mv /tmp/PyInquirer-7637373429bec66788650cda8091b7a6f12929ee /tmp/pyinq",
+    "cd /tmp/pyinq && python3 -m venv .v && .v/bin/pip install --quiet -e .",
+    "printf '%s\\n' 'import os, importlib, sys' 'types = [\"input\",\"confirm\",\"list\",\"rawlist\",\"expand\",\"checkbox\",\"password\",\"editor\"]' 'present = [t for t in types if os.path.isfile(\"PyInquirer/prompts/%s.py\" % t)]' 'print(\"prompt modules present:\", present, \"(%d/8)\" % len(present))' 'res = {}' 'for t in types:' '    try:' '        importlib.import_module(\"PyInquirer.prompts.\" + t); res[t] = \"import ok\"' '    except Exception as e:' '        res[t] = \"%s: %s\" % (type(e).__name__, e)' 'for t in types:' '    print(\"  \", t, \"->\", res[t])' 'ok = len(present) == 8 and all(v == \"import ok\" for v in res.values())' 'print(\"all 8 types present and importable:\", ok)' 'sys.exit(0 if ok else 1)' > /tmp/types.py"
+   ],
+   "commands": [
+    "ls /tmp/pyinq/PyInquirer/prompts",
+    "cd /tmp/pyinq && .v/bin/pip show prompt_toolkit | grep -i version",
+    "cd /tmp/pyinq && .v/bin/python /tmp/types.py && echo 'VERDICT_LINE: PASS one prompt module per documented type exists and imports with the repo-declared prompt_toolkit' || echo 'VERDICT_LINE: FAIL not every documented question type has a present+importable prompt module (see per-type results)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "printf '%s\\n' 'import urllib.request, urllib.error, sys' 'u = \"https://travis-ci.org/expobrain/PyInquirer.svg?branch=master\"' 'try:' '    r = urllib.request.urlopen(u, timeout=30)' '    code, final, body = r.status, r.geturl(), r.read().decode(errors=\"replace\")' 'except urllib.error.HTTPError as e:' '    code, final, body = e.code, e.geturl(), e.read().decode(errors=\"replace\")' 'except Exception as e:' '    code, final, body = \"ERR\", str(e), \"\"' 'print(\"badge status:\", code, \"| final_url:\", final)' 'print(\"body_head:\", body[:300].replace(\"\\n\", \" \"))' 'ok = code == 200 and \"passing\" in body' 'print(\"live passing badge:\", ok)' 'sys.exit(0 if ok else 1)' > /tmp/badge.py"
+   ],
+   "commands": [
+    "echo 'note: badge owner is expobrain, repo owner is CITGuru'",
+    "python3 /tmp/badge.py && echo 'VERDICT_LINE: PASS travis-ci.org badge returns 200 with a passing build' || echo 'VERDICT_LINE: FAIL travis-ci.org badge is not a live passing build (see status/final_url/body_head)'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request, tarfile; urllib.request.urlretrieve(\"https://github.com/CITGuru/PyInquirer/archive/7637373429bec66788650cda8091b7a6f12929ee.tar.gz\", \"/tmp/src.tgz\"); tarfile.open(\"/tmp/src.tgz\").extractall(\"/tmp\")'",
+    "mv /tmp/PyInquirer-7637373429bec66788650cda8091b7a6f12929ee /tmp/pyinq",
+    "cd /tmp/pyinq && python3 -m venv venv && venv/bin/pip install --quiet --upgrade pip"
+   ],
+   "commands": [
+    "cd /tmp/pyinq && ls requirements.txt requirements_dev.txt && cat requirements.txt requirements_dev.txt",
+    "cd /tmp/pyinq && venv/bin/pip install -r requirements.txt > /tmp/req.log 2>&1; rc=$?; tail -3 /tmp/req.log; echo \"pip install -r requirements.txt exit: $rc\"; test $rc -eq 0 || { echo 'VERDICT_LINE: FAIL pip install -r requirements.txt failed'; exit 1; }",
+    "cd /tmp/pyinq && venv/bin/pip install -r requirements_dev.txt > /tmp/reqdev.log 2>&1; rc=$?; tail -3 /tmp/reqdev.log; echo \"pip install -r requirements_dev.txt exit: $rc\"; test $rc -eq 0 || { echo 'VERDICT_LINE: FAIL pip install -r requirements_dev.txt failed'; exit 1; }",
+    "cd /tmp/pyinq && ls tests/ && timeout 90 venv/bin/pytest -sv tests/ > /tmp/pytest.log 2>&1; rc=$?; tail -30 /tmp/pytest.log; echo \"pytest exit: $rc\"; test $rc -eq 0 && echo 'VERDICT_LINE: PASS documented contributor flow installs and pytest -sv tests/ passes' || echo \"VERDICT_LINE: FAIL pytest -sv tests/ exited $rc: $(grep -E 'passed|failed|error' /tmp/pytest.log | tail -1)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "printf '%s\\n' 'import urllib.request, urllib.error, json, sys' 'h = {\"Accept\": \"application/vnd.github+json\", \"User-Agent\": \"repo-probe\"}' 'try:' '    d = json.load(urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/CITGuru/PyInquirer/issues/159\", headers=h), timeout=30))' 'except urllib.error.HTTPError as e:' '    print(\"issue #159 fetch failed: HTTP\", e.code); sys.exit(1)' 'repo = json.load(urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/CITGuru/PyInquirer\", headers=h), timeout=30))' 'print(\"issue #159 title:\", d[\"title\"], \"| state:\", d[\"state\"], \"| created:\", d[\"created_at\"], \"| comments:\", d[\"comments\"])' 'print(\"repo pushed_at:\", repo[\"pushed_at\"], \"| archived:\", repo[\"archived\"])' 'sys.exit(0 if d[\"state\"] == \"open\" else 1)' > /tmp/issue.py"
+   ],
+   "commands": [
+    "python3 /tmp/issue.py && echo 'VERDICT_LINE: PASS issue #159 exists and is still open (see title above)' || echo 'VERDICT_LINE: FAIL issue #159 missing or not open'"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "printf '%s\\n' 'import urllib.request, urllib.error, json, sys' 'h = {\"Accept\": \"application/vnd.github+json\", \"User-Agent\": \"repo-probe\"}' 'try:' '    rel = json.load(urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/CITGuru/PyInquirer/releases/tags/1.0.3\", headers=h), timeout=30)); rel_ok = True; rel_info = rel.get(\"published_at\")' 'except urllib.error.HTTPError as e:' '    rel_ok = False; rel_info = \"HTTP %s\" % e.code' 'p = json.load(urllib.request.urlopen(\"https://pypi.org/pypi/PyInquirer/json\", timeout=30))' 'v = p[\"info\"][\"version\"]' 'print(\"github release tag 1.0.3 exists:\", rel_ok, \"published_at:\", rel_info)' 'print(\"pypi latest version:\", v, \"uploaded:\", p[\"releases\"][v][0][\"upload_time\"], \"| requires_dist:\", p[\"info\"][\"requires_dist\"])' 'ok = rel_ok and v == \"1.0.3\"' 'print(\"release exists and matches pypi latest:\", ok)' 'sys.exit(0 if ok else 1)' > /tmp/rel.py"
+   ],
+   "commands": [
+    "python3 /tmp/rel.py && echo 'VERDICT_LINE: PASS GitHub release 1.0.3 exists and PyPI latest is 1.0.3' || echo 'VERDICT_LINE: FAIL release 1.0.3 missing on GitHub or PyPI latest differs (see values above)'"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
