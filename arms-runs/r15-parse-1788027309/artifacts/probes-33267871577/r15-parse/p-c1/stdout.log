@@ -1,0 +1,7 @@
+Collecting parse
+  Downloading parse-1.22.1-py2.py3-none-any.whl.metadata (21 kB)
+Downloading parse-1.22.1-py2.py3-none-any.whl (20 kB)
+Installing collected packages: parse
+Successfully installed parse-1.22.1
+installed parse version: 1.22.1
+VERDICT_LINE: PASS pip install parse succeeded and import parse works

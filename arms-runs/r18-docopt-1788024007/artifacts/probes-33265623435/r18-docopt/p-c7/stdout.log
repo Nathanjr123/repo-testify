@@ -1,3 +1,0 @@
-observed: exit 0 | stdout {'--drifting': False,  '--help': False,  '--moored': False,  '--speed': '15',  '--version': False,  '<name>': ['Guardian'],  '<x>': '100',  '<y>': '150',  'mine': False,  'move': True,  'new': False,  'remove': False,  'set': False,  'ship': True,  'shoot': False} | stderr 
-observed: diff keys = {}
-VERDICT_LINE: PASS examples/naval_fate.py ship Guardian move 100 150 --speed=15 printed exactly the README dictionary

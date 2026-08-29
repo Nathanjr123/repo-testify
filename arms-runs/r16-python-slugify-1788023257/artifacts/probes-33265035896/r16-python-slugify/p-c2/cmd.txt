@@ -1,6 +1,0 @@
-python - <<'EOF' && echo "VERDICT_LINE: PASS python-slugify[unidecode] installs Unidecode alongside slugify" || echo "VERDICT_LINE: FAIL unidecode or slugify not importable after pip install python-slugify[unidecode] (see traceback above)"
-import importlib.metadata as m
-import unidecode
-from slugify import slugify
-print('observed: python-slugify', m.version('python-slugify'), '| Unidecode', m.version('Unidecode'), '| slugify("Hello World")=', repr(slugify('Hello World')))
-EOF

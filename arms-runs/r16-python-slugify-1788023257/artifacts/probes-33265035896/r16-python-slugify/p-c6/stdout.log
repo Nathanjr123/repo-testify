@@ -1,2 +1,0 @@
-observed: http 200 | final_url https://s3.amazonaws.com/assets.coveralls.io/badges/coveralls_97.svg | coverage_pct 100.0 | badge_says_unknown False
-VERDICT_LINE: PASS coveralls reports 100.0% coverage for un33k/python-slugify (README implies ~97%)

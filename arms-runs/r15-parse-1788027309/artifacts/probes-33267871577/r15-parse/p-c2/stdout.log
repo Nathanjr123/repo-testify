@@ -1,0 +1,3 @@
+__all__: ['parse', 'search', 'findall', 'with_pattern']
+import * names: ['findall', 'parse', 'search', 'with_pattern']
+VERDICT_LINE: PASS import * exports exactly parse,search,findall,with_pattern; compile not exported

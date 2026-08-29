@@ -1,0 +1,264 @@
+{
+ "repo": "https://github.com/seb-m/pyinotify",
+ "overall_score": 56,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "Successfully installed pyinotify-0.9.6 / observed: pip_exit=0 installed=Version: 0.9.6 / VERDICT_LINE: PASS pip install pyinotify exited 0 on Python 3.13.15 and pip show finds it; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "File \"/tmp/v/lib/python3.13/site-packages/pyinotify.py\", line 71, in <module>: import asyncore / ModuleNotFoundError: No module named 'asyncore' / import_exit=1 (probe exit_code 0; the VERDICT_LINE: PASS is contradicted by import_exit=1 in the same transcript, the grep matched the echoed command text inside the traceback, not a successful print; on Python 3.13.15 the import fails, so 'any Python 3.x' is false as written)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "setup.py:28 if not platform.startswith('linux') and not platform.startswith('freebsd'): sys.exit(1) / inotify is not available on macosx-10.9-x86_64 / observed: simulated_non_linux_exit=1 / VERDICT_LINE: PASS setup.py exits 1 with 'inotify is not available' when platform is not linux/freebsd; host kernel 6.17.0-1022-azure has /proc/sys/fs/inotify; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "File \"/tmp/pyin/setup.py\", line 11, in <module>: import distutils.extension / ModuleNotFoundError: No module named 'distutils' / setup_py_install_exit=1 / VERDICT_LINE: FAIL python setup.py install exit 1, import exit 1 on Python 3.13.15 (probe exit_code 0; the documented `python3 setup.py install` line fails as written on a current Python 3)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "python -m pyinotify -v /my-dir-to-watch -> ModuleNotFoundError: No module named 'asyncore' / observed: IN_CREATE in output = False / VERDICT_LINE: FAIL no IN_CREATE event printed on Python 3.13.15 (probe exit_code 0; the watcher never started, no events printed after touch + write in the watched dir)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "observed: github_spdx='MIT' pypi_license='MIT License' COPYING_has_MIT_grant=True / VERDICT_LINE: PASS GitHub license API=MIT, PyPI license='MIT License', COPYING contains MIT grant text; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "VERDICT_LINE: FAIL http://seb-m.github.com/pyinotify unreachable: URLError(gaierror(-5, 'No address associated with hostname')) (probe exit_code 0; the hostname does not resolve, so the README link does not lead to a live documentation page)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "observed: status=200 final_url=https://github.com/seb-m/pyinotify/wiki has_wiki=True page_markup=True empty_wiki_prompt=False / VERDICT_LINE: PASS wiki URL returns HTTP 200 with wiki page content and repo has_wiki=true; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "observed: pypi_version='0.9.6' uploaded='2015-06-04T15:50:23' repo_python3_version='0.9.6' / VERDICT_LINE: PASS PyPI latest is 0.9.6 (uploaded 2015-06-04T15:50:23) and python3/pyinotify.py __version__ is 0.9.6; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [],
+ "run_id": "33266463031",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r20-pyinotify-1788025416",
+ "_evidence_index": {
+  "probes": [
+   "p-c1",
+   "p-c2",
+   "p-c3",
+   "p-c4",
+   "p-c5",
+   "p-c6",
+   "p-c7",
+   "p-c8",
+   "p-c9"
+  ],
+  "text": "p-c1 /tmp/v/bin/pip install pyinotify > /tmp/pip.log 2>&1; rc=$?; tail -8 /tmp/pip.log; echo \"observed: pip_exit=$rc installed=$(/tmp/v/bin/pip show pyinotify 2>/dev/null | grep -m1 '^Version' || echo none)\"; [ \"$rc\" = 0 ] && /tmp/v/bin/pip show pyinotify >/dev/null 2>&1 && echo \"VERDICT_LINE: PASS pip install pyinotify exited 0 on $(/tmp/v/bin/python -V) and pip show finds it\" || echo \"VERDICT_LINE: FAIL pip install pyinotify exited $rc on $(/tmp/v/bin/python -V) (see log tail above)\"\nSTDOUT Building wheels for collected packages: pyinotify\n  Building wheel for pyinotify (pyproject.toml): started\n  Building wheel for pyinotify (pyproject.toml): finished with status 'done'\n  Created wheel for pyinotify: filename=pyinotify-0.9.6-py3-none-any.whl size=25418 sha256=ab467c6d2974c5122885a77005a19d78f24e32509250533025253e25a27039cd\n  Stored in directory: /root/.cache/pip/wheels/be/e0/29/d237cd80907dd5699eeee0237d136eae049d8edef6f5a6a6fa\nSuccessfully built pyinotify\nInstalling collected packages: pyinotify\nSuccessfully installed pyinotify-0.9.6\nobserved: pip_exit=0 installed=Version: 0.9.6\nVERDICT_LINE: PASS pip install pyinotify exited 0 on Python 3.13.15 and pip show finds it\n\nSTDERR \nPHASE_A Python 3.13.15\n\n--stderr--\nUnable to find image 'python:3.13-slim' locally\n3.13-slim: Pulling from library/python\n6310eb16bf42: Pulling fs layer\n64c7e6efa7cd: Pulling fs layer\n357a46282089: Pulling fs layer\nd64904dff413: Pulling fs layer\nd64904dff413: Waiting\n64c7e6efa7cd: Verifying Checksum\n64c7e6efa7cd: Download complete\n357a46282089: Verifying Checksum\n357a46282089: Download complete\nd64904dff413: Verifying Checksum\nd64904dff413: Download complete\n6310eb16bf42: Verifying Checksum\n6310eb16bf42: Download complete\n6310eb16bf42: Pull complete\n64c7e6efa7cd: Pull complete\n357a46282089: Pull complete\nd64904dff413: Pull complete\nDigest: sha256:7ce4b6dfe35e55397b7cda544f8a13f191b7ae28dc5aad71fe664dbc9bc2623f\nStatus: Downloaded newer image for python:3.13-slim\n\nEXIT 0\np-c2 /tmp/v/bin/python -c 'import pyinotify; print(\"observed __version__:\", pyinotify.__version__)' > /tmp/imp.log 2>&1; rc=$?; tail -4 /tmp/imp.log; echo \"import_exit=$rc\"; grep -q 'observed __version__' /tmp/imp.log && echo \"VERDICT_LINE: PASS import pyinotify succeeds on $(/tmp/v/bin/python -V)\" || echo \"VERDICT_LINE: FAIL import pyinotify on $(/tmp/v/bin/python -V) raised: $(tail -1 /tmp/imp.log)\"\nSTDOUT     ^^^^^^^^^^^^^^^^\n  File \"/tmp/v/lib/python3.13/site-packages/pyinotify.py\", line 71, in <module>\n    import asyncore\nModuleNotFoundError: No module named 'asyncore'\nimport_exit=1\nVERDICT_LINE: PASS import pyinotify succeeds on Python 3.13.15\n\nSTDERR \nPHASE_A ne'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: pyinotify\n  Building wheel for pyinotify (pyproject.toml): started\n  Building wheel for pyinotify (pyproject.toml): finished with status 'done'\n  Created wheel for pyinotify: filename=pyinotify-0.9.6-py3-none-any.whl size=25418 sha256=8d31b4f86d6d5eeca0889ef16db2fa65fb76e49b638109493e8e4319926438e5\n  Stored in directory: /root/.cache/pip/wheels/be/e0/29/d237cd80907dd5699eeee0237d136eae049d8edef6f5a6a6fa\nSuccessfully built pyinotify\nInstalling collected packages: pyinotify\nSuccessfully installed pyinotify-0.9.6\n\n--stderr--\n\nEXIT 0\np-c3 cd /tmp/src && echo '--- guard in setup.py:' && grep -n -A2 'not platform.startswith' setup.py; echo \"kernel: $(uname -r)\"; ls /proc/sys/fs/inotify/ 2>&1; python -c \"import distutils.util as u; u.get_platform=lambda: 'macosx-10.9-x86_64'; import sys; sys.argv=['setup.py','--name']; exec(open('setup.py').read())\" > /tmp/sim.log 2>&1; rc=$?; cat /tmp/sim.log; echo \"observed: simulated_non_linux_exit=$rc msg=$(tr -d '\\n' < /tmp/sim.log)\"; python -c \"s=open('/tmp/sim.log').read(); assert $rc==1 and 'inotify is not available' in s, (${rc}, s)\" && echo \"VERDICT_LINE: PASS setup.py exits 1 with 'inot\nSTDOUT --- guard in setup.py:\n28:if not platform.startswith('linux') and not platform.startswith('freebsd'):\n29-    sys.stderr.write(\"inotify is not available on %s\\n\" % platform)\n30-    sys.exit(1)\nkernel: 6.17.0-1022-azure\nmax_queued_events\nmax_user_instances\nmax_user_watches\ninotify is not available on macosx-10.9-x86_64\nobserved: simulated_non_linux_exit=1 msg=inotify is not available on macosx-10.9-x86_64\nVERDICT_LINE: PASS setup.py exits 1 with 'inotify is not available' when platform is not linux/freebsd; host kernel 6.17.0-1022-azure has /proc/sys/fs/inotify\n\nSTDERR \nPHASE_A \n--stderr--\nUnable to find image 'python:3.11-slim' locally\n3.11-slim: Pulling from library/python\n6310eb16bf42: Already exists\n87e1b7cce023: Pulling fs layer\nc86306e32cd0: Pulling fs layer\na14578096eda: Pulling fs layer\na14578096eda: Verifying Checksum\na14578096eda: Download complete\n87e1b7cce023: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\n\nEXIT 0\np-c4 cd /tmp/pyin && .v/bin/python setup.py install > /tmp/inst.log 2>&1; rc=$?; tail -6 /tmp/inst.log; echo \"setup_py_install_exit=$rc\"; .v/bin/python -c 'import pyinotify; print(\"observed: installed __version__\", pyinotify.__version__)' > /tmp/imp.log 2>&1; irc=$?; tail -2 /tmp/imp.log; [ \"$rc\" = 0 ] && [ \"$irc\" = 0 ] && echo \"VERDICT_LINE: PASS python setup.py install exited 0 on $(.v/bin/python -V) and import works (run without sudo: container is root)\" || echo \"VERDICT_LINE: FAIL python setup.py install exit $rc, import exit $irc on $(.v/bin/python -V): $(tail -1 /tmp/inst.log)\"\nSTDOUT Traceback (most recent call last):\n  File \"/tmp/pyin/setup.py\", line 11, in <module>\n    import distutils.extension\nModuleNotFoundError: No module named 'distutils'\nsetup_py_install_exit=1\n    ^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'pyinotify'\nVERDICT_LINE: FAIL python setup.py install exit 1, import exit 1 on Python 3.13.15: ModuleNotFoundError: No module named 'distutils'\n\nSTDERR \nPHASE_A 61284 bytes\nPython 3.13.15\n\n--stderr--\n<string>:1: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.\n\nEXIT 0\np-c5 (timeout 8 /tmp/v/bin/python -m pyinotify -v /my-dir-to-watch > /tmp/watch.log 2>&1 &); sleep 3; touch /my-dir-to-watch/x; echo hi > /my-dir-to-watch/x; sleep 6; echo '--- watcher output (head):'; head -20 /tmp/watch.log; /tmp/v/bin/python -c \"s=open('/tmp/watch.log').read(); print('observed: IN_CREATE in output =', 'IN_CREATE' in s, '| last line:', (s.strip().splitlines() or [''])[-1][:120]); assert 'IN_CREATE' in s\" && echo \"VERDICT_LINE: PASS python -m pyinotify -v printed IN_CREATE event for a file created in the watched dir\" || echo \"VERDICT_LINE: FAIL no IN_CREATE event printed on $(/tmp\nSTDOUT --- watcher output (head):\nTraceback (most recent call last):\n  File \"<frozen runpy>\", line 203, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/tmp/v/lib/python3.13/site-packages/pyinotify.py\", line 71, in <module>\n    import asyncore\nModuleNotFoundError: No module named 'asyncore'\nobserved: IN_CREATE in output = False | last line: ModuleNotFoundError: No module named 'asyncore'\nVERDICT_LINE: FAIL no IN_CREATE event printed on Python 3.13.15; watcher output ended with: ModuleNotFoundError: No module named 'asyncore'\n\nSTDERR Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    s=open('/tmp/watch.log').read(); print('observed: IN_CREATE in output =', 'IN_CREATE' in s, '| last line:', (s.strip().splitlines() or [''])[-1][:120]); assert 'IN_CREATE' in s\n                                                                                                                                                                    ^^^^^^^^^^^^^^^^\nAssertionError\n\nPHASE_A ne'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: pyinotify\n  Building wheel for pyinotify (pyproject.toml): started\n  Building wheel for pyinotify (pyproject.toml): finished with status 'done'\n  Created wheel for pyinotify: filename=pyinotify-0.9.6-py3-none-any.whl size=25418 sha256=dc5e97bbe0d243ccc4345713cb780dd1e0d2cee1ed7ebd6a9a73b316e257973e\n  Stored in directory: /root/.cache/pip/wheels/be/e0/29/d237cd80907dd5699eeee0237d136eae049d8edef6f5a6a6fa\nSuccessfully built pyinotify\nInstalling collected packages: pyinotify\nSuccessfully installed pyinotify-0.9.6\n\n--stderr--\n\nEXIT 0\np-c6 python - <<'EOF'\nimport json, urllib.request\ndef get(u):\n    r = urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'probe/1'}), timeout=20)\n    return r.status, r.read()\ntry:\n    s1, b1 = get('https://api.github.com/repos/seb-m/pyinotify/license'); gh = json.loads(b1)['license']['spdx_id']\n    s2, b2 = get('https://pypi.org/pypi/pyinotify/json'); py = json.loads(b2)['info'].get('license')\n    s3, b3 = get('https://raw.githubusercontent.com/seb-m/pyinotify/0f3f8950d12e4a6534320153eed1a90a778da4ae/COPYING'); cp = b3.decode('utf-8', 'replace')\n    mit_text = 'Permission is h\nSTDOUT observed: github_spdx='MIT' pypi_license='MIT License' COPYING_has_MIT_grant=True\nVERDICT_LINE: PASS GitHub license API=MIT, PyPI license='MIT License', COPYING contains MIT grant text\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c7 python - <<'EOF'\nimport urllib.request, urllib.error, re\nurl = 'http://seb-m.github.com/pyinotify'\ntry:\n    r = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'probe/1'}), timeout=20)\n    body = r.read().decode('utf-8', 'replace')\n    title = re.search(r'<title>(.*?)</title>', body, re.S | re.I)\n    print('observed: status=%s final_url=%s title=%r' % (r.status, r.geturl(), (title.group(1).strip()[:80] if title else None)))\n    assert r.status == 200 and 'pyinotify' in body.lower(), (r.status, r.geturl())\n    print('VERDICT_LINE: PASS %s resolves (HTTP 200 at %s) and \nSTDOUT VERDICT_LINE: FAIL http://seb-m.github.com/pyinotify unreachable: URLError(gaierror(-5, 'No address associated with hostname'))\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c8 python - <<'EOF'\nimport json, urllib.request, urllib.error\nhdr = {'User-Agent': 'probe/1'}\ntry:\n    api = json.loads(urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/seb-m/pyinotify', headers=hdr), timeout=20).read())\n    has_wiki = api.get('has_wiki')\nexcept Exception as e:\n    has_wiki = 'api-error:%s' % repr(e)[:60]\nurl = 'https://github.com/seb-m/pyinotify/wiki'\ntry:\n    r = urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=20)\n    body = r.read().decode('utf-8', 'replace')\n    empty = 'Create the first page' in body\n    has_page = ('wiki-b\nSTDOUT observed: status=200 final_url=https://github.com/seb-m/pyinotify/wiki has_wiki=True page_markup=True empty_wiki_prompt=False\nVERDICT_LINE: PASS wiki URL returns HTTP 200 with wiki page content and repo has_wiki=true\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c9 python - <<'EOF'\nimport json, re, urllib.request\nhdr = {'User-Agent': 'probe/1'}\ntry:\n    d = json.loads(urllib.request.urlopen(urllib.request.Request('https://pypi.org/pypi/pyinotify/json', headers=hdr), timeout=20).read())\n    pv = d['info']['version']\n    files = d['releases'].get(pv, [])\n    uploaded = files[0]['upload_time'] if files else None\n    src = urllib.request.urlopen(urllib.request.Request('https://raw.githubusercontent.com/seb-m/pyinotify/0f3f8950d12e4a6534320153eed1a90a778da4ae/python3/pyinotify.py', headers=hdr), timeout=20).read().decode('utf-8', 'replace')\n    m = re.search(\nSTDOUT observed: pypi_version='0.9.6' uploaded='2015-06-04T15:50:23' repo_python3_version='0.9.6'\nVERDICT_LINE: PASS PyPI latest is 0.9.6 (uploaded 2015-06-04T15:50:23) and python3/pyinotify.py __version__ is 0.9.6\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0"
+ },
+ "llm_calls": 4,
+ "usage": {
+  "cost_usd": 2.370502,
+  "input_tokens": 8,
+  "output_tokens": 17916
+ },
+ "memo_md": "# Due-diligence memo: https://github.com/seb-m/pyinotify @ 0f3f8950d12e\nQuestion: A file-sync daemon we are taking over uses pyinotify for filesystem watching \u2014 does the README's install path still produce an importable module on a current Python 3, does the documented `python -m pyinotify` watcher run, is the Python-version support statement true, and do the documentation links still resolve?\n\n**Bottom line.** 5 of 9 README claims held under execution, 4 were refuted, 0 could not be settled in the sandbox and need a human. Rubric score 56/100.\n\n## Refuted (negotiate on these)\n- **c2** pyinotify supports Python >= 2.4 including any Python 3.x: after installation, `import pyinotify` succeeds on a current Python 3 interpreter.\n  Evidence: `p-c2` File \"/tmp/v/lib/python3.13/site-packages/pyinotify.py\", line 71, in <module>: import asyncore / ModuleNotFoundError: No module named 'asyncore' / import_exit=1 (probe exit_code 0; the VERDICT_LINE: PASS is contradicted \n- **c4** pyinotify can be installed from a source checkout with `sudo pythonXXX setup.py install` (XXX = the chosen interpreter, e.g. python3) on a current Python 3.\n  Evidence: `p-c4` File \"/tmp/pyin/setup.py\", line 11, in <module>: import distutils.extension / ModuleNotFoundError: No module named 'distutils' / setup_py_install_exit=1 / VERDICT_LINE: FAIL python setup.py install exit 1, import exit 1 \n- **c5** With pyinotify installed, `python -m pyinotify -v /my-dir-to-watch` watches the given directory and prints filesystem events as they occur.\n  Evidence: `p-c5` python -m pyinotify -v /my-dir-to-watch -> ModuleNotFoundError: No module named 'asyncore' / observed: IN_CREATE in output = False / VERDICT_LINE: FAIL no IN_CREATE event printed on Python 3.13.15 (probe exit_code 0; the\n- **c7** The API documentation link given in the README, http://seb-m.github.com/pyinotify, resolves to a live documentation page.\n  Evidence: `p-c7` VERDICT_LINE: FAIL http://seb-m.github.com/pyinotify unreachable: URLError(gaierror(-5, 'No address associated with hostname')) (probe exit_code 0; the hostname does not resolve, so the README link does not lead to a liv\n\n## Verified as written\n- **c1** The package can be installed from PyPI with `pip install pyinotify` (the README uses `sudo pip install pyinotify`) on a current Python \u2014 the\n- **c3** pyinotify requires Linux (kernel >= 2.6.13, i.e. inotify support); its setup.py refuses to install on non-Linux platforms.\n- **c6** pyinotify is released under the MIT license (repository COPYING file and PyPI metadata both say MIT).\n- **c8** The project wiki link given in the README, http://github.com/seb-m/pyinotify/wiki, resolves to an existing GitHub wiki.\n- **c9** The version distributed on PyPI as the 'current stable version' is 0.9.6, matching `__version__` in python3/pyinotify.py at the pinned commi\n\nEvery verdict above cites a recorded probe (command, exit code, output) from the CI run named in the report."
+}

@@ -1,3 +1,0 @@
-observed: .travis.yml present = True | python versions in .travis.yml = ['2.7', '3.4', '3.5', '3.6'] | local GH workflows = [] | .travis.yml head = 'language: python\ncache: pip\npython:\n  - "2.7"\n  - "3.4"\n  - "3.5"\n  - "3.6"\ninstall: pip install tox tox-travis\nscript: tox\n'
-observed: GitHub Actions runs = 0 (http 200 ) | travis-ci.com builds = None (http 404 ) | latest travis build (state, finished, sha) = None
-VERDICT_LINE: FAIL .travis.yml targets ['2.7', '3.4', '3.5', '3.6'] but no CI runs exist: GitHub Actions 0 runs (http 200), travis-ci.com http 404 builds=None (travis-ci.org was shut down)

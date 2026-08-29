@@ -1,0 +1,1 @@
+python3 /tmp/issue.py && echo 'VERDICT_LINE: PASS issue #159 exists and is still open (see title above)' || echo 'VERDICT_LINE: FAIL issue #159 missing or not open'

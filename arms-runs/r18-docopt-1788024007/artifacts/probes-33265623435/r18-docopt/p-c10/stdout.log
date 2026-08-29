@@ -1,2 +1,0 @@
-observed: args = {'-v': 2} | args['-v'] = 2
-VERDICT_LINE: PASS argv ['-vv'] against 'Usage: my_program.py [-v | -vv | -vvv]' gives args['-v'] == 2

@@ -1,0 +1,48 @@
+  Stored in directory: /tmp/pip-ephem-wheel-cache-zyf5hgow/wheels/e9/7d/d0/088d05c60df49c7b5b42a6cba09decff4c2b6ecdbd827dfe5f
+Successfully built PyInquirer
+Installing collected packages: wcwidth, Pygments, prompt_toolkit, PyInquirer
+
+Successfully installed PyInquirer-1.0.3 Pygments-2.21.0 prompt_toolkit-3.0.53 wcwidth-0.8.3
+pip install -e . exit: 0
+Version: 3.0.53
+--- PyInquirer/__init__.py ---
+# -*- coding: utf-8 -*-
+
+import os
+
+from .utils import print_json, format_json
+# from .prompt import prompt
+from .separator import Separator
+from .prompts.common import default_style
+
+__version__ = '1.0.2'
+
+
+def here(p):
+    # TODO: Is this being used externally or deprecate?
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), p))
+
+class PromptParameterException(ValueError):
+    def __init__(self, message, errors=None):
+
+        # Call the base class constructor with the parameters it needs
+        super().__init__('You must provide a `%s` value' % message, errors)
+
+# The code below here is here because of backwards-compatibility. Before,
+# people were using style_from_dict and importing it from here. It's better to
+# use Style.from_dict, as recommended by prompt_toolkit now.
+from prompt_toolkit.styles import Style
+
+def style_from_dict(style_dict):
+    # Deprecated function. Users should use Style.from_dict instead.
+    # Keep this here for backwards-compatibility.
+    return Style.from_dict({
+        '.'.join(key).lower(): value for key, value in style_dict.items()
+    })
+  
+from pygments.token import Token
+from prompt_toolkit.validation import Validator, ValidationError
+
+__all__ = ["PromptParameterException", "style_from_dict"]import ok: <module 'PyInquirer.prompt' from '/tmp/pyinq/PyInquirer/prompt.py'> <function print_json at 0x7f1f8441ede0>
+import exit: 0
+VERDICT_LINE: PASS pip install -e . yields importable prompt and print_json from repository code

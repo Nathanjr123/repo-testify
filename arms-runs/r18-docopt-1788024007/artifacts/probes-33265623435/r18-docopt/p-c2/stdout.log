@@ -1,3 +1,0 @@
-observed: imports = ['re', 'sys'] | non-stdlib = [] | lines = 581
-observed: standalone run exit 0 | stdout {'-v': True, '<f>': 'a'} | stderr 
-VERDICT_LINE: PASS docopt.py imports only stdlib modules and parses a pattern when dropped into a bare directory with nothing installed

@@ -1,0 +1,2 @@
+default: <Result () {}> case_sensitive=True: None
+VERDICT_LINE: PASS case-insensitive by default, None with case_sensitive=True

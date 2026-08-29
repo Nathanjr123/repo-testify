@@ -1,0 +1,122 @@
+{
+ "case_id": "r20-pyinotify",
+ "repo": "https://github.com/seb-m/pyinotify",
+ "commit": "0f3f8950d12e4a6534320153eed1a90a778da4ae",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/python -V"
+   ],
+   "commands": [
+    "/tmp/v/bin/pip install pyinotify > /tmp/pip.log 2>&1; rc=$?; tail -8 /tmp/pip.log; echo \"observed: pip_exit=$rc installed=$(/tmp/v/bin/pip show pyinotify 2>/dev/null | grep -m1 '^Version' || echo none)\"; [ \"$rc\" = 0 ] && /tmp/v/bin/pip show pyinotify >/dev/null 2>&1 && echo \"VERDICT_LINE: PASS pip install pyinotify exited 0 on $(/tmp/v/bin/python -V) and pip show finds it\" || echo \"VERDICT_LINE: FAIL pip install pyinotify exited $rc on $(/tmp/v/bin/python -V) (see log tail above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install pyinotify"
+   ],
+   "commands": [
+    "/tmp/v/bin/python -c 'import pyinotify; print(\"observed __version__:\", pyinotify.__version__)' > /tmp/imp.log 2>&1; rc=$?; tail -4 /tmp/imp.log; echo \"import_exit=$rc\"; grep -q 'observed __version__' /tmp/imp.log && echo \"VERDICT_LINE: PASS import pyinotify succeeds on $(/tmp/v/bin/python -V)\" || echo \"VERDICT_LINE: FAIL import pyinotify on $(/tmp/v/bin/python -V) raised: $(tail -1 /tmp/imp.log)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "mkdir -p /tmp/src && python -c \"import urllib.request; open('/tmp/src/setup.py','wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/seb-m/pyinotify/0f3f8950d12e4a6534320153eed1a90a778da4ae/setup.py', timeout=30).read())\""
+   ],
+   "commands": [
+    "cd /tmp/src && echo '--- guard in setup.py:' && grep -n -A2 'not platform.startswith' setup.py; echo \"kernel: $(uname -r)\"; ls /proc/sys/fs/inotify/ 2>&1; python -c \"import distutils.util as u; u.get_platform=lambda: 'macosx-10.9-x86_64'; import sys; sys.argv=['setup.py','--name']; exec(open('setup.py').read())\" > /tmp/sim.log 2>&1; rc=$?; cat /tmp/sim.log; echo \"observed: simulated_non_linux_exit=$rc msg=$(tr -d '\\n' < /tmp/sim.log)\"; python -c \"s=open('/tmp/sim.log').read(); assert $rc==1 and 'inotify is not available' in s, (${rc}, s)\" && echo \"VERDICT_LINE: PASS setup.py exits 1 with 'inotify is not available' when platform is not linux/freebsd; host kernel $(uname -r) has /proc/sys/fs/inotify\" || echo \"VERDICT_LINE: FAIL setup.py did not refuse on simulated non-Linux platform (exit $rc)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [
+    "python -c \"import urllib.request,tarfile,io; d=urllib.request.urlopen('https://github.com/seb-m/pyinotify/archive/0f3f8950d12e4a6534320153eed1a90a778da4ae.tar.gz', timeout=60).read(); tarfile.open(fileobj=io.BytesIO(d)).extractall('/tmp'); print(len(d),'bytes')\"",
+    "mv /tmp/pyinotify-0f3f8950d12e4a6534320153eed1a90a778da4ae /tmp/pyin",
+    "cd /tmp/pyin && python -m venv .v && .v/bin/python -V"
+   ],
+   "commands": [
+    "cd /tmp/pyin && .v/bin/python setup.py install > /tmp/inst.log 2>&1; rc=$?; tail -6 /tmp/inst.log; echo \"setup_py_install_exit=$rc\"; .v/bin/python -c 'import pyinotify; print(\"observed: installed __version__\", pyinotify.__version__)' > /tmp/imp.log 2>&1; irc=$?; tail -2 /tmp/imp.log; [ \"$rc\" = 0 ] && [ \"$irc\" = 0 ] && echo \"VERDICT_LINE: PASS python setup.py install exited 0 on $(.v/bin/python -V) and import works (run without sudo: container is root)\" || echo \"VERDICT_LINE: FAIL python setup.py install exit $rc, import exit $irc on $(.v/bin/python -V): $(tail -1 /tmp/inst.log)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install pyinotify",
+    "mkdir -p /my-dir-to-watch"
+   ],
+   "commands": [
+    "(timeout 8 /tmp/v/bin/python -m pyinotify -v /my-dir-to-watch > /tmp/watch.log 2>&1 &); sleep 3; touch /my-dir-to-watch/x; echo hi > /my-dir-to-watch/x; sleep 6; echo '--- watcher output (head):'; head -20 /tmp/watch.log; /tmp/v/bin/python -c \"s=open('/tmp/watch.log').read(); print('observed: IN_CREATE in output =', 'IN_CREATE' in s, '| last line:', (s.strip().splitlines() or [''])[-1][:120]); assert 'IN_CREATE' in s\" && echo \"VERDICT_LINE: PASS python -m pyinotify -v printed IN_CREATE event for a file created in the watched dir\" || echo \"VERDICT_LINE: FAIL no IN_CREATE event printed on $(/tmp/v/bin/python -V); watcher output ended with: $(tail -1 /tmp/watch.log)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python - <<'EOF'\nimport json, urllib.request\ndef get(u):\n    r = urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'probe/1'}), timeout=20)\n    return r.status, r.read()\ntry:\n    s1, b1 = get('https://api.github.com/repos/seb-m/pyinotify/license'); gh = json.loads(b1)['license']['spdx_id']\n    s2, b2 = get('https://pypi.org/pypi/pyinotify/json'); py = json.loads(b2)['info'].get('license')\n    s3, b3 = get('https://raw.githubusercontent.com/seb-m/pyinotify/0f3f8950d12e4a6534320153eed1a90a778da4ae/COPYING'); cp = b3.decode('utf-8', 'replace')\n    mit_text = 'Permission is hereby granted, free of charge' in cp\n    print('observed: github_spdx=%r pypi_license=%r COPYING_has_MIT_grant=%r' % (gh, py, mit_text))\n    assert gh == 'MIT' and 'MIT' in (py or '') and mit_text, (gh, py, mit_text)\n    print('VERDICT_LINE: PASS GitHub license API=MIT, PyPI license=%r, COPYING contains MIT grant text' % py)\nexcept Exception as e:\n    print('VERDICT_LINE: FAIL %s' % repr(e)[:160])\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python - <<'EOF'\nimport urllib.request, urllib.error, re\nurl = 'http://seb-m.github.com/pyinotify'\ntry:\n    r = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'probe/1'}), timeout=20)\n    body = r.read().decode('utf-8', 'replace')\n    title = re.search(r'<title>(.*?)</title>', body, re.S | re.I)\n    print('observed: status=%s final_url=%s title=%r' % (r.status, r.geturl(), (title.group(1).strip()[:80] if title else None)))\n    assert r.status == 200 and 'pyinotify' in body.lower(), (r.status, r.geturl())\n    print('VERDICT_LINE: PASS %s resolves (HTTP 200 at %s) and page mentions pyinotify' % (url, r.geturl()))\nexcept urllib.error.HTTPError as e:\n    print('observed: HTTPError %s at %s' % (e.code, e.geturl()))\n    print('VERDICT_LINE: FAIL %s returned HTTP %s' % (url, e.code))\nexcept Exception as e:\n    print('VERDICT_LINE: FAIL %s unreachable: %s' % (url, repr(e)[:120]))\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python - <<'EOF'\nimport json, urllib.request, urllib.error\nhdr = {'User-Agent': 'probe/1'}\ntry:\n    api = json.loads(urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/seb-m/pyinotify', headers=hdr), timeout=20).read())\n    has_wiki = api.get('has_wiki')\nexcept Exception as e:\n    has_wiki = 'api-error:%s' % repr(e)[:60]\nurl = 'https://github.com/seb-m/pyinotify/wiki'\ntry:\n    r = urllib.request.urlopen(urllib.request.Request(url, headers=hdr), timeout=20)\n    body = r.read().decode('utf-8', 'replace')\n    empty = 'Create the first page' in body\n    has_page = ('wiki-body' in body) or ('wiki-content' in body) or ('id=\"wiki-wrapper\"' in body)\n    print('observed: status=%s final_url=%s has_wiki=%r page_markup=%r empty_wiki_prompt=%r' % (r.status, r.geturl(), has_wiki, has_page, empty))\n    assert r.status == 200 and has_wiki is True and has_page and not empty and '/wiki' in r.geturl()\n    print('VERDICT_LINE: PASS wiki URL returns HTTP 200 with wiki page content and repo has_wiki=true')\nexcept urllib.error.HTTPError as e:\n    print('observed: HTTPError %s has_wiki=%r' % (e.code, has_wiki))\n    print('VERDICT_LINE: FAIL %s returned HTTP %s (has_wiki=%r)' % (url, e.code, has_wiki))\nexcept AssertionError:\n    print('VERDICT_LINE: FAIL wiki URL reachable but no wiki page content found (has_wiki=%r)' % has_wiki)\nexcept Exception as e:\n    print('VERDICT_LINE: FAIL %s' % repr(e)[:140])\nEOF"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.13-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python - <<'EOF'\nimport json, re, urllib.request\nhdr = {'User-Agent': 'probe/1'}\ntry:\n    d = json.loads(urllib.request.urlopen(urllib.request.Request('https://pypi.org/pypi/pyinotify/json', headers=hdr), timeout=20).read())\n    pv = d['info']['version']\n    files = d['releases'].get(pv, [])\n    uploaded = files[0]['upload_time'] if files else None\n    src = urllib.request.urlopen(urllib.request.Request('https://raw.githubusercontent.com/seb-m/pyinotify/0f3f8950d12e4a6534320153eed1a90a778da4ae/python3/pyinotify.py', headers=hdr), timeout=20).read().decode('utf-8', 'replace')\n    m = re.search(r'^__version__\\s*=\\s*[\\'\"]([^\\'\"]+)[\\'\"]', src, re.M)\n    rv = m.group(1) if m else None\n    print('observed: pypi_version=%r uploaded=%r repo_python3_version=%r' % (pv, uploaded, rv))\n    assert pv == '0.9.6' and rv == '0.9.6', (pv, rv)\n    print('VERDICT_LINE: PASS PyPI latest is 0.9.6 (uploaded %s) and python3/pyinotify.py __version__ is 0.9.6' % uploaded)\nexcept Exception as e:\n    print('VERDICT_LINE: FAIL %s' % repr(e)[:160])\nEOF"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}

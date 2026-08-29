@@ -1,2 +1,0 @@
-observed: python-slugify 8.0.4 | Unidecode 1.4.0 | slugify("Hello World")= 'hello-world'
-VERDICT_LINE: PASS python-slugify[unidecode] installs Unidecode alongside slugify

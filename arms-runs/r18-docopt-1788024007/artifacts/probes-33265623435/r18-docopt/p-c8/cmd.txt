@@ -1,6 +1,0 @@
-python - <<'EOF' && echo "VERDICT_LINE: PASS docopt.docopt signature is (doc, argv=None, help=True, version=None, options_first=False)" || echo "VERDICT_LINE: FAIL docopt.docopt signature differs from the README (see observed line above)"
-import inspect, docopt
-sig = str(inspect.signature(docopt.docopt))
-print('observed: signature', sig, '| file', docopt.__file__, '| version', docopt.__version__)
-assert sig == '(doc, argv=None, help=True, version=None, options_first=False)', sig
-EOF

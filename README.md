@@ -16,13 +16,14 @@ The format the challenge asks for, public split:
 |---|---|---|---|
 | Primary outcome: per-claim accuracy, 95% Wilson interval | 0.13 (10/75; 0.07 to 0.23) | 0.84 (63/75; 0.74 to 0.91) | +0.71; intervals do not overlap |
 | Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | 0.07 | 0.75 | +0.68 |
+| Same, public + extension (13 repositories, 143 claims) | 0.15 (22/143; 0.10 to 0.22) | 0.87 (125/143; 0.81 to 0.92) | +0.72 |
 | Composite score (published rubric) | 0.284 | 0.836 | +0.552 |
 | Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
 | Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |
 
 Full table:
 
-| arm | claim accuracy (worst-case weighted) | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |
+| arm | claim accuracy (worst-case weighted) | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo (cost) | wall/repo | human min/repo | cases ok |
 |---|---|---|---|---|---|---|---|---|---|---|
 | baseline (run 1) | 0.074 | 0.771 | 0.111 | 0.811 | 0.16 | **0.284** | 1* | 0.9 min | pending audit | 7/7 |
 | baseline (run 2) | 0.074 | 0.783 | 0.070 | 0.745 | 0.15 | **0.271** | 1* | 0.9 min | pending audit | 7/7 |
@@ -30,6 +31,8 @@ Full table:
 | pipeline v2 (public, tuned) | 0.750 | 0.910 | 1.000 | 0.777 | 0.90 | **0.836** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: k=1 votes | 0.729 | 0.876 | 1.000 | 0.777 | 0.92 | **0.820** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: no execution | 0.007 | 1.000 | 0.000 | 0.712 | 0.00 | **0.044** | 3* | 0.6 min | pending audit | 7/7 |
+| baseline (extension, 6 repos, v3 code) | 0.094 | 0.373 | 1.000 | 0.739 | 0.09 | **0.350** (capped) | 1.0, $0.62 | 0.8 min | pending audit | 6/6 |
+| pipeline v3 (extension, 6 repos) | 0.802 | 0.964 | 1.000 | 0.701 | 0.89 | **0.859** | 4.0, $3.47 | 7.5 min | pending audit | 6/6 |
 
 Baseline-vs-baseline spread (noise floor): **0.013** composite; claim-accuracy spread 0.000.
 
@@ -85,6 +88,9 @@ How ground truth was made, since it decides every number here: each claim's verd
 The primary metric is per-claim verdict accuracy against audited ground truth, reported as a raw count with a 95% Wilson interval. The full table weights the same metric toward the worst repositories (0.55 mean, 0.30 mean of the worst 30%, 0.15 single worst) so that one bad repository cannot hide behind six good ones; both views are shown. It was pre-registered as macro-F1 and changed to accuracy in iteration 3, because per-case macro-F1 is degenerate on repositories where every claim has the same verdict. The change is disclosed in CHANGELOG.md. Secondary rows: not confidently wrong (abstaining is the honest exit), evidence validity (every cited artifact must exist), and agreement with the reviewer's rubric score.
 
 Cost per task is model calls per repository (baseline 1; pipeline 4 to 5: plan, at most one repair, three votes) plus wall time. CI compute is free on public runners. Human time per task is measured during the human audit, on two repositories timed end to end, and is reported once the audit closes. The held-out split (7 repositories, including two hard cases built for this) is run once after the audit, and the same generator appends its rows to the table.
+
+### The extension set
+Six more public repositories (r15 to r20) were added on Saturday, chosen the same way (bucket-balanced: honest, overclaiming, abandoned, badge mirage, research code) and run with the v3 code. Their rows appear in the full table as "extension", and the challenge-format table carries a combined interval over all 13 public repositories. The extension exposed a planner defect (here-documents inside command chains, so probes never ran) that the public split had only hinted at; the fix and the re-run are in CHANGELOG iteration 14.
 
 ### The hard case on the public split and what it revealed
 `r11-gpt-2` is OpenAI's archived GPT-2 repository: famous, tiny, and its documented install (`pip3 install tensorflow==1.12.0`) cannot succeed on any current Python. Pipeline v2 scored 0.50 claim accuracy here, its worst. The reason is instructive. Once the documented prerequisite failed, the adjudicator marked every dependent claim "unverifiable" instead of "refuted as written". What the case revealed was a missing rule rather than a weak model: a documented prerequisite that fails as written refutes everything downstream. That rule became adjudicator v3 (CHANGELOG iteration 8) and is measured on the held-out split. The two held-out hard cases (`keyboard`, whose mocked tests pass anywhere while a platform claim is false; `simplejson`, where every test passes and the headline "fast" claim is a benchmark question) are reported once, unchanged, in the held-out rows.

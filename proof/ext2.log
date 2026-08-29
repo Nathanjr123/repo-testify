@@ -1,0 +1,26 @@
+r15-parse.json: ok wall=49.69s
+r16-python-slugify.json: ok wall=47.34s
+r17-pyinquirer.json: ok wall=50.07s
+r18-docopt.json: ok wall=46.72s
+r19-nanogpt.json: ok wall=47.2s
+r20-pyinotify.json: ok wall=39.81s
+{
+ "id": "baseline-ext2-1788027224",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.087,
+   "confident_wrong": 0.366,
+   "evidence_valid": 1.0,
+   "score_error": 0.739
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.35,
+  "n_cases": 6,
+  "settled_fraction": 0.087,
+  "capped": true
+ }
+}
+BASELINE_EXT2_DONE
