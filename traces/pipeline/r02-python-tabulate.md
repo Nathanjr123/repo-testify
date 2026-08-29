@@ -120,13 +120,62 @@ try:
     print('observed: tabulate version', t.__version__, 'callable', callable(tabulate))
     print('VERDICT_LINE: PASS pip install tabulate + from tabulate import tabulate ok, version', t.__version__)
 except Exception as e:
-    print('observed:', repr(e)) cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c10 python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (network?)"
+    print('observed:', repr(e))
+    print('VERDICT_LINE: FAIL from tabulate import tabulate raised', type(e).__name__)
+EOF
+STDOUT observed: tabulate version 0.10.0 callable True
+VERDICT_LINE: PASS pip install tabulate + from tabulate import tabulate ok, version 0.10.0
+
+STDERR 
+PHASE_A Pulling from library/python
+6310eb16bf42: Pulling fs layer
+87e1b7cce023: Pulling fs layer
+c86306e32cd0: Pulling fs layer
+a14578096eda: Pulling fs layer
+a14578096eda: Waiting
+87e1b7cce023: Verifying Checksum
+87e1b7cce023: Download complete
+c86306e32cd0: Verifying Checksum
+c86306e32cd0: Download complete
+6310eb16bf42: Verifying Checksum
+6310eb16bf42: Download complete
+a14578096eda: Verifying Checksum
+a14578096eda: Download complete
+6310eb16bf42: Pull complete
+87e1b7cce023: Pull complete
+c86306e32cd0: Pull complete
+a14578096eda: Pull complete
+Digest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6
+Status: Downloaded newer image for python:3.11-slim
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: python3 -m pip install --upgrade pip
+
+EXIT 0
+p-c10 python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (network?)"
 import json, urllib.request, urllib.error
 UA = {'User-Agent': 'claim-probe', 'Accept': 'application/vnd.github+json'}
 badge_url = 'https://github.com/astanin/python-tabulate/actions/workflows/tabulate.yml/badge.svg'
 status = None; body = ''
 try:
-    with urllib.request.urlopen(urllib.request.Request(badge_url, headers=UA), tim cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c11 python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
+    with urllib.request.urlopen(urllib.request.Request(badge_url, headers=UA), timeout=30) as r:
+        status = r.status; body = r.read().decode('utf-8', 'replace')
+except urllib.error.HTTPError as e:
+    status = e.code
+except Exception as e:
+    print('observed: badge fetch err
+STDOUT observed: badge http 200 badge text = passing svg bytes 2276
+observed: run 272 268615a5 success 2026-03-11T08:43:01Z
+observed: run 271 52dc17b0 success 2026-03-11T08:38:35Z
+observed: run 261 2070736f success 2026-03-10T10:28:42Z
+VERDICT_LINE: PASS badge renders "passing" and latest completed master run is success
+
+STDERR 
+PHASE_A 
+--stderr--
+
+EXIT 0
+p-c11 python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
 import timeit, importlib.metadata as md
 from tabulate import tabulate
 import prettytable, texttable
@@ -134,21 +183,13 @@ headers = ['col%d' % i for i in range(10)]
 table = [['some text'] + list(range(i, i + 9)) for i in range(10)]  # 10x10 mixed text/numeric, as in benchmark/benchmark.py
 def run_tabulate():
     return tabulate(table, headers)
-def run_prettyt cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c2 ls -l /tmp/v/bin/tabulate 2>&1 && if test -x /tmp/v/bin/tabulate; then OUT=$(printf '1 2\n3 4\n' | /tmp/v/bin/tabulate 2>&1); RC=$?; echo "observed: rc=$RC output=$(echo "$OUT" | tr '\n' '|')"; if [ $RC -eq 0 ] && echo "$OUT" | grep -q '^ *1 *2'; then echo 'VERDICT_LINE: PASS bin/tabulate exists, executable, formats stdin'; else echo 'VERDICT_LINE: FAIL bin/tabulate exists but did not format stdin cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c3 /tmp/v2/bin/python -c 'import tabulate; print("observed: library importable, version", tabulate.__version__)' || echo 'observed: library NOT importable' && N=$(ls /tmp/v2/bin 2>/dev/null | grep -c '^tabulate$'); echo "observed: tabulate scripts in venv bin = $N (README says lib-only should install none)"; if [ "$N" -eq 0 ]; then echo 'VERDICT_LINE: PASS TABULATE_INSTALL=lib-only suppressed the CLI cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c4 python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (network?)"
-import json, urllib.request
-try:
-    req = urllib.request.Request('https://pypi.org/pypi/tabulate/json', headers={'User-Agent': 'claim-probe'})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        status = r.status
-        info = json.load(r)['info']
-except Exception as e:
-    print('observed: pypi fetch failed', rep cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c5 python3 - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed"
-from tabulate import tabulate
-table = [["Sun",696000,1989100000],["Earth",6371,5973.6],
-         ["Moon",1737,73.5],["Mars",3390,641.85]]
-out = tabulate(table)
-print(out)
-lines =
+def run_prettytable():
+    pt = prettytable.PrettyTable(headers)
+    for r in table:
+        pt.add_row(r)
+    return pt.get_string()
+def run_texttable():
+    tt = texttable.T
 ```
 
 ## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)

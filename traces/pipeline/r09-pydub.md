@@ -108,7 +108,40 @@ def mkwav(p, secs, amp=8000, freq=440, rate=8000):
 
 Transcript index (probe · command excerpt):
 ```
-p-c1 python --version && pip show pydub | head -3 && python -c 'import pydub, sys; print("observed: pydub imported from", pydub.__file__, "on", sys.version.split()[0])' && echo 'VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable' || echo 'VERDICT_LINE: FAIL pip install pydub did not produce an installed, importable package' cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c10 python -c '
+p-c1 python --version && pip show pydub | head -3 && python -c 'import pydub, sys; print("observed: pydub imported from", pydub.__file__, "on", sys.version.split()[0])' && echo 'VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable' || echo 'VERDICT_LINE: FAIL pip install pydub did not produce an installed, importable package'
+STDOUT Python 3.11.16
+Name: pydub
+Version: 0.25.1
+Summary: Manipulate audio with an simple and easy high level interface
+observed: pydub imported from /repo/pydub/__init__.py on 3.11.16
+VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable
+
+STDERR ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/repo/pydub/utils.py:174: RuntimeWarning: Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work
+  warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
+
+PHASE_A b7cce023: Download complete
+c86306e32cd0: Verifying Checksum
+c86306e32cd0: Download complete
+6310eb16bf42: Verifying Checksum
+6310eb16bf42: Download complete
+a14578096eda: Verifying Checksum
+a14578096eda: Download complete
+6310eb16bf42: Pull complete
+87e1b7cce023: Pull complete
+c86306e32cd0: Pull complete
+a14578096eda: Pull complete
+Digest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6
+Status: Downloaded newer image for python:3.11-slim
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+
+EXIT 0
+p-c10 python -c '
 import wave, struct, math
 from pydub import AudioSegment
 def mkwav(p, secs, amp=8000, freq=440, rate=8000):
@@ -117,38 +150,20 @@ def mkwav(p, secs, amp=8000, freq=440, rate=8000):
 N = 7
 mkwav("known.wav", N)
 seg = AudioSegment.from_wav("known.wav")
-p cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c11 python -c '
-import wave, struct, math
-from pydub import AudioSegment
-def mkwav(p, secs, amp=8000, freq=440, rate=8000):
-    n = rate*secs
-    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
-    w.writeframes(b"".join(struct.pack("<h", int(amp*(i/n)*math.sin(2*math.pi*freq*i/rate))) for i in range(n))); w.close()
-mkwav("song.wav", 2)
-song = AudioSegment.from_wav("son cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c2 python --version && python -c 'from pydub import AudioSegment; import sys; print("observed: from pydub import AudioSegment OK on Python", sys.version.split()[0])' && echo 'VERDICT_LINE: PASS README quickstart import succeeds on Python 3.13' || echo 'VERDICT_LINE: FAIL from pydub import AudioSegment raises on Python 3.13 (traceback above; README states no version restriction)' cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c3 python -c '
-import wave, struct, math, shutil
-from pydub import AudioSegment
-def mkwav(p, secs, amp=8000, freq=440, rate=8000):
-    w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
-    w.writeframes(b"".join(struct.pack("<h", int(amp*math.sin(2*math.pi*freq*i/rate))) for i in range(rate*secs))); w.close()
-mkwav("in.wav", 2)
-seg = AudioSegment.from_wav("in.wav")
-seg.e cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c4 python -c '
-import shutil
-from pydub import AudioSegment
-open("fake.mp3","wb").write(b"\xff\xfb\x90\x00" + b"\x00"*4000)
-print("observed: ffmpeg =", shutil.which("ffmpeg"), "avconv =", shutil.which("avconv"))
-try:
-    AudioSegment.from_mp3("fake.mp3")
-    print("observed: from_mp3 unexpectedly succeeded with no converter installed")
-    print("VERDICT_LINE: FAIL from_mp3 succeeded without ffmpeg/a cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c5 python -c '
-import urllib.request, urllib.error
-def get(u):
-    try:
-        r = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent":"probe"}), timeout=20)
-        return r.status, r.geturl(), r.read(20000).decode("utf-8","replace")
-    except urllib.error.HTTPError as e:
-        return e.c
+print("observed: wav seconds =", N, "len(seg) =", len(seg), "duration_seconds =", seg.duration_seconds)
+assert abs(len(seg) - N*1000) <= 1, "len(seg) is not milliseconds"
+print("VERDICT_LINE: PASS len(
+STDOUT observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0
+VERDICT_LINE: PASS len(audio_segment) == 7000 for a 7 s WAV (milliseconds)
+
+STDERR /repo/pydub/utils.py:174: RuntimeWarning: Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work
+  warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
+
+PHASE_A Collecting pydub
+  Downloading pydub-0.25.1-py2.py3-none-any.whl.metadata (1.4 kB)
+Downloading pydub-0.25.1-py2.py3-none-any.whl (32 kB)
+Installing collected packages: pydub
+Successfully installed p
 ```
 
 ## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)

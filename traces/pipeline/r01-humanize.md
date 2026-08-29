@@ -57,7 +57,57 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 
 Transcript index (probe · command excerpt):
 ```
-p-c1 /tmp/v/bin/python -c 'import humanize; print("HUMANIZE_VERSION", humanize.__version__)' && /tmp/v/bin/python -c 'import humanize' && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c10 PYTHONIOENCODING=utf-8 python3 -c "import humanize, datetime as dt; before=humanize.naturaltime(dt.timedelta(seconds=3)); _t=humanize.i18n.activate('ru_RU'); ru=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.deactivate(); after=humanize.naturaltime(dt.timedelta(seconds=3)); print('RESULT', repr(before), repr(ru), repr(after)); assert before == '3 seconds ago', repr(before); assert ru cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c11 python3 -c "import json; runs=json.load(open('/tmp/runs.json'))['workflow_runs']; [print('RUN', r['head_sha'][:12], r['created_at'], r['conclusion']) for r in runs]; assert runs, 'no completed Test runs on main'; latest=runs[0]; print('LATEST_CONCLUSION', latest['conclusion']); assert latest['conclusion']=='success', latest['conclusion']" && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c2 cd / && python3 -c 'import humanize, os; print("HUMANIZE_FILE", humanize.__file__); assert humanize.__file__.startswith("/tmp/humanize/"), humanize.__file__' && cd / && python3 -c 'import humanize; print("HUMANIZE_VERSION", humanize.__version__)' && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c3 python3 -c "import json; d=json.load(open('/tmp/pypi.json'))['info']; print('REQUIRES_PYTHON', d['requires_python']); print('CLASSIFIERS', [c for c in d['classifiers'] if 'Python ::' in c])" && python3 -c "import json; d=json.load(open('/tmp/pypi.json'))['info']; assert d['requires_python']=='>=3.10', d['requires_python']" && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c4 python3 -c "import humanize; r=humanize.intcomma(12345); print('RESULT', repr(r)); assert r == '12,345', repr(r)" && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c5 python3 -c "import humanize; r=humanize.intword(123455913); print('RESULT', repr(r)); assert r == '123.5 million', repr(r)" && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c6 python3 -c "import humanize, datetime as dt; r=humanize.naturaldelta(dt.timedelta(seconds=1001)); print('RESULT', repr(r)); assert r == '16 minutes', repr(r)" && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c7 python3 -c "import humanize; a=humanize.naturalsize(1_000_000); b=humanize.naturalsize(1_000_000, binary=True); print('RESULT', repr(a), repr(b)); assert a == '1.0 MB', repr(a); assert b == '976.6 KiB', repr(b)" && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c8 python3 -c "import humanize; r=humanize.fractional(1/3); print('RESULT', repr(r)); assert r == '1/3', repr(r)" && echo PROBE_OK cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c9 PYTHONIOENCODING=utf-8 python3 -c "import humanize; r=humanize.scientific(0.3); print('RESULT', 
+p-c1 /tmp/v/bin/python -c 'import humanize; print("HUMANIZE_VERSION", humanize.__version__)' && /tmp/v/bin/python -c 'import humanize' && echo PROBE_OK
+STDOUT HUMANIZE_VERSION 4.16.0
+PROBE_OK
+
+STDERR 
+PHASE_A Collecting humanize
+  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)
+Downloading humanize-4.16.0-py3-none-any.whl (137 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 137.2/137.2 kB 24.4 MB/s eta 0:00:00
+Installing collected packages: humanize
+Successfully installed humanize-4.16.0
+
+--stderr--
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: python -m pip install --upgrade pip
+
+EXIT 0
+p-c10 PYTHONIOENCODING=utf-8 python3 -c "import humanize, datetime as dt; before=humanize.naturaltime(dt.timedelta(seconds=3)); _t=humanize.i18n.activate('ru_RU'); ru=humanize.naturaltime(dt.timedelta(seconds=3)); humanize.i18n.deactivate(); after=humanize.naturaltime(dt.timedelta(seconds=3)); print('RESULT', repr(before), repr(ru), repr(after)); assert before == '3 seconds ago', repr(before); assert ru == '3 \u0441\u0435\u043a\u0443\u043d\u0434\u044b \u043d\u0430\u0437\u0430\u0434', repr(ru); assert after == '3 seconds ago', repr(after)" && echo PROBE_OK
+STDOUT RESULT '3 seconds ago' '3 секунды назад' '3 seconds ago'
+PROBE_OK
+
+STDERR 
+PHASE_A Collecting humanize
+  Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)
+Downloading humanize-4.16.0-py3-none-any.whl (137 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 137.2/137.2 kB 31.8 MB/s eta 0:00:00
+Installing collected packages: humanize
+Successfully installed humanize-4.16.0
+
+--stderr--
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+
+EXIT 0
+p-c11 python3 -c "import json; runs=json.load(open('/tmp/runs.json'))['workflow_runs']; [print('RUN', r['head_sha'][:12], r['created_at'], r['conclusion']) for r in runs]; assert runs, 'no completed Test runs on main'; latest=runs[0]; print('LATEST_CONCLUSION', latest['conclusion']); assert latest['conclusion']=='success', latest['conclusion']" && echo PROBE_OK
+STDOUT RUN ce4147b6c8f8 2026-08-01T09:18:47Z success
+RUN 8a01306c2d2d 2026-08-01T07:49:24Z success
+RUN 9140152a404b 2026-08-01T07:49:09Z success
+RUN 42b4a1dbcdcb 2026-07-25T13:58:41Z success
+RUN c3a124cdeb27 2026-07-06T21:53:40Z success
+LATEST_CONCLUSION success
+PROBE_OK
+
+STDERR 
+PHASE_A (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /
 ```
 
 ## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
