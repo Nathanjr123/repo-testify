@@ -1,9 +1,9 @@
-# Pipeline trajectory — r09-pydub (proof `advanced-v2-1787952546`)
+# Pipeline trajectory, r09-pydub (proof `advanced-v2-1787952546`)
 
 Repository https://github.com/jiaaro/pydub @ `103e339d3bc7` · buyer question: _We want to adopt pydub for audio slicing/concatenation/export in a service running current Python (3.13). Does it install and work as the README documents, and is the project's CI story real?_
 
-## Step 1 — instructions
-See `arms/PROMPTS.md` (PLAN → EXECUTE → ADJUDICATE). Claims given to the agent:
+## Step 1, instructions
+See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The package pydub can be installed from PyPI with the exact command `pip install pydub`.
 - **c2** (quickstart): After `pip install pydub`, the import `from pydub import AudioSegment` succeeds on a current Python interpreter (the README quickstart begins with this import, stating no version restriction).
@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN → EXECUTE → ADJUDICATE). Claims given to the age
 - **c10** (interface): `len(audio_segment)` returns the segment length in milliseconds.
 - **c11** (interface): AudioSegment objects are immutable: operations like `reverse()` return new objects and never modify the original.
 
-## Step 2 — PLAN output: 11 probes (committed as `eval/probes/r09-pydub.json`)
+## Step 2, PLAN output: 11 probes (committed as `eval/probes/r09-pydub.json`)
 
 - `p-c1` image `python:3.13-slim` network `install-only`
   - setup: `python -m venv /venv && . /venv/bin/activate && pip install --no-cache-dir pydub > /pip.log 2>&1; echo PIP_RC=$? >> /pip.log`
@@ -91,7 +91,7 @@ faded = song.fade_in(1000).fade_out(1000)
 clip = song[:1000]
 assert byte`
 
-## Step 3 — EXECUTE on GitHub Actions: run `33212005473` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3, EXECUTE on GitHub Actions: run `33212005473` (artifacts: per-probe cmd/stdout/stderr/exit_code)
 
 Transcript index (probe · command excerpt):
 ```
@@ -138,23 +138,23 @@ def get(u):
         return e.c
 ```
 
-## Step 4 — ADJUDICATE: votes → verdict per claim (confidence demoted on disagreement)
+## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | verified / verified / verified | **verified** | high | `p-c1` — Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3 |
-| c2 | refuted / refuted / refuted | **refuted** | high | `p-c2` — Python 3.13.15 / File "/repo/pydub/utils.py", line 17, in <module>: import pyaudioop as au |
-| c3 | verified / verified / verified | **verified** | high | `p-c3` — observed: ffmpeg on PATH = None avconv = None / out.wav frames = 16000 rate = 8000 duratio |
-| c4 | verified / verified / verified | **verified** | low | `p-c4` — observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errn |
-| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5` — observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=m |
-| c6 | verified / verified / verified | **verified** | high | `p-c6` — observed: badge http = 200 svg says passing = True / api http = 200 last master build stat |
-| c7 | verified / verified / verified | **verified** | high | `p-c7` — observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDIC |
-| c8 | verified / verified / verified | **verified** | high | `p-c8` — observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PAS |
-| c9 | verified / verified / verified | **verified** | high | `p-c9` — README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav' |
-| c10 | verified / verified / verified | **verified** | high | `p-c10` — observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len( |
-| c11 | verified / verified / verified | **verified** | high | `p-c11` — observed: original raw_data unchanged after reverse() = True / reversed differs = True / r |
+| c1 | verified / verified / verified | **verified** | high | `p-c1`, Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3 |
+| c2 | refuted / refuted / refuted | **refuted** | high | `p-c2`, Python 3.13.15 / File "/repo/pydub/utils.py", line 17, in <module>: import pyaudioop as au |
+| c3 | verified / verified / verified | **verified** | high | `p-c3`, observed: ffmpeg on PATH = None avconv = None / out.wav frames = 16000 rate = 8000 duratio |
+| c4 | verified / verified / verified | **verified** | low | `p-c4`, observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errn |
+| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5`, observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=m |
+| c6 | verified / verified / verified | **verified** | high | `p-c6`, observed: badge http = 200 svg says passing = True / api http = 200 last master build stat |
+| c7 | verified / verified / verified | **verified** | high | `p-c7`, observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDIC |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`, observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PAS |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`, README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav' |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`, observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len( |
+| c11 | verified / verified / verified | **verified** | high | `p-c11`, observed: original raw_data unchanged after reverse() = True / reversed differs = True / r |
 
-## Step 5 — REPORT
+## Step 5, REPORT
 Overall score 82 · escalated to human: none · model calls: nominal 4
 
 _Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._

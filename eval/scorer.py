@@ -1,4 +1,4 @@
-"""THE PROPOSED RUBRIC — "make the repo testify".
+"""THE PROPOSED RUBRIC, "make the repo testify".
 Agent report schema (arms must emit this JSON):
 { "repo": str, "overall_score": 0-100,
   "claims": [ {"id": str, "verdict": "verified|refuted|unverifiable",
@@ -8,14 +8,14 @@ Agent report schema (arms must emit this JSON):
 Case schema (eval/cases/*.json):
 { "id": str, "repo": str, "commit": str, "buyer_question": str,
   "claims": [{"id": str, "text": str, "type": "install|quickstart|compat|feature|benchmark"}] }
-Ground truth (PRIVATE, eval/truth/<case_id>.json — heldout half never seen during tuning):
+Ground truth (PRIVATE, eval/truth/<case_id>.json, heldout half never seen during tuning):
 { "verdicts": {claim_id: "verified|refuted|unverifiable"}, "reviewer_score": 0-100 }
 Rows ADD (weights below), gates MULTIPLY (award nothing, only remove).
 Bands to be set AFTER measuring row distributions on the first baseline run (law 5).
 """
 import json, pathlib, re
 
-WEIGHTS = {  # v2 (2026-08-28, after first row-distribution measurement — see CHANGELOG iteration 6)
+WEIGHTS = {  # v2 (2026-08-28, after first row-distribution measurement, see CHANGELOG iteration 6)
     "verdict_acc":     0.45,  # per-claim accuracy vs ground truth; unaddressed claims count as wrong (coverage folded in: it was 1.00 on every case = saturated row)
     "confident_wrong": 0.20,  # 1 - (high-confidence wrong verdicts / claims); abstention is the honest exit
     "evidence_valid":  0.20,  # fraction of verdicts whose evidence refs exist in run artifacts
@@ -23,7 +23,7 @@ WEIGHTS = {  # v2 (2026-08-28, after first row-distribution measurement — see 
 }
 SETTLED_MIN, SETTLED_CAP = 0.50, 0.35  # objective = settle claims. If < half are settled (verified/refuted), raw <= 0.35:
                                        # an arm that abstains on everything must not out-score one that tries (incomplete-objective cap)
-BANDS = {}  # set after first distribution measurement — no dead/saturated/crushed rows
+BANDS = {}  # set after first distribution measurement, no dead/saturated/crushed rows
 
 TRUTH_DIR = pathlib.Path(__file__).resolve().parent / "truth"
 
@@ -50,7 +50,7 @@ def score(case: dict, output: dict) -> dict:
 
     ev_total = ev_ok = 0
     run_dir = pathlib.Path(output.get("_run_dir", "."))  # local artifacts, if still present
-    idx = output.get("_evidence_index")  # portable: {"probes": [...], "text": "<cmds+filenames>"} — makes replay self-contained
+    idx = output.get("_evidence_index")  # portable: {"probes": [...], "text": "<cmds+filenames>"}, makes replay self-contained
     for c in rep_claims.values():
         for e in c.get("evidence", []):
             ev_total += 1

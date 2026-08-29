@@ -1,4 +1,4 @@
-"""Baseline arm: fetch README + tree via GitHub API (no clone — local disk is tight),
+"""Baseline arm: fetch README + tree via GitHub API (no clone, local disk is tight),
 one claude -p call, emit the report schema. This is the honest 'reasonable basic way':
 what an engineer does today = read the README and skim the tree, then judge."""
 import json, pathlib, subprocess, sys
@@ -22,7 +22,7 @@ prompt = f"""You are doing technical due diligence on a repository for a buyer, 
 Buyer question: {case['buyer_question']}
 Repository: {case['repo']} at commit {case['commit']}
 You may NOT run anything. Judge only from the README and file tree below.
-For EVERY claim in this list, give verdict "verified" | "refuted" | "unverifiable" (use unverifiable when reading alone cannot settle it — do not guess), confidence "high"|"low", and evidence (kind "file" = a path from the tree, kind "url" = a link).
+For EVERY claim in this list, give verdict "verified" | "refuted" | "unverifiable" (use unverifiable when reading alone cannot settle it, do not guess), confidence "high"|"low", and evidence (kind "file" = a path from the tree, kind "url" = a link).
 Claims: {claims}
 README:\n{readme_text[:30000]}\nFile tree (first 400): {json.dumps(paths)}
 Reply with ONLY a JSON object: {{"repo": str, "overall_score": 0-100, "claims": [{{"id","verdict","confidence","evidence":[{{"kind","ref","excerpt"}}]}}], "escalations": [ids], "memo_md": "<=300 word due-diligence memo"}}"""

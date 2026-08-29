@@ -60,7 +60,7 @@ def main():
             per_case.append(zero)  # a crashed arm is a failed submission for that case: scored 0, never hidden
         print(f"{c.name}: {r['status']} wall={r['wall_s']}s", file=sys.stderr)
         if r["status"] == "limit_blocked":
-            print("USAGE LIMIT — halting sweep; rerun later resumes cleanly (partial entry flagged)", file=sys.stderr)
+            print("USAGE LIMIT, halting sweep; rerun later resumes cleanly (partial entry flagged)", file=sys.stderr)
             break
     agg = aggregate(per_case)
     entry = {"id": f"{a.label or a.arm}-{int(time.time())}", "arm": a.arm,
