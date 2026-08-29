@@ -16,7 +16,7 @@ def resolve_claude() -> str:
         return cands[0]
     raise FileNotFoundError("claude CLI not found; set CLAUDE_BIN")
 
-import json, subprocess, sys, time
+import json, os, subprocess, sys, time
 
 class LimitBlocked(RuntimeError):
     """Usage/rate limit: an INFRASTRUCTURE condition, never a verdict. Arms exit 75 (EX_TEMPFAIL)."""
@@ -44,6 +44,12 @@ def llm(prompt, model="claude-fable-5", retries=2, backoff=(60, 300)):
             pass
         blob = (out + " " + (r.stderr or "")).lower()
         limited = (not out) or any(m in blob for m in LIMIT_MARKERS)
+        if limited:  # keep the raw envelope for diagnosis (outside the repo)
+            try:
+                with open(os.path.expanduser("~/micro1-fec-research/llm-debug.log"), "a") as f:
+                    f.write(f"--- {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} try {i} rc={r.returncode} model={model} prompt_chars={len(prompt)}\nSTDOUT[:800]={r.stdout[:800]!r}\nSTDERR[:800]={r.stderr[:800]!r}\n")
+            except OSError:
+                pass
         if r.returncode == 0 and out and not limited:
             return out
         if limited and i < retries:
