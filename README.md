@@ -14,14 +14,15 @@ The format the challenge asks for, public split:
 
 | Metric | Simple baseline | Agent solution | Change |
 |---|---|---|---|
-| Primary outcome: claim accuracy (raw count, 95% Wilson interval) | 0.07 (10/75, 0.07 to 0.23) | 0.71 (62/75, 0.73 to 0.90) | +0.64 (10x); intervals do not overlap |
+| Primary outcome: per-claim accuracy, 95% Wilson interval | 0.13 (10/75; 0.07 to 0.23) | 0.83 (62/75; 0.73 to 0.90) | +0.69; intervals do not overlap |
+| Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | 0.07 | 0.71 | +0.64 |
 | Composite score (published rubric) | 0.350 | 0.817 | +0.467 |
 | Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
 | Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |
 
 Full table:
 
-| arm | claim accuracy | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |
+| arm | claim accuracy (worst-case weighted) | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |
 |---|---|---|---|---|---|---|---|---|---|---|
 | baseline (run 1) | 0.074 | 0.771 | 0.260 | 0.811 | 0.16 | **0.350** (capped) | 1* | 0.9 min | pending audit | 7/7 |
 | baseline (run 2) | 0.066 | 0.783 | 0.246 | 0.745 | 0.15 | **0.347** | 1* | 0.9 min | pending audit | 7/7 |
@@ -56,7 +57,7 @@ Baseline-vs-baseline spread (noise floor): **0.003** composite; claim-accuracy s
 ## The four questions
 - Who has this problem? An engineer doing due diligence on a repository someone else wrote.
 - What bottleneck makes it worth solving? Checking a README's promises by hand is slow, and two reviewers reading the same signals reach different conclusions.
-- Does the agent solve it well? Claim accuracy went from 0.07 to 0.71 on the public split, with every verdict tied to a recorded artifact. The held-out split is run once and reported as is.
+- Does the agent solve it well? Raw per-claim accuracy went from 0.13 to 0.83 on the public split (0.07 to 0.71 when weighted toward the worst repositories), with every verdict tied to a recorded artifact. The held-out split is run once and reported as is.
 - Can another person reproduce the result? `./repro.sh` from a clean clone. CI does exactly that in the shipped Docker image on every push.
 
 ## Who has this problem
@@ -79,7 +80,7 @@ Baseline: what a diligent engineer does today with an LLM. One prompt with the R
 Agent solution: a code-orchestrated pipeline (DESIGN.md). Map the repository. Plan one probe per claim under a fixed contract (the README's own steps only, and a machine-readable VERDICT_LINE at the end). Execute the probes in a two-phase Docker sandbox on GitHub Actions: network on for the install, off for the probe unless the claim is about a URL. One repair round for environment failures. Adjudicate every claim from the transcripts with a three-vote majority. Cross-check each cited exit code against the recorded log. Report, with escalations. Same cases, same claim lists, same output schema for both arms. The only difference in resources is that the pipeline can run code and the baseline cannot; that difference is the thing being measured.
 
 ## Measured improvement
-The primary metric is per-claim verdict accuracy against audited ground truth. It was pre-registered as macro-F1 and changed to accuracy in iteration 3, because per-case macro-F1 is degenerate on repositories where every claim has the same verdict. The change is disclosed in CHANGELOG.md. Secondary rows: not confidently wrong (abstaining is the honest exit), evidence validity (every cited artifact must exist), and agreement with the reviewer's rubric score.
+The primary metric is per-claim verdict accuracy against audited ground truth, reported as a raw count with a 95% Wilson interval. The full table weights the same metric toward the worst repositories (0.55 mean, 0.30 mean of the worst 30%, 0.15 single worst) so that one bad repository cannot hide behind six good ones; both views are shown. It was pre-registered as macro-F1 and changed to accuracy in iteration 3, because per-case macro-F1 is degenerate on repositories where every claim has the same verdict. The change is disclosed in CHANGELOG.md. Secondary rows: not confidently wrong (abstaining is the honest exit), evidence validity (every cited artifact must exist), and agreement with the reviewer's rubric score.
 
 Cost per task is model calls per repository (baseline 1; pipeline 4 to 5: plan, at most one repair, three votes) plus wall time. CI compute is free on public runners. Human time per task is measured during the human audit, on two repositories timed end to end, and is reported once the audit closes. The held-out split (7 repositories, including two hard cases built for this) is run once after the audit, and the same generator appends its rows to the table.
 

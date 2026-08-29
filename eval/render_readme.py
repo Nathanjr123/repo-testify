@@ -14,7 +14,7 @@ def row(label, name):
     calls = e.get("llm_calls") or f"{nominal}*"
     human = e.get("human_min_per_repo") or "pending audit"
     return f"| {name} | {acc:.3f} | {a['rows']['confident_wrong']:.3f} | {a['rows']['evidence_valid']:.3f} | {a['rows']['score_error']:.3f} | {a.get('settled_fraction', 0):.2f} | **{a['raw']:.3f}**{' (capped)' if a.get('capped') else ''} | {calls} | {e['wall_total_s']/max(1,len(e['per_case']))/60:.1f} min | {human} | {len(ok)}/{len(e['per_case'])} |"
-hdr = "| arm | claim accuracy | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |\n|---|---|---|---|---|---|---|---|---|---|---|"
+hdr = "| arm | claim accuracy (worst-case weighted) | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |\n|---|---|---|---|---|---|---|---|---|---|---|"
 rows = [row("baseline-v2-n1-rescored", "baseline (run 1)"), row("baseline-v2-n2-rescored", "baseline (run 2)"),
         row("advanced-v1-rescored", "pipeline v1"), row("advanced-v2-rescored", "pipeline v2 (public, tuned)"),
         row("ablate-k1", "ablation: k=1 votes"), row("ablate-no-execution", "ablation: no execution"),
@@ -44,7 +44,8 @@ def pdf_table():
     hm = adv.get("human_min_per_repo") or "pending audit"
     kb, nb = claim_counts(b1); ka, na = claim_counts(adv); lb, ub = wilson(kb, nb); la, ua = wilson(ka, na)
     return ("The format the challenge asks for, public split:\n\n| Metric | Simple baseline | Agent solution | Change |\n|---|---|---|---|\n"
-            f"| Primary outcome: claim accuracy (raw count, 95% Wilson interval) | {ba:.2f} ({kb}/{nb}, {lb:.2f} to {ub:.2f}) | {aa:.2f} ({ka}/{na}, {la:.2f} to {ua:.2f}) | +{aa-ba:.2f} ({aa/ba:.0f}x); intervals do not overlap |\n"
+            f"| Primary outcome: per-claim accuracy, 95% Wilson interval | {kb/nb:.2f} ({kb}/{nb}; {lb:.2f} to {ub:.2f}) | {ka/na:.2f} ({ka}/{na}; {la:.2f} to {ua:.2f}) | +{ka/na-kb/nb:.2f}; intervals do not overlap |\n"
+            f"| Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | {ba:.2f} | {aa:.2f} | +{aa-ba:.2f} |\n"
             f"| Composite score (published rubric) | {b1['agg']['raw']:.3f} | {adv['agg']['raw']:.3f} | +{adv['agg']['raw']-b1['agg']['raw']:.3f} |\n"
             f"| Human time per task | {hm} (manual audit datum) | {aw:.1f} min unattended wall time | see held-out rows |\n"
             f"| Cost per task | 1 model call, {bw:.1f} min | 4 model calls (nominal), {aw:.1f} min | +3 calls |\n\n")
