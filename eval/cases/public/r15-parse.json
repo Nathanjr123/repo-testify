@@ -1,0 +1,94 @@
+{
+  "id": "r15-parse",
+  "repo": "https://github.com/r1chardj0n3s/parse",
+  "commit": "8059e320eccf40d750843006dd2ef25197bbff74",
+  "license": "MIT",
+  "bucket": "A",
+  "buyer_question": "We want to use parse as the format-string matcher inside a log-ingestion product — do the README's install line, export list, and interactive examples (typed fields, datetime formats, custom converters) actually reproduce on a current interpreter, and does the documented test flow pass?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package 'parse' can be installed from PyPI with the command `pip install parse`, after which `import parse` succeeds.",
+      "type": "install",
+      "source_quote": "Installation\n------------\n\n.. code-block:: pycon\n\n    pip install parse",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install parse && /tmp/v/bin/python -c 'import parse; print(parse.__version__)'"
+    },
+    {
+      "id": "c2",
+      "text": "With 'parse' installed, `from parse import *` exports exactly parse, search, findall and with_pattern (compile is deliberately not exported).",
+      "type": "interface",
+      "source_quote": "The module is set up to only export ``parse()``, ``search()``, ``findall()``,\nand ``with_pattern()`` when ``import *`` is used:",
+      "probe_hint": "python3 -c \"import parse; assert set(parse.__all__) == {'parse','search','findall','with_pattern'}, parse.__all__\""
+    },
+    {
+      "id": "c3",
+      "text": "With 'parse' installed, `parse(\"It's {}, I love it!\", \"It's spam, I love it!\")` returns a Result whose repr is `<Result ('spam',) {}>` and whose element [0] is 'spam'.",
+      "type": "quickstart",
+      "source_quote": ">>> parse(\"It's {}, I love it!\", \"It's spam, I love it!\")\n    <Result ('spam',) {}>\n    >>> _[0]\n    'spam'",
+      "probe_hint": "python3 -c \"from parse import parse; r=parse(\\\"It's {}, I love it!\\\", \\\"It's spam, I love it!\\\"); assert repr(r)==\\\"<Result ('spam',) {}>\\\" and r[0]=='spam', repr(r)\""
+    },
+    {
+      "id": "c4",
+      "text": "With 'parse' installed, `search('Age: {:d}\\n', 'Name: Rufus\\nAge: 42\\nColor: red\\n')` returns a Result with repr `<Result (42,) {}>` (an int 42, not the string '42').",
+      "type": "quickstart",
+      "source_quote": ">>> search('Age: {:d}\\n', 'Name: Rufus\\nAge: 42\\nColor: red\\n')\n    <Result (42,) {}>",
+      "probe_hint": "python3 -c \"from parse import search; r=search('Age: {:d}\\n', 'Name: Rufus\\nAge: 42\\nColor: red\\n'); assert repr(r)=='<Result (42,) {}>' and r[0]==42, repr(r)\""
+    },
+    {
+      "id": "c5",
+      "text": "With 'parse' installed, `''.join(r[0] for r in findall(\">{}<\", \"<p>the <b>bold</b> text</p>\"))` evaluates to the string 'the bold text'.",
+      "type": "quickstart",
+      "source_quote": ">>> ''.join(r[0] for r in findall(\">{}<\", \"<p>the <b>bold</b> text</p>\"))\n    'the bold text'",
+      "probe_hint": "python3 -c \"from parse import findall; s=''.join(r[0] for r in findall('>{}<', '<p>the <b>bold</b> text</p>')); assert s=='the bold text', s\""
+    },
+    {
+      "id": "c6",
+      "text": "With 'parse' installed, `from parse import compile; p = compile(\"It's {}, I love it!\")` gives an object that prints as `<Parser \"It's {}, I love it!\">` and whose `p.parse(\"It's spam, I love it!\")` returns `<Result ('spam',) {}>`.",
+      "type": "interface",
+      "source_quote": ">>> from parse import compile\n    >>> p = compile(\"It's {}, I love it!\")\n    >>> print(p)\n    <Parser \"It's {}, I love it!\">\n    >>> p.parse(\"It's spam, I love it!\")\n    <Result ('spam',) {}>",
+      "probe_hint": "python3 -c \"from parse import compile; p=compile(\\\"It's {}, I love it!\\\"); assert str(p)=='<Parser \\\"It\\'s {}, I love it!\\\">', str(p); assert repr(p.parse(\\\"It's spam, I love it!\\\"))==\\\"<Result ('spam',) {}>\\\"\""
+    },
+    {
+      "id": "c7",
+      "text": "With 'parse' installed, matching is case-insensitive by default and `parse('SPAM', 'spam', case_sensitive=True)` returns None.",
+      "type": "interface",
+      "source_quote": "The default behaviour is to match strings case insensitively. You may match with\ncase by specifying `case_sensitive=True`:\n\n.. code-block:: pycon\n\n    >>> parse('SPAM', 'spam', case_sensitive=True) is None\n    True",
+      "probe_hint": "python3 -c \"from parse import parse; assert parse('SPAM','spam') is not None; assert parse('SPAM','spam',case_sensitive=True) is None\""
+    },
+    {
+      "id": "c8",
+      "text": "With 'parse' installed, `r = parse(\"Bring out the holy {item}\", \"Bring out the holy hand grenade\")` gives a Result printing as `<Result () {'item': 'hand grenade'}>`, with `r.named == {'item': 'hand grenade'}`, `r['item'] == 'hand grenade'`, and `'item' in r` True.",
+      "type": "interface",
+      "source_quote": ">>> r = parse(\"Bring out the holy {item}\", \"Bring out the holy hand grenade\")\n    >>> print(r)\n    <Result () {'item': 'hand grenade'}>\n    >>> print(r.named)\n    {'item': 'hand grenade'}\n    >>> print(r['item'])\n    hand grenade\n    >>> 'item' in r\n    True",
+      "probe_hint": "python3 -c \"from parse import parse; r=parse('Bring out the holy {item}','Bring out the holy hand grenade'); assert str(r)==\\\"<Result () {'item': 'hand grenade'}>\\\", str(r); assert r.named=={'item':'hand grenade'} and r['item']=='hand grenade' and 'item' in r\""
+    },
+    {
+      "id": "c9",
+      "text": "With 'parse' installed, strptime-style type specs are supported: `parse(\"{:%Y-%m-%d %H:%M:%S}\", \"2023-11-23 12:56:47\")` yields datetime.datetime(2023, 11, 23, 12, 56, 47), `parse(\"{:%H:%M}\", \"10:26\")` yields datetime.time(10, 26), and `parse(\"{:%Y/%m/%d}\", \"2023/11/25\")` yields datetime.date(2023, 11, 25).",
+      "type": "interface",
+      "source_quote": ">>> parse(\"{:%Y-%m-%d %H:%M:%S}\", \"2023-11-23 12:56:47\")\n    <Result (datetime.datetime(2023, 11, 23, 12, 56, 47),) {}>\n    >>> parse(\"{:%H:%M}\", \"10:26\")\n    <Result (datetime.time(10, 26),) {}>\n    >>> parse(\"{:%Y/%m/%d}\", \"2023/11/25\")\n    <Result (datetime.date(2023, 11, 25),) {}>",
+      "probe_hint": "python3 -c \"import datetime as dt; from parse import parse; assert parse('{:%Y-%m-%d %H:%M:%S}','2023-11-23 12:56:47')[0]==dt.datetime(2023,11,23,12,56,47); assert parse('{:%H:%M}','10:26')[0]==dt.time(10,26); assert parse('{:%Y/%m/%d}','2023/11/25')[0]==dt.date(2023,11,25)\""
+    },
+    {
+      "id": "c10",
+      "text": "With 'parse' installed, width and precision restrict matched text: `parse('{:.2}{:.2}', 'look')` gives ('lo', 'ok'), `parse('{:4}{:.4}', 'look at that')` gives ('look at ', 'that'), and `parse('{:2d}{:2d}', '0440')` gives (4, 40).",
+      "type": "interface",
+      "source_quote": ">>> parse('{:.2}{:.2}', 'look')           # specifying precision\n    <Result ('lo', 'ok') {}>\n    >>> parse('{:4}{:4}', 'look at that')     # specifying width\n    <Result ('look', 'at that') {}>\n    >>> parse('{:4}{:.4}', 'look at that')    # specifying both\n    <Result ('look at ', 'that') {}>\n    >>> parse('{:2d}{:2d}', '0440')           # parsing two contiguous numbers\n    <Result (4, 40) {}>",
+      "probe_hint": "python3 -c \"from parse import parse; assert parse('{:.2}{:.2}','look').fixed==('lo','ok'); assert parse('{:4}{:.4}','look at that').fixed==('look at ','that'); assert parse('{:2d}{:2d}','0440').fixed==(4,40)\""
+    },
+    {
+      "id": "c11",
+      "text": "With 'parse' installed, a converter decorated with `@with_pattern(r'\\d+')` and passed as an extra type works: `parse('Answer: {number:Number}', 'Answer: 42', {\"Number\": parse_number})` returns `<Result () {'number': 42}>` with an int value.",
+      "type": "interface",
+      "source_quote": ">>> from parse import with_pattern\n    >>> @with_pattern(r'\\d+')\n    ... def parse_number(text):\n    ...    return int(text)\n    >>> parse('Answer: {number:Number}', 'Answer: 42', {\"Number\": parse_number})\n    <Result () {'number': 42}>",
+      "probe_hint": "python3 -c \"from parse import parse, with_pattern\n@with_pattern(r'\\d+')\ndef pn(t): return int(t)\nr=parse('Answer: {number:Number}','Answer: 42',{'Number':pn}); assert r['number']==42 and isinstance(r['number'],int), repr(r)\""
+    },
+    {
+      "id": "c12",
+      "text": "In a clone of the repository, the documented developer flow `pip install -r tests/requirements.txt && pip install -e . && pytest` installs the package in editable mode and the test suite passes.",
+      "type": "test_ci",
+      "source_quote": "To run the tests locally:\n\n.. code-block:: bash\n\n   python -m venv .venv\n   source .venv/bin/activate\n   pip install -r tests/requirements.txt\n   pip install -e .\n   pytest",
+      "probe_hint": "git clone --depth 1 https://github.com/r1chardj0n3s/parse /tmp/parse && cd /tmp/parse && python3 -m venv .venv && .venv/bin/pip install -r tests/requirements.txt && .venv/bin/pip install -e . && .venv/bin/pytest -q"
+    }
+  ]
+}

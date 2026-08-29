@@ -1,0 +1,94 @@
+{
+  "id": "r19-nanogpt",
+  "repo": "https://github.com/karpathy/nanoGPT",
+  "commit": "3adf61e154c3fe3fca428ad6bc3818b27a3b8291",
+  "license": "MIT",
+  "bucket": "E",
+  "buyer_question": "We want to use nanoGPT as the reference training loop for an internal LLM course and cite its numbers — does the documented pip install and Shakespeare quick start actually run on a CPU-only machine today, which of the README's loss/timing figures are reproducible without an A100 cluster, and is the project still maintained?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The documented dependency set installs with the single command `pip install torch numpy transformers datasets tiktoken wandb tqdm` on a current CPU-only Python.",
+      "type": "install",
+      "source_quote": "## install\n\n```\npip install torch numpy transformers datasets tiktoken wandb tqdm\n```",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install torch numpy transformers datasets tiktoken wandb tqdm --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple && /tmp/v/bin/python -c 'import torch, numpy, transformers, datasets, tiktoken, wandb, tqdm; print(torch.__version__)'"
+    },
+    {
+      "id": "c2",
+      "text": "Running `python data/shakespeare_char/prepare.py` in a clone downloads the ~1 MB tiny-shakespeare text and creates the files train.bin and val.bin in data/shakespeare_char/.",
+      "type": "quickstart",
+      "source_quote": "First, we download it as a single (1MB) file and turn it from raw text into one large stream of integers:\n\n```sh\npython data/shakespeare_char/prepare.py\n```\n\nThis creates a `train.bin` and `val.bin` in that data directory.",
+      "probe_hint": "git clone --depth 1 https://github.com/karpathy/nanoGPT /tmp/ng && cd /tmp/ng && /tmp/v/bin/python data/shakespeare_char/prepare.py && ls -l data/shakespeare_char/train.bin data/shakespeare_char/val.bin"
+    },
+    {
+      "id": "c3",
+      "text": "The config file config/train_shakespeare_char.py specifies a GPT with block_size 256 (context of up to 256 characters), n_embd 384, n_layer 6 and n_head 6.",
+      "type": "interface",
+      "source_quote": "If you peek inside it, you'll see that we're training a GPT with a context size of up to 256 characters, 384 feature channels, and it is a 6-layer Transformer with 6 heads in each layer.",
+      "probe_hint": "curl -sL https://raw.githubusercontent.com/karpathy/nanoGPT/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/config/train_shakespeare_char.py | grep -E '^(block_size|n_embd|n_layer|n_head) '"
+    },
+    {
+      "id": "c4",
+      "text": "On a single A100 GPU, `python train.py config/train_shakespeare_char.py` takes about 3 minutes and reaches a best validation loss of 1.4697.",
+      "type": "quantitative",
+      "source_quote": "On one A100 GPU this training run takes about 3 minutes and the best validation loss is 1.4697.",
+      "probe_hint": "On an A100: cd /tmp/ng && time python train.py config/train_shakespeare_char.py 2>&1 | grep 'val loss' | tail -3  # record min val loss and wall-clock"
+    },
+    {
+      "id": "c5",
+      "text": "On a CPU-only machine, the exact command `python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0` runs to completion and writes a checkpoint to out-shakespeare-char/ckpt.pt.",
+      "type": "quickstart",
+      "source_quote": "```sh\npython train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0\n```",
+      "probe_hint": "cd /tmp/ng && /tmp/v/bin/python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0 > /tmp/train.log 2>&1; echo exit=$?; ls -l out-shakespeare-char/ckpt.pt"
+    },
+    {
+      "id": "c6",
+      "text": "The CPU command in c5 runs in about 3 minutes and reaches a validation loss of about 1.88.",
+      "type": "quantitative",
+      "source_quote": "This still runs in about ~3 minutes, but gets us a loss of only 1.88 and therefore also worse samples, but it's still good fun:",
+      "probe_hint": "cd /tmp/ng && /usr/bin/time -v /tmp/v/bin/python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=2000 --lr_decay_iters=2000 --dropout=0.0 2>&1 | grep -E 'val loss|Elapsed' | tail -4  # record final val loss and wall-clock; compare to 1.88 / 3 min"
+    },
+    {
+      "id": "c7",
+      "text": "After the CPU training run, `python sample.py --out_dir=out-shakespeare-char --device=cpu` loads the checkpoint and prints generated text samples.",
+      "type": "quickstart",
+      "source_quote": "```sh\npython sample.py --out_dir=out-shakespeare-char --device=cpu\n```\nGenerates samples like this:",
+      "probe_hint": "cd /tmp/ng && /tmp/v/bin/python sample.py --out_dir=out-shakespeare-char --device=cpu --num_samples=2 --max_new_tokens=100 | head -30"
+    },
+    {
+      "id": "c8",
+      "text": "train.py is approximately a 300-line training loop and model.py approximately a 300-line GPT model definition (each within ~15% of 300 lines at the pinned commit).",
+      "type": "quantitative",
+      "source_quote": "`train.py` is a ~300-line boilerplate training loop and `model.py` a ~300-line GPT model definition, which can optionally load the GPT-2 weights from OpenAI.",
+      "probe_hint": "for f in train.py model.py; do curl -sL https://raw.githubusercontent.com/karpathy/nanoGPT/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/$f | wc -l; done"
+    },
+    {
+      "id": "c9",
+      "text": "Evaluating the OpenAI GPT-2 checkpoints on OpenWebText with `python train.py config/eval_gpt2.py` (and the _medium/_large/_xl variants) yields train/val losses of 3.11/3.12 (gpt2, 124M), 2.85/2.84 (gpt2-medium, 350M), 2.66/2.67 (gpt2-large, 774M) and 2.56/2.54 (gpt2-xl, 1558M).",
+      "type": "quantitative",
+      "source_quote": "| model | params | train loss | val loss |\n| ------| ------ | ---------- | -------- |\n| gpt2 | 124M         | 3.11  | 3.12     |\n| gpt2-medium | 350M  | 2.85  | 2.84     |\n| gpt2-large | 774M   | 2.66  | 2.67     |\n| gpt2-xl | 1558M     | 2.56  | 2.54     |",
+      "probe_hint": "cd /tmp/ng && python data/openwebtext/prepare.py && python train.py config/eval_gpt2.py 2>&1 | grep 'val loss'  # requires the ~54GB OpenWebText prep and a GPU; on CPU with --device=cpu --eval_iters=5 only a noisy proxy"
+    },
+    {
+      "id": "c10",
+      "text": "Reproducing GPT-2 (124M) with `torchrun --standalone --nproc_per_node=8 train.py config/train_gpt2.py` on an 8xA100 40GB node takes about 4 days and reaches a loss of about 2.85.",
+      "type": "quantitative",
+      "source_quote": "This will run for about 4 days using PyTorch Distributed Data Parallel (DDP) and go down to loss of ~2.85.",
+      "probe_hint": "On an 8xA100 node: torchrun --standalone --nproc_per_node=8 train.py config/train_gpt2.py; record wall-clock and final val loss (compare against assets/gpt2_124M_loss.png)"
+    },
+    {
+      "id": "c11",
+      "text": "`sample.py` can sample from OpenAI's released GPT-2 models via `--init_from=gpt2-xl` (or any gpt2 variant) with `--start=\"...\" --num_samples=5 --max_new_tokens=100`, and `--start=FILE:prompt.txt` reads the prompt from a file.",
+      "type": "interface",
+      "source_quote": "```sh\npython sample.py \\\n    --init_from=gpt2-xl \\\n    --start=\"What is the answer to life, the universe, and everything?\" \\\n    --num_samples=5 --max_new_tokens=100\n```\n\nIf you'd like to sample from a model you trained, use the `--out_dir` to point the code appropriately. You can also prompt the model with some text from a file, e.g. ```python sample.py --start=FILE:prompt.txt```.",
+      "probe_hint": "cd /tmp/ng && echo 'Once upon a time' > prompt.txt && /tmp/v/bin/python sample.py --init_from=gpt2 --device=cpu --start=FILE:prompt.txt --num_samples=1 --max_new_tokens=20  # gpt2 (124M, ~500MB download) as a lighter proxy for gpt2-xl (6GB)"
+    },
+    {
+      "id": "c12",
+      "text": "nanoGPT is declared old and deprecated by its author, with a successor project karpathy/nanochat that exists on GitHub.",
+      "type": "environment",
+      "source_quote": "**Update Nov 2025** nanoGPT has a new and improved cousin called [nanochat](https://github.com/karpathy/nanochat). It is very likely you meant to use/find nanochat instead. nanoGPT (this repo) is now very old and deprecated but I will leave it up for posterity.",
+      "probe_hint": "gh api repos/karpathy/nanochat --jq '.full_name + \" \" + .created_at'; gh api repos/karpathy/nanoGPT --jq '.pushed_at + \" archived=\" + (.archived|tostring)'"
+    }
+  ]
+}

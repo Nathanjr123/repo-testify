@@ -98,6 +98,24 @@ To reproduce the primary mode: case `r07-newspaper3k`, claims c8 and c9, proof `
 ## Hot take
 A green CI badge is a Goodharted proxy for "the README is true", and the honest repositories are the proof. On the public split, every repository whose test and CI claims fully verified, the ones a buyer trusts on sight, still had at least one refuted README claim (2 of 2; the held-out rows extend the count). humanize's own doctest promises `'16 minutes'` and returns `'17 minutes'`. tabulate documents an install switch that does nothing and a benchmark table that contradicts its own prose. Tests verify what the maintainers chose to test. The README is written for readers, drifts quietly, and never gets executed, until something executes it. For anyone building agents, the cheapest reliable component in this pipeline turned out to be an execution result the model could not argue with, ahead of the model itself and ahead of voting (k=1 against k=3 sat inside the noise floor). Give an agent a verifier and it gets careful. Give it a README and it gets confident.
 
+## Running it on itself
+We pointed the pipeline at this repository (case `eval/cases/self/r00-repo-testify.json`, ten claims taken from this README; CI run 33259186251). Nine verified. One was refuted, at high confidence, and the pipeline was right: RESULTS.md cited a commit hash that no longer existed after the commit history was rewritten to fix author attribution. One proof entry had escaped the hash remap. It is fixed in the same change that records this (CHANGELOG iteration 10), and the refuted row stays here because a tool that audits other people's READMEs should show its own audit.
+
+| claim | what the README promises | verdict | confidence |
+|---|---|---|---|
+| c1 | From a clean clone, `./repro.sh` runs to completion with exit code 0 using only Python 3.10+ (no make, no dock | **verified** | high |
+| c2 | `python3 tests/test_scorer.py` passes all six scorer contract tests. | **verified** | high |
+| c3 | `python3 eval/validate_cases.py` reports every case file valid. | **verified** | high |
+| c4 | `python3 -m eval.replay --run <the advanced-v2-rescored run id>` reproduces the stored raw score 0.817 exactly | **verified** | high |
+| c5 | Regenerating RESULTS.md and the README tables from proof/ yields files byte-identical to the committed ones. | **verified** | high |
+| c6 | The shipped Dockerfile builds and its default command runs the Level-1 reproduction successfully. | **verified** | low |
+| c7 | On the public split the pipeline's raw per-claim accuracy is 0.83 (62 of 75) against the baseline's 0.13 (10 o | **verified** | high |
+| c8 | Every row of RESULTS.md carries a proof id, a git hash and a UTC timestamp, and each cited git hash exists in  | **refuted** | high |
+| c9 | The README's `repro` workflow badge asserts the latest run of that workflow on master succeeded. | **verified** | high |
+| c10 | `arms/PROMPTS.md` is generated from the arm sources: running `python3 tools/render_prompts.py` leaves it uncha | **verified** | high |
+
+The Docker claim (c6) is verified at low confidence: the sandbox cannot run Docker, so the probe checked the latest `repro` workflow run instead and said so. That is the escalation lane working as designed.
+
 ## What we did not attempt
 Claim discovery is not on the scored path. The claim list per repository is fixed so that two people scoring the same run get the same number; an extractor exists for real use but its recall is not evaluated here. No embedding retrieval, no agents talking to each other, no self-review passes without new evidence (DESIGN.md explains why). No Windows or macOS execution: these are Linux verdicts.
 

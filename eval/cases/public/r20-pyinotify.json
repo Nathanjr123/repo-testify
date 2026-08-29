@@ -1,0 +1,73 @@
+{
+  "id": "r20-pyinotify",
+  "repo": "https://github.com/seb-m/pyinotify",
+  "commit": "0f3f8950d12e4a6534320153eed1a90a778da4ae",
+  "license": "MIT",
+  "bucket": "C",
+  "buyer_question": "A file-sync daemon we are taking over uses pyinotify for filesystem watching — does the README's install path still produce an importable module on a current Python 3, does the documented `python -m pyinotify` watcher run, is the Python-version support statement true, and do the documentation links still resolve?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package can be installed from PyPI with `pip install pyinotify` (the README uses `sudo pip install pyinotify`) on a current Python — the sdist builds and pip reports success.",
+      "type": "install",
+      "source_quote": "### Get the current stable version from PyPI and install it with `pip`\n\n    # To install pip follow http://www.pip-installer.org/en/latest/installing.html\n    $ sudo pip install pyinotify",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install pyinotify; echo exit=$?; /tmp/v/bin/pip show pyinotify | head -3"
+    },
+    {
+      "id": "c2",
+      "text": "pyinotify supports Python >= 2.4 including any Python 3.x: after installation, `import pyinotify` succeeds on a current Python 3 interpreter.",
+      "type": "environment",
+      "source_quote": "## Dependencies\n\n* Linux ≥ 2.6.13\n* Python ≥ 2.4 (including Python 3.x)",
+      "probe_hint": "/tmp/v/bin/python -c 'import pyinotify; print(pyinotify.__version__)'  # expect ModuleNotFoundError: No module named 'asyncore' on Python >= 3.12"
+    },
+    {
+      "id": "c3",
+      "text": "pyinotify requires Linux (kernel >= 2.6.13, i.e. inotify support); its setup.py refuses to install on non-Linux platforms.",
+      "type": "environment",
+      "source_quote": "* Linux ≥ 2.6.13",
+      "probe_hint": "curl -sL https://raw.githubusercontent.com/seb-m/pyinotify/0f3f8950d12e4a6534320153eed1a90a778da4ae/setup.py | grep -n -A2 'not platform.startswith'; uname -r"
+    },
+    {
+      "id": "c4",
+      "text": "pyinotify can be installed from a source checkout with `sudo pythonXXX setup.py install` (XXX = the chosen interpreter, e.g. python3) on a current Python 3.",
+      "type": "install",
+      "source_quote": "### Or install Pyinotify directly from source\n\n    # Choose your Python interpreter: either python, python2.7, python3.2,..\n    # Replacing XXX accordingly, type:\n    $ sudo pythonXXX setup.py install",
+      "probe_hint": "git clone --depth 1 https://github.com/seb-m/pyinotify /tmp/pyin && cd /tmp/pyin && python3 -m venv .v && .v/bin/python setup.py install; echo exit=$?  # setup.py does `import distutils.extension` at top level; distutils is gone in 3.12 unless setuptools is pre-installed in the venv"
+    },
+    {
+      "id": "c5",
+      "text": "With pyinotify installed, `python -m pyinotify -v /my-dir-to-watch` watches the given directory and prints filesystem events as they occur.",
+      "type": "quickstart",
+      "source_quote": "## Watch a directory\n\nInstall pyinotify and run this command from a shell:\n\n    $ python -m pyinotify -v /my-dir-to-watch",
+      "probe_hint": "mkdir -p /tmp/w && (timeout 5 /tmp/v/bin/python -m pyinotify -v /tmp/w & sleep 1; touch /tmp/w/x; wait) 2>&1 | head  # expect IN_CREATE event lines, or the asyncore ImportError on 3.12+"
+    },
+    {
+      "id": "c6",
+      "text": "pyinotify is released under the MIT license (repository COPYING file and PyPI metadata both say MIT).",
+      "type": "environment",
+      "source_quote": "* License          : MIT",
+      "probe_hint": "gh api repos/seb-m/pyinotify/license --jq .license.spdx_id; curl -s https://pypi.org/pypi/pyinotify/json | python3 -c \"import json,sys; print(json.load(sys.stdin)['info']['license'])\""
+    },
+    {
+      "id": "c7",
+      "text": "The API documentation link given in the README, http://seb-m.github.com/pyinotify, resolves to a live documentation page.",
+      "type": "interface",
+      "source_quote": "* API Documentation: [http://seb-m.github.com/pyinotify](http://seb-m.github.com/pyinotify)",
+      "probe_hint": "curl -sSL -m 20 -o /dev/null -w '%{http_code} %{url_effective}\\n' http://seb-m.github.com/pyinotify; curl -sSL -m 20 -o /dev/null -w '%{http_code} %{url_effective}\\n' https://seb-m.github.io/pyinotify/"
+    },
+    {
+      "id": "c8",
+      "text": "The project wiki link given in the README, http://github.com/seb-m/pyinotify/wiki, resolves to an existing GitHub wiki.",
+      "type": "environment",
+      "source_quote": "* Project Wiki     : [http://github.com/seb-m/pyinotify/wiki](http://github.com/seb-m/pyinotify/wiki)",
+      "probe_hint": "curl -sL -o /dev/null -w '%{http_code}\\n' https://github.com/seb-m/pyinotify/wiki; gh api repos/seb-m/pyinotify --jq .has_wiki"
+    },
+    {
+      "id": "c9",
+      "text": "The version distributed on PyPI as the 'current stable version' is 0.9.6, matching `__version__` in python3/pyinotify.py at the pinned commit.",
+      "type": "quantitative",
+      "source_quote": "### Get the current stable version from PyPI and install it with `pip`",
+      "probe_hint": "curl -s https://pypi.org/pypi/pyinotify/json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['info']['version'], d['releases'][d['info']['version']][0]['upload_time'])\"; curl -sL https://raw.githubusercontent.com/seb-m/pyinotify/0f3f8950d12e4a6534320153eed1a90a778da4ae/python3/pyinotify.py | grep -n '^__version__'"
+    }
+  ]
+}

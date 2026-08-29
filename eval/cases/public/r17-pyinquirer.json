@@ -1,0 +1,87 @@
+{
+  "id": "r17-pyinquirer",
+  "repo": "https://github.com/CITGuru/PyInquirer",
+  "commit": "7637373429bec66788650cda8091b7a6f12929ee",
+  "license": "MIT",
+  "bucket": "C",
+  "buyer_question": "An internal CLI tool we are inheriting depends on PyInquirer for its interactive prompts — does the README's pip install path and quickstart import still work on a current Python, is the documented prompt_toolkit workaround valid, is the CI badge real, and is the project maintained?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The command `pip install PyInquirer` completes successfully on a current Python (resolving and installing the package and its declared dependencies).",
+      "type": "install",
+      "source_quote": "Simply use pip to install the PyInquirer package\n\n.. code:: shell\n\n    pip install PyInquirer",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install PyInquirer && /tmp/v/bin/pip list | grep -i -E 'pyinquirer|prompt'"
+    },
+    {
+      "id": "c2",
+      "text": "After `pip install PyInquirer`, the README quickstart import `from PyInquirer import prompt, print_json` succeeds on a current Python interpreter.",
+      "type": "quickstart",
+      "source_quote": "    from __future__ import print_function, unicode_literals\n    from PyInquirer import prompt, print_json",
+      "probe_hint": "/tmp/v/bin/python -c 'from PyInquirer import prompt, print_json; print(\"ok\")'  # expect ImportError: cannot import name Mapping from collections (prompt_toolkit 1.0.14) on Python >= 3.10"
+    },
+    {
+      "id": "c3",
+      "text": "If a prompt_toolkit error is encountered, installing the version the README prescribes with `pip install prompt_toolkit==1.0.14` resolves it and makes PyInquirer importable.",
+      "type": "install",
+      "source_quote": "In case you encounter any prompt\\_toolkit error, that means you've the\nwrong prompt\\_toolkit version.\n\nYou can correct that by doing\n\n.. code:: shell\n\n    pip install prompt_toolkit==1.0.14",
+      "probe_hint": "/tmp/v/bin/pip install prompt_toolkit==1.0.14 && /tmp/v/bin/python -c 'import prompt_toolkit.styles.from_dict'  # inspect prompt_toolkit/styles/from_dict.py line 9"
+    },
+    {
+      "id": "c4",
+      "text": "With PyInquirer importable, `prompt(questions)` for a list containing one `{'type': 'input', 'name': 'first_name', 'message': ...}` question returns a dict keyed by 'first_name', which `print_json(answers)` prints as JSON.",
+      "type": "interface",
+      "source_quote": "    questions = [\n        {\n            'type': 'input',\n            'name': 'first_name',\n            'message': 'What\\'s your first name',\n        }\n    ]\n\n    answers = prompt(questions)\n    print_json(answers)  # use the answers as input for your app",
+      "probe_hint": "python3 -c \"import pexpect; c=pexpect.spawn('/tmp/v/bin/python examples/input.py'); c.expect('first name'); c.sendline('Bob'); c.expect(pexpect.EOF, timeout=20); print(c.before.decode())\"  # needs a pty and an interpreter where c2 imports"
+    },
+    {
+      "id": "c5",
+      "text": "The repository ships example scripts editor.py, expand.py, list.py, password.py, when.py, checkbox.py, confirm.py, hierarchical.py, pizza.py, input.py and rawlist.py under ./examples/.",
+      "type": "interface",
+      "source_quote": "-  `editor.py <./examples/editor.py>`_\n-  `expand.py <./examples/expand.py>`_\n-  `list.py <./examples/list.py>`_\n-  `password.py <./examples/password.py>`_\n-  `when.py <./examples/when.py>`_\n-  `checkbox.py <./examples/checkbox.py>`_\n-  `confirm.py <./examples/confirm.py>`_\n-  `hierarchical.py <./examples/hierarchical.py>`_\n-  `pizza.py <./examples/pizza.py>`_ - demonstrate using different question types\n-  `input.py  <./examples/input.py>`_\n-  `rawlist.py <./examples/rawlist.py>`_",
+      "probe_hint": "gh api repos/CITGuru/PyInquirer/contents/examples?ref=7637373429bec66788650cda8091b7a6f12929ee --jq '.[].name'"
+    },
+    {
+      "id": "c6",
+      "text": "Running `pip install -e .` inside a clone of the repository yields a working from-source install in which the quickstart import `from PyInquirer import prompt, print_json` succeeds, so the examples can be launched with repository code.",
+      "type": "install",
+      "source_quote": "If you want to launch examples with the code from repository instead of\ninstalling a package you need to execute ``pip install -e .`` within project\ndirectory.",
+      "probe_hint": "git clone --depth 1 https://github.com/CITGuru/PyInquirer /tmp/pyinq && cd /tmp/pyinq && python3 -m venv .v && .v/bin/pip install -e . && .v/bin/python -c 'from PyInquirer import prompt, print_json'  # check PyInquirer/__init__.py: the prompt import is commented out at HEAD"
+    },
+    {
+      "id": "c7",
+      "text": "PyInquirer supports the question types input, confirm, list, rawlist, expand, checkbox, password and editor (one prompt implementation per type).",
+      "type": "interface",
+      "source_quote": "-  ``type``: (String) Type of the prompt. Defaults: input - Possible values:\n   input, confirm, list, rawlist, expand, checkbox, password, editor",
+      "probe_hint": "gh api repos/CITGuru/PyInquirer/contents/PyInquirer/prompts?ref=7637373429bec66788650cda8091b7a6f12929ee --jq '.[].name'  # expect a module per type"
+    },
+    {
+      "id": "c8",
+      "text": "The Travis CI badge in the README (travis-ci.org/expobrain/PyInquirer, branch master) asserts a live, passing CI build for the project.",
+      "type": "test_ci",
+      "source_quote": ".. image:: https://travis-ci.org/expobrain/PyInquirer.svg?branch=master\n    :target: https://travis-ci.org/expobrain/PyInquirer",
+      "probe_hint": "curl -sL -o /dev/null -w '%{http_code} %{url_effective}\\n' 'https://travis-ci.org/expobrain/PyInquirer.svg?branch=master'  # travis-ci.org shut down 2021; note the badge points at a fork owner, not CITGuru"
+    },
+    {
+      "id": "c9",
+      "text": "The documented contributor flow — `pip install -r requirements.txt`, `pip install -r requirements_dev.txt`, then `pytest -sv tests/` in a clone — installs cleanly and the test suite passes on a current Python.",
+      "type": "test_ci",
+      "source_quote": "    $ pip install -r requirements.txt\n    $ pip install -r requirements_dev.txt\n\nWith an environment ready you can add new feature and check everything works\njust fine\n\n.. code:: shell\n\n    $ pytest -sv tests/",
+      "probe_hint": "cd /tmp/pyinq && .v/bin/pip install -r requirements.txt -r requirements_dev.txt && .v/bin/pytest -sv tests/ -x -q 2>&1 | tail -20"
+    },
+    {
+      "id": "c10",
+      "text": "The project is looking for a successor/maintainer, as announced in GitHub issue #159 on CITGuru/PyInquirer (i.e. the issue exists and is still open).",
+      "type": "environment",
+      "source_quote": "**Update: We are looking for a successor/maintainance. Here: <https://github.com/CITGuru/PyInquirer/issues/159>**",
+      "probe_hint": "gh api repos/CITGuru/PyInquirer/issues/159 --jq '\"\\(.title) \\(.state) \\(.created_at)\"'; gh api repos/CITGuru/PyInquirer --jq '.pushed_at'"
+    },
+    {
+      "id": "c11",
+      "text": "PyInquirer 1.0.3 is the current bugfix release, published at github.com/CITGuru/PyInquirer/releases/tag/1.0.3 and matching the latest version on PyPI.",
+      "type": "environment",
+      "source_quote": "PyInquirer 1.0.3 Bugfix Update\n-----------------\n\n`PyInquirer 1.0.3 <https://github.com/CITGuru/PyInquirer/releases/tag/1.0.3>`",
+      "probe_hint": "gh api repos/CITGuru/PyInquirer/releases/tags/1.0.3 --jq '.published_at'; curl -s https://pypi.org/pypi/PyInquirer/json | python3 -c \"import json,sys; d=json.load(sys.stdin); print(d['info']['version'], d['releases'][d['info']['version']][0]['upload_time'])\""
+    }
+  ]
+}

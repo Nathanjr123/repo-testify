@@ -1,0 +1,94 @@
+{
+  "id": "r16-python-slugify",
+  "repo": "https://github.com/un33k/python-slugify",
+  "commit": "7b6d5d96c1995e6dccb39a19a13ba78d7d0a3ee4",
+  "license": "MIT",
+  "bucket": "B",
+  "buyer_question": "We plan to use python-slugify for URL slugs in a CMS we will support for years — do the install variants, the Python support matrix, the status/coverage badges and the README usage examples (unicode transliteration, max_length, stopwords, CLI) still hold on a current interpreter?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package can be installed from PyPI with `pip install python-slugify`, after which `from slugify import slugify` succeeds (the default install pulls in text-unidecode).",
+      "type": "install",
+      "source_quote": "# How to install\n\n    pip install python-slugify",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install python-slugify && /tmp/v/bin/python -c 'from slugify import slugify; import text_unidecode; print(\"ok\")'"
+    },
+    {
+      "id": "c2",
+      "text": "The alternative extra `pip install python-slugify[unidecode]` installs the Unidecode package alongside python-slugify.",
+      "type": "install",
+      "source_quote": "    # OR\n\n    pip install python-slugify[unidecode]",
+      "probe_hint": "python3 -m venv /tmp/v2 && /tmp/v2/bin/pip install 'python-slugify[unidecode]' && /tmp/v2/bin/python -c 'import unidecode, slugify; print(\"ok\")'"
+    },
+    {
+      "id": "c3",
+      "text": "Per the README's 'Official Support Matrix', the current python-slugify release line (>= 7.0.0) supports Python >= 3.7, i.e. the latest PyPI release declares requires-python >= 3.7.",
+      "type": "environment",
+      "source_quote": "| `>= 3.7`       | `>= 7.0.0`         |",
+      "probe_hint": "curl -s https://pypi.org/pypi/python-slugify/json | python3 -c \"import json,sys; d=json.load(sys.stdin)['info']; print(d['version'], d['requires_python'])\""
+    },
+    {
+      "id": "c4",
+      "text": "The README's support matrix (Python >= 3.7 for slugify >= 7.0.0) matches the repository's own python_requires declaration at the pinned commit.",
+      "type": "environment",
+      "source_quote": "### `Official` Support Matrix\n\n| Python         | Slugify            |\n| -------------- | ------------------ |\n| `>= 2.7 < 3.6` | `< 5.0.0`          |\n| `>= 3.6 < 3.7` | `>= 5.0.0 < 7.0.0` |\n| `>= 3.7`       | `>= 7.0.0`         |",
+      "probe_hint": "gh api repos/un33k/python-slugify/contents/setup.py?ref=7b6d5d96c1995e6dccb39a19a13ba78d7d0a3ee4 --jq .content | base64 -d | grep python_requires; gh api repos/un33k/python-slugify/contents/CHANGELOG.md?ref=7b6d5d96c1995e6dccb39a19a13ba78d7d0a3ee4 --jq .content | base64 -d | head -12"
+    },
+    {
+      "id": "c5",
+      "text": "The README's build-status badge asserts that the GitHub Actions workflow it links to (actions/workflows/ci.yml on un33k/python-slugify) is currently passing.",
+      "type": "test_ci",
+      "source_quote": "[status-image]: https://github.com/un33k/python-slugify/actions/workflows/main.yml/badge.svg\n[status-link]: https://github.com/un33k/python-slugify/actions/workflows/ci.yml",
+      "probe_hint": "gh api 'repos/un33k/python-slugify/actions/workflows/ci.yml/runs?per_page=3' --jq '.workflow_runs[] | \"\\(.name) \\(.head_branch) \\(.conclusion) \\(.created_at)\"'; curl -sL https://github.com/un33k/python-slugify/actions/workflows/main.yml/badge.svg | grep -o '<title>[^<]*'; curl -sL https://github.com/un33k/python-slugify/actions/workflows/ci.yml/badge.svg | grep -o '<title>[^<]*'"
+    },
+    {
+      "id": "c6",
+      "text": "The README's Coveralls badge asserts that live test-coverage data is reported for un33k/python-slugify on coveralls.io (currently ~97%).",
+      "type": "test_ci",
+      "source_quote": "[coverage-image]: https://coveralls.io/repos/un33k/python-slugify/badge.svg\n[coverage-link]: https://coveralls.io/r/un33k/python-slugify",
+      "probe_hint": "curl -sIL https://coveralls.io/repos/un33k/python-slugify/badge.svg | grep -i -E 'location|HTTP/'  # resolves to coveralls_NN.svg giving the percentage"
+    },
+    {
+      "id": "c7",
+      "text": "With python-slugify installed, `slugify(\"This is a test ---\")` returns 'this-is-a-test'.",
+      "type": "quickstart",
+      "source_quote": "txt = \"This is a test ---\"\nr = slugify(txt)\nself.assertEqual(r, \"this-is-a-test\")",
+      "probe_hint": "python3 -c \"from slugify import slugify; assert slugify('This is a test ---') == 'this-is-a-test', slugify('This is a test ---')\""
+    },
+    {
+      "id": "c8",
+      "text": "With python-slugify installed (default text-unidecode backend), `slugify('影師嗎')` returns 'ying-shi-ma', and `slugify('影師嗎', allow_unicode=True)` returns '影師嗎'.",
+      "type": "quickstart",
+      "source_quote": "txt = '影師嗎'\nr = slugify(txt)\nself.assertEqual(r, \"ying-shi-ma\")\n\ntxt = '影師嗎'\nr = slugify(txt, allow_unicode=True)\nself.assertEqual(r, \"影師嗎\")",
+      "probe_hint": "python3 -c \"from slugify import slugify; assert slugify('影師嗎') == 'ying-shi-ma', slugify('影師嗎'); assert slugify('影師嗎', allow_unicode=True) == '影師嗎'\""
+    },
+    {
+      "id": "c9",
+      "text": "With python-slugify installed, `slugify(\"C'est déjà l'été.\")` returns 'c-est-deja-l-ete' and `slugify('Компьютер')` returns 'kompiuter'.",
+      "type": "quickstart",
+      "source_quote": "txt = 'C\\'est déjà l\\'été.'\nr = slugify(txt)\nself.assertEqual(r, \"c-est-deja-l-ete\")\n\ntxt = 'Nín hǎo. Wǒ shì zhōng guó rén'\nr = slugify(txt)\nself.assertEqual(r, \"nin-hao-wo-shi-zhong-guo-ren\")\n\ntxt = 'Компьютер'\nr = slugify(txt)\nself.assertEqual(r, \"kompiuter\")",
+      "probe_hint": "python3 -c \"from slugify import slugify; assert slugify(\\\"C'est déjà l'été.\\\") == 'c-est-deja-l-ete'; assert slugify('Компьютер') == 'kompiuter', slugify('Компьютер')\""
+    },
+    {
+      "id": "c10",
+      "text": "With python-slugify installed, for txt = 'jaja---lol-méméméoo--a': `slugify(txt, max_length=9)` returns 'jaja-lol'; `slugify(txt, max_length=15, word_boundary=True)` returns 'jaja-lol-a'; `slugify(txt, max_length=20, word_boundary=True, separator=\".\")` returns 'jaja.lol.mememeoo.a'.",
+      "type": "interface",
+      "source_quote": "txt = 'jaja---lol-méméméoo--a'\nr = slugify(txt, max_length=9)\nself.assertEqual(r, \"jaja-lol\")\n\ntxt = 'jaja---lol-méméméoo--a'\nr = slugify(txt, max_length=15, word_boundary=True)\nself.assertEqual(r, \"jaja-lol-a\")\n\ntxt = 'jaja---lol-méméméoo--a'\nr = slugify(txt, max_length=20, word_boundary=True, separator=\".\")\nself.assertEqual(r, \"jaja.lol.mememeoo.a\")",
+      "probe_hint": "python3 -c \"from slugify import slugify; t='jaja---lol-méméméoo--a'; assert slugify(t, max_length=9)=='jaja-lol'; assert slugify(t, max_length=15, word_boundary=True)=='jaja-lol-a'; assert slugify(t, max_length=20, word_boundary=True, separator='.')=='jaja.lol.mememeoo.a'\""
+    },
+    {
+      "id": "c11",
+      "text": "With python-slugify installed, `slugify('the quick brown fox jumps over the lazy dog', stopwords=['the'])` returns 'quick-brown-fox-jumps-over-lazy-dog' and `slugify('10 | 20 %', replacements=[['|', 'or'], ['%', 'percent']])` returns '10-or-20-percent'.",
+      "type": "interface",
+      "source_quote": "txt = 'the quick brown fox jumps over the lazy dog'\nr = slugify(txt, stopwords=['the'])\nself.assertEqual(r, 'quick-brown-fox-jumps-over-lazy-dog')",
+      "probe_hint": "python3 -c \"from slugify import slugify; assert slugify('the quick brown fox jumps over the lazy dog', stopwords=['the'])=='quick-brown-fox-jumps-over-lazy-dog'; assert slugify('10 | 20 %', replacements=[['|','or'],['%','percent']])=='10-or-20-percent'\""
+    },
+    {
+      "id": "c12",
+      "text": "Installing python-slugify also installs a command-line tool named `slugify`: `echo \"Taking input from STDIN\" | slugify --stdin` prints 'taking-input-from-stdin' and `slugify taking input from the command line` prints 'taking-input-from-the-command-line'.",
+      "type": "interface",
+      "source_quote": "```\n$ echo \"Taking input from STDIN\" | slugify --stdin\ntaking-input-from-stdin\n```\n\n```\n$ slugify taking input from the command line\ntaking-input-from-the-command-line\n```",
+      "probe_hint": "/tmp/v/bin/pip install python-slugify >/dev/null && test \"$(echo 'Taking input from STDIN' | /tmp/v/bin/slugify --stdin)\" = 'taking-input-from-stdin' && test \"$(/tmp/v/bin/slugify taking input from the command line)\" = 'taking-input-from-the-command-line' && echo OK"
+    }
+  ]
+}

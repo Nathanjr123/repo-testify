@@ -1,0 +1,94 @@
+{
+  "id": "r18-docopt",
+  "repo": "https://github.com/docopt/docopt",
+  "commit": "8fea867d4220f1095dae9d6264ec5aa4031fb712",
+  "license": "MIT",
+  "bucket": "D",
+  "buyer_question": "Several of our CLI tools pin docopt==0.6.2 — does the pinned package still install and behave as the README documents on a current Python, is the README's CI badge and 'tested with' statement meaningful today, and can the bundled test suite still be run with the documented commands?",
+  "claims": [
+    {
+      "id": "c1",
+      "text": "The package can be installed from PyPI with the exact command `pip install docopt==0.6.2`, after which `from docopt import docopt` succeeds and `docopt.__version__` is '0.6.2'.",
+      "type": "install",
+      "source_quote": "Use `pip <http://pip-installer.org>`_ or easy_install::\n\n    pip install docopt==0.6.2",
+      "probe_hint": "python3 -m venv /tmp/v && /tmp/v/bin/pip install docopt==0.6.2 && /tmp/v/bin/python -c 'import docopt; from docopt import docopt as d; print(docopt.__version__)'"
+    },
+    {
+      "id": "c2",
+      "text": "docopt.py is self-contained: the single file at the pinned commit imports only Python standard-library modules and works when dropped into a project without installing anything.",
+      "type": "install",
+      "source_quote": "Alternatively, you can just drop ``docopt.py`` file into your\nproject--it is self-contained.",
+      "probe_hint": "curl -sL https://raw.githubusercontent.com/docopt/docopt/8fea867d4220f1095dae9d6264ec5aa4031fb712/docopt.py -o /tmp/d/docopt.py && grep -n -E '^(import|from) ' /tmp/d/docopt.py && cd /tmp/d && python3 -c 'from docopt import docopt; print(docopt(\"Usage: x [-v]\", argv=[\"-v\"]))'"
+    },
+    {
+      "id": "c3",
+      "text": "The docopt project tests docopt on Python 2.7, 3.4, 3.5 and 3.6 (its CI configuration targets those interpreters and CI actually runs).",
+      "type": "environment",
+      "source_quote": "**docopt** is tested with Python 2.7, 3.4, 3.5, and 3.6.",
+      "probe_hint": "gh api repos/docopt/docopt/contents/.travis.yml?ref=8fea867d4220f1095dae9d6264ec5aa4031fb712 --jq .content | base64 -d; gh api 'repos/docopt/docopt/actions/runs?per_page=3' --jq '.total_count'"
+    },
+    {
+      "id": "c4",
+      "text": "The Travis CI badge at the top of the README (travis-ci.org/docopt/docopt, branch master) asserts that master currently builds and passes on Travis CI.",
+      "type": "test_ci",
+      "source_quote": ".. image:: https://travis-ci.org/docopt/docopt.svg?branch=master\n    :target: https://travis-ci.org/docopt/docopt",
+      "probe_hint": "curl -sL 'https://travis-ci.org/docopt/docopt.svg?branch=master' | grep -o -E '>[^<>]+<'  # record what the badge actually renders (expect 'build unknown')"
+    },
+    {
+      "id": "c5",
+      "text": "In a clone of the repository, `python setup.py test` runs docopt's unit tests.",
+      "type": "test_ci",
+      "source_quote": "Testing\n======================================================================\n\nYou can run unit tests using the command:\n\n    python setup.py test",
+      "probe_hint": "git clone --depth 1 https://github.com/docopt/docopt /tmp/docopt && cd /tmp/docopt && python3 -m venv .v && .v/bin/pip install setuptools pytest && .v/bin/python setup.py test  # setuptools >= 72 disabled the test command"
+    },
+    {
+      "id": "c6",
+      "text": "In a clone of the repository, the bundled test suite (test_docopt.py plus the language-agnostic testcases.docopt collected by conftest.py) runs and passes under a current pytest.",
+      "type": "test_ci",
+      "source_quote": "A Language-agnostic test suite is bundled\nwith `Python implementation <http://github.com/docopt/docopt>`_.",
+      "probe_hint": "cd /tmp/docopt && .v/bin/pip install pytest && .v/bin/pytest -q  # conftest.py uses pytest_collect_file(path, parent) and direct Node construction; see docopt/docopt#483"
+    },
+    {
+      "id": "c7",
+      "text": "Running the README's Naval Fate program (examples/naval_fate.py) as `naval_fate.py ship Guardian move 100 150 --speed=15` returns the dictionary {'--drifting': False, '--help': False, '--moored': False, '--speed': '15', '--version': False, '<name>': ['Guardian'], '<x>': '100', '<y>': '150', 'mine': False, 'move': True, 'new': False, 'remove': False, 'set': False, 'ship': True, 'shoot': False}.",
+      "type": "quickstart",
+      "source_quote": "    naval_fate.py ship Guardian move 100 150 --speed=15\n\nthe return dictionary will be:\n\n.. code:: python\n\n    {'--drifting': False,    'mine': False,\n     '--help': False,        'move': True,\n     '--moored': False,      'new': False,\n     '--speed': '15',        'remove': False,\n     '--version': False,     'set': False,\n     '<name>': ['Guardian'], 'ship': True,\n     '<x>': '100',           'shoot': False,\n     '<y>': '150'}",
+      "probe_hint": "cd /tmp/docopt && .v/bin/python -c \"import runpy,sys; sys.argv=['naval_fate.py','ship','Guardian','move','100','150','--speed=15']; import docopt, examples\" 2>/dev/null; .v/bin/python examples/naval_fate.py ship Guardian move 100 150 --speed=15  # compare printed dict to expected"
+    },
+    {
+      "id": "c8",
+      "text": "The public API is a single function with signature `docopt(doc, argv=None, help=True, version=None, options_first=False)`.",
+      "type": "interface",
+      "source_quote": ".. code:: python\n\n    docopt(doc, argv=None, help=True, version=None, options_first=False)\n\n``docopt`` takes 1 required and 4 optional arguments:",
+      "probe_hint": "python3 -c \"import inspect, docopt; print(inspect.signature(docopt.docopt))\""
+    },
+    {
+      "id": "c9",
+      "text": "When `docopt()` is given a version argument and the usage pattern mentions --version, invoking the program with `--version` prints the supplied version string and exits.",
+      "type": "interface",
+      "source_quote": "- ``version``, by default ``None``, is an optional argument that\n  specifies the version of your program. If supplied, then, (assuming\n  ``--version`` option is mentioned in usage pattern) when parser\n  encounters the ``--version`` option, it will print the supplied\n  version and terminate.",
+      "probe_hint": "python3 -c \"from docopt import docopt; docopt('Usage: p [--version]', argv=['--version'], version='2.1.0rc1')\"; echo exit=$?  # expect '2.1.0rc1' on stdout and exit 0"
+    },
+    {
+      "id": "c10",
+      "text": "For a usage pattern `Usage: my_program.py [-v | -vv | -vvv]`, parsing the argv ['-vv'] yields args['-v'] == 2 (repeated flags are counted).",
+      "type": "interface",
+      "source_quote": "If your pattern allows to match argument-less option (a flag) several\ntimes::\n\n    Usage: my_program.py [-v | -vv | -vvv]\n\nthen number of occurrences of the option will be counted. I.e.\n``args['-v']`` will be ``2`` if program was invoked as ``my_program\n-vv``.",
+      "probe_hint": "python3 -c \"from docopt import docopt; a=docopt('Usage: my_program.py [-v | -vv | -vvv]', argv=['-vv']); assert a['-v']==2, a\""
+    },
+    {
+      "id": "c11",
+      "text": "For a usage pattern `Usage: my_program.py <file> <file> --path=<path>...`, parsing `file1 file2 --path=./here --path=./there` yields args['<file>'] == ['file1', 'file2'] and args['--path'] == ['./here', './there'].",
+      "type": "interface",
+      "source_quote": "    Usage: my_program.py <file> <file> --path=<path>...\n\nI.e. invoked with ``my_program.py file1 file2 --path=./here\n--path=./there`` the returned dict will contain ``args['<file>'] ==\n['file1', 'file2']`` and ``args['--path'] == ['./here', './there']``.",
+      "probe_hint": "python3 -c \"from docopt import docopt; a=docopt('Usage: my_program.py <file> <file> --path=<path>...', argv=['file1','file2','--path=./here','--path=./there']); assert a['<file>']==['file1','file2'] and a['--path']==['./here','./there'], a\""
+    },
+    {
+      "id": "c12",
+      "text": "A `[default: ./here ./there]` value on a repeatable option is split on whitespace into ['./here', './there'], while the same default on a non-repeatable option stays the string './here ./there'.",
+      "type": "interface",
+      "source_quote": "    # will be ['./here', './there']\n    --repeatable=<arg>          [default: ./here ./there]\n\n    # will be ['./here']\n    --another-repeatable=<arg>  [default: ./here]\n\n    # will be './here ./there', because it is not repeatable\n    --not-repeatable=<arg>      [default: ./here ./there]",
+      "probe_hint": "python3 -c \"from docopt import docopt; d='''Usage: p [--repeatable=<arg> --repeatable=<arg>] [--not-repeatable=<arg>]\n\n--repeatable=<arg>      [default: ./here ./there]\n--not-repeatable=<arg>  [default: ./here ./there]\n'''; a=docopt(d, argv=[]); assert a['--repeatable']==['./here','./there'] and a['--not-repeatable']=='./here ./there', a\""
+    }
+  ]
+}
