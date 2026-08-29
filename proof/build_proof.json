@@ -5,7 +5,7 @@
   "label": "baseline-n1",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "c5b2588",
+  "git": "c5f2d52",
   "ts": "2026-08-28T16:53:31Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
   "agg": {
@@ -68,7 +68,7 @@
   "label": "baseline-n2",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "c5b2588",
+  "git": "c5f2d52",
   "ts": "2026-08-28T16:53:40Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
   "agg": {
@@ -131,7 +131,7 @@
   "label": "baseline-n3",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "c5b2588",
+  "git": "c5f2d52",
   "ts": "2026-08-28T16:53:49Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
   "agg": {
@@ -194,7 +194,7 @@
   "label": "baseline-n1",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "00126a7",
+  "git": "d702b93",
   "ts": "2026-08-28T17:02:24Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
   "agg": {
@@ -337,7 +337,7 @@
   "label": "baseline-n2",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "02e87c0",
+  "git": "bed6cc6",
   "ts": "2026-08-28T17:08:00Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
   "agg": {
@@ -480,7 +480,7 @@
   "label": "baseline-n3",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "02e87c0",
+  "git": "bed6cc6",
   "ts": "2026-08-28T17:11:03Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
   "agg": {
@@ -590,7 +590,7 @@
   "label": "baseline-v2-n1",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "1725577",
+  "git": "05b1164",
   "ts": "2026-08-28T18:56:17Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
   "agg": {
@@ -2001,7 +2001,7 @@
   "label": "baseline-v2-n2",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "1725577",
+  "git": "05b1164",
   "ts": "2026-08-28T19:02:18Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
   "agg": {
@@ -3404,7 +3404,7 @@
   "label": "advanced-v1",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "765886e",
+  "git": "92895cc",
   "ts": "2026-08-28T19:50:12Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
   "agg": {
@@ -5385,7 +5385,7 @@
   "label": "advanced-v2",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "d1a29a8",
+  "git": "8b60420",
   "ts": "2026-08-28T21:29:06Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
   "agg": {
@@ -7671,7 +7671,7 @@
   "label": "baseline-v2-n1-rescored",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "1725577",
+  "git": "05b1164",
   "ts": "2026-08-28T18:56:17Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
   "agg": {
@@ -9077,7 +9077,7 @@
   "label": "baseline-v2-n2-rescored",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "1725577",
+  "git": "05b1164",
   "ts": "2026-08-28T19:02:18Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
   "agg": {
@@ -10475,7 +10475,7 @@
   "label": "advanced-v1-rescored",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "765886e",
+  "git": "92895cc",
   "ts": "2026-08-28T19:50:12Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
   "agg": {
@@ -12461,7 +12461,7 @@
   "label": "advanced-v2-rescored",
   "disable": null,
   "cases_dir": "eval/cases/public",
-  "git": "d1a29a8",
+  "git": "8b60420",
   "ts": "2026-08-28T21:29:06Z",
   "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
   "agg": {
@@ -14741,7 +14741,7 @@
   "label": "ablate-k1",
   "disable": "k3(replayed from votes[0])",
   "cases_dir": "eval/cases/public",
-  "git": "d1a29a8",
+  "git": "8b60420",
   "ts": "2026-08-28T21:29:06Z",
   "cmd": "python3 eval/ablate_k1.py advanced-v2-rescored",
   "agg": {
