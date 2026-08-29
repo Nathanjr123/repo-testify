@@ -3,6 +3,15 @@
 
 **One line:** most tools *read* a repository and opine. This one extracts the repository's own claims — install commands, quickstart snippets, supported versions, features, benchmarks — and **executes them** in a clean environment, returning a per-claim verdict ledger where every verdict cites a recorded artifact, and anything the sandbox cannot settle is escalated to a human rather than guessed.
 
+## Start here (60 seconds)
+`./repro.sh` regenerates every number below from `proof/` and asserts they match · **RESULTS.md** the table · **CHANGELOG.md** every experiment with its proof id, removed ones included · **DESIGN.md** why each component exists (cited) · **DECISIONS.md** ambiguities and tradeoffs, truth-vs-taste declared · **arms/PROMPTS.md** the exact instructions that shape each agent · **traces/pipeline/** one trajectory per repository (instructions → probes → CI run → votes → verdict) · **traces/** the authoring trajectory.
+
+## The four questions
+- *Who has this problem?* An engineer doing due diligence on someone else's repository (below).
+- *What bottleneck makes it worth solving?* Checking a README's promises by hand is slow, and different reviewers reach different conclusions from the same signals.
+- *Does the agent solve it well?* Claim accuracy 0.07 → 0.71 on the public split with every verdict tied to a recorded artifact; the held-out split is run once and reported unchanged.
+- *Can another person reproduce it?* `./repro.sh` from a clean clone; CI does exactly that in the shipped Docker image on every push.
+
 ## Intended user
 An engineer doing technical due diligence on a repository they did not write: a team pricing an acquisition of a private codebase, a lead deciding whether to adopt a dependency, a client receiving a contractor handover. They have hours, not days, and the cost of being wrong is high.
 
@@ -65,6 +74,17 @@ git clone https://github.com/Nathanjr123/repo-testify.git && cd repo-testify
 python3 -m eval.replay --run <id>      # re-score any run id's persisted outputs through the current scorer
 ```
 Every table row carries its proof id, git hash and UTC timestamp; `replay` re-scores persisted arm outputs through the current scorer and fails loudly on drift.
+
+Expected output of `./repro.sh` (last lines):
+```
+ok test_perfect … ok test_crashed_case_is_zero_not_hidden
+14 case files checked / all valid
+sanity cell ok: 1.0
+README results block rendered
+replay ok: advanced-v2-rescored-<ts> raw 0.817
+REPRO OK: README/RESULTS regenerate byte-identically from proof
+```
+A per-repository report looks like `traces/pipeline/r01-humanize.md` (rendered from the persisted report: verdict, confidence, votes, cited artifact per claim).
 
 **Level 2 — re-execute the probes (≈2–15 min per repo on ubuntu-latest, $0 on public repos)**
 Fork, `gh workflow run probe.yml -f probes_path=eval/probes/r01-humanize.json`, download the artifact: per-probe `cmd.txt`, `stdout.log`, `stderr.log`, `exit_code`, `phase_a.log`. Images are `python:3.X-slim` by tag; a pinned digest is recorded in each probe artifact's phase-A log. Probe specs for every case are committed under `eval/probes/`.
