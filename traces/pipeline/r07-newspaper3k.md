@@ -86,7 +86,43 @@ assert all(u.startswith('http') and 'cnn' in u for u in d['urls']),`
 
 Transcript index (probe · command excerpt):
 ```
-p-c1 /tmp/v/bin/python --version && /tmp/v/bin/python -c 'import newspaper; print("import newspaper OK", newspaper.__version__)' && /tmp/v/bin/python -c 'from newspaper import Article; print("from newspaper import Article OK")' && /tmp/v/bin/python -c 'from newspaper import Article; print("C1_OK")' 2>&1 | grep -E 'C1_OK|ModuleNotFoundError|ImportError|lxml.html.clean' cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c10 python3 -c "import json
+p-c1 /tmp/v/bin/python --version && /tmp/v/bin/python -c 'import newspaper; print("import newspaper OK", newspaper.__version__)' && /tmp/v/bin/python -c 'from newspaper import Article; print("from newspaper import Article OK")' && /tmp/v/bin/python -c 'from newspaper import Article; print("C1_OK")' 2>&1 | grep -E 'C1_OK|ModuleNotFoundError|ImportError|lxml.html.clean'
+STDOUT Python 3.12.14
+
+STDERR /repo/newspaper/urls.py:117: SyntaxWarning: invalid escape sequence '\.'
+  Separators can be [\.-/_]. Years can be 2 or 4 digits, must
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/repo/newspaper/__init__.py", line 10, in <module>
+    from .api import (build, build_article, fulltext, hot, languages,
+  File "/repo/newspaper/api.py", line 14, in <module>
+    from .article import Article
+  File "/repo/newspaper/article.py", line 16, in <module>
+    from . import network
+  File "/repo/newspaper/network.py", line 14, in <module>
+    from .configuration import Configuration
+  File "/repo/newspaper/configuration.py", line 15, in <module>
+    from .parsers import Parser
+  File "/repo/newspaper/parsers.py", line 12, in <module>
+    import lxml.html.clean
+  File "/tmp/v/lib/python3.12/site-packages/lxml/html/clean.py", line 18, in <module>
+    raise ImportError(
+ImportError: lxml.html.clean module is now a separate project lxml_html_clean.
+Install lxml[html-clean] or lxml_html_clean directly.
+
+PHASE_A 
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: python3 -m pip install --upgrade pip
+pip_rc=0
+lxml==6.1.2
+newspaper3k==0.2.8
+nltk==3.10.3
+pillow==12.3.0
+
+--stderr--
+
+EXIT 1
+p-c10 python3 -c "import json
 d=json.load(open('/tmp/c10.json'))
 print(d)
 assert d['ok'], d.get('err')
@@ -94,23 +130,17 @@ assert d['type']=='Source', d['type']
 assert d['n']>0, 'articles list EMPTY'
 assert d['article_types']==['Article'], d['article_types']
 assert all(u.startswith('http') and 'cnn' in u for u in d['urls']), d['urls']
-print('C10_OK', d['n'], 'articles')" cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c11 echo '== claims of success rate in README at pinned commit =='; grep -noE '[0-9]+\.[0-9]+% success rate|[0-9]+M\+ residential IPs across [0-9]+\+ countries' /tmp/README.rst && echo '== vendor page: is the number present, is any methodology present =='; echo "bytes=$(wc -c < /tmp/swift.html)"; echo "mentions_99.89=$(grep -c '99\.89' /tmp/swift.html)"; echo "mentions_80M=$(grep -ciE '80M\+?|80 milli cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c2 python3 -c "import json; d=json.load(open('/tmp/n3k.json'))['info']; print('newspaper3k', d['version'], 'requires_python=', d.get('requires_python')); cls=[c for c in d['classifiers'] if 'Python' in c]; print(cls); assert any(':: 3' in c for c in cls), 'no Python 3 classifier'; assert not any(':: 2' in c for c in cls), 'py2 classifier present'; print('C2_PY3_OK')" && python3 -c "import json; d=jso cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c3 cat /tmp/c3_head.txt /tmp/c3_target.txt && echo "badge body bytes: $(wc -c < /tmp/c3_badge.body)"; head -c 400 /tmp/c3_badge.body; echo && grep -qi '<svg' /tmp/c3_badge.body && echo BADGE_IS_SVG || echo BADGE_NOT_SVG && grep -qiE 'passing' /tmp/c3_badge.body && echo BADGE_SAYS_PASSING || echo BADGE_NOT_PASSING && grep -qiE 'unknown|failing|error|not found' /tmp/c3_badge.body && echo BADGE_NEGATIVE cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c4 python3 -c "import datetime
-from newspaper import Article
-url='http://fox13now.com/2013/12/30/new-year-new-laws-obamacare-pot-guns-and-drones/'
-html=open('/tmp/fox.html').read()
-print('html_len', len(html))
-assert html, 'download returned empty html'
-a=Article(url)
-a.download(input_html=html)
-a.parse()
-print('title', repr(a.title))
-print('authors', a.authors)
-print('publish_date', repr(a.publish_d cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c5 python3 -c "import nltk
-for r in ['tokenizers/punkt','corpora/stopwords']:
-    try: print(r, '->', nltk.data.find(r))
-    except LookupError as e: print(r, 'MISSING')" && python3 -c "from newspaper import Article
-a=Article('http://example.com/2013/12/30/new-year-new-laws/')
-a.download(input_html=open('/tmp/sample.html').read(
+print('C10_OK', d['n'], 'articles')"
+STDOUT {'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', 'https://www.cnn.com/weather/video', 'https://www.cnn.com/audio/podcasts/all-there-is-with-anderson-cooper', 'https://www.cnn.com/audio/podcasts/terms-of-service-with-clare-duffy', 'http://cnn.com/2026/08/28/asia/map-nepal-china-flood-landslide-damage-vis'], 'article_types': ['Article'], 'cats': ['http://cnn.com', 'https://us.cnn.com', 'https://cnnespanol.cnn.com', 'https://cnn.it', 'http://cnn.com/follow'], 'secs': 1.9}
+C10_OK 378 articles
+
+STDERR 
+PHASE_A e: 24.0 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+NOTE: installing lxml[html_clean] so this probe tests build(), not c1 import failure
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+{'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', 'https://www.cnn.com/weather/video', 'https://www.cnn.com/audio/podcasts/all-the
 ```
 
 ## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)

@@ -121,7 +121,38 @@ import records, pandas, tablib
 v = m.version('records')
 print('OBSERVED records=%s pandas=%s tablib=%s' % (v, pandas.__version__, m.version('tablib')))
 print('VERDICT_LINE: PASS pip install records[pandas] ok; import records ok; records', v)
-EOF cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c10 python - <<'EOF' || echo "VERDICT_LINE: FAIL could not fetch PyPI/badge (network error or non-200)"
+EOF
+STDOUT OBSERVED records=0.6.0 pandas=3.0.5 tablib=3.10.0
+VERDICT_LINE: PASS pip install records[pandas] ok; import records ok; records 0.6.0
+
+STDERR 
+PHASE_A [notice] To update, run: pip install --upgrade pip
+
+--stderr--
+Unable to find image 'python:3.11-slim' locally
+3.11-slim: Pulling from library/python
+6310eb16bf42: Pulling fs layer
+87e1b7cce023: Pulling fs layer
+c86306e32cd0: Pulling fs layer
+a14578096eda: Pulling fs layer
+a14578096eda: Waiting
+87e1b7cce023: Verifying Checksum
+87e1b7cce023: Download complete
+c86306e32cd0: Verifying Checksum
+c86306e32cd0: Download complete
+a14578096eda: Verifying Checksum
+a14578096eda: Download complete
+6310eb16bf42: Verifying Checksum
+6310eb16bf42: Download complete
+6310eb16bf42: Pull complete
+87e1b7cce023: Pull complete
+c86306e32cd0: Pull complete
+a14578096eda: Pull complete
+Digest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6
+Status: Downloaded newer image for python:3.11-slim
+
+EXIT 0
+p-c10 python - <<'EOF' || echo "VERDICT_LINE: FAIL could not fetch PyPI/badge (network error or non-200)"
 import json, urllib.request
 def get(url):
     req = urllib.request.Request(url, headers={'User-Agent': 'probe/1'})
@@ -129,7 +160,20 @@ def get(url):
         return r.status, r.read()
 s, body = get('https://pypi.org/pypi/records/json')
 info = json.loads(body)['info']
-print('OBSER cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c11 DATABASE_URL='sqlite:///:memory:' python - <<'EOF' || echo "VERDICT_LINE: FAIL records.Database() did not use \$DATABASE_URL (see traceback)"
+print('OBSERVED pypi status=%s name=%s version=%s' % (s, info['name'], info['version']))
+bs, bbody = get('https://img.shields.io/pypi/v/records.svg')
+btxt = bbody.decode('utf-8', 'replace')
+print('OBSERVED badge 
+STDOUT OBSERVED pypi status=200 name=records version=0.6.0
+OBSERVED badge status=200 contains_version=True len=1275
+VERDICT_LINE: PASS records published on PyPI, latest 0.6.0 matches setup.py; badge HTTP 200
+
+STDERR 
+PHASE_A 
+--stderr--
+
+EXIT 0
+p-c11 DATABASE_URL='sqlite:///:memory:' python - <<'EOF' || echo "VERDICT_LINE: FAIL records.Database() did not use \$DATABASE_URL (see traceback)"
 import os, records
 print('DATABASE_URL =', os.environ.get('DATABASE_URL'))
 db = records.Database()
@@ -137,33 +181,17 @@ print('OBSERVED db.db_url =', getattr(db, 'db_url', None))
 v = db.query('select 1 as x')[0].x
 print('OBSERVED select 1 ->', v)
 assert v == 1
-del os.environ['DA cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c2 python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed before classifying postgres:// error"
-import records, sqlalchemy
-print('sqlalchemy', sqlalchemy.__version__)
-def probe(url):
-    try:
-        records.Database(url); return 'OK'
-    except Exception as e:
-        return type(e).__name__ + ': ' + str(e)[:160]
-a = probe('postgres://user:pw@localhost/db')
-b = probe('postgresql://user:pw@localh cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c3 python - <<'EOF' || echo "VERDICT_LINE: FAIL row indexing/iteration/field access raised (see traceback)"
-import records
-db = records.Database('sqlite:///:memory:')
-db.query('create table active_users (username text, active int, name text)')
-db.query('insert into active_users values (:u, :a, :n)', u='model-t', a=1, n='Henry Ford')
-db.query('insert into active_users values (:u, :a, :n)', u='model-a' cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c4 rm -f /tmp/r.db && python - <<'EOF' || echo "VERDICT_LINE: FAIL probe crashed (see traceback)"
-import records, sqlalchemy
-print('sqlalchemy', sqlalchemy.__version__)
-db = records.Database('sqlite:////tmp/r.db')
-db.query('create table t (x int)')
-db.query('insert into t values (:x)', x=1)
-db.bulk_query('insert into t values (:x)', [{'x': 2}, {'x': 3}])
-same = db.query('select count(*) c from t')[0] cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c5 rm -f /tmp/t.db && python - <<'EOF' || echo "VERDICT_LINE: FAIL Database.transaction()/commit() raised (see traceback)"
-import records
-db = records.Database('sqlite:////tmp/t.db')
-db.query('create table t (x int)')
-t = db.transaction()
-print('OBSERVED 
+del os.environ['DATABASE_URL']
+try:
+    records.Database(); print('OBSERVED no-env control: no error raised')
+except Exception as e:
+    print('OBSERVED no-env control:', type(e).__name__, str(e)[:80])
+print('VERDICT_L
+STDOUT DATABASE_URL = sqlite:///:memory:
+OBSERVED db.db_url = sqlite:///:memory:
+OBSERVED select 1 -> 1
+OBSERVED no-env control: ValueError You must provide a db_url.
+VERDICT_LINE: P
 ```
 
 ## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)

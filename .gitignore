@@ -5,3 +5,4 @@ traces/*.jsonl
 traces/*.md
 !traces/pipeline/*.md
 !traces/README.md
+!traces/authoring-*.md

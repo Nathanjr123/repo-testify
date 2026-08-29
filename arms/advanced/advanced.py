@@ -9,7 +9,7 @@ from common import llm, exit_if_limited, CALLS
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 DISABLE = set(filter(None, os.environ.get("ADVANCED_DISABLE", "").split(",")))
-GHREPO = "Nathanjr123/repo-testify"
+GHREPO = os.environ.get("GHREPO", "Nathanjr123/repo-testify")  # set to your fork to run Level 3 yourself
 
 
 def jparse(text):
@@ -145,15 +145,33 @@ Claims again: {claims}"""
         out.append(best)
     return out
 
-def crosscheck(verdicts, commands_log_text):
-    """Code-checked evidence: a quoted exit code must appear in the recorded log (DESIGN stage 5)."""
+def crosscheck(verdicts, probe_log):
+    """Code-checked evidence: a quoted exit code must match the RECORDED exit code of the probe the verdict cites."""
+    by_probe = {p["probe"]: p for p in probe_log}
     for v in verdicts:
         for e in v.get("evidence", []):
-            m = re.search(r"exit[_ ]?code[:= ]+(\d+)", e.get("excerpt", ""), re.I)
-            if m and f'"exit_code": "{m.group(1)}"' not in commands_log_text and f"exit={m.group(1)}" not in commands_log_text:
-                v["verdict"], v["confidence"] = "unverifiable", "low"
-                e["excerpt"] += " [CROSSCHECK FAILED: quoted exit code not in recorded log]"
+            m = re.search(r"exit[_ ]?code[:= ]+(\d+)", str(e.get("excerpt", "")), re.I)
+            ref = str(e.get("ref", "")); pm = re.search(r"\bp-c\d+\b", ref)
+            if m and pm and pm.group(0) in by_probe:
+                if by_probe[pm.group(0)]["exit_code"].strip() != m.group(1):
+                    v["verdict"], v["confidence"] = "unverifiable", "low"
+                    e["excerpt"] = str(e.get("excerpt", "")) + f" [CROSSCHECK FAILED: probe {pm.group(0)} recorded exit {by_probe[pm.group(0)]['exit_code'].strip()}]"
     return verdicts
+
+def write_memo(case, verdicts, esc, score):
+    """A memo the buyer can forward: refuted claims first with their evidence, then escalations, then what held."""
+    txt = {c["id"]: c["text"] for c in case["claims"]}
+    def line(v):
+        ev = (v.get("evidence") or [{}])[0]
+        return f"- **{v['id']}** {txt.get(v['id'], '')}\n  Evidence: `{str(ev.get('ref',''))[:40]}` {str(ev.get('excerpt',''))[:220]}"
+    ref = [v for v in verdicts if v["verdict"] == "refuted"]; ver = [v for v in verdicts if v["verdict"] == "verified"]; unv = [v for v in verdicts if v["verdict"] == "unverifiable"]
+    parts = [f"# Due-diligence memo: {case['repo']} @ {case['commit'][:12]}", f"Question: {case['buyer_question']}", "",
+             f"**Bottom line.** {len(ver)} of {len(verdicts)} README claims held under execution, {len(ref)} were refuted, {len(unv)} could not be settled in the sandbox and need a human. Rubric score {score}/100.", ""]
+    if ref: parts += ["## Refuted (negotiate on these)"] + [line(v) for v in ref] + [""]
+    if unv: parts += ["## Escalated to a human reviewer (not settled by execution)"] + [line(v) for v in unv] + [""]
+    if ver: parts += ["## Verified as written"] + [f"- **{v['id']}** {txt.get(v['id'], '')[:140]}" for v in ver] + [""]
+    parts += ["Every verdict above cites a recorded probe (command, exit code, output) from the CI run named in the report."]
+    return "\n".join(parts)
 
 def main():
     case = json.loads(pathlib.Path(sys.argv[1]).read_text())
@@ -185,19 +203,18 @@ Reply ONLY JSON: {{"probes": [...same schema...]}}"""
                 except Exception as e:
                     notes["repair_round_error"] = str(e)[:200]
     k = 1 if "k3" in DISABLE else 3
-    clog_text = (run_dir / "commands.log").read_text() if probe_log else ""
     verdicts = adjudicate_batch(case, probe_log, k)
-    verdicts = crosscheck(verdicts, clog_text)
+    verdicts = crosscheck(verdicts, probe_log)
     esc = [v["id"] for v in verdicts if v["verdict"] == "unverifiable"]
     n_ver = sum(v["verdict"] == "verified" for v in verdicts)
     n_ref = sum(v["verdict"] == "refuted" for v in verdicts)
     score = round(100 * (n_ver + 0.5 * (len(verdicts) - n_ver - n_ref)) / max(1, len(verdicts)))
-    idx_text = "\n".join(f'{p["probe"]} {p["cmd.txt"][:400]} {" ".join(k for k in ("cmd.txt","exit_code","stdout.log","stderr.log","phase_a.log") if p.get(k))}' for p in probe_log)
+    idx_text = "\n".join(f'{p["probe"]} {p["cmd.txt"][:600]}\nSTDOUT {p["stdout.log"][:3000]}\nSTDERR {p["stderr.log"][-1500:]}\nPHASE_A {p["phase_a.log"][-800:]}\nEXIT {p["exit_code"].strip()}' for p in probe_log)
     report = {"repo": case["repo"], "overall_score": score, "claims": verdicts,
               "escalations": esc, "run_id": rid, "_run_dir": str(run_dir),
               "_evidence_index": {"probes": [p["probe"] for p in probe_log], "text": idx_text},
               "llm_calls": CALLS["n"], "usage": {"cost_usd": CALLS["cost_usd"], "input_tokens": CALLS["input_tokens"], "output_tokens": CALLS["output_tokens"]},
-              "memo_md": f"{n_ver} verified, {n_ref} refuted, {len(esc)} escalated of {len(verdicts)} claims."}
+              "memo_md": write_memo(case, verdicts, esc, score)}
     (run_dir / "report.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report))
 

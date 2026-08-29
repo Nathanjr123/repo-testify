@@ -78,25 +78,48 @@ print('job invoked', len(hits), 'time(s) after 1.2s')"`
 
 Transcript index (probe · command excerpt):
 ```
-p-c1 /tmp/v/bin/python -c 'import schedule; print("import ok, version", schedule.__version__)' && /tmp/v/bin/pip show schedule | grep -E '^(Name|Version):' && /tmp/v/bin/pip show schedule | grep -E '^Version: 1\.2\.2$' || echo 'NOTE: PyPI version differs from setup.py at pinned commit (1.2.2)' cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c10 python -c "import json; d=json.load(open('/tmp/pypi.json')); v=d['info']['version']; print('PyPI latest:', v); print('1.2.2 uploaded:', d['releases'].get('1.2.2',[{}])[0].get('upload_time')); assert '1.2.2' in d['releases'], '1.2.2 not on PyPI'; assert v=='1.2.2', 'latest is '+v+', not 1.2.2'" cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c2 cd /tmp/wf && ls -1 *.yml *.yaml 2>/dev/null; grep -n -A10 'python-version' *.yml *.yaml 2>/dev/null && cd /tmp/wf && for v in 3.7 3.8 3.9 3.10 3.11 3.12; do grep -qE "[\"']?$v[\"']?" *.yml *.yaml 2>/dev/null && echo "matrix has $v" || { echo "MISSING $v in CI matrix"; exit 1; }; done && python -c "import json; rs=json.load(open('/tmp/wf/runs.json'))['workflow_runs']; [print(r['name'],'|',r['concl cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c3 grep -oE '(passing|failing|no status)' /tmp/badge.svg | head -1 | tee /tmp/badge_state.txt && grep -q 'passing' /tmp/badge.svg && echo 'badge renders: passing' && python -c "import json; rs=[r for r in json.load(open('/tmp/runs.json'))['workflow_runs'] if r['name']=='Tests']; assert rs,'no Tests runs on master'; r=rs[0]; print('latest Tests on master:',r['conclusion'],r['created_at'],r['html_url'] cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c4 /tmp/v/bin/pip freeze && n=$(/tmp/v/bin/pip freeze | grep -vi '^schedule==' | wc -l); echo "extra_packages=$n"; test "$n" -eq 0 && /tmp/v/bin/pip show schedule | grep -E '^Requires: *$' && echo 'Requires: (empty) confirmed' && du -sh /tmp/v/lib/python*/site-packages/schedule cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c5 python -c "import schedule
-def job():
-    print(\"I'm working...\")
-schedule.every(10).seconds.do(job)
-n=len(schedule.get_jobs()); print('registered jobs:', n); assert n==1" cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c6 python -c "import schedule
-def job():
-    print(\"I'm working...\")
-j=schedule.every().day.at('10:30').do(job)
-print('next_run:', j.next_run); assert j.next_run.hour==10 and j.next_run.minute==30; print('ok')" cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c7 /tmp/vtz/bin/pip freeze && ! /tmp/vtz/bin/pip show pytz >/dev/null 2>&1 && echo 'pytz absent (fresh env confirmed)' && /tmp/vtz/bin/python -c "import schedule
-def job():
-    print(\"I'm working...\")
-try:
-    j=schedule.every().day.at('12:42', 'Europe/Amsterdam').do(job)
-    print('RESULT: works out of the box; next_run', j.next_run)
-except Exception as e:
-    print('RESULT: raised', type(e).__nam cmd.txt exit_code stdout.log stderr.log phase_a.log\np-c8 python -c "import schedule
-def job():
-    print(\"I'm working...\")
-j=schedule.eve
+p-c1 /tmp/v/bin/python -c 'import schedule; print("import ok, version", schedule.__version__)' && /tmp/v/bin/pip show schedule | grep -E '^(Name|Version):' && /tmp/v/bin/pip show schedule | grep -E '^Version: 1\.2\.2$' || echo 'NOTE: PyPI version differs from setup.py at pinned commit (1.2.2)'
+STDOUT NOTE: PyPI version differs from setup.py at pinned commit (1.2.2)
+
+STDERR Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: module 'schedule' has no attribute '__version__'
+
+PHASE_A Collecting schedule
+  Downloading schedule-1.2.2-py3-none-any.whl.metadata (3.8 kB)
+Downloading schedule-1.2.2-py3-none-any.whl (12 kB)
+Installing collected packages: schedule
+Successfully installed schedule-1.2.2
+
+--stderr--
+
+EXIT 0
+p-c10 python -c "import json; d=json.load(open('/tmp/pypi.json')); v=d['info']['version']; print('PyPI latest:', v); print('1.2.2 uploaded:', d['releases'].get('1.2.2',[{}])[0].get('upload_time')); assert '1.2.2' in d['releases'], '1.2.2 not on PyPI'; assert v=='1.2.2', 'latest is '+v+', not 1.2.2'"
+STDOUT PyPI latest: 1.2.2
+1.2.2 uploaded: 2024-05-25T18:41:59
+
+STDERR 
+PHASE_A (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 27.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+
+EXIT 0
+p-c2 cd /tmp/wf && ls -1 *.yml *.yaml 2>/dev/null; grep -n -A10 'python-version' *.yml *.yaml 2>/dev/null && cd /tmp/wf && for v in 3.7 3.8 3.9 3.10 3.11 3.12; do grep -qE "[\"']?$v[\"']?" *.yml *.yaml 2>/dev/null && echo "matrix has $v" || { echo "MISSING $v in CI matrix"; exit 1; }; done && python -c "import json; rs=json.load(open('/tmp/wf/runs.json'))['workflow_runs']; [print(r['name'],'|',r['conclusion'],'|',r['created_at'],'|',r['html_url']) for r in rs[:10]]" && cd /tmp/src && python --version && python -m pytest -q test_schedule.py 2>&1 | tail -5 && cd /tmp/src && python -m pytest -q test_s
+STDOUT ci.yml
+ci.yml:17:        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+ci.yml-18-    steps:
+ci.yml-19-      - uses: actions/checkout@v3
+ci.yml:20:      - name: Set up Python ${{ matrix.python-version }}
+ci.yml-21-        uses: actions/setup-python@v4
+ci.yml-22-        with:
+ci.yml:23:          python-version: ${{ matrix.python-version }}
+ci.yml-24-      - name: Install dependencies
+ci.yml-25-        run: pip install tox t
 ```
 
 ## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)

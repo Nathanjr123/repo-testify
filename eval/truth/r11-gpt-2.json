@@ -10,10 +10,11 @@
   "c7": "verified",
   "c8": "verified",
   "c9": "verified",
-  "c10": "refuted"
+  "c10": "verified"
  },
  "reviewer_score": 45,
  "audit_notes": {
-  "c2": "was refuted; pip3 install -r requirements.txt succeeded on python 3.11.16: 'Successfully installed ... regex-2017.4.5 requests-2.21.0 tqdm-4.31.1', EXIT=0 (advanced-v1 p-c2). Draft guessed sdist failure."
+  "c2": "verified as written on a standard developer image (v1 probe: requirements installed on python:3.11 with build tools); on python:3.11-slim the regex sdist needs gcc and fails (v2 probe). Environment-dependent; the README assumes a normal dev machine, so verified stands, with this note.",
+  "c10": "was refuted; the claim (Setting the environment variable PYTHONIOENCODING=UTF-8 is documented as require...) is about what DEVELOPERS.md documents, and probe p-c10 recorded the documented line verbatim (DEVELOPERS.md:58). Corrected from evidence; this correction goes AGAINST the draft, not for the pipeline."
  }
 }
