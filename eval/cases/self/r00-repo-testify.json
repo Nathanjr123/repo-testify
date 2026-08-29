@@ -1,0 +1,80 @@
+{
+ "id": "r00-repo-testify",
+ "repo": "https://github.com/Nathanjr123/repo-testify",
+ "commit": "42bb1ca3556af237d12e00e13cfd912ba23f19fe",
+ "license": "MIT",
+ "bucket": "SELF",
+ "buyer_question": "A hackathon judge asks: does this repository actually do what its README claims, from a clean clone, with no credentials?",
+ "claims": [
+  {
+   "id": "c1",
+   "type": "install",
+   "text": "From a clean clone, `./repro.sh` runs to completion with exit code 0 using only Python 3.10+ (no make, no docker, no credentials).",
+   "source_quote": "Level 1 needs only Python 3.10+ and reproduces every number in this README from the shipped proof.",
+   "probe_hint": "git clone; cd; ./repro.sh; echo $?"
+  },
+  {
+   "id": "c2",
+   "type": "test_ci",
+   "text": "`python3 tests/test_scorer.py` passes all six scorer contract tests.",
+   "source_quote": "ok test_perfect ... ok test_crashed_case_is_zero_not_hidden",
+   "probe_hint": "python3 tests/test_scorer.py | grep -c '^ok' -> 6"
+  },
+  {
+   "id": "c3",
+   "type": "quickstart",
+   "text": "`python3 eval/validate_cases.py` reports every case file valid.",
+   "source_quote": "14 case files checked / all valid",
+   "probe_hint": "python3 eval/validate_cases.py | tail -1 -> 'all valid'"
+  },
+  {
+   "id": "c4",
+   "type": "quickstart",
+   "text": "`python3 -m eval.replay --run <the advanced-v2-rescored run id>` reproduces the stored raw score 0.817 exactly.",
+   "source_quote": "replay ok: advanced-v2-rescored-<ts> raw 0.817",
+   "probe_hint": "ID from proof; python3 -m eval.replay --run $ID -> 'replay ok ... raw 0.817'"
+  },
+  {
+   "id": "c5",
+   "type": "quickstart",
+   "text": "Regenerating RESULTS.md and the README tables from proof/ yields files byte-identical to the committed ones.",
+   "source_quote": "REPRO OK: README/RESULTS regenerate byte-identically from proof",
+   "probe_hint": "python3 -m eval.report > RESULTS.md; python3 eval/render_readme.py; git diff --quiet -- README.md RESULTS.md"
+  },
+  {
+   "id": "c6",
+   "type": "environment",
+   "text": "The shipped Dockerfile builds and its default command runs the Level-1 reproduction successfully.",
+   "source_quote": "CI runs it inside the shipped Docker image on every push",
+   "probe_hint": "docker build . && docker run --rm <image> (outside the sandbox: verify via the repro workflow's latest run status instead)"
+  },
+  {
+   "id": "c7",
+   "type": "quantitative",
+   "text": "On the public split the pipeline's raw per-claim accuracy is 0.83 (62 of 75) against the baseline's 0.13 (10 of 75), as generated from proof/build_proof.json.",
+   "source_quote": "0.83 (62/75; 0.73 to 0.90)",
+   "probe_hint": "python3 eval/render_readme.py; grep '62/75' README.md"
+  },
+  {
+   "id": "c8",
+   "type": "interface",
+   "text": "Every row of RESULTS.md carries a proof id, a git hash and a UTC timestamp, and each cited git hash exists in the repository history.",
+   "source_quote": "Every table row carries its proof id, git hash and UTC timestamp",
+   "probe_hint": "for h in $(grep -oE '\\| [0-9a-f]{7} \\|' RESULTS.md ...); do git cat-file -e $h; done"
+  },
+  {
+   "id": "c9",
+   "type": "test_ci",
+   "text": "The README's `repro` workflow badge asserts the latest run of that workflow on master succeeded.",
+   "source_quote": "[![repro](.../actions/workflows/repro.yml/badge.svg)]",
+   "probe_hint": "GitHub API: actions/workflows/repro.yml/runs?branch=master&per_page=1 -> conclusion success (network on)"
+  },
+  {
+   "id": "c10",
+   "type": "interface",
+   "text": "`arms/PROMPTS.md` is generated from the arm sources: running `python3 tools/render_prompts.py` leaves it unchanged.",
+   "source_quote": "rendered from source by tools/render_prompts.py, do not edit by hand",
+   "probe_hint": "python3 tools/render_prompts.py; git diff --quiet -- arms/PROMPTS.md"
+  }
+ ]
+}
