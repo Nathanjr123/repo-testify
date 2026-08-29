@@ -58,8 +58,7 @@ def stage_execute(case, probes, run_dir):
     pf = ROOT / "eval" / "probes" / (f"{case['id']}.json" if n == 0 else f"{case['id']}-r{n}.json")
     pf.write_text(json.dumps(spec, indent=1))
     subprocess.run(["git", "-C", str(ROOT), "add", str(pf)], check=True)
-    subprocess.run(["git", "-C", str(ROOT), "-c", "user.email=p.szczepanik94@gmail.com",
-                    "-c", "user.name=Nathanjr123", "commit", "-qm", f"probes: {case['id']}"], check=False)
+    subprocess.run(["git", "-C", str(ROOT), "commit", "-qm", f"probes: {case['id']}"], check=False)
     subprocess.run(["git", "-C", str(ROOT), "push", "-q"], check=True)
     for attempt in range(4):  # GitHub returned 504 on dispatch once (r05, sweep1); transient, retry
         r = gh(["workflow", "run", "probe.yml", "--ref", "master", "-f",
