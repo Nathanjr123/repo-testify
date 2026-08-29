@@ -1,9 +1,9 @@
-# Pipeline trajectory, r09-pydub (proof `advanced-v2-1787952546`)
+# Pipeline trajectory: r09-pydub (proof `advanced-v2-1787952546`)
 
-Repository https://github.com/jiaaro/pydub @ `103e339d3bc7` · buyer question: _We want to adopt pydub for audio slicing/concatenation/export in a service running current Python (3.13). Does it install and work as the README documents, and is the project's CI story real?_
+Repository https://github.com/jiaaro/pydub @ `103e339d3bc7`. Buyer question: _We want to adopt pydub for audio slicing/concatenation/export in a service running current Python (3.13). Does it install and work as the README documents, and is the project's CI story real?_
 
-## Step 1, instructions
-See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
+## Step 1: instructions
+See `arms/PROMPTS.md` (PLAN, EXECUTE, ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The package pydub can be installed from PyPI with the exact command `pip install pydub`.
 - **c2** (quickstart): After `pip install pydub`, the import `from pydub import AudioSegment` succeeds on a current Python interpreter (the README quickstart begins with this import, stating no version restriction).
@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (interface): `len(audio_segment)` returns the segment length in milliseconds.
 - **c11** (interface): AudioSegment objects are immutable: operations like `reverse()` return new objects and never modify the original.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r09-pydub-r1.json`; matched to this run by its evidence index)
+## Step 2: PLAN output, 11 probes (`eval/probes/r09-pydub-r1.json`, matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `pip install pydub`
@@ -104,9 +104,9 @@ def mkwav(p, secs, amp=8000, freq=440, rate=8000):
     w=wave.open(p,"wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
     w.writeframes(b"".join(struct.pack("<h", int(amp*(i/n)*math.sin(2*math.pi*`
 
-## Step 3, EXECUTE on GitHub Actions: run `33212005473` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3: EXECUTE on GitHub Actions, run `33212005473` (artifacts: per-probe cmd, stdout, stderr, exit code)
 
-Transcript index (probe · command excerpt):
+Transcript index (probe, command, recorded output):
 ```
 p-c1 python --version && pip show pydub | head -3 && python -c 'import pydub, sys; print("observed: pydub imported from", pydub.__file__, "on", sys.version.split()[0])' && echo 'VERDICT_LINE: PASS pip install pydub exited 0 and package is installed/importable' || echo 'VERDICT_LINE: FAIL pip install pydub did not produce an installed, importable package'
 STDOUT Python 3.11.16
@@ -166,23 +166,23 @@ Installing collected packages: pydub
 Successfully installed p
 ```
 
-## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
+## Step 4: ADJUDICATE, votes then verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | verified / verified / verified | **verified** | high | `p-c1`, Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3 |
-| c2 | refuted / refuted / refuted | **refuted** | high | `p-c2`, Python 3.13.15 / File "/repo/pydub/utils.py", line 17, in <module>: import pyaudioop as au |
-| c3 | verified / verified / verified | **verified** | high | `p-c3`, observed: ffmpeg on PATH = None avconv = None / out.wav frames = 16000 rate = 8000 duratio |
-| c4 | verified / verified / verified | **verified** | low | `p-c4`, observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errn |
-| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5`, observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=m |
-| c6 | verified / verified / verified | **verified** | high | `p-c6`, observed: badge http = 200 svg says passing = True / api http = 200 last master build stat |
-| c7 | verified / verified / verified | **verified** | high | `p-c7`, observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDIC |
-| c8 | verified / verified / verified | **verified** | high | `p-c8`, observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PAS |
-| c9 | verified / verified / verified | **verified** | high | `p-c9`, README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav' |
-| c10 | verified / verified / verified | **verified** | high | `p-c10`, observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len( |
-| c11 | verified / verified / verified | **verified** | high | `p-c11`, observed: original raw_data unchanged after reverse() = True / reversed differs = True / r |
+| c1 | verified / verified / verified | **verified** | high | `p-c1`: Name: pydub / Version: 0.25.1 / observed: pydub imported from /repo/pydub/__init__.py on 3 |
+| c2 | refuted / refuted / refuted | **refuted** | high | `p-c2`: Python 3.13.15 / File "/repo/pydub/utils.py", line 17, in <module>: import pyaudioop as au |
+| c3 | verified / verified / verified | **verified** | high | `p-c3`: observed: ffmpeg on PATH = None avconv = None / out.wav frames = 16000 rate = 8000 duratio |
+| c4 | verified / verified / verified | **verified** | low | `p-c4`: observed: ffmpeg = None avconv = None / observed: from_mp3 raised FileNotFoundError: [Errn |
+| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5`: observed: badge http = 200 final url = https://api.travis-ci.com/jiaaro/pydub.svg?branch=m |
+| c6 | verified / verified / verified | **verified** | high | `p-c6`: observed: badge http = 200 svg says passing = True / api http = 200 last master build stat |
+| c7 | verified / verified / verified | **verified** | high | `p-c7`: observed: song = 20.0 first_10 = 10.0 last_5 = 5.0 concat duration_seconds = 15.0 / VERDIC |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`: observed: base dBFS = -15.259 delta(seg+6) = 6.001 delta(seg-3) = -3.0 / VERDICT_LINE: PAS |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`: README debug-logger captured converter call = subprocess.call(['ffmpeg', '-y', '-f', 'wav' |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`: observed: wav seconds = 7 len(seg) = 7000 duration_seconds = 7.0 / VERDICT_LINE: PASS len( |
+| c11 | verified / verified / verified | **verified** | high | `p-c11`: observed: original raw_data unchanged after reverse() = True / reversed differs = True / r |
 
-## Step 5, REPORT
-Overall score 82 · escalated to human: none · model calls: nominal 4
+## Step 5: REPORT
+Overall score 82. Escalated to a human: none. Model calls: nominal 4. Verdicts disagreeing with audited truth: none.
 
-_Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._
+Human checkpoint for this repository: c6: was refuted; Executed with network: AppVeyor API last master build status=success finished 2026-03-19 (161 days), badge svg 'passing' (advanced-v2 p-c6). Draft had assumed a stale mirage; the claim as written is true.
