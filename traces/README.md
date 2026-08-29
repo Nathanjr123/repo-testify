@@ -4,7 +4,7 @@ One coding agent was used: **Claude Code (claude-fable-5)**, driven by Nathan Ob
 Format: `Step NN — Model Thinking / Tool Call: <tool> / Tool Result`, exported by `tools/export_traces.py` from the session log. The export starts at kickoff and is redacted only for private paths and personal identifiers; no steps are removed, and failures and dead ends stay in.
 
 ## Pipeline agent — one trajectory per repository
-`traces/pipeline/<case>.md` (rendered from persisted data by `tools/render_pipeline_traces.py`): the instructions (`arms/PROMPTS.md`), the probes the PLAN stage wrote, the GitHub Actions run that executed them, the transcript index, the three adjudication votes per claim, and the final verdict with its cited artifact. Retries appear as `-r1` probe files; escalations are listed in the report.
+`traces/pipeline/<case>.md`, one per repository across the public, extension and held-out splits plus the self-run (rendered from persisted data by `tools/render_pipeline_traces.py`): the instructions (`arms/PROMPTS.md`), the probes the PLAN stage wrote, the GitHub Actions run that executed them, the transcript index, the three adjudication votes per claim, and the final verdict with its cited artifact. Retries appear as `-r1` probe files; escalations are listed in the report.
 
 ## Authoring agent — sessions
 | file | purpose | steps | outcome |
