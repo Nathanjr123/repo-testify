@@ -1,5 +1,5 @@
-"""Shared arm helpers. The Claude Code CLI is not on PATH in non-interactive shells on this
-machine (it ships inside the VS Code extension); resolve it explicitly so background runs work."""
+"""Shared arm helpers. The pipeline calls the Claude CLI (`claude -p`) for its model calls; resolve the binary
+explicitly (PATH, CLAUDE_BIN, or the VS Code extension bundle) so non-interactive runs work."""
 import glob, os, shutil
 
 def resolve_claude() -> str:
