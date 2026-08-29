@@ -9,6 +9,14 @@ Mark human checkpoints by searching for your own interjections (role=user mid-se
 import json, pathlib, sys, glob, os
 SRC = os.environ.get("CLAUDE_PROJ", os.path.expanduser("~/.claude/projects"))
 DST = pathlib.Path(__file__).resolve().parent.parent / "traces"
+import re
+REDACT = [r"/home/nate/micro1-fec-research\S*", r"/home/nate/lbx-rl-tasks-template\S*", r"\S+@\S+\.\S+",
+          r"(?i)alignerr\S*", r"(?i)payreality\S*", r"(?i)neural grid", r"(?i)lbx-rl\S*", r"(?i)labelbox"]
+def redact(s):
+    for pat in REDACT:
+        s = re.sub(pat, "[redacted: private path/identity]", s)
+    return s
+
 def render(path):
     name = pathlib.Path(path).stem
     out, step = [f"# Trajectory {name}\n"], 0
@@ -33,7 +41,7 @@ def render(path):
             elif t == "tool_result":
                 c = b.get("content"); c = json.dumps(c) if not isinstance(c, str) else c
                 out.append(f"## Step {step} — Tool Result\n```\n{c[:2000]}\n```\n")
-    (DST / f"{name}.md").write_text("\n".join(out))
+    (DST / f"{name}.md").write_text(redact("\n".join(out)) + "\n\n_Redaction: private paths, personal identifiers and unrelated-client names are replaced with `[redacted]`; tool calls, results, retries and decisions are untouched._")
     print(f"traces/{name}.md ({step} steps)")
 if __name__ == "__main__":
     files = sys.argv[1:] or sorted(glob.glob(f"{SRC}/*micro1*/*.jsonl")) or []
