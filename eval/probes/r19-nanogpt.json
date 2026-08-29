@@ -1,0 +1,171 @@
+{
+ "case_id": "r19-nanogpt",
+ "repo": "https://github.com/karpathy/nanoGPT",
+ "commit": "3adf61e154c3fe3fca428ad6bc3818b27a3b8291",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install -q torch numpy transformers datasets tiktoken wandb tqdm --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple"
+   ],
+   "commands": [
+    "/tmp/v/bin/pip check || true",
+    "/tmp/v/bin/python -c \"import torch,numpy,transformers,datasets,tiktoken,wandb,tqdm;print('torch',torch.__version__,'numpy',numpy.__version__,'transformers',transformers.__version__,'datasets',datasets.__version__,'tiktoken',tiktoken.__version__,'wandb',wandb.__version__,'tqdm',tqdm.__version__,'cuda_available',torch.cuda.is_available())\" && echo \"VERDICT_LINE: PASS all 7 documented packages install and import in a CPU-only venv (torch taken from the pytorch CPU wheel index because a bare 'pip install torch' on Linux pulls multi-GB CUDA wheels; claim is read as CPU-only)\" || echo \"VERDICT_LINE: FAIL one or more of the 7 documented packages failed to install or import (see traceback above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install -q torch numpy transformers datasets tiktoken wandb tqdm --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple",
+    "python -c \"import urllib.request,tarfile,io;d=urllib.request.urlopen('https://github.com/karpathy/nanoGPT/archive/3adf61e154c3fe3fca428ad6bc3818b27a3b8291.tar.gz',timeout=60).read();tarfile.open(fileobj=io.BytesIO(d)).extractall('/tmp')\" && mv /tmp/nanoGPT-3adf61e154c3fe3fca428ad6bc3818b27a3b8291 /tmp/ng"
+   ],
+   "commands": [
+    "cd /tmp/ng && grep -n '^import' data/shakespeare_char/prepare.py; /tmp/v/bin/pip show requests 2>/dev/null | head -2 || echo 'requests NOT installed'",
+    "cd /tmp/ng && /tmp/v/bin/python data/shakespeare_char/prepare.py; echo prepare_exit=$?",
+    "cd /tmp/ng && ls -l data/shakespeare_char/input.txt data/shakespeare_char/train.bin data/shakespeare_char/val.bin; /tmp/v/bin/python -c \"import os;i=os.path.getsize('data/shakespeare_char/input.txt');t=os.path.getsize('data/shakespeare_char/train.bin');v=os.path.getsize('data/shakespeare_char/val.bin');print('input_bytes',i,'train_bytes',t,'val_bytes',v);assert 900000<i<1200000,'input.txt not ~1MB';assert t>0 and v>0,'empty bin'\" && echo \"VERDICT_LINE: PASS prepare.py downloaded ~1MB input.txt and wrote non-empty train.bin and val.bin in data/shakespeare_char/\" || echo \"VERDICT_LINE: FAIL prepare.py did not produce train.bin/val.bin (see traceback; note prepare.py imports 'requests', which is absent from the README pip list and only arrives transitively)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python -c \"import urllib.request,re;s=urllib.request.urlopen('https://raw.githubusercontent.com/karpathy/nanoGPT/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/config/train_shakespeare_char.py',timeout=30).read().decode();v={k:int(re.search(r'^%s\\s*=\\s*(\\d+)'%k,s,re.M).group(1)) for k in ['block_size','n_embd','n_layer','n_head']};print('observed',v);assert v=={'block_size':256,'n_embd':384,'n_layer':6,'n_head':6},v\" && echo \"VERDICT_LINE: PASS config/train_shakespeare_char.py sets block_size=256 n_embd=384 n_layer=6 n_head=6 at the pinned commit\" || echo \"VERDICT_LINE: FAIL config values differ from README (see observed dict) or the raw file could not be fetched\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [],
+   "commands": [
+    "ls /dev/nvidia* 2>/dev/null || echo 'no /dev/nvidia* devices'; command -v nvidia-smi >/dev/null && nvidia-smi -L || echo 'nvidia-smi absent'",
+    "python -c \"import glob;g=glob.glob('/dev/nvidia*');print('nvidia_devices',g);assert g,'no GPU'\" && echo \"VERDICT_LINE: PASS a GPU is present (unexpected) - the full config run must be timed separately\" || echo \"VERDICT_LINE: FAIL unverifiable in sandbox: no CUDA/A100 device, so the ~3 minute / 1.4697 best-val-loss claim cannot be measured here\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install -q torch numpy transformers tiktoken --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple",
+    "python -c \"import urllib.request,tarfile,io;d=urllib.request.urlopen('https://github.com/karpathy/nanoGPT/archive/3adf61e154c3fe3fca428ad6bc3818b27a3b8291.tar.gz',timeout=60).read();tarfile.open(fileobj=io.BytesIO(d)).extractall('/tmp')\" && mv /tmp/nanoGPT-3adf61e154c3fe3fca428ad6bc3818b27a3b8291 /tmp/ng",
+    "cd /tmp/ng && /tmp/v/bin/python data/shakespeare_char/prepare.py"
+   ],
+   "commands": [
+    "cd /tmp/ng && nproc && timeout 100 /tmp/v/bin/python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=100 --lr_decay_iters=100 --eval_interval=50 --dropout=0.0 > /tmp/train.log 2>&1; rc=$?; echo train_exit=$rc; tail -4 /tmp/train.log; ls -l out-shakespeare-char/ckpt.pt 2>&1; [ $rc -eq 0 ] && [ -s out-shakespeare-char/ckpt.pt ] && echo \"VERDICT_LINE: PASS README CPU command ran to completion and wrote out-shakespeare-char/ckpt.pt (max_iters scaled 2000->100 with --eval_interval=50 to fit the 120s budget; every other flag verbatim)\" || echo \"VERDICT_LINE: FAIL train.py exit=$rc or no out-shakespeare-char/ckpt.pt written (see log tail above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install -q torch numpy transformers tiktoken --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple",
+    "python -c \"import urllib.request,tarfile,io;d=urllib.request.urlopen('https://github.com/karpathy/nanoGPT/archive/3adf61e154c3fe3fca428ad6bc3818b27a3b8291.tar.gz',timeout=60).read();tarfile.open(fileobj=io.BytesIO(d)).extractall('/tmp')\" && mv /tmp/nanoGPT-3adf61e154c3fe3fca428ad6bc3818b27a3b8291 /tmp/ng",
+    "cd /tmp/ng && /tmp/v/bin/python data/shakespeare_char/prepare.py"
+   ],
+   "commands": [
+    "cd /tmp/ng && echo cpus=$(nproc); START=$(date +%s); timeout 100 /tmp/v/bin/python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=200 --lr_decay_iters=2000 --eval_interval=100 --dropout=0.0 > /tmp/train.log 2>&1; rc=$?; END=$(date +%s); echo exit=$rc wall_200_iters=$((END-START))s; grep 'val loss' /tmp/train.log | tail -2; /tmp/v/bin/python -c \"import re;s=open('/tmp/train.log').read();t=[float(x) for x in re.findall(r'iter \\d+: loss [\\d.]+, time ([\\d.]+)ms',s)[10:]];assert t,'no iter timing lines';ms=sum(t)/len(t);est=ms*2000/1000;print('mean_ms_per_iter %.1f extrapolated_2000_iter_seconds %.0f (README says ~180s; eval overhead excluded)'%(ms,est));assert est<=360,'extrapolated %.0fs exceeds 2x the README 3 min'%est\" && echo \"VERDICT_LINE: PASS timing part only: extrapolated 2000-iter wall is within 2x of ~3 min on this CPU; the 1.88 val loss was NOT measured (needs the full 2000-iter run, beyond the 120s budget)\" || echo \"VERDICT_LINE: FAIL run failed (exit=$rc) or extrapolated 2000-iter wall exceeds 2x the README's ~3 min; the 1.88 loss was not measured\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install -q torch numpy transformers tiktoken --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple",
+    "python -c \"import urllib.request,tarfile,io;d=urllib.request.urlopen('https://github.com/karpathy/nanoGPT/archive/3adf61e154c3fe3fca428ad6bc3818b27a3b8291.tar.gz',timeout=60).read();tarfile.open(fileobj=io.BytesIO(d)).extractall('/tmp')\" && mv /tmp/nanoGPT-3adf61e154c3fe3fca428ad6bc3818b27a3b8291 /tmp/ng",
+    "cd /tmp/ng && /tmp/v/bin/python data/shakespeare_char/prepare.py"
+   ],
+   "commands": [
+    "cd /tmp/ng && timeout 60 /tmp/v/bin/python train.py config/train_shakespeare_char.py --device=cpu --compile=False --eval_iters=20 --log_interval=1 --block_size=64 --batch_size=12 --n_layer=4 --n_head=4 --n_embd=128 --max_iters=100 --lr_decay_iters=100 --eval_interval=50 --dropout=0.0 > /tmp/train.log 2>&1; echo train_exit=$?; tail -2 /tmp/train.log; ls -l out-shakespeare-char/ckpt.pt 2>&1",
+    "cd /tmp/ng && timeout 50 /tmp/v/bin/python sample.py --out_dir=out-shakespeare-char --device=cpu --num_samples=2 --max_new_tokens=100 > /tmp/sample.log 2>&1; rc=$?; echo sample_exit=$rc; head -15 /tmp/sample.log; /tmp/v/bin/python -c \"s=open('/tmp/sample.log').read();n=s.count('---------------');print('sample_separators',n,'log_chars',len(s));assert n>=2,'fewer than 2 samples printed'\" && [ $rc -eq 0 ] && echo \"VERDICT_LINE: PASS sample.py --out_dir=out-shakespeare-char --device=cpu loaded ckpt.pt and printed 2 generated samples (checkpoint from a 100-iter run scaled from 2000; num_samples/max_new_tokens reduced to fit budget)\" || echo \"VERDICT_LINE: FAIL sample.py exit=$rc or no generated samples printed (see log head above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python -c \"import urllib.request;b='https://raw.githubusercontent.com/karpathy/nanoGPT/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/';n={f:len(urllib.request.urlopen(b+f,timeout=30).read().decode().splitlines()) for f in ['train.py','model.py']};print('line_counts',n,'window 255-345');bad=[f for f,c in n.items() if not 255<=c<=345];assert not bad,bad\" && echo \"VERDICT_LINE: PASS train.py and model.py both within 255-345 lines (~300 +/-15%) at the pinned commit\" || echo \"VERDICT_LINE: FAIL at least one file is outside 255-345 lines (see printed counts) or the raw fetch failed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python -c \"import urllib.request,re;b='https://raw.githubusercontent.com/karpathy/nanoGPT/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/';[print(f,re.findall(r'^(init_from|dataset|eval_iters|batch_size)\\s*=\\s*(.+)$',urllib.request.urlopen(b+f,timeout=30).read().decode(),re.M)) for f in ['config/eval_gpt2.py','config/eval_gpt2_medium.py','config/eval_gpt2_large.py','config/eval_gpt2_xl.py']];p=urllib.request.urlopen(b+'data/openwebtext/prepare.py',timeout=30).read().decode();print('openwebtext_prepare_uses_hf_load_dataset','load_dataset' in p and 'openwebtext' in p)\" && echo \"VERDICT_LINE: FAIL unverifiable in sandbox: the four eval configs exist as documented (structural check only), but reproducing the loss table needs the OpenWebText prep (~54GB, hours) plus a GPU, far beyond a 120s CPU budget\" || echo \"VERDICT_LINE: FAIL eval config files or data/openwebtext/prepare.py missing at the pinned commit\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python -c \"import urllib.request,re;b='https://raw.githubusercontent.com/karpathy/nanoGPT/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/';s=urllib.request.urlopen(b+'config/train_gpt2.py',timeout=30).read().decode();print('train_gpt2_config',re.findall(r'^(batch_size|block_size|gradient_accumulation_steps|max_iters|lr_decay_iters)\\s*=\\s*(.+)$',s,re.M));r=urllib.request.urlopen(b+'assets/gpt2_124M_loss.png',timeout=30);print('loss_curve_png http',r.status,len(r.read()),'bytes')\" && echo \"VERDICT_LINE: FAIL unverifiable in sandbox: config/train_gpt2.py and the loss-curve PNG exist, but the ~4 day 8xA100 DDP run cannot be executed here (no GPU, 120s budget); wall-clock and ~2.85 loss unmeasured\" || echo \"VERDICT_LINE: FAIL config/train_gpt2.py or assets/gpt2_124M_loss.png missing at the pinned commit\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python -m venv /tmp/v",
+    "/tmp/v/bin/pip install -q torch numpy transformers tiktoken --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple",
+    "python -c \"import urllib.request,tarfile,io;d=urllib.request.urlopen('https://github.com/karpathy/nanoGPT/archive/3adf61e154c3fe3fca428ad6bc3818b27a3b8291.tar.gz',timeout=60).read();tarfile.open(fileobj=io.BytesIO(d)).extractall('/tmp')\" && mv /tmp/nanoGPT-3adf61e154c3fe3fca428ad6bc3818b27a3b8291 /tmp/ng"
+   ],
+   "commands": [
+    "cd /tmp/ng && /tmp/v/bin/python -c \"s=open('sample.py').read();need=['init_from','start','num_samples','max_new_tokens','FILE:'];miss=[k for k in need if k not in s];print('sample.py missing_tokens',miss)\"",
+    "cd /tmp/ng && echo 'Once upon a time' > prompt.txt && timeout 100 /tmp/v/bin/python sample.py --init_from=gpt2 --device=cpu --start=FILE:prompt.txt --num_samples=1 --max_new_tokens=10 > /tmp/sample.log 2>&1; rc=$?; echo sample_exit=$rc; tail -8 /tmp/sample.log; [ $rc -eq 0 ] && grep -q 'Once upon a time' /tmp/sample.log && echo \"VERDICT_LINE: PASS sample.py --init_from=gpt2 with --start=FILE:prompt.txt --num_samples --max_new_tokens generated text continuing the file prompt (gpt2 124M used as proxy; gpt2-xl 6GB download exceeds the budget)\" || echo \"VERDICT_LINE: FAIL sample.py exit=$rc or prompt not echoed in output (see log tail; gpt2-xl not attempted, 6GB)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c12",
+   "claim_id": "c12",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python -c \"import urllib.request,json;h={'User-Agent':'probe'};r=urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/karpathy/nanochat',headers=h),timeout=30);j=json.load(r);print('nanochat http',r.status,j['full_name'],'created',j['created_at'],'stars',j.get('stargazers_count'));r2=urllib.request.urlopen(urllib.request.Request('https://api.github.com/repos/karpathy/nanoGPT',headers=h),timeout=30);k=json.load(r2);print('nanoGPT archived',k['archived'],'pushed_at',k['pushed_at']);s=urllib.request.urlopen('https://raw.githubusercontent.com/karpathy/nanoGPT/3adf61e154c3fe3fca428ad6bc3818b27a3b8291/README.md',timeout=30).read().decode();print('pinned_README_has_deprecation_notice','deprecated' in s and 'github.com/karpathy/nanochat' in s);assert r.status==200 and j['full_name']=='karpathy/nanochat' and 'deprecated' in s and 'github.com/karpathy/nanochat' in s\" && echo \"VERDICT_LINE: PASS karpathy/nanochat exists on GitHub (HTTP 200) and the pinned README carries the author's deprecation notice pointing to it\" || echo \"VERDICT_LINE: FAIL nanochat repo unreachable/404 or the pinned README lacks the deprecation notice\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
