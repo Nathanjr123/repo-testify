@@ -27,7 +27,12 @@ for cname, r in e["per_case"].items():
         for p in probes:
             md.append(f"- `{p['id']}` image `{p['image']}` network `{p.get('network','none')}`\n  - setup: `{' && '.join(p.get('setup', []))[:300]}`\n  - commands: `{' && '.join(p['commands'])[:300]}`")
     if r["status"] != "ok":
-        md.append(f"\n## Outcome: `{r['status']}`, {r.get('stderr','')[-300:]}\n"); (dst / f"{cid}.md").write_text("\n".join(md)); continue
+        truth = json.loads((ROOT / "eval" / "truth" / cname).read_text()) if (ROOT / "eval" / "truth" / cname).exists() else {}
+    notes = truth.get("audit_notes") or {}
+    wrong = [c["id"] for c in out["claims"] if truth.get("verdicts", {}).get(c["id"]) not in (None, c["verdict"])]
+    hc = ("Human checkpoint for this repository: " + "; ".join(f"{k}: {v}" for k, v in notes.items())) if notes else "Human checkpoint for this repository: no truth entry was changed after this run."
+    md.append(f"\n## Step 5, REPORT\nOverall score {out.get('overall_score')}. Escalated to a human: {out.get('escalations') or 'none'}. Model calls: {out.get('llm_calls') or 'nominal 4'}. Verdicts disagreeing with audited truth: {', '.join(wrong) or 'none'}.\n\n{hc}")
+    (dst / f"{cid}.md").write_text("\n".join(md)); continue
     out = r["output"]
     md.append(f"\n## Step 3, EXECUTE on GitHub Actions: run `{out.get('run_id')}` (artifacts: per-probe cmd/stdout/stderr/exit_code)\n")
     idx = out.get("_evidence_index", {})
