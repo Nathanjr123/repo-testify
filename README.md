@@ -16,7 +16,7 @@ The format the challenge asks for, public split:
 |---|---|---|---|
 | Primary outcome: per-claim accuracy, 95% Wilson interval | 0.13 (10/75; 0.07 to 0.23) | 0.83 (62/75; 0.73 to 0.90) | +0.69; intervals do not overlap |
 | Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | 0.07 | 0.71 | +0.64 |
-| Composite score (published rubric) | 0.284 | 0.584 | +0.300 |
+| Composite score (published rubric) | 0.284 | 0.817 | +0.533 |
 | Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
 | Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |
 
@@ -26,9 +26,9 @@ Full table:
 |---|---|---|---|---|---|---|---|---|---|---|
 | baseline (run 1) | 0.074 | 0.771 | 0.111 | 0.811 | 0.16 | **0.284** | 1* | 0.9 min | pending audit | 7/7 |
 | baseline (run 2) | 0.066 | 0.783 | 0.070 | 0.745 | 0.15 | **0.267** | 1* | 0.9 min | pending audit | 7/7 |
-| pipeline v1 | 0.481 | 0.572 | 0.345 | 0.506 | 0.72 | **0.408** | 4* | 6.8 min | pending audit | 6/7 |
-| pipeline v2 (public, tuned) | 0.712 | 0.901 | 0.321 | 0.777 | 0.90 | **0.584** | 4* | 13.2 min | pending audit | 7/7 |
-| ablation: k=1 votes | 0.691 | 0.867 | 0.321 | 0.777 | 0.92 | **0.570** | 4* | 13.2 min | pending audit | 7/7 |
+| pipeline v1 | 0.481 | 0.572 | 0.580 | 0.506 | 0.72 | **0.448** | 4* | 6.8 min | pending audit | 6/7 |
+| pipeline v2 (public, tuned) | 0.712 | 0.901 | 1.000 | 0.777 | 0.90 | **0.817** | 4* | 13.2 min | pending audit | 7/7 |
+| ablation: k=1 votes | 0.691 | 0.867 | 1.000 | 0.777 | 0.92 | **0.801** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: no execution | 0.007 | 1.000 | 0.000 | 0.712 | 0.00 | **0.044** | 3* | 0.6 min | pending audit | 7/7 |
 
 Baseline-vs-baseline spread (noise floor): **0.017** composite; claim-accuracy spread 0.008.

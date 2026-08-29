@@ -53,12 +53,16 @@ def score(case: dict, output: dict) -> dict:
     idx_text = idx.get("text", "")           # portable, persisted with the output: probe ids, commands, and output tails
     tree_text = idx.get("tree", "")          # for arms without execution: the pinned file tree they were shown
     def excerpt_supported(e):
-        ex = str(e.get("excerpt", "")).strip()
-        # a quoted excerpt must be findable in the recorded outputs (>=12 chars of it, whitespace-insensitive)
-        if len(ex) < 12: return False
+        """The quoted part of an excerpt must exist in the recorded output. We take every quoted substring
+        ('...' or "...") and every token of 8+ characters, and require at least one to appear verbatim
+        (whitespace-insensitive) in the persisted index; labels like "stdout:" or "exit_code" do not count."""
+        ex = str(e.get("excerpt", ""))
         norm = lambda s: " ".join(s.split())
-        chunks = [c.strip() for c in re.split(r"[/|;]|\.\.\.", ex) if len(c.strip()) >= 12]
-        return any(norm(c)[:60] in norm(idx_text) for c in chunks)
+        hay = norm(idx_text)
+        quoted = [q for q in re.findall(r"'([^']{3,})'|\"([^\"]{3,})\"", ex) for q in q if q]
+        tokens = [w for w in re.findall(r"[A-Za-z0-9_./=+:-]{8,}", ex) if w.lower() not in ("exit_code", "stdout:", "stderr:", "phase_a.log", "phase_a", "exit_code:")]
+        cands = quoted + tokens
+        return any(norm(c) in hay for c in cands)
     for c in rep_claims.values():
         for e in c.get("evidence", []):
             ev_total += 1
