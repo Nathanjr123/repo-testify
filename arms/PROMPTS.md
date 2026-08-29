@@ -14,8 +14,8 @@ README:\n{readme_text[:30000]}\nFile tree (first 400): {json.dumps(paths)}
 Reply with ONLY a JSON object: {{"repo": str, "overall_score": 0-100, "claims": [{{"id","verdict","confidence","evidence":[{{"kind","ref","excerpt"}}]}}], "escalations": [ids], "memo_md": "<=300 word due-diligence memo"}}
 ```
 
-## Pipeline — stage PLAN (one probe per claim)
-`arms/advanced/advanced.py`
+## Pipeline — stage PLAN (one call per repository; one probe per claim)
+`arms/advanced/advanced.py::stage_plan`
 
 ```text
 You design sandbox probes to verify repository claims by EXECUTION.
@@ -27,25 +27,20 @@ NETWORK: default "none". For claims about badges/URLs/CI status/remote resources
 Do NOT add dependencies the README does not mention to make a claim pass; if the claim only works with an extra package, the probe should FAIL as written and print what was missing.
 Claims: {claims}
 README (for verbatim snippets): {repo_map['readme'][:15000]}
-Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image": "python:3.11-slim", "network": "none|install-only", "setup": [..], "commands": [..], "timeout_s": 120}}]}}
+Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image": "python:3.11-slim", "network": "none|on", "setup": [..], "commands": [..], "timeout_s": 120}}]}}
 ```
 
-## Pipeline — stage REPAIR (one round, environment failures only)
-`arms/advanced/advanced.py`
+## Pipeline — stage REPAIR (one round; environment failures only)
+`arms/advanced/advanced.py::main`
 
 ```text
-You adjudicate ONE repository claim from EXECUTION EVIDENCE only.
-{FEWSHOT}
-Claim ({claim['id']}): {claim['text']}
-Probe transcript (cmd, exit codes, output head/tail): {json.dumps(probe_log)[:8000]}
-Rules: verdict from evidence in the transcript alone; quote the exit code you rely on; if evidence is missing or ambiguous -> unverifiable + low confidence. Reply ONLY JSON:
-{{"id": "{claim['id']}", "verdict": "verified|refuted|unverifiable", "confidence": "high|low",
- "evidence": [{{"kind": "command", "ref": "<exact cmd string or probe id>", "excerpt": "<quoted output line + exit code>"}}]}}
-Claim: {claim['text']}
+These probe SETUP steps failed in a fresh container (environment problem, before the claim was tested). Repair each probe's setup/commands ONCE so the claim itself gets tested; keep the claim's own install method; each retry must CHANGE the command. Failures: {json.dumps(errs)[:6000]}
+Original probes: {json.dumps([p for p in probes if p['id'] in errs])[:6000]}
+Reply ONLY JSON: {{"probes": [...same schema...]}}
 ```
 
-## Pipeline — stage ADJUDICATE (k votes, evidence-only, v3 rules)
-`arms/advanced/advanced.py`
+## Pipeline — stage ADJUDICATE (k=3 votes, evidence-only, v3 rules)
+`arms/advanced/advanced.py::adjudicate_batch`
 
 ```text
 You adjudicate repository claims from EXECUTION EVIDENCE only.
