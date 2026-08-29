@@ -1,9 +1,9 @@
-# Pipeline trajectory, r01-humanize (proof `advanced-v2-1787952546`)
+# Pipeline trajectory: r01-humanize (proof `advanced-v2-1787952546`)
 
-Repository https://github.com/python-humanize/humanize @ `ce4147b6c8f8` · buyer question: _We want to embed humanize in our reporting product's number/date formatting layer — do the README's install instructions, Python-version support, and example outputs actually hold on a current interpreter?_
+Repository https://github.com/python-humanize/humanize @ `ce4147b6c8f8`. Buyer question: _We want to embed humanize in our reporting product's number/date formatting layer — do the README's install instructions, Python-version support, and example outputs actually hold on a current interpreter?_
 
-## Step 1, instructions
-See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
+## Step 1: instructions
+See `arms/PROMPTS.md` (PLAN, EXECUTE, ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The package 'humanize' can be installed from PyPI with the command `python3 -m pip install --upgrade humanize`, after which `import humanize` succeeds.
 - **c2** (install): The package 'humanize' can be installed from source by cloning https://github.com/python-humanize/humanize and running `python3 -m pip install -e .` in the clone.
@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (interface): The 'humanize' package ships a Russian locale: after `humanize.i18n.activate('ru_RU')`, `humanize.naturaltime(datetime.timedelta(seconds=3))` returns '3 секунды назад', and `humanize.i18n.deactivate()` restores '3 seconds ago'.
 - **c11** (test_ci): The GitHub Actions 'Test' workflow badge in the humanize README asserts that the Test workflow on python-humanize/humanize is currently passing.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r01-humanize.json`; matched to this run by its evidence index)
+## Step 2: PLAN output, 11 probes (`eval/probes/r01-humanize.json`, matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `python3 -m venv /tmp/v && /tmp/v/bin/python -m pip install --upgrade humanize`
@@ -53,9 +53,9 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
   - setup: `apt-get update -qq && apt-get install -y -qq curl >/dev/null && curl -sf -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/python-humanize/humanize/actions/workflows' -o /tmp/workflows.json && WF_ID=$(python3 -c "import json; ws=json.load(open('/tmp/workflows.json'))['workflows'`
   - commands: `python3 -c "import json; runs=json.load(open('/tmp/runs.json'))['workflow_runs']; [print('RUN', r['head_sha'][:12], r['created_at'], r['conclusion']) for r in runs]; assert runs, 'no completed Test runs on main'; latest=runs[0]; print('LATEST_CONCLUSION', latest['conclusion']); assert latest['conclu`
 
-## Step 3, EXECUTE on GitHub Actions: run `33206171217` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3: EXECUTE on GitHub Actions, run `33206171217` (artifacts: per-probe cmd, stdout, stderr, exit code)
 
-Transcript index (probe · command excerpt):
+Transcript index (probe, command, recorded output):
 ```
 p-c1 /tmp/v/bin/python -c 'import humanize; print("HUMANIZE_VERSION", humanize.__version__)' && /tmp/v/bin/python -c 'import humanize' && echo PROBE_OK
 STDOUT HUMANIZE_VERSION 4.16.0
@@ -110,23 +110,23 @@ debconf: unable to initialize frontend: Readline
 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /
 ```
 
-## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
+## Step 4: ADJUDICATE, votes then verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | verified / verified / verified | **verified** | high | `p-c1`, phase_a_tail: 'Successfully installed humanize-4.16.0'; stdout: 'HUMANIZE_VERSION 4.16.0'  |
-| c2 | verified / verified / verified | **verified** | high | `p-c2`, phase_a_tail: "Cloning into '/tmp/humanize'..."; stdout: 'HUMANIZE_FILE /tmp/humanize/src/ |
-| c3 | verified / verified / verified | **verified** | high | `p-c3`, stdout: 'REQUIRES_PYTHON >=3.10' with classifiers Python 3.10 through 3.15; assert require |
-| c4 | verified / verified / verified | **verified** | high | `p-c4`, stdout: "RESULT '12,345'" / 'PROBE_OK'; exit_code 0 |
-| c5 | verified / verified / verified | **verified** | high | `p-c5`, stdout: "RESULT '123.5 million'" / 'PROBE_OK'; exit_code 0 |
-| c6 | refuted / refuted / refuted | **refuted** | high | `p-c6`, stdout: "RESULT '17 minutes'"; stderr: "AssertionError: '17 minutes'" (claim says '16 minu |
-| c7 | verified / verified / verified | **verified** | high | `p-c7`, stdout: "RESULT '1.0 MB' '976.6 KiB'" / 'PROBE_OK'; exit_code 0 |
-| c8 | verified / verified / verified | **verified** | high | `p-c8`, stdout: "RESULT '1/3'" / 'PROBE_OK'; exit_code 0 |
-| c9 | verified / verified / verified | **verified** | high | `p-c9`, stdout: "RESULT '3.00 x 10⁻¹'" / 'PROBE_OK' (assert against '3.00 x 10\u207b\u00b9' passed |
-| c10 | verified / verified / verified | **verified** | high | `p-c10`, stdout: "RESULT '3 seconds ago' '3 секунды назад' '3 seconds ago'" / 'PROBE_OK' (before/ac |
-| c11 | verified / verified / verified | **verified** | high | `p-c11`, stdout: 'RUN ce4147b6c8f8 2026-08-01T09:18:47Z success' ... 'LATEST_CONCLUSION success' /  |
+| c1 | verified / verified / verified | **verified** | high | `p-c1`: phase_a_tail: 'Successfully installed humanize-4.16.0'; stdout: 'HUMANIZE_VERSION 4.16.0'  |
+| c2 | verified / verified / verified | **verified** | high | `p-c2`: phase_a_tail: "Cloning into '/tmp/humanize'..."; stdout: 'HUMANIZE_FILE /tmp/humanize/src/ |
+| c3 | verified / verified / verified | **verified** | high | `p-c3`: stdout: 'REQUIRES_PYTHON >=3.10' with classifiers Python 3.10 through 3.15; assert require |
+| c4 | verified / verified / verified | **verified** | high | `p-c4`: stdout: "RESULT '12,345'" / 'PROBE_OK'; exit_code 0 |
+| c5 | verified / verified / verified | **verified** | high | `p-c5`: stdout: "RESULT '123.5 million'" / 'PROBE_OK'; exit_code 0 |
+| c6 | refuted / refuted / refuted | **refuted** | high | `p-c6`: stdout: "RESULT '17 minutes'"; stderr: "AssertionError: '17 minutes'" (claim says '16 minu |
+| c7 | verified / verified / verified | **verified** | high | `p-c7`: stdout: "RESULT '1.0 MB' '976.6 KiB'" / 'PROBE_OK'; exit_code 0 |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`: stdout: "RESULT '1/3'" / 'PROBE_OK'; exit_code 0 |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`: stdout: "RESULT '3.00 x 10⁻¹'" / 'PROBE_OK' (assert against '3.00 x 10\u207b\u00b9' passed |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`: stdout: "RESULT '3 seconds ago' '3 секунды назад' '3 seconds ago'" / 'PROBE_OK' (before/ac |
+| c11 | verified / verified / verified | **verified** | high | `p-c11`: stdout: 'RUN ce4147b6c8f8 2026-08-01T09:18:47Z success' ... 'LATEST_CONCLUSION success' /  |
 
-## Step 5, REPORT
-Overall score 91 · escalated to human: none · model calls: nominal 4
+## Step 5: REPORT
+Overall score 91. Escalated to a human: none. Model calls: nominal 4. Verdicts disagreeing with audited truth: none.
 
-_Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._
+Human checkpoint for this repository: c6: README says '16 minutes'; executed humanize 4.16.0 returns '17 minutes' (CI run 33192516200, probe p-c6). Draft guessed verified; corrected from evidence.

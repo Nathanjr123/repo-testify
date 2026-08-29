@@ -1,9 +1,9 @@
-# Pipeline trajectory, r04-schedule (proof `advanced-v2-1787952546`)
+# Pipeline trajectory: r04-schedule (proof `advanced-v2-1787952546`)
 
-Repository https://github.com/dbader/schedule @ `82a43db1b938` · buyer question: _We want to use schedule for in-process periodic jobs in a service we will run for years — is the project's CI actually green, are the dependency-free and Python-version claims still true, and do the README examples run?_
+Repository https://github.com/dbader/schedule @ `82a43db1b938`. Buyer question: _We want to use schedule for in-process periodic jobs in a service we will run for years — is the project's CI actually green, are the dependency-free and Python-version claims still true, and do the README examples run?_
 
-## Step 1, instructions
-See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
+## Step 1: instructions
+See `arms/PROMPTS.md` (PLAN, EXECUTE, ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The package 'schedule' can be installed from PyPI with `pip install schedule`, after which `import schedule` succeeds.
 - **c2** (environment): The 'schedule' package is tested on Python 3.7, 3.8, 3.9, 3.10, 3.11, and 3.12.
@@ -16,7 +16,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c9** (interface): In Python with 'schedule' installed, `schedule.run_pending()` executes jobs that are due: a job registered with `schedule.every(1).seconds.do(f)` is invoked when run_pending() is called after more than 1 second has elapsed.
 - **c10** (quantitative): The schedule README's PyPI version badge asserts that 'schedule' is published on PyPI (latest release 1.2.2).
 
-## Step 2, PLAN output: 10 probes (committed as `eval/probes/r04-schedule.json`; matched to this run by its evidence index)
+## Step 2: PLAN output, 10 probes (`eval/probes/r04-schedule.json`, matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `python -m venv /tmp/v && /tmp/v/bin/pip install --disable-pip-version-check schedule`
@@ -74,9 +74,9 @@ print('job invoked', len(hits), 'time(s) after 1.2s')"`
   - setup: `apt-get update -qq && apt-get install -y -qq curl >/dev/null && curl -s https://pypi.org/pypi/schedule/json -o /tmp/pypi.json`
   - commands: `python -c "import json; d=json.load(open('/tmp/pypi.json')); v=d['info']['version']; print('PyPI latest:', v); print('1.2.2 uploaded:', d['releases'].get('1.2.2',[{}])[0].get('upload_time')); assert '1.2.2' in d['releases'], '1.2.2 not on PyPI'; assert v=='1.2.2', 'latest is '+v+', not 1.2.2'"`
 
-## Step 3, EXECUTE on GitHub Actions: run `33207924062` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3: EXECUTE on GitHub Actions, run `33207924062` (artifacts: per-probe cmd, stdout, stderr, exit code)
 
-Transcript index (probe · command excerpt):
+Transcript index (probe, command, recorded output):
 ```
 p-c1 /tmp/v/bin/python -c 'import schedule; print("import ok, version", schedule.__version__)' && /tmp/v/bin/pip show schedule | grep -E '^(Name|Version):' && /tmp/v/bin/pip show schedule | grep -E '^Version: 1\.2\.2$' || echo 'NOTE: PyPI version differs from setup.py at pinned commit (1.2.2)'
 STDOUT NOTE: PyPI version differs from setup.py at pinned commit (1.2.2)
@@ -122,22 +122,22 @@ ci.yml-24-      - name: Install dependencies
 ci.yml-25-        run: pip install tox t
 ```
 
-## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
+## Step 4: ADJUDICATE, votes then verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | verified / verified / verified | **verified** | high | `p-c1`, phase_a_tail: 'Successfully installed schedule-1.2.2'; stderr: "AttributeError: module 'sc |
-| c2 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c2`, stdout shows only 'python-version: 3.11' for needs/docs/formatting/setuppy jobs; the test  |
-| c3 | refuted / refuted / refuted | **refuted** | high | `p-c3`, stdout: 'no status' (badge SVG renders 'no status', not 'passing'; grep -q 'passing' faile |
-| c4 | verified / verified / verified | **verified** | high | `p-c4`, stdout: 'schedule==1.2.2' / 'extra_packages=0' / 'Requires: (empty) confirmed' / '80K .../ |
-| c5 | verified / verified / verified | **verified** | high | `p-c5`, stdout: 'registered jobs: 1'; exit_code 0 |
-| c6 | verified / verified / verified | **verified** | high | `p-c6`, stdout: 'next_run: 2026-08-29 10:30:00' / 'ok'; exit_code 0 |
-| c7 | refuted / refuted / refuted | **refuted** | high | `p-c7`, stdout: 'pytz absent (fresh env confirmed)' / "RESULT: raised ModuleNotFoundError: No modu |
-| c8 | verified / verified / verified | **verified** | high | `p-c8`, stdout: 'next_run: 2026-08-28 20:28:17' / 'ok' (second==17 asserted); exit_code 0 |
-| c9 | verified / verified / verified | **verified** | high | `p-c9`, stdout: 'job invoked 1 time(s) after 1.2s' (and not invoked before due); exit_code 0 |
-| c10 | verified / verified / verified | **verified** | high | `p-c10`, stdout: 'PyPI latest: 1.2.2' / '1.2.2 uploaded: 2024-05-25T18:41:59'; exit_code 0 |
+| c1 | verified / verified / verified | **verified** | high | `p-c1`: phase_a_tail: 'Successfully installed schedule-1.2.2'; stderr: "AttributeError: module 'sc |
+| c2 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c2`: stdout shows only 'python-version: 3.11' for needs/docs/formatting/setuppy jobs; the test  |
+| c3 | refuted / refuted / refuted | **refuted** | high | `p-c3`: stdout: 'no status' (badge SVG renders 'no status', not 'passing'; grep -q 'passing' faile |
+| c4 | verified / verified / verified | **verified** | high | `p-c4`: stdout: 'schedule==1.2.2' / 'extra_packages=0' / 'Requires: (empty) confirmed' / '80K .../ |
+| c5 | verified / verified / verified | **verified** | high | `p-c5`: stdout: 'registered jobs: 1'; exit_code 0 |
+| c6 | verified / verified / verified | **verified** | high | `p-c6`: stdout: 'next_run: 2026-08-29 10:30:00' / 'ok'; exit_code 0 |
+| c7 | refuted / refuted / refuted | **refuted** | high | `p-c7`: stdout: 'pytz absent (fresh env confirmed)' / "RESULT: raised ModuleNotFoundError: No modu |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`: stdout: 'next_run: 2026-08-28 20:28:17' / 'ok' (second==17 asserted); exit_code 0 |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`: stdout: 'job invoked 1 time(s) after 1.2s' (and not invoked before due); exit_code 0 |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`: stdout: 'PyPI latest: 1.2.2' / '1.2.2 uploaded: 2024-05-25T18:41:59'; exit_code 0 |
 
-## Step 5, REPORT
-Overall score 75 · escalated to human: ['c2'] · model calls: nominal 4
+## Step 5: REPORT
+Overall score 75. Escalated to a human: ['c2']. Model calls: nominal 4. Verdicts disagreeing with audited truth: c2.
 
-_Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._
+Human checkpoint for this repository: no truth entry was changed after this run.

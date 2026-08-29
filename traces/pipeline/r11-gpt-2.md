@@ -1,9 +1,9 @@
-# Pipeline trajectory, r11-gpt-2 (proof `advanced-v2-1787952546`)
+# Pipeline trajectory: r11-gpt-2 (proof `advanced-v2-1787952546`)
 
-Repository https://github.com/openai/gpt-2 @ `9b63575ef427` · buyer question: _We want to reproduce GPT-2 sample generation from this repo today for a research baseline. Can the documented install path (DEVELOPERS.md) actually be executed on a current machine, and do the model downloads still work?_
+Repository https://github.com/openai/gpt-2 @ `9b63575ef427`. Buyer question: _We want to reproduce GPT-2 sample generation from this repo today for a research baseline. Can the documented install path (DEVELOPERS.md) actually be executed on a current machine, and do the model downloads still work?_
 
-## Step 1, instructions
-See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
+## Step 1: instructions
+See `arms/PROMPTS.md` (PLAN, EXECUTE, ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The documented TensorFlow dependency installs with the exact command `pip3 install tensorflow==1.12.0` (CPU) or `pip3 install tensorflow-gpu==1.12.0` (GPU).
 - **c2** (install): The remaining Python dependencies install with `pip3 install -r requirements.txt` (fire>=0.1.3, regex==2017.4.5, requests==2.21.0, tqdm==4.31.1).
@@ -16,7 +16,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c9** (quantitative): The README notes the originally published parameter counts (117M small, 345M medium) were wrong; the corrected sizes used by the code are 124M and 355M.
 - **c10** (environment): Setting the environment variable PYTHONIOENCODING=UTF-8 is documented as required to handle Unicode output from the sample scripts.
 
-## Step 2, PLAN output: 10 probes (committed as `eval/probes/r11-gpt-2-r1.json`; matched to this run by its evidence index)
+## Step 2: PLAN output, 10 probes (`eval/probes/r11-gpt-2-r1.json`, matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `python3 -c "import sys;print('python',sys.version.split()[0])"`
@@ -68,9 +68,9 @@ assert '124M' in docs and`
   - setup: `mkdir -p /w && cd /w && python3 -c "import urllib.request;sha='9b63575ef42771a015060c964af2c3da4cf7c8ab';[open(p,'wb').write(urllib.request.urlopen('https://raw.githubusercontent.com/openai/gpt-2/'+sha+'/'+p,timeout=30).read()) for p in ['README.md','DEVELOPERS.md']]" && grep -n 'PYTHONIOENCODING' R`
   - commands: `cd /w && grep -q 'export PYTHONIOENCODING=UTF-8' README.md DEVELOPERS.md && echo 'observed: instruction present in repo docs' || { echo 'observed: instruction absent from README.md/DEVELOPERS.md'; echo 'VERDICT_LINE: FAIL PYTHONIOENCODING instruction not found in docs'; exit 0; }; env -u PYTHONIOENC`
 
-## Step 3, EXECUTE on GitHub Actions: run `33212514162` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3: EXECUTE on GitHub Actions, run `33212514162` (artifacts: per-probe cmd, stdout, stderr, exit code)
 
-Transcript index (probe · command excerpt):
+Transcript index (probe, command, recorded output):
 ```
 p-c1 pip3 install tensorflow==1.12.0 > /tmp/tf.log 2>&1; rc=$?; grep -iE 'ERROR|No matching|Could not find|Successfully installed' /tmp/tf.log | tail -3; if [ $rc -eq 0 ]; then python3 -c 'import tensorflow as tf;print("observed tf.__version__=",tf.__version__)' && echo 'VERDICT_LINE: PASS pip3 install tensorflow==1.12.0 installed and imports' || echo 'VERDICT_LINE: FAIL tensorflow==1.12.0 installed but import failed'; else echo "observed pip rc=$rc python=$(python3 -c 'import sys;print(sys.version.split()[0])')"; echo 'VERDICT_LINE: FAIL pip3 install tensorflow==1.12.0 has no distribution for this
 STDOUT ERROR: Could not find a version that satisfies the requirement tensorflow==1.12.0 (from versions: 2.12.0rc0, 2.12.0rc1, 2.12.0, 2.12.1, 2.13.0rc0, 2.13.0rc1, 2.13.0rc2, 2.13.0, 2.13.1, 2.14.0rc0, 2.14.0rc1, 2.14.0, 2.14.1, 2.15.0rc0, 2.15.0rc1, 2.15.0, 2.15.0.post1, 2.15.1, 2.16.0rc0, 2.16.1, 2.16.2, 2.17.0rc0, 2.17.0rc1, 2.17.0, 2.17.1, 2.18.0rc0, 2.18.0rc1, 2.18.0rc2, 2.18.0, 2.18.1, 2.19.0rc0, 2.19.0, 2.19.1, 2.20.0rc0, 2.20.0, 2.21.0rc0, 2.21.0rc1, 2.21.0)
@@ -112,22 +112,22 @@ observed WITH var: rc=0 utf-8 é—中
 VERDICT_LINE: PASS export PYTHONIOENCODING=UT
 ```
 
-## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
+## Step 4: ADJUDICATE, votes then verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | refuted / refuted / refuted | **refuted** | high | `p-c1`, "ERROR: No matching distribution found for tensorflow==1.12.0" / "observed pip rc=1 python |
-| c2 | refuted / refuted / refuted | **refuted** | low | `p-c2`, "error: command 'gcc' failed: No such file or directory" / "ERROR: Failed building wheel f |
-| c3 | verified / verified / verified | **verified** | high | `p-c3`, "observed download rc=0" / "observed files ['checkpoint', 'encoder.json', 'hparams.json']" |
-| c4 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c4`, "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run gener |
-| c5 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c5`, "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run inter |
-| c6 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c6`, "observed docker binary: none" / "Dockerfile.cpu: FROM tensorflow/tensorflow:1.12.0-py3 -> |
-| c7 | verified / verified / verified | **verified** | high | `p-c7`, "observed status 200 archived= True pushed_at= 2024-08-14T10:50:53Z" / "VERDICT_LINE: PASS |
-| c8 | verified / verified / verified | **verified** | high | `p-c8`, "observed status 200 bytes 4975 first line: # GPT-2 model card" at pinned SHA 9b63575; exi |
-| c9 | verified / verified / verified | **verified** | high | `p-c9`, phase_a: "README.md:11: *Note that our original parameter counts were wrong ... small refe |
-| c10 | verified / verified / verified | **verified** | high | `p-c10`, phase_a: "DEVELOPERS.md:58:export PYTHONIOENCODING=UTF-8" / "observed WITHOUT var (C local |
+| c1 | refuted / refuted / refuted | **refuted** | high | `p-c1`: "ERROR: No matching distribution found for tensorflow==1.12.0" / "observed pip rc=1 python |
+| c2 | refuted / refuted / refuted | **refuted** | low | `p-c2`: "error: command 'gcc' failed: No such file or directory" / "ERROR: Failed building wheel f |
+| c3 | verified / verified / verified | **verified** | high | `p-c3`: "observed download rc=0" / "observed files ['checkpoint', 'encoder.json', 'hparams.json']" |
+| c4 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c4`: "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run gener |
+| c5 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c5`: "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run inter |
+| c6 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c6`: "observed docker binary: none" / "Dockerfile.cpu: FROM tensorflow/tensorflow:1.12.0-py3 -> |
+| c7 | verified / verified / verified | **verified** | high | `p-c7`: "observed status 200 archived= True pushed_at= 2024-08-14T10:50:53Z" / "VERDICT_LINE: PASS |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`: "observed status 200 bytes 4975 first line: # GPT-2 model card" at pinned SHA 9b63575; exi |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`: phase_a: "README.md:11: *Note that our original parameter counts were wrong ... small refe |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`: phase_a: "DEVELOPERS.md:58:export PYTHONIOENCODING=UTF-8" / "observed WITHOUT var (C local |
 
-## Step 5, REPORT
-Overall score 65 · escalated to human: ['c4', 'c5', 'c6'] · model calls: nominal 4
+## Step 5: REPORT
+Overall score 65. Escalated to a human: ['c4', 'c5', 'c6']. Model calls: nominal 4. Verdicts disagreeing with audited truth: c2, c4, c5, c6.
 
-_Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._
+Human checkpoint for this repository: c2: verified as written on a standard developer image (v1 probe: requirements installed on python:3.11 with build tools); on python:3.11-slim the regex sdist needs gcc and fails (v2 probe). Environment-dependent; the README assumes a normal dev machine, so verified stands, with this note.; c10: was refuted; the claim (Setting the environment variable PYTHONIOENCODING=UTF-8 is documented as require...) is about what DEVELOPERS.md documents, and probe p-c10 recorded the documented line verbatim (DEVELOPERS.md:58). Corrected from evidence; this correction goes AGAINST the draft, not for the pipeline.

@@ -1,9 +1,9 @@
-# Pipeline trajectory, r05-records (proof `advanced-v2-1787952546`)
+# Pipeline trajectory: r05-records (proof `advanced-v2-1787952546`)
 
-Repository https://github.com/kennethreitz/records @ `ea4273695cee` · buyer question: _We are evaluating records as the SQL layer for an internal analytics tool — do its connection-string examples, transaction API, and export features still work against a current SQLAlchemy, or will writes silently be lost?_
+Repository https://github.com/kennethreitz/records @ `ea4273695cee`. Buyer question: _We are evaluating records as the SQL layer for an internal analytics tool — do its connection-string examples, transaction API, and export features still work against a current SQLAlchemy, or will writes silently be lost?_
 
-## Step 1, instructions
-See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
+## Step 1: instructions
+See `arms/PROMPTS.md` (PLAN, EXECUTE, ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The package 'records' with pandas support can be installed with the recommended command `pipenv install records[pandas]` (equivalently `pip install "records[pandas]"`), after which `import records` succeeds.
 - **c2** (quickstart): In Python with 'records' installed, a database connection can be opened with a 'postgres://' URL scheme exactly as shown: `records.Database('postgres://...')`.
@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (quantitative): The records README's PyPI badge asserts that 'records' is published on PyPI (latest release 0.6.0).
 - **c11** (interface): In Python with 'records' installed, `records.Database()` with no argument reads the connection URL from the $DATABASE_URL environment variable.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r05-records-r1.json`; matched to this run by its evidence index)
+## Step 2: PLAN output, 11 probes (`eval/probes/r05-records-r1.json`, matched to this run by its evidence index)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `pip install -q "records[pandas]" 2>&1 | tail -3`
@@ -111,9 +111,9 @@ db = records.Database()
 print('OBSERVED db.db_url =', getattr(db, 'db_url', None))
 `
 
-## Step 3, EXECUTE on GitHub Actions: run `33209465292` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3: EXECUTE on GitHub Actions, run `33209465292` (artifacts: per-probe cmd, stdout, stderr, exit code)
 
-Transcript index (probe · command excerpt):
+Transcript index (probe, command, recorded output):
 ```
 p-c1 python - <<'EOF' || echo "VERDICT_LINE: FAIL pip install records[pandas] or import records failed (see above)"
 import importlib.metadata as m
@@ -194,23 +194,23 @@ OBSERVED no-env control: ValueError You must provide a db_url.
 VERDICT_LINE: P
 ```
 
-## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
+## Step 4: ADJUDICATE, votes then verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | verified / verified / verified | **verified** | high | `p-c1`, OBSERVED records=0.6.0 pandas=3.0.5 tablib=3.10.0 / VERDICT_LINE: PASS pip install records |
-| c2 | refuted / refuted / refuted | **refuted** | high | `p-c2`, OBSERVED postgres://   -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgr |
-| c3 | verified / verified / verified | **verified** | high | `p-c3`, OBSERVED rows[0] = <Record {"username": "model-t", "active": 1, "name": "Henry Ford"}> / O |
-| c4 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c4`, stderr: sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked [SQ |
-| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5`, OBSERVED transaction object = _GeneratorContextManager has commit/rollback = False False / |
-| c6 | verified / verified / verified | **verified** | high | `p-c6`, OBSERVED first() = <Record {"a": 1}> Record / OBSERVED all() = list 2 ['Record', 'Record'] |
-| c7 | verified / verified / verified | **verified** | high | `p-c7`, OBSERVED csv = 'username,active\r\nmodel-t,1\r\n' / VERDICT_LINE: PASS export("csv") retur |
-| c8 | verified / verified / verified | **verified** | high | `p-c8`, OBSERVED type = pandas.DataFrame shape = (1, 2) / VERDICT_LINE: PASS export("df") returns  |
-| c9 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c9`, OBSERVED mssql+pyodbc://u:p@h/db -> ModuleNotFoundError: No module named 'pyodbc' / OBSERV |
-| c10 | verified / verified / verified | **verified** | high | `p-c10`, OBSERVED pypi status=200 name=records version=0.6.0 / OBSERVED badge status=200 contains_v |
-| c11 | verified / verified / verified | **verified** | high | `p-c11`, OBSERVED db.db_url = sqlite:///:memory: / OBSERVED select 1 -> 1 / OBSERVED no-env control |
+| c1 | verified / verified / verified | **verified** | high | `p-c1`: OBSERVED records=0.6.0 pandas=3.0.5 tablib=3.10.0 / VERDICT_LINE: PASS pip install records |
+| c2 | refuted / refuted / refuted | **refuted** | high | `p-c2`: OBSERVED postgres://   -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgr |
+| c3 | verified / verified / verified | **verified** | high | `p-c3`: OBSERVED rows[0] = <Record {"username": "model-t", "active": 1, "name": "Henry Ford"}> / O |
+| c4 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c4`: stderr: sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked [SQ |
+| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5`: OBSERVED transaction object = _GeneratorContextManager has commit/rollback = False False / |
+| c6 | verified / verified / verified | **verified** | high | `p-c6`: OBSERVED first() = <Record {"a": 1}> Record / OBSERVED all() = list 2 ['Record', 'Record'] |
+| c7 | verified / verified / verified | **verified** | high | `p-c7`: OBSERVED csv = 'username,active\r\nmodel-t,1\r\n' / VERDICT_LINE: PASS export("csv") retur |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`: OBSERVED type = pandas.DataFrame shape = (1, 2) / VERDICT_LINE: PASS export("df") returns  |
+| c9 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c9`: OBSERVED mssql+pyodbc://u:p@h/db -> ModuleNotFoundError: No module named 'pyodbc' / OBSERV |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`: OBSERVED pypi status=200 name=records version=0.6.0 / OBSERVED badge status=200 contains_v |
+| c11 | verified / verified / verified | **verified** | high | `p-c11`: OBSERVED db.db_url = sqlite:///:memory: / OBSERVED select 1 -> 1 / OBSERVED no-env control |
 
-## Step 5, REPORT
-Overall score 73 · escalated to human: ['c4', 'c9'] · model calls: nominal 4
+## Step 5: REPORT
+Overall score 73. Escalated to a human: ['c4', 'c9']. Model calls: nominal 4. Verdicts disagreeing with audited truth: c4, c9.
 
-_Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._
+Human checkpoint for this repository: c5: was unverifiable; Executed: Database.transaction() returns _GeneratorContextManager with no commit/rollback; documented `t.commit()` raises (advanced-v2 p-c5). Draft had guessed unverifiable.

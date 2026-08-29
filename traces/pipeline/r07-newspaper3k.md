@@ -1,9 +1,9 @@
-# Pipeline trajectory, r07-newspaper3k (proof `advanced-v2-1787952546`)
+# Pipeline trajectory: r07-newspaper3k (proof `advanced-v2-1787952546`)
 
-Repository https://github.com/codelucas/newspaper @ `1618b547f31c` · buyer question: _We are acquiring a news-monitoring pipeline built on newspaper3k — does the library still install and import cleanly on a current Python with current lxml, is its CI badge meaningful, and do the README's scraping examples still work?_
+Repository https://github.com/codelucas/newspaper @ `1618b547f31c`. Buyer question: _We are acquiring a news-monitoring pipeline built on newspaper3k — does the library still install and import cleanly on a current Python with current lxml, is its CI badge meaningful, and do the README's scraping examples still work?_
 
-## Step 1, instructions
-See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
+## Step 1: instructions
+See `arms/PROMPTS.md` (PLAN, EXECUTE, ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): Installing the package with `pip3 install newspaper3k` on a current Python yields a working library: `import newspaper` and `from newspaper import Article` succeed.
 - **c2** (environment): Newspaper (newspaper3k) is a Python 3 library; the python2 branch is deprecated and the python2 package on PyPI is named 'newspaper', not 'newspaper3k'.
@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent
 - **c10** (quickstart): With newspaper3k installed, `newspaper.build('http://cnn.com')` returns a Source object whose .articles list contains Article objects with populated .url attributes.
 - **c11** (quantitative): The newspaper README claims the Swiftproxy residential-proxy service offers '80M+ residential IPs across 195+ countries' and 'a 99.89% success rate' for use with newspaper3k pipelines.
 
-## Step 2, PLAN output: 11 probes (committed as `eval/probes/r07-newspaper3k.json`; matched to this run by its evidence index)
+## Step 2: PLAN output, 11 probes (`eval/probes/r07-newspaper3k.json`, matched to this run by its evidence index)
 
 - `p-c1` image `python:3.12-slim` network `install-only`
   - setup: `python3 -m venv /tmp/v && /tmp/v/bin/pip install --quiet newspaper3k 2>&1 | tail -5; echo "pip_rc=${PIPESTATUS[0]}" && /tmp/v/bin/pip freeze | grep -iE '^(newspaper3k|lxml|lxml-html-clean|nltk|Pillow)=' || true`
@@ -82,9 +82,9 @@ assert all(u.startswith('http') and 'cnn' in u for u in d['urls']),`
   - setup: `apt-get update -qq >/dev/null && apt-get install -y -qq curl >/dev/null && curl -sf https://raw.githubusercontent.com/codelucas/newspaper/1618b547f31c2d1fd19ae3b6afd8f7542dd02074/README.rst -o /tmp/README.rst; echo "readme_rc=$?" && curl -sL -A 'Mozilla/5.0' --max-time 30 -o /tmp/swift.html -w 'vend`
   - commands: `echo '== claims of success rate in README at pinned commit =='; grep -noE '[0-9]+\.[0-9]+% success rate|[0-9]+M\+ residential IPs across [0-9]+\+ countries' /tmp/README.rst && echo '== vendor page: is the number present, is any methodology present =='; echo "bytes=$(wc -c < /tmp/swift.html)"; echo "`
 
-## Step 3, EXECUTE on GitHub Actions: run `33209972786` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3: EXECUTE on GitHub Actions, run `33209972786` (artifacts: per-probe cmd, stdout, stderr, exit code)
 
-Transcript index (probe · command excerpt):
+Transcript index (probe, command, recorded output):
 ```
 p-c1 /tmp/v/bin/python --version && /tmp/v/bin/python -c 'import newspaper; print("import newspaper OK", newspaper.__version__)' && /tmp/v/bin/python -c 'from newspaper import Article; print("from newspaper import Article OK")' && /tmp/v/bin/python -c 'from newspaper import Article; print("C1_OK")' 2>&1 | grep -E 'C1_OK|ModuleNotFoundError|ImportError|lxml.html.clean'
 STDOUT Python 3.12.14
@@ -143,23 +143,23 @@ NOTE: installing lxml[html_clean] so this probe tests build(), not c1 import fai
 {'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', 'https://www.cnn.com/weather/video', 'https://www.cnn.com/audio/podcasts/all-the
 ```
 
-## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
+## Step 4: ADJUDICATE, votes then verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | refuted / refuted / refuted | **refuted** | high | `p-c1`, Python 3.12.14 ... pip_rc=0, newspaper3k==0.2.8, lxml==6.1.2 installed; then `import newsp |
-| c2 | verified / verified / verified | **verified** | high | `p-c2`, newspaper3k 0.2.8 classifiers ['Programming Language :: Python :: 3'] C2_PY3_OK; PyPI 'new |
-| c3 | refuted / refuted / refuted | **refuted** | high | `p-c3`, http=200 final_url=https://api.travis-ci.com/codelucas/newspaper.svg (travis-ci.org redire |
-| c4 | refuted / refuted / refuted | **refuted** | high | `p-c4`, html_len 102350; title 'New Year, new laws: Obamacare, pot, guns and drones'; authors ['Cn |
-| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5`, tokenizers/punkt -> /root/nltk_data/tokenizers/punkt; corpora/stopwords present; text_len  |
-| c6 | refuted / refuted / refuted | **refuted** | low | `p-c6`, bare interpreter: ModuleNotFoundError: No module named 'nltk' bare_rc=1; after pip install |
-| c7 | refuted / refuted / refuted | **refuted** | high | `p-c7`, Debian 13 (trixie), update_rc=0; verbatim install rc=100; "E: Package 'libpng12-dev' has n |
-| c8 | verified / verified / verified | **verified** | high | `p-c8`, rc=0; 'Your available languages are:' HEADER_OK; has ar be bg da de el en es; language row |
-| c9 | verified / verified / verified | **verified** | high | `p-c9`, <class 'newspaper.mthreading.NewsPool'> newspaper.mthreading; methods ['config', 'join', ' |
-| c10 | verified / verified / verified | **verified** | high | `p-c10`, {'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', .. |
-| c11 | verified / unverifiable / unverifiable | **unverifiable** | low | `p-c11`, README.rst line 251: "80M+ residential IPs across 195+ countries" and "99.89% success rate |
+| c1 | refuted / refuted / refuted | **refuted** | high | `p-c1`: Python 3.12.14 ... pip_rc=0, newspaper3k==0.2.8, lxml==6.1.2 installed; then `import newsp |
+| c2 | verified / verified / verified | **verified** | high | `p-c2`: newspaper3k 0.2.8 classifiers ['Programming Language :: Python :: 3'] C2_PY3_OK; PyPI 'new |
+| c3 | refuted / refuted / refuted | **refuted** | high | `p-c3`: http=200 final_url=https://api.travis-ci.com/codelucas/newspaper.svg (travis-ci.org redire |
+| c4 | refuted / refuted / refuted | **refuted** | high | `p-c4`: html_len 102350; title 'New Year, new laws: Obamacare, pot, guns and drones'; authors ['Cn |
+| c5 | refuted / refuted / refuted | **refuted** | high | `p-c5`: tokenizers/punkt -> /root/nltk_data/tokenizers/punkt; corpora/stopwords present; text_len  |
+| c6 | refuted / refuted / refuted | **refuted** | low | `p-c6`: bare interpreter: ModuleNotFoundError: No module named 'nltk' bare_rc=1; after pip install |
+| c7 | refuted / refuted / refuted | **refuted** | high | `p-c7`: Debian 13 (trixie), update_rc=0; verbatim install rc=100; "E: Package 'libpng12-dev' has n |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`: rc=0; 'Your available languages are:' HEADER_OK; has ar be bg da de el en es; language row |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`: <class 'newspaper.mthreading.NewsPool'> newspaper.mthreading; methods ['config', 'join', ' |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`: {'ok': True, 'type': 'Source', 'n': 378, 'urls': ['https://www.cnn.com/business/media', .. |
+| c11 | verified / unverifiable / unverifiable | **unverifiable** | low | `p-c11`: README.rst line 251: "80M+ residential IPs across 195+ countries" and "99.89% success rate |
 
-## Step 5, REPORT
-Overall score 41 · escalated to human: ['c11'] · model calls: nominal 4
+## Step 5: REPORT
+Overall score 41. Escalated to a human: ['c11']. Model calls: nominal 4. Verdicts disagreeing with audited truth: c6, c8, c9.
 
-_Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._
+Human checkpoint for this repository: c4: was unverifiable; README example output stale: executed authors == ['Cnn Wire'], README states a different author (advanced-v1 p-c4 AssertionError authors mismatch).; c5: was unverifiable; nlp() raises LookupError on current nltk despite punkt+stopwords present (advanced-v1 p-c5 stderr) — the README's download_corpora path no longer suffices.; c10: was unverifiable; Live probe with network built Source(cnn.com): 369 article urls (advanced-v1 p-c10). Draft had marked unverifiable.
