@@ -1,41 +1,27 @@
-# repo-testify — make the repository testify
+# repo-testify: make the repository testify
 [![repro](https://github.com/Nathanjr123/repo-testify/actions/workflows/repro.yml/badge.svg)](https://github.com/Nathanjr123/repo-testify/actions/workflows/repro.yml) [![probe](https://github.com/Nathanjr123/repo-testify/actions/workflows/probe.yml/badge.svg)](https://github.com/Nathanjr123/repo-testify/actions/workflows/probe.yml) ![license](https://img.shields.io/badge/license-MIT-green)
-<!-- Every number in this file is generated from proof/build_proof.json. Hand-typed numbers are a bug. -->
+<!-- Every number in this file is generated from proof/build_proof.json. A hand-typed number is a bug. -->
 
-**One line:** most tools *read* a repository and opine. This one extracts the repository's own claims — install commands, quickstart snippets, supported versions, features, benchmarks — and **executes them** in a clean environment, returning a per-claim verdict ledger where every verdict cites a recorded artifact, and anything the sandbox cannot settle is escalated to a human rather than guessed.
+Most tools read a repository and give an opinion. This one takes the claims a README makes (install command, quickstart snippet, supported Python versions, features, benchmarks), runs each of them in a clean container, and returns a verdict per claim with the recorded evidence attached. Anything the sandbox cannot settle is handed to a human instead of guessed.
 
-## Start here (60 seconds)
-`./repro.sh` regenerates every number below from `proof/` and asserts they match · **RESULTS.md** the table · **CHANGELOG.md** every experiment with its proof id, removed ones included · **DESIGN.md** why each component exists (cited) · **DECISIONS.md** ambiguities and tradeoffs, truth-vs-taste declared · **arms/PROMPTS.md** the exact instructions that shape each agent · **traces/pipeline/** one trajectory per repository (instructions → probes → CI run → votes → verdict) · **traces/** the authoring trajectory.
+Entry for the micro1 Agentic Workflows Hackathon, August 2026. Built by one person with a coding agent; the tooling is disclosed in the last section.
 
-## The four questions
-- *Who has this problem?* An engineer doing due diligence on someone else's repository (below).
-- *What bottleneck makes it worth solving?* Checking a README's promises by hand is slow, and different reviewers reach different conclusions from the same signals.
-- *Does the agent solve it well?* Claim accuracy 0.07 → 0.71 on the public split with every verdict tied to a recorded artifact; the held-out split is run once and reported unchanged.
-- *Can another person reproduce it?* `./repro.sh` from a clean clone; CI does exactly that in the shipped Docker image on every push.
-
-## Intended user
-An engineer doing technical due diligence on a repository they did not write: a team pricing an acquisition of a private codebase, a lead deciding whether to adopt a dependency, a client receiving a contractor handover. They have hours, not days, and the cost of being wrong is high.
-
-## The bottleneck
-A README is a promise, not a record. The buyer must clone, build, run the quickstart, run the tests, check the claimed Python versions, and chase every "supports X" — and the base rate of broken promises is high and well documented: only 32.3% of code from 601 systems papers built within 30 minutes (Collberg & Proebsting, CACM 2016); of 1.4M Jupyter notebooks on GitHub, 24% execute and about 4% reproduce their results (Pimentel et al., MSR 2019); the best LLM agent set up 16.3% of research repositories end to end (SUPER, EMNLP 2024). Manual diligence is slow, and — worse — reviewers interpret the same signals differently, so the conclusion depends on who did the reading. A green CI badge does not mean the quickstart runs.
-
-## Why solving it is valuable
-A repeatable, evidence-linked verdict per claim turns "is this repo good?" from an opinion into an audit. The buyer negotiates on refuted claims instead of vibes; the reviewer's time goes to the escalated claims only. The same need appears wherever many repositories must be judged on what they *claim* — dependency reviews, grant and paper artifact evaluation, and, not incidentally, hackathons whose every entry promises "reproducible from a clean clone". Related tools stop short of this: OpenSSF Scorecard measures process hygiene, PR-review bots review diffs, and the closest research (READU, 2026) checks READMEs against code *statically*. We found no tool that executes a repository's own claims and reports which ones survive.
-
-## Ambiguities we named and how we resolved them
-- *What counts as a claim?* Anything a buyer could be misled by that a probe can settle: install, environment, quickstart, interface, test/CI, quantitative. Marketing adjectives are not claims.
-- *Is a claim true "on some platforms"?* We verdict against the environment the README implies (Linux, current CPython); platform-conditional truths are recorded as refuted-with-note, and the note is shown.
-- *Who decides overall quality?* A published rubric with weights, not a holistic score — so a second reviewer reaches the same number from the same evidence. Where a judgment is taste rather than truth, DECISIONS.md says so.
-
-## The baseline and the solution
-**Baseline** — the reasonable basic way a diligent engineer works today with an LLM: one prompt with the README and file tree, asked for the same verdict ledger. No execution.
-**Solution** — a code-orchestrated pipeline (DESIGN.md): map → plan one probe per claim under a fixed contract (README's own steps only; a machine-readable `VERDICT_LINE`) → execute in a two-phase Docker sandbox on GitHub Actions (network for install, none for probes unless the claim is about a URL; every run is a public log; one repair round for environment failures) → adjudicate every claim from the transcripts with a 3-vote majority → cross-check every cited exit code against the recorded log → report with escalations. Same cases, same claim lists, same schema for both arms.
-
-## Measured improvement
+## Results at a glance
 <!-- RESULTS:START -->
-_Generated by `python3 eval/render_readme.py` from proof/build_proof.json — public split (7 repos, 75 claims)._
+_Generated by `python3 eval/render_readme.py` from proof/build_proof.json. Public split: 7 repositories, 75 claims._
 
-| arm | claim accuracy | 1−confident-wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |
+The format the challenge asks for, public split:
+
+| Metric | Simple baseline | Agent solution | Change |
+|---|---|---|---|
+| Primary outcome: claim accuracy | 0.07 | 0.71 | +0.64 (10x) |
+| Composite score (published rubric) | 0.350 | 0.817 | +0.467 |
+| Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
+| Cost per task | 1 model call, 0.9 min | 4 model calls (nominal), 13.2 min | +3 calls |
+
+Full table:
+
+| arm | claim accuracy | not confidently wrong | evidence valid | score agreement | settled | composite | model calls/repo | wall/repo | human min/repo | cases ok |
 |---|---|---|---|---|---|---|---|---|---|---|
 | baseline (run 1) | 0.074 | 0.771 | 0.260 | 0.811 | 0.16 | **0.350** (capped) | 1* | 0.9 min | pending audit | 7/7 |
 | baseline (run 2) | 0.066 | 0.783 | 0.246 | 0.745 | 0.15 | **0.347** | 1* | 0.9 min | pending audit | 7/7 |
@@ -46,57 +32,103 @@ _Generated by `python3 eval/render_readme.py` from proof/build_proof.json — pu
 
 Baseline-vs-baseline spread (noise floor): **0.003** composite; claim-accuracy spread 0.008.
 
-\* nominal call count per repository (plan + ≤1 repair + 3 votes; baseline 1); exact counts are persisted for runs from v3 onward.
+\* nominal call count per repository (plan, at most one repair, three votes; baseline 1). Exact counts are persisted for runs from v3 onward.
 <!-- RESULTS:END -->
-**Primary metric: per-claim verdict accuracy** against audited ground truth (pre-registered as macro-F1; changed to accuracy in iteration 3 because per-case macro-F1 is degenerate on single-class repositories — disclosed in CHANGELOG). Secondary rows: not-confidently-wrong (abstention is the honest exit), evidence validity (every cited artifact must exist), score agreement with the reviewer's rubric score. **Cost per task** = model calls per repository (baseline 1; pipeline 4–5: plan, ≤1 repair, 3 votes) and wall time; CI compute is free on public runners. **Human time per task** = the manual-diligence datum measured during the human audit (two repositories timed end to end) — reported in the held-out section once the audit closes. The held-out split (7 repositories incl. two designed hard cases) is run once, after the audit, and its rows are appended to this table by the same generator.
 
-### The challenging case (public split) and what it revealed
-`r11-gpt-2` — OpenAI's archived GPT-2 repository: a famous, tiny codebase whose documented install (`pip3 install tensorflow==1.12.0`) cannot succeed on any current Python. Pipeline v2 scored only 0.50 claim accuracy here (its worst), and the reason is instructive: once the documented prerequisite failed, the adjudicator marked every dependent claim "unverifiable" instead of "refuted as written". The case revealed that our verdict vocabulary needed a rule, not a better model — *a documented prerequisite that fails as written refutes everything downstream* — which became adjudicator v3 (CHANGELOG iteration 8) and is measured on the held-out split. The two held-out hard cases (`keyboard`: mocked-green tests with a false platform claim; `simplejson`: every test passes, the headline "fast" claim is a benchmark question) are reported once, unchanged, in the held-out rows.
+## Where to find each judging criterion
+| Criterion | Where it lives |
+|---|---|
+| Problem & User Value | "Who has this problem" and "The bottleneck" below; the buyer question in every case file |
+| Agent Solution & Engineering | DESIGN.md (each component and the evidence for it), arms/PROMPTS.md (the exact instructions each agent gets), the two ablations in the table above |
+| End to End Quality | traces/pipeline/*.md (one finished report per repository), the solution video |
+| Measured Improvement | The table above, HYPOTHESIS.md (pre-registered, outcome recorded), CHANGELOG.md (every experiment with its proof id) |
+| Reproducibility | `./repro.sh` from a clean clone; CI runs it inside the shipped Docker image on every push |
+| Hot Take / Insights | "Main failure mode" and "Hot take" below |
 
-## Improvement changelog
-CHANGELOG.md — one row per experiment, evidence-linked, removed experiments included.
+## Submission package
+| Deliverable | File(s) |
+|---|---|
+| Complete solution code and Improvement Changelog | this repository; CHANGELOG.md |
+| Reproduction guide | "Reproduction guide" below; `repro.sh`; `Dockerfile` |
+| Solution video | VIDEO-SCRIPT.md (recording linked in the submission form) |
+| Agent trajectories | traces/README.md, traces/pipeline/*.md, the authoring trajectory in traces/ |
+
+## The four questions
+- Who has this problem? An engineer doing due diligence on a repository someone else wrote.
+- What bottleneck makes it worth solving? Checking a README's promises by hand is slow, and two reviewers reading the same signals reach different conclusions.
+- Does the agent solve it well? Claim accuracy went from 0.07 to 0.71 on the public split, with every verdict tied to a recorded artifact. The held-out split is run once and reported as is.
+- Can another person reproduce the result? `./repro.sh` from a clean clone. CI does exactly that in the shipped Docker image on every push.
+
+## Who has this problem
+An engineer doing technical due diligence on code they did not write. A team pricing the purchase of a private codebase. A lead deciding whether to adopt a dependency. A client taking a handover from a contractor. They have hours, not days, and getting it wrong is expensive.
+
+## The bottleneck
+A README is a promise, not a record. To check it, the buyer has to clone, build, run the quickstart, run the tests, check the claimed Python versions, and chase every "supports X". The base rate of broken promises is high and well documented. Only 32.3% of the code from 601 systems papers built within 30 minutes (Collberg and Proebsting, CACM 2016). Of 1.4 million Jupyter notebooks on GitHub, 24% execute and about 4% reproduce their results (Pimentel et al., MSR 2019). The best LLM agent set up 16.3% of research repositories end to end (SUPER, EMNLP 2024). Manual diligence is slow, and reviewers interpret the same signals differently, so the conclusion depends on who did the reading. A green CI badge does not tell you the quickstart runs.
+
+## Why solving it is valuable
+A repeatable, evidence-linked verdict per claim turns "is this repo any good?" from an opinion into an audit. The buyer negotiates on refuted claims instead of impressions. The reviewer's time goes only to the claims that were escalated. Existing tools stop short of this: OpenSSF Scorecard measures process hygiene, PR review bots review diffs, and the closest research (READU, 2026) checks READMEs against code statically. We found no tool that executes a repository's own claims and reports which ones survive. The same need shows up anywhere many repositories are judged on what they claim: dependency reviews, artifact evaluation for papers and grants, and hackathons where every entry promises "reproducible from a clean clone".
+
+## Ambiguities we named and how we resolved them
+- What counts as a claim? Anything a buyer could be misled by that a probe can settle: install, environment, quickstart, interface, test/CI, quantitative. Marketing adjectives are not claims.
+- Is a claim true if it only works on some platforms? We judge against the environment the README implies (Linux, current CPython). Platform-conditional truths are recorded as refuted with a note, and the note is shown.
+- Who decides overall quality? A published rubric with weights, so a second reviewer gets the same number from the same evidence. Where a call is taste rather than truth, DECISIONS.md says so.
+
+## The simple baseline and the agent solution
+Baseline: what a diligent engineer does today with an LLM. One prompt with the README and the file tree, asked for the same verdict ledger. No execution. See arms/baseline.
+
+Agent solution: a code-orchestrated pipeline (DESIGN.md). Map the repository. Plan one probe per claim under a fixed contract (the README's own steps only, and a machine-readable VERDICT_LINE at the end). Execute the probes in a two-phase Docker sandbox on GitHub Actions: network on for the install, off for the probe unless the claim is about a URL. One repair round for environment failures. Adjudicate every claim from the transcripts with a three-vote majority. Cross-check each cited exit code against the recorded log. Report, with escalations. Same cases, same claim lists, same output schema for both arms. The only difference in resources is that the pipeline can run code and the baseline cannot; that difference is the thing being measured.
+
+## Measured improvement
+The primary metric is per-claim verdict accuracy against audited ground truth. It was pre-registered as macro-F1 and changed to accuracy in iteration 3, because per-case macro-F1 is degenerate on repositories where every claim has the same verdict. The change is disclosed in CHANGELOG.md. Secondary rows: not confidently wrong (abstaining is the honest exit), evidence validity (every cited artifact must exist), and agreement with the reviewer's rubric score.
+
+Cost per task is model calls per repository (baseline 1; pipeline 4 to 5: plan, at most one repair, three votes) plus wall time. CI compute is free on public runners. Human time per task is measured during the human audit, on two repositories timed end to end, and is reported once the audit closes. The held-out split (7 repositories, including two hard cases built for this) is run once after the audit, and the same generator appends its rows to the table.
+
+### The hard case on the public split and what it revealed
+`r11-gpt-2` is OpenAI's archived GPT-2 repository: famous, tiny, and its documented install (`pip3 install tensorflow==1.12.0`) cannot succeed on any current Python. Pipeline v2 scored 0.50 claim accuracy here, its worst. The reason is instructive. Once the documented prerequisite failed, the adjudicator marked every dependent claim "unverifiable" instead of "refuted as written". What the case revealed was a missing rule rather than a weak model: a documented prerequisite that fails as written refutes everything downstream. That rule became adjudicator v3 (CHANGELOG iteration 8) and is measured on the held-out split. The two held-out hard cases (`keyboard`, whose mocked tests pass anywhere while a platform claim is false; `simplejson`, where every test passes and the headline "fast" claim is a benchmark question) are reported once, unchanged, in the held-out rows.
+
+## Improvement Changelog
+CHANGELOG.md. One row per experiment, each tied to a proof id. Removed experiments are kept, with what they taught.
 
 ## Main failure mode
-**The sandbox being helpful corrupts the verdict.** Reading the 15 remaining disagreements between pipeline v2 and audited truth (all from recorded probe output — CHANGELOG "Truth audit 2"), the largest class was not wrong execution but *lenient* execution: the planner quietly added a dependency the README never mentions (`lxml_html_clean` for newspaper3k) so that `import newspaper` succeeded, and the adjudicator then verified two downstream claims that fail *as written*; in three other cases a documented prerequisite failed to install (`tensorflow==1.12.0`) and the adjudicator abstained instead of refuting the claims that depend on it. Both are the same error: the pipeline answered "could this be made to work?" when the buyer asked "does it work as promised?". The fix is a rule, not a model: probes may only use steps the README documents, and a documented prerequisite that fails as written refutes everything downstream. A secondary mode — the adjudicator contradicting the probe's own `VERDICT_LINE: PASS` once in 75 claims — is why the verdict line exists at all: the interface, not the model, carries the reliability.
+The sandbox being helpful corrupts the verdict. When we read the 15 remaining disagreements between pipeline v2 and audited truth (all from recorded probe output; see "Truth audit 2" in the changelog), the largest class was lenient execution rather than wrong execution. The planner quietly added a dependency the README never mentions (`lxml_html_clean` for newspaper3k) so that `import newspaper` succeeded, and the adjudicator then verified two downstream claims that fail as written. In three other cases a documented prerequisite failed to install (`tensorflow==1.12.0`) and the adjudicator abstained instead of refuting the claims that depend on it. Both are the same mistake: the pipeline answered "could this be made to work?" when the buyer asked "does it work as promised?". The fix is a rule, not a bigger model. Probes may only use steps the README documents, and a documented prerequisite that fails as written refutes everything downstream. A smaller second mode, the adjudicator contradicting the probe's own `VERDICT_LINE: PASS` once in 75 claims, is the reason the verdict line exists at all. The interface carries the reliability, not the model.
 
-A reproducible repro of the primary mode: case `r07-newspaper3k`, claims c8/c9, proof `advanced-v2` — compare the probe's phase-A install log against the README's install line.
+To reproduce the primary mode: case `r07-newspaper3k`, claims c8 and c9, proof `advanced-v2`. Compare the probe's phase-A install log with the README's install line.
 
 ## Hot take
-**A green CI badge is a Goodharted proxy for "the README is true", and the honest repos prove it.** On the public split, every repository whose test/CI claims fully verified — the ones a buyer would trust on sight — still had at least one refuted README claim (2 of 2; heldout results extend the count). humanize's own doctest promises `'16 minutes'` and returns `'17 minutes'`; tabulate documents an install switch that does nothing and a benchmark table that contradicts its prose. Tests verify what the maintainers chose to test; the README is written for readers, drifts silently, and is never executed — until something executes it. The practical lesson for building agents: the cheapest reliable component in this pipeline was not the model or the votes (k=1 vs k=3 sat inside the noise floor) but **an execution result the model could not argue with**. Give an agent a verifier and it becomes careful; give it a README and it becomes confident.
+A green CI badge is a Goodharted proxy for "the README is true", and the honest repositories are the proof. On the public split, every repository whose test and CI claims fully verified, the ones a buyer trusts on sight, still had at least one refuted README claim (2 of 2; the held-out rows extend the count). humanize's own doctest promises `'16 minutes'` and returns `'17 minutes'`. tabulate documents an install switch that does nothing and a benchmark table that contradicts its own prose. Tests verify what the maintainers chose to test. The README is written for readers, drifts quietly, and never gets executed, until something executes it. For anyone building agents, the cheapest reliable component in this pipeline turned out to be an execution result the model could not argue with, ahead of the model itself and ahead of voting (k=1 against k=3 sat inside the noise floor). Give an agent a verifier and it gets careful. Give it a README and it gets confident.
 
 ## What we did not attempt
-Claim *discovery* is not on the scored path — the claim list per repository is fixed so two people scoring the same run get the same number; the extractor exists for real-world use but its recall is not evaluated here. No embedding retrieval, no conversing agents, no ungrounded self-review passes (DESIGN.md explains why). No Windows or macOS execution: verdicts are Linux verdicts.
+Claim discovery is not on the scored path. The claim list per repository is fixed so that two people scoring the same run get the same number; an extractor exists for real use but its recall is not evaluated here. No embedding retrieval, no agents talking to each other, no self-review passes without new evidence (DESIGN.md explains why). No Windows or macOS execution: these are Linux verdicts.
 
 ## Reproduction guide
-Three levels, from a clean clone. Level 1 needs only Python 3.10+ and reproduces every number in this README from the shipped proof; Level 2 re-runs the sandbox probes on GitHub Actions (needs a fork + `gh` login); Level 3 re-runs the LLM arms (needs a Claude Code login — the arms call `claude -p`).
+Three levels, all from a clean clone. Level 1 needs only Python 3.10+ and reproduces every number in this README from the shipped proof. Level 2 re-runs the sandbox probes on GitHub Actions (a fork and a `gh` login). Level 3 re-runs the model arms (a Claude Code login; the arms call `claude -p`).
 
-**Level 1 — verify and regenerate the results (≈10 s, $0)**
+Level 1, verify and regenerate the results (about 10 seconds, no cost):
 ```
 git clone https://github.com/Nathanjr123/repo-testify.git && cd repo-testify
-./repro.sh     # self-test + case-contract validator + scorer sanity cell + regenerate RESULTS.md and README tables
-               # from proof/, then replay one run and assert byte-identical output. Exit 0 = reproduced.
+./repro.sh     # tests, case-contract validator, scorer sanity cell, regenerate RESULTS.md and the README tables
+               # from proof/, then replay one run and assert byte-identical output. Exit 0 means reproduced.
 python3 -m eval.replay --run <id>      # re-score any run id's persisted outputs through the current scorer
 ```
-Every table row carries its proof id, git hash and UTC timestamp; `replay` re-scores persisted arm outputs through the current scorer and fails loudly on drift.
+Every table row carries its proof id, git hash and UTC timestamp. `replay` re-scores persisted arm outputs through the current scorer and fails loudly on drift.
 
 Expected output of `./repro.sh` (last lines):
 ```
-ok test_perfect … ok test_crashed_case_is_zero_not_hidden
+ok test_perfect ... ok test_crashed_case_is_zero_not_hidden
 14 case files checked / all valid
 sanity cell ok: 1.0
 README results block rendered
 replay ok: advanced-v2-rescored-<ts> raw 0.817
 REPRO OK: README/RESULTS regenerate byte-identically from proof
 ```
-A per-repository report looks like `traces/pipeline/r01-humanize.md` (rendered from the persisted report: verdict, confidence, votes, cited artifact per claim).
+A finished per-repository report looks like `traces/pipeline/r01-humanize.md`: verdict, confidence, votes and the cited artifact for every claim.
 
-**Level 2 — re-execute the probes (≈2–15 min per repo on ubuntu-latest, $0 on public repos)**
-Fork, `gh workflow run probe.yml -f probes_path=eval/probes/r01-humanize.json`, download the artifact: per-probe `cmd.txt`, `stdout.log`, `stderr.log`, `exit_code`, `phase_a.log`. Images are `python:3.X-slim` by tag; a pinned digest is recorded in each probe artifact's phase-A log. Probe specs for every case are committed under `eval/probes/`.
+Level 2, re-execute the probes (2 to 15 minutes per repository on ubuntu-latest, no cost on public repositories):
+fork, then `gh workflow run probe.yml -f probes_path=eval/probes/r01-humanize.json`, then download the artifact. It holds, per probe, `cmd.txt`, `stdout.log`, `stderr.log`, `exit_code`, `phase_a.log`. Images are `python:3.X-slim` by tag; the pulled digest is recorded in each probe's phase-A log. Probe specs for every case are committed under `eval/probes/`.
 
-**Level 3 — re-run the arms** (`python3 -m eval.runner --arm baseline|advanced --cases eval/cases/public`; `Makefile` targets are a convenience if `make` exists)
-Requires `claude` on PATH (or `CLAUDE_BIN`) and `gh auth login` with `workflow` scope. Measured cost: baseline ≈0.9 min/repo, 1 model call; pipeline v2 ≈13 min/repo wall (mostly CI wait), 4–5 model calls (plan, up to one repair, three adjudication votes). Token spend is not metered by the CLI on a subscription; call counts are in the proof entries.
+Level 3, re-run the arms: `python3 -m eval.runner --arm baseline|advanced --cases eval/cases/public` (the `Makefile` targets are a convenience if `make` exists). Needs `claude` on PATH (or `CLAUDE_BIN`) and `gh auth login` with the `workflow` scope. Measured cost: baseline about 0.9 min per repository and 1 model call; pipeline v2 about 13 min per repository of wall time (mostly waiting for CI) and 4 to 5 model calls (plan, up to one repair, three votes). The CLI does not meter token spend on a subscription, so call counts are what the proof records.
 
-Data: `eval/cases/{public,heldout}/*.json` (claims + pinned commits, public GitHub repositories only), `eval/truth/*.json` (audited verdicts; `provisional: true` until the human audit closes). Versions: Python 3.12 locally, `python:3.11-slim`/`3.12-slim`/`3.13-slim` in probes, ubuntu-latest runners, Claude Code 2.1.250.
+Data: `eval/cases/{public,heldout}/*.json` (claims and pinned commits; public GitHub repositories only) and `eval/truth/*.json` (audited verdicts; `provisional: true` until the human audit closes). Versions: Python 3.12 locally, `python:3.11-slim`, `3.12-slim` and `3.13-slim` in probes, ubuntu-latest runners, Claude Code 2.1.250.
 
 ## Agents, tools, provenance
-Coding agent: Claude Code (claude-fable-5) for authoring; the pipeline's LLM calls use the same model via `claude -p`. Trajectories for every session are in traces/, failures included, human checkpoints marked. Pre-existing before kickoff: the problem-agnostic harness (Makefile, eval/ skeleton, trace exporter). Everything else was built during the competition.
+Coding agent used for authoring: Claude Code (claude-fable-5). The pipeline's own model calls use the same model through `claude -p`. Trajectories are in traces/, failures included, with human checkpoints marked. What existed before kickoff: the problem-agnostic harness (Makefile, the eval/ skeleton, the trace exporter). Everything else was built during the competition.

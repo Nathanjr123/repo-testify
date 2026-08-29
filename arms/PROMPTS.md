@@ -1,6 +1,6 @@
-# Instructions that shape each agent (rendered from source by tools/render_prompts.py — do not edit by hand)
+# Instructions that shape each agent (rendered from source by tools/render_prompts.py, do not edit by hand)
 
-## Baseline arm — one-shot read of README + tree
+## Baseline arm, one-shot read of README + tree
 `arms/baseline/baseline.py`
 
 ```text
@@ -8,13 +8,13 @@ You are doing technical due diligence on a repository for a buyer, from document
 Buyer question: {case['buyer_question']}
 Repository: {case['repo']} at commit {case['commit']}
 You may NOT run anything. Judge only from the README and file tree below.
-For EVERY claim in this list, give verdict "verified" | "refuted" | "unverifiable" (use unverifiable when reading alone cannot settle it — do not guess), confidence "high"|"low", and evidence (kind "file" = a path from the tree, kind "url" = a link).
+For EVERY claim in this list, give verdict "verified" | "refuted" | "unverifiable" (use unverifiable when reading alone cannot settle it, do not guess), confidence "high"|"low", and evidence (kind "file" = a path from the tree, kind "url" = a link).
 Claims: {claims}
 README:\n{readme_text[:30000]}\nFile tree (first 400): {json.dumps(paths)}
 Reply with ONLY a JSON object: {{"repo": str, "overall_score": 0-100, "claims": [{{"id","verdict","confidence","evidence":[{{"kind","ref","excerpt"}}]}}], "escalations": [ids], "memo_md": "<=300 word due-diligence memo"}}
 ```
 
-## Pipeline — stage PLAN (one call per repository; one probe per claim)
+## Pipeline, stage PLAN (one call per repository; one probe per claim)
 `arms/advanced/advanced.py::stage_plan`
 
 ```text
@@ -30,7 +30,7 @@ README (for verbatim snippets): {repo_map['readme'][:15000]}
 Reply ONLY JSON: {{"probes": [{{"id": "p-<claim_id>", "claim_id": "...", "image": "python:3.11-slim", "network": "none|on", "setup": [..], "commands": [..], "timeout_s": 120}}]}}
 ```
 
-## Pipeline — stage REPAIR (one round; environment failures only)
+## Pipeline, stage REPAIR (one round; environment failures only)
 `arms/advanced/advanced.py::main`
 
 ```text
@@ -39,7 +39,7 @@ Original probes: {json.dumps([p for p in probes if p['id'] in errs])[:6000]}
 Reply ONLY JSON: {{"probes": [...same schema...]}}
 ```
 
-## Pipeline — stage ADJUDICATE (k=3 votes, evidence-only, v3 rules)
+## Pipeline, stage ADJUDICATE (k=3 votes, evidence-only, v3 rules)
 `arms/advanced/advanced.py::adjudicate_batch`
 
 ```text
@@ -49,8 +49,8 @@ Claims: {claims}
 Probe transcripts (probe p-cN corresponds to claim cN): {json.dumps(slim)[:60000]}
 Rules: verdict from the transcript alone; quote the exit code you rely on; missing/ambiguous evidence -> unverifiable + low.
 v3 rules (from the audited public-split failures):
- (a) A probe's own `VERDICT_LINE: PASS/FAIL` is its conclusion — follow it unless you quote contrary evidence from the same transcript.
- (b) The claim is judged AS WRITTEN in the README. If a documented prerequisite (install line, pinned dependency, required tool) fails as written, every claim that depends on it is REFUTED (high), not unverifiable — "could be made to work" is not the question.
+ (a) A probe's own `VERDICT_LINE: PASS/FAIL` is its conclusion, follow it unless you quote contrary evidence from the same transcript.
+ (b) The claim is judged AS WRITTEN in the README. If a documented prerequisite (install line, pinned dependency, required tool) fails as written, every claim that depends on it is REFUTED (high), not unverifiable, "could be made to work" is not the question.
  (c) If a probe's setup installed a package or applied a fix the README does not document, the claim is UNVERIFIABLE-as-written (low) and must say what was added.
 Reply ONLY JSON:
 {{"claims": [{{"id": "cN", "verdict": "verified|refuted|unverifiable", "confidence": "high|low", "evidence": [{{"kind": "command", "ref": "p-cN", "excerpt": "<quoted output line + exit_code N>"}}]}}]}}

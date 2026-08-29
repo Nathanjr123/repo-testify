@@ -1,9 +1,9 @@
-# Pipeline trajectory — r11-gpt-2 (proof `advanced-v2-1787952546`)
+# Pipeline trajectory, r11-gpt-2 (proof `advanced-v2-1787952546`)
 
 Repository https://github.com/openai/gpt-2 @ `9b63575ef427` · buyer question: _We want to reproduce GPT-2 sample generation from this repo today for a research baseline. Can the documented install path (DEVELOPERS.md) actually be executed on a current machine, and do the model downloads still work?_
 
-## Step 1 — instructions
-See `arms/PROMPTS.md` (PLAN → EXECUTE → ADJUDICATE). Claims given to the agent:
+## Step 1, instructions
+See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The documented TensorFlow dependency installs with the exact command `pip3 install tensorflow==1.12.0` (CPU) or `pip3 install tensorflow-gpu==1.12.0` (GPU).
 - **c2** (install): The remaining Python dependencies install with `pip3 install -r requirements.txt` (fire>=0.1.3, regex==2017.4.5, requests==2.21.0, tqdm==4.31.1).
@@ -16,7 +16,7 @@ See `arms/PROMPTS.md` (PLAN → EXECUTE → ADJUDICATE). Claims given to the age
 - **c9** (quantitative): The README notes the originally published parameter counts (117M small, 345M medium) were wrong; the corrected sizes used by the code are 124M and 355M.
 - **c10** (environment): Setting the environment variable PYTHONIOENCODING=UTF-8 is documented as required to handle Unicode output from the sample scripts.
 
-## Step 2 — PLAN output: 10 probes (committed as `eval/probes/r11-gpt-2.json`)
+## Step 2, PLAN output: 10 probes (committed as `eval/probes/r11-gpt-2.json`)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `python3 -m venv /venv`
@@ -49,7 +49,7 @@ See `arms/PROMPTS.md` (PLAN → EXECUTE → ADJUDICATE). Claims given to the age
   - setup: `python3 -c 'import urllib.request,tarfile,io; tarfile.open(fileobj=io.BytesIO(urllib.request.urlopen("https://codeload.github.com/openai/gpt-2/tar.gz/9b63575ef42771a015060c964af2c3da4cf7c8ab").read())).extractall("/src")' && mv /src/gpt-2-9b63575ef42771a015060c964af2c3da4cf7c8ab /w`
   - commands: `grep -n -B3 -A4 'PYTHONIOENCODING' /w/DEVELOPERS.md /w/README.md || echo 'PYTHONIOENCODING not documented in DEVELOPERS.md/README.md' && python3 -V; echo '--- case A: C locale, no var, modern defaults (PEP 538/540 locale coercion) ---'; env -i LANG=C /usr/local/bin/python3 -c 'import sys; print("std`
 
-## Step 3 — EXECUTE on GitHub Actions: run `33212514162` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3, EXECUTE on GitHub Actions: run `33212514162` (artifacts: per-probe cmd/stdout/stderr/exit_code)
 
 Transcript index (probe · command excerpt):
 ```
@@ -61,22 +61,22 @@ for f in ['Dockerfile.cpu','Dockerfile.gpu']:
     base=
 ```
 
-## Step 4 — ADJUDICATE: votes → verdict per claim (confidence demoted on disagreement)
+## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | refuted / refuted / refuted | **refuted** | high | `p-c1` — "ERROR: No matching distribution found for tensorflow==1.12.0" / "observed pip rc=1 python |
-| c2 | refuted / refuted / refuted | **refuted** | low | `p-c2` — "error: command 'gcc' failed: No such file or directory" / "ERROR: Failed building wheel f |
-| c3 | verified / verified / verified | **verified** | high | `p-c3` — "observed download rc=0" / "observed files ['checkpoint', 'encoder.json', 'hparams.json']" |
-| c4 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c4` — "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run gener |
-| c5 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c5` — "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run inter |
-| c6 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c6` — "observed docker binary: none" / "Dockerfile.cpu: FROM tensorflow/tensorflow:1.12.0-py3 -> |
-| c7 | verified / verified / verified | **verified** | high | `p-c7` — "observed status 200 archived= True pushed_at= 2024-08-14T10:50:53Z" / "VERDICT_LINE: PASS |
-| c8 | verified / verified / verified | **verified** | high | `p-c8` — "observed status 200 bytes 4975 first line: # GPT-2 model card" at pinned SHA 9b63575; exi |
-| c9 | verified / verified / verified | **verified** | high | `p-c9` — phase_a: "README.md:11: *Note that our original parameter counts were wrong ... small refe |
-| c10 | verified / verified / verified | **verified** | high | `p-c10` — phase_a: "DEVELOPERS.md:58:export PYTHONIOENCODING=UTF-8" / "observed WITHOUT var (C local |
+| c1 | refuted / refuted / refuted | **refuted** | high | `p-c1`, "ERROR: No matching distribution found for tensorflow==1.12.0" / "observed pip rc=1 python |
+| c2 | refuted / refuted / refuted | **refuted** | low | `p-c2`, "error: command 'gcc' failed: No such file or directory" / "ERROR: Failed building wheel f |
+| c3 | verified / verified / verified | **verified** | high | `p-c3`, "observed download rc=0" / "observed files ['checkpoint', 'encoder.json', 'hparams.json']" |
+| c4 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c4`, "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run gener |
+| c5 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c5`, "ModuleNotFoundError: No module named 'tensorflow'" / "VERDICT_LINE: FAIL cannot run inter |
+| c6 | unverifiable / unverifiable / unverifiable | **unverifiable** | low | `p-c6`, "observed docker binary: none" / "Dockerfile.cpu: FROM tensorflow/tensorflow:1.12.0-py3 -> |
+| c7 | verified / verified / verified | **verified** | high | `p-c7`, "observed status 200 archived= True pushed_at= 2024-08-14T10:50:53Z" / "VERDICT_LINE: PASS |
+| c8 | verified / verified / verified | **verified** | high | `p-c8`, "observed status 200 bytes 4975 first line: # GPT-2 model card" at pinned SHA 9b63575; exi |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`, phase_a: "README.md:11: *Note that our original parameter counts were wrong ... small refe |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`, phase_a: "DEVELOPERS.md:58:export PYTHONIOENCODING=UTF-8" / "observed WITHOUT var (C local |
 
-## Step 5 — REPORT
+## Step 5, REPORT
 Overall score 65 · escalated to human: ['c4', 'c5', 'c6'] · model calls: nominal 4
 
 _Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._

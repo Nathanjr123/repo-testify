@@ -1,4 +1,4 @@
-"""Deterministic probe executor — NO LLM in this loop (DESIGN.md stage 4).
+"""Deterministic probe executor, NO LLM in this loop (DESIGN.md stage 4).
 Input: a probes JSON file: {"case_id": str, "repo": str, "commit": str,
   "probes": [{"id": str, "claim_id": str, "image": "python:3.11-slim",
               "network": "install-only|none", "setup": [cmds], "commands": [cmds],
@@ -18,7 +18,7 @@ SRC_CACHE = {}
 
 def host_checkout(repo, commit, workdir):
     """Clone once per (repo, commit) on the HOST (has git); containers get a ro-mount.
-    Slim images ship without git — probe smoke-install failed exit 127 before this."""
+    Slim images ship without git, probe smoke-install failed exit 127 before this."""
     key = (repo, commit)
     if key in SRC_CACHE:
         return SRC_CACHE[key]

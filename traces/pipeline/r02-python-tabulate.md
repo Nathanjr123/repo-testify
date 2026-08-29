@@ -1,9 +1,9 @@
-# Pipeline trajectory — r02-python-tabulate (proof `advanced-v2-1787952546`)
+# Pipeline trajectory, r02-python-tabulate (proof `advanced-v2-1787952546`)
 
 Repository https://github.com/astanin/python-tabulate @ `268615a5c27d` · buyer question: _We plan to standardize on tabulate for CLI table output across our internal tools — do the README's install story (library + command-line utility), example outputs, and performance claims hold up?_
 
-## Step 1 — instructions
-See `arms/PROMPTS.md` (PLAN → EXECUTE → ADJUDICATE). Claims given to the agent:
+## Step 1, instructions
+See `arms/PROMPTS.md` (PLAN -> EXECUTE -> ADJUDICATE). Claims given to the agent:
 
 - **c1** (install): The package 'tabulate' can be installed from PyPI with `pip install tabulate`, after which `from tabulate import tabulate` succeeds.
 - **c2** (install): Installing the 'tabulate' package with pip on Linux also installs a command-line utility named `tabulate` onto the PATH (in the environment's bin directory).
@@ -17,7 +17,7 @@ See `arms/PROMPTS.md` (PLAN → EXECUTE → ADJUDICATE). Claims given to the age
 - **c10** (test_ci): The python-tabulate README's GitHub Actions badge (workflows/tabulate.yml) asserts that the repository's CI workflow on astanin/python-tabulate is currently passing.
 - **c11** (quantitative): In a mini-benchmark on a 10x10 table of mixed text and numeric data, the tabulate library formats the table faster than PrettyTable and texttable (README cites tabulate 0.10.0 at 553.4 μs vs PrettyTable 3.17.0 at 468.0 μs and texttable 1.7.0 at 1071.4 μs on Python 3.13.7/Windows 11 — note the table itself shows PrettyTable FASTER than tabulate).
 
-## Step 2 — PLAN output: 11 probes (committed as `eval/probes/r02-python-tabulate.json`)
+## Step 2, PLAN output: 11 probes (committed as `eval/probes/r02-python-tabulate.json`)
 
 - `p-c1` image `python:3.11-slim` network `install-only`
   - setup: `python3 -m venv /tmp/v && /tmp/v/bin/pip install --no-cache-dir tabulate`
@@ -91,7 +91,7 @@ try:
 import timeit
 # mirrors the repo's benchmark.py: 10x10 mixed t`
 
-## Step 3 — EXECUTE on GitHub Actions: run `33207614025` (artifacts: per-probe cmd/stdout/stderr/exit_code)
+## Step 3, EXECUTE on GitHub Actions: run `33207614025` (artifacts: per-probe cmd/stdout/stderr/exit_code)
 
 Transcript index (probe · command excerpt):
 ```
@@ -133,23 +133,23 @@ print(out)
 lines =
 ```
 
-## Step 4 — ADJUDICATE: votes → verdict per claim (confidence demoted on disagreement)
+## Step 4, ADJUDICATE: votes -> verdict per claim (confidence demoted on disagreement)
 
 | claim | votes | final | conf | evidence cited |
 |---|---|---|---|---|
-| c1 | verified / verified / verified | **verified** | high | `p-c1` — observed: tabulate version 0.10.0 callable True / VERDICT_LINE: PASS pip install tabulate  |
-| c2 | verified / verified / verified | **verified** | high | `p-c2` — -rwxr-xr-x 1 root root 211 Aug 28 20:18 /tmp/v/bin/tabulate / observed: rc=0 output=-  -/1 |
-| c3 | refuted / refuted / refuted | **refuted** | high | `p-c3` — observed: tabulate scripts in venv bin = 1 (README says lib-only should install none) / VE |
-| c4 | verified / verified / verified | **verified** | high | `p-c4` — observed: http 200 version 0.10.0 requires_python '>=3.10' py2 classifiers [] + exit_code  |
-| c5 | verified / verified / verified | **verified** | high | `p-c5` — observed: first data line = 'Sun    696000     1.9891e+09' / VERDICT_LINE: PASS output mat |
-| c6 | verified / verified / verified | **verified** | high | `p-c6` — observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] + e |
-| c7 | verified / verified / verified | **verified** | high | `p-c7` — observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] / V |
-| c8 | refuted / refuted / refuted | **refuted** | high | `p-c8` — -f FMT, --format FMT      set output table format; supported formats: plain, simple, grid, |
-| c9 | verified / verified / verified | **verified** | high | `p-c9` — observed: wcwidth 0.8.3 WIDE_CHARS_MODE True display widths per line [9, 9, 9, 9] / VERDIC |
-| c10 | verified / verified / verified | **verified** | high | `p-c10` — observed: badge http 200 badge text = passing svg bytes 2276 / observed: run 272 268615a5  |
-| c11 | verified / verified / verified | **verified** | low | `p-c11` — observed: tabulate     0.10.0      478.1 us/call / observed: prettytable  3.18.0      501. |
+| c1 | verified / verified / verified | **verified** | high | `p-c1`, observed: tabulate version 0.10.0 callable True / VERDICT_LINE: PASS pip install tabulate  |
+| c2 | verified / verified / verified | **verified** | high | `p-c2`, -rwxr-xr-x 1 root root 211 Aug 28 20:18 /tmp/v/bin/tabulate / observed: rc=0 output=-  -/1 |
+| c3 | refuted / refuted / refuted | **refuted** | high | `p-c3`, observed: tabulate scripts in venv bin = 1 (README says lib-only should install none) / VE |
+| c4 | verified / verified / verified | **verified** | high | `p-c4`, observed: http 200 version 0.10.0 requires_python '>=3.10' py2 classifiers [] + exit_code  |
+| c5 | verified / verified / verified | **verified** | high | `p-c5`, observed: first data line = 'Sun    696000     1.9891e+09' / VERDICT_LINE: PASS output mat |
+| c6 | verified / verified / verified | **verified** | high | `p-c6`, observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] + e |
+| c7 | verified / verified / verified | **verified** | high | `p-c7`, observed: lines = ['Name      Age', '------  -----', 'Alice      24', 'Bob        19'] / V |
+| c8 | refuted / refuted / refuted | **refuted** | high | `p-c8`, -f FMT, --format FMT      set output table format; supported formats: plain, simple, grid, |
+| c9 | verified / verified / verified | **verified** | high | `p-c9`, observed: wcwidth 0.8.3 WIDE_CHARS_MODE True display widths per line [9, 9, 9, 9] / VERDIC |
+| c10 | verified / verified / verified | **verified** | high | `p-c10`, observed: badge http 200 badge text = passing svg bytes 2276 / observed: run 272 268615a5  |
+| c11 | verified / verified / verified | **verified** | low | `p-c11`, observed: tabulate     0.10.0      478.1 us/call / observed: prettytable  3.18.0      501. |
 
-## Step 5 — REPORT
+## Step 5, REPORT
 Overall score 82 · escalated to human: none · model calls: nominal 4
 
 _Human checkpoint: the verdicts above were audited against ground truth; disagreements were read from the recorded probe output and resolved in favour of the evidence (CHANGELOG 'Truth audit')._
