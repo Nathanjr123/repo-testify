@@ -1,2 +1,0 @@
-repr: <Result () {'number': 42}> type: int
-VERDICT_LINE: PASS with_pattern converter yields int 42 in named result

@@ -1,0 +1,82 @@
+[
+ {
+  "probe": "p-c1",
+  "cmd.txt": "python3 -c 'import sys, funcy; print(\"installed funcy\", funcy.__version__, \"on python\", sys.version.split()[0])' && echo \"VERDICT_LINE: PASS pip install funcy from PyPI succeeded and import funcy works\" || echo \"VERDICT_LINE: FAIL import funcy failed after pip install funcy\"",
+  "exit_code": "0",
+  "stdout.log": "VERDICT_LINE: FAIL import funcy failed after pip install funcy\n",
+  "stderr.log": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAttributeError: module 'funcy' has no attribute '__version__'\n",
+  "phase_a.log": "\n--stderr--\nUnable to find image 'python:3.11-slim' locally\n3.11-slim: Pulling from library/python\n6310eb16bf42: Pulling fs layer\n87e1b7cce023: Pulling fs layer\nc86306e32cd0: Pulling fs layer\na14578096eda: Pulling fs layer\na14578096eda: Waiting\n87e1b7cce023: Verifying Checksum\n87e1b7cce023: Download complete\n6310eb16bf42: Verifying Checksum\n6310eb16bf42: Download complete\na14578096eda: Verifying Checksum\na14578096eda: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\n6310eb16bf42: Pull complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c10",
+  "cmd.txt": "python3 -c 'import urllib.request, json; r = urllib.request.urlopen(urllib.request.Request(\"https://github.com/Suor/funcy/actions/workflows/test.yml/badge.svg\", headers={\"User-Agent\": \"probe\"}), timeout=30); svg = r.read().decode(); print(\"badge_http\", r.status, \"passing_in_svg\", \"passing\" in svg, \"failing_in_svg\", \"failing\" in svg); a = urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/Suor/funcy/actions/workflows/test.yml/runs?branch=master&per_page=3\", headers={\"User-Agent\": \"probe\", \"Accept\": \"application/vnd.github+json\"}), timeout=30); d = json.load(a); runs = [(w[\"head_sha\"][:7], w[\"conclusion\"], w[\"created_at\"]) for w in d[\"workflow_runs\"]]; print(\"latest_master_runs\", runs); assert \"passing\" in svg and runs and runs[0][1] == \"success\", (svg[:200], runs)' && echo \"VERDICT_LINE: PASS badge shows passing and latest master test.yml run concluded success\" || echo \"VERDICT_LINE: FAIL badge not passing or latest master test.yml run not success (see values above)\"",
+  "exit_code": "0",
+  "stdout.log": "badge_http 200 passing_in_svg False failing_in_svg True\nlatest_master_runs [('19e9617', 'cancelled', '2026-08-17T01:46:50Z'), ('2c9535a', 'cancelled', '2026-07-03T16:31:20Z'), ('9eb0447', 'cancelled', '2026-02-26T04:14:02Z')]\nVERDICT_LINE: FAIL badge not passing or latest master test.yml run not success (see values above)\n",
+  "stderr.log": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAssertionError: ('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"83\" height=\"20\">\\n  <title>CI - failing</title>\\n  <defs>\\n    <linearGradient id=\"workflow-fill\" x1=\"50%\" y1=\"0%\" x2=\"50%\" y2=\"100%\">\\n      <stop stop-colo', [('19e9617', 'cancelled', '2026-08-17T01:46:50Z'), ('2c9535a', 'cancelled', '2026-07-03T16:31:20Z'), ('9eb0447', 'cancelled', '2026-02-26T04:14:02Z')])\n",
+  "phase_a.log": "\n--stderr--\n"
+ },
+ {
+  "probe": "p-c2",
+  "cmd.txt": "python3 -c 'import sys, funcy; from operator import add; from funcy import walk, select, even, curry, lsplit, odd; assert walk(str.upper, {\"a\",\"b\"}) == {\"A\",\"B\"}; assert select(even, {1,2,3,10,20}) == {2,10,20}; assert curry(add)(1)(2) == 3; assert tuple(lsplit(odd, range(5))) == ([1,3],[0,2,4]); print(\"python\", sys.version.split()[0], \"funcy\", funcy.__version__, \"README examples run OK\")' && echo \"VERDICT_LINE: PASS funcy installs and README examples run on Python 3.4 (claimed lower bound); newer CPython covered by other probes, PyPy3 not tested\" || echo \"VERDICT_LINE: FAIL funcy does not install or run on Python 3.4 as claimed\"",
+  "exit_code": "0",
+  "stdout.log": "VERDICT_LINE: FAIL funcy does not install or run on Python 3.4 as claimed\n",
+  "stderr.log": "mesg: ttyname failed: Inappropriate ioctl for device\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAttributeError: 'module' object has no attribute '__version__'\n",
+  "phase_a.log": "\n--stderr--\nUnable to find image 'python:3.4-slim' locally\n3.4-slim: Pulling from library/python\nf7e2b70d04ae: Pulling fs layer\n43e4f8f1b597: Pulling fs layer\n58d86f1ba87c: Pulling fs layer\n0a5fe6f498ca: Pulling fs layer\n36b630fe2a63: Pulling fs layer\n0a5fe6f498ca: Waiting\n36b630fe2a63: Waiting\n43e4f8f1b597: Verifying Checksum\n43e4f8f1b597: Download complete\n58d86f1ba87c: Verifying Checksum\n58d86f1ba87c: Download complete\n0a5fe6f498ca: Verifying Checksum\n0a5fe6f498ca: Download complete\nf7e2b70d04ae: Verifying Checksum\nf7e2b70d04ae: Download complete\n36b630fe2a63: Verifying Checksum\n36b630fe2a63: Download complete\nf7e2b70d04ae: Pull complete\n43e4f8f1b597: Pull complete\n58d86f1ba87c: Pull complete\n0a5fe6f498ca: Pull complete\n36b630fe2a63: Pull complete\nDigest: sha256:44b78f9c6c93df7d8bc0d32a85ef8fd10a074a101985bde6fd41d3b5aadf16f0\nStatus: Downloaded newer image for python:3.4-slim\nmesg: ttyname failed: Inappropriate ioctl for device\nDEPRECATION: Python 3.4 support has been deprecated. pip 19.1 will be the last one supporting it. Please upgrade your Python as Python 3.4 won't be maintained after March 2019 (cf PEP 429).\nYou are using pip version 19.0.3, however version 19.1.1 is available.\nYou should consider upgrading via the 'pip install --upgrade pip' command.\n"
+ },
+ {
+  "probe": "p-c3",
+  "cmd.txt": "python3 -c 'from funcy import walk; r = walk(str.upper, {\"a\", \"b\"}); print(\"observed\", repr(r), type(r).__name__); assert r == {\"A\", \"B\"} and isinstance(r, set), r' && echo \"VERDICT_LINE: PASS walk(str.upper, {a,b}) returned set {A,B}\" || echo \"VERDICT_LINE: FAIL walk did not return set {A,B}\"",
+  "exit_code": "0",
+  "stdout.log": "observed {'A', 'B'} set\nVERDICT_LINE: PASS walk(str.upper, {a,b}) returned set {A,B}\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c4",
+  "cmd.txt": "python3 -c 'from funcy import select, even; r = select(even, {1,2,3,10,20}); print(\"observed\", repr(r), type(r).__name__); assert r == {2,10,20} and isinstance(r, set), r' && echo \"VERDICT_LINE: PASS select(even, {1,2,3,10,20}) returned set {2,10,20}\" || echo \"VERDICT_LINE: FAIL select(even, ...) did not return {2,10,20}\"",
+  "exit_code": "0",
+  "stdout.log": "observed {2, 10, 20} set\nVERDICT_LINE: PASS select(even, {1,2,3,10,20}) returned set {2,10,20}\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c5",
+  "cmd.txt": "python3 -c 'from funcy import lsplit, odd; r = lsplit(odd, range(5)); print(\"observed\", repr(r), type(r).__name__); assert tuple(r) == ([1, 3], [0, 2, 4]), r' && echo \"VERDICT_LINE: PASS lsplit(odd, range(5)) returned ([1, 3], [0, 2, 4])\" || echo \"VERDICT_LINE: FAIL lsplit(odd, range(5)) did not return ([1, 3], [0, 2, 4])\"",
+  "exit_code": "0",
+  "stdout.log": "observed ([1, 3], [0, 2, 4]) tuple\nVERDICT_LINE: PASS lsplit(odd, range(5)) returned ([1, 3], [0, 2, 4])\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c6",
+  "cmd.txt": "python3 -c 'from funcy import chunks; it = chunks(2, range(5)); r = list(it); print(\"observed\", repr(r), \"from\", type(it).__name__); assert r == [[0, 1], [2, 3], [4]], r' && echo \"VERDICT_LINE: PASS list(chunks(2, range(5))) == [[0, 1], [2, 3], [4]]\" || echo \"VERDICT_LINE: FAIL chunks(2, range(5)) did not yield [[0,1],[2,3],[4]]\"",
+  "exit_code": "0",
+  "stdout.log": "observed [range(0, 2), range(2, 4), range(4, 5)] from generator\nVERDICT_LINE: FAIL chunks(2, range(5)) did not yield [[0,1],[2,3],[4]]\n",
+  "stderr.log": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAssertionError: [range(0, 2), range(2, 4), range(4, 5)]\n",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c7",
+  "cmd.txt": "python3 -c 'from operator import add; from funcy import curry; r = curry(add)(1)(2); print(\"observed\", repr(r)); assert r == 3, r' && echo \"VERDICT_LINE: PASS curry(add)(1)(2) == 3\" || echo \"VERDICT_LINE: FAIL curry(add)(1)(2) != 3\"",
+  "exit_code": "0",
+  "stdout.log": "observed 3\nVERDICT_LINE: PASS curry(add)(1)(2) == 3\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c8",
+  "cmd.txt": "python3 -c 'from funcy import walk_values, silent; r = walk_values(silent(int), {\"a\": \"1\", \"b\": \"no\"}); print(\"observed\", repr(r)); assert r == {\"a\": 1, \"b\": None}, r' && echo \"VERDICT_LINE: PASS walk_values(silent(int), ...) returned {a: 1, b: None}\" || echo \"VERDICT_LINE: FAIL walk_values(silent(int), ...) did not return {a: 1, b: None}\"",
+  "exit_code": "0",
+  "stdout.log": "observed {'a': 1, 'b': None}\nVERDICT_LINE: PASS walk_values(silent(int), ...) returned {a: 1, b: None}\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ },
+ {
+  "probe": "p-c9",
+  "cmd.txt": "cd /tmp/src && python3 --version && pytest -q > /tmp/pytest.log 2>&1; rc=$?; tail -n 8 /tmp/pytest.log; echo \"pytest exit code $rc\"; if [ $rc -eq 0 ]; then echo \"VERDICT_LINE: PASS pip install -r test_requirements.txt then pytest passed at pinned commit\"; else echo \"VERDICT_LINE: FAIL pytest exited $rc at pinned commit (see tail above)\"; fi",
+  "exit_code": "0",
+  "stdout.log": "Python 3.11.16\n........................................................................ [ 35%]\n........................................................................ [ 70%]\n.............................................................            [100%]\n205 passed in 0.43s\npytest exit code 0\nVERDICT_LINE: PASS pip install -r test_requirements.txt then pytest passed at pinned commit\n",
+  "stderr.log": "",
+  "phase_a.log": "test_requirements.txt\npytest==7.4.3; python_version>='3.7'\npytest==6.2.5; python_version=='3.6'\npytest==3.9.3; python_version<='3.5'\nmore-itertools==4.0.0; python_version=='3.5'\nwhatever==0.7\ntyping; python_version=='3.4'\n\n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n"
+ }
+]

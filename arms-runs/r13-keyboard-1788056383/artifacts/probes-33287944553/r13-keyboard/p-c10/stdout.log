@@ -1,0 +1,17 @@
+--- headless env: DISPLAY, /dev/input, /proc/bus/input/devices ---
+DISPLAY=<unset>
+ls: cannot access '/dev/input': No such file or directory
+I: Bus=0011 Vendor=0001 Product=0001 Version=ab00
+N: Name="AT Translated Set 2 keyboard"
+P: Phys=d34b2567-b9b6-42b9-8778-0a4ec0b
+S: Sysfs=/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/d34b2567-b9b6-42b9-8778-0a4ec0b955bf/serio0/input/input0
+U: Uniq=
+--- hook as unprivileged user nobody ---
+FileNotFoundError: [Errno 2] No such file or directory: 'dumpkeys'
+exit=1
+device paths in linux backend: ['/dev/input/', '/dev/input/by-id', '/dev/input/event'] (README says /dev/input/input*)
+/proc/bus/input/devices used: True
+root check text: []
+X references anywhere in package: []
+non-root hook refused with root error: False
+VERDICT_LINE: FAIL dev_input_paths=['/dev/input/', '/dev/input/by-id', '/dev/input/event'] nonroot_refused=False X_refs=[]

@@ -1,2 +1,0 @@
-results: <Result (datetime.datetime(2023, 11, 23, 12, 56, 47),) {}> <Result (datetime.time(10, 26),) {}> <Result (datetime.date(2023, 11, 25),) {}>
-VERDICT_LINE: PASS strptime specs yield datetime, time and date as README shows

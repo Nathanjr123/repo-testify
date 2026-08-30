@@ -1,2 +1,0 @@
-str: <Result () {'item': 'hand grenade'}> named: {'item': 'hand grenade'}
-VERDICT_LINE: PASS named field str/named/getitem/in all match README

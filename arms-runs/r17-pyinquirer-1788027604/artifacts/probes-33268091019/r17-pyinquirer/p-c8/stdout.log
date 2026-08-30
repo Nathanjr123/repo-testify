@@ -1,5 +1,0 @@
-note: badge owner is expobrain, repo owner is CITGuru
-badge status: 403 | final_url: https://travis-ci.org/expobrain/PyInquirer.svg?branch=master
-body_head: error code: 1010 
-live passing badge: False
-VERDICT_LINE: FAIL travis-ci.org badge is not a live passing build (see status/final_url/body_head)

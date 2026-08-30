@@ -1,0 +1,82 @@
+[
+ {
+  "probe": "p-c1",
+  "cmd.txt": "python3 --version; thefuck --version > /tmp/out.txt 2>&1; rc=$?; echo \"thefuck --version exit=$rc\"; tail -n 2 /tmp/out.txt; python3 -c 'import sys; o=open(\"/tmp/out.txt\").read(); sys.exit(0 if (\"3.32\" in o and \"Traceback\" not in o) else 1)' && echo \"VERDICT_LINE: PASS thefuck --version runs on Python 3.12\" || echo \"VERDICT_LINE: FAIL thefuck 3.32 does not run on Python 3.12 (exit=$rc, see last output line above)\"",
+  "exit_code": "0",
+  "stdout.log": "Python 3.12.14\nthefuck --version exit=1\n    from distutils.spawn import find_executable\nModuleNotFoundError: No module named 'distutils'\nVERDICT_LINE: FAIL thefuck 3.32 does not run on Python 3.12 (exit=1, see last output line above)\n",
+  "stderr.log": "",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\nUnable to find image 'python:3.12-slim' locally\n3.12-slim: Pulling from library/python\n6310eb16bf42: Pulling fs layer\na0d8783128af: Pulling fs layer\nb79f58b3eb94: Pulling fs layer\n48579d87405c: Pulling fs layer\n48579d87405c: Waiting\na0d8783128af: Verifying Checksum\na0d8783128af: Download complete\n48579d87405c: Verifying Checksum\n48579d87405c: Download complete\nb79f58b3eb94: Verifying Checksum\nb79f58b3eb94: Download complete\n6310eb16bf42: Verifying Checksum\n6310eb16bf42: Download complete\n6310eb16bf42: Pull complete\na0d8783128af: Pull complete\nb79f58b3eb94: Pull complete\n48579d87405c: Pull complete\nDigest: sha256:09f7da3bc104798d0afb40bc08d23ab2da20a76130cec1f2ef170848f5d85217\nStatus: Downloaded newer image for python:3.12-slim\n"
+ },
+ {
+  "probe": "p-c10",
+  "cmd.txt": "pip3 install thefuck --upgrade > /tmp/up.log 2>&1; rc=$?; echo \"pip3 install thefuck --upgrade exit=$rc\"; tail -n 1 /tmp/up.log; thefuck --version 2>&1 | tail -n 1; python3 -c 'import json, urllib.request as u; d=json.load(u.urlopen(\"https://pypi.org/pypi/thefuck/json\", timeout=30)); v=d[\"info\"][\"version\"]; t=max(f[\"upload_time\"] for f in d[\"releases\"][v]); print(\"pypi_latest:\", v, \"uploaded:\", t); assert v == \"3.32\" and t.startswith(\"2021\"), (v, t)' && [ \"$rc\" -eq 0 ] && echo \"VERDICT_LINE: PASS pip3 install thefuck --upgrade succeeds; PyPI latest is 3.32 uploaded 2021\" || echo \"VERDICT_LINE: FAIL upgrade exit=$rc or PyPI latest version/date differs from 3.32/2021 (see pypi_latest line)\"",
+  "exit_code": "0",
+  "stdout.log": "pip3 install thefuck --upgrade exit=0\n[notice] To update, run: pip install --upgrade pip\nThe Fuck 3.32 using Python 3.11.16 and Bash 5.2.37(1)-release\npypi_latest: 3.32 uploaded: 2022-01-02T21:46:55\nVERDICT_LINE: FAIL upgrade exit=0 or PyPI latest version/date differs from 3.32/2021 (see pypi_latest line)\n",
+  "stderr.log": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAssertionError: ('3.32', '2022-01-02T21:46:55')\n",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\n"
+ },
+ {
+  "probe": "p-c2",
+  "cmd.txt": "python3 --version; which thefuck || echo \"thefuck not on PATH\"; thefuck --version > /tmp/out.txt 2>&1; rc=$?; echo \"thefuck --version exit=$rc\"; tail -n 2 /tmp/out.txt; python3 -c 'import sys; o=open(\"/tmp/out.txt\").read(); sys.exit(0 if (\"3.32\" in o and \"Traceback\" not in o) else 1)' && echo \"VERDICT_LINE: PASS pip install thefuck gives a working thefuck executable on Python 3.11\" || echo \"VERDICT_LINE: FAIL thefuck --version failed after pip install (exit=$rc, see above)\"",
+  "exit_code": "0",
+  "stdout.log": "Python 3.11.16\n/usr/local/bin/thefuck\nthefuck --version exit=0\nThe Fuck 3.32 using Python 3.11.16 and Bash 5.2.37(1)-release\nVERDICT_LINE: PASS pip install thefuck gives a working thefuck executable on Python 3.11\n",
+  "stderr.log": "",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\nUnable to find image 'python:3.11-slim' locally\n3.11-slim: Pulling from library/python\n6310eb16bf42: Already exists\n87e1b7cce023: Pulling fs layer\nc86306e32cd0: Pulling fs layer\na14578096eda: Pulling fs layer\na14578096eda: Verifying Checksum\na14578096eda: Download complete\n87e1b7cce023: Verifying Checksum\n87e1b7cce023: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\n"
+ },
+ {
+  "probe": "p-c3",
+  "cmd.txt": "echo \"note: container is root so sudo is omitted; README step run verbatim: pip3 install thefuck --user\"; pip3 install thefuck --user > /tmp/pip.log 2>&1; rc=$?; echo \"pip3 install thefuck --user exit=$rc\"; grep -m1 -E \"externally-managed-environment|Successfully installed|ERROR\" /tmp/pip.log || tail -n 1 /tmp/pip.log; export PATH=\"$HOME/.local/bin:$PATH\"; thefuck --version > /tmp/out.txt 2>&1; rc2=$?; echo \"thefuck --version exit=$rc2\"; tail -n 1 /tmp/out.txt; python3 -c 'import sys; o=open(\"/tmp/out.txt\").read(); sys.exit(0 if (\"3.32\" in o and \"Traceback\" not in o) else 1)' && echo \"VERDICT_LINE: PASS Ubuntu 24.04 apt + pip3 --user install yields a working thefuck\" || echo \"VERDICT_LINE: FAIL on Ubuntu 24.04 (python 3.12): pip3 --user exit=$rc, thefuck --version exit=$rc2 (see lines above)\"",
+  "exit_code": "0",
+  "stdout.log": "note: container is root so sudo is omitted; README step run verbatim: pip3 install thefuck --user\npip3 install thefuck --user exit=1\nerror: externally-managed-environment\nthefuck --version exit=127\nbash: line 1: thefuck: command not found\nVERDICT_LINE: FAIL on Ubuntu 24.04 (python 3.12): pip3 --user exit=1, thefuck --version exit=127 (see lines above)\n",
+  "stderr.log": "",
+  "phase_a.log": "Python 3.12.3\npip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)\n\n\n--stderr--\nUnable to find image 'ubuntu:24.04' locally\n24.04: Pulling from library/ubuntu\n0926a8eb0e60: Already exists\nDigest: sha256:33ceb71981b602c1a7443a53469e4dba065f7503eab3078a2d7a57a2ab987517\nStatus: Downloaded newer image for ubuntu:24.04\n"
+ },
+ {
+  "probe": "p-c4",
+  "cmd.txt": "thefuck --alias > /tmp/alias.sh 2>&1; echo \"thefuck --alias exit=$?\"; head -c 200 /tmp/alias.sh; echo && bash -c 'eval $(thefuck --alias); type fuck' > /tmp/type.txt 2>&1; head -n 1 /tmp/type.txt; bash -c 'eval $(thefuck --alias FUCK); type FUCK' > /tmp/type2.txt 2>&1; head -n 1 /tmp/type2.txt; grep -q \"fuck is a function\" /tmp/type.txt && grep -q \"FUCK is a function\" /tmp/type2.txt && echo \"VERDICT_LINE: PASS eval \\$(thefuck --alias) defines a fuck shell function in bash (FUCK variant too)\" || echo \"VERDICT_LINE: FAIL fuck function not defined after eval \\$(thefuck --alias) (see lines above)\"",
+  "exit_code": "0",
+  "stdout.log": "thefuck --alias exit=0\n\n            function fuck () {\n                TF_PYTHONIOENCODING=$PYTHONIOENCODING;\n                export TF_SHELL=bash;\n                export TF_ALIAS=fuck;\n                export TF_SHELL_ALIAS\nfuck is a function\nFUCK is a function\nVERDICT_LINE: PASS eval $(thefuck --alias) defines a fuck shell function in bash (FUCK variant too)\n",
+  "stderr.log": "",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\n"
+ },
+ {
+  "probe": "p-c5",
+  "cmd.txt": "thefuck --help > /tmp/help.txt 2>&1; echo \"thefuck --help exit=$?\"; grep -E -- \"-y|--yeah|--hard\" /tmp/help.txt | head -n 2 && python3 -c 'from thefuck.argument_parser import Parser; r={a: vars(Parser().parse([\"thefuck\", a])) for a in [\"--yeah\", \"-y\", \"--hard\"]}; f={a: bool(v.get(\"yes\") or v.get(\"yeah\")) for a, v in r.items()}; print(\"parsed no-confirmation flag:\", f); assert all(f.values()), f' && echo \"VERDICT_LINE: PASS --yeah, -y and --hard are accepted and set the run-without-confirmation flag\" || echo \"VERDICT_LINE: FAIL one of --yeah/-y/--hard is not accepted by the thefuck argument parser (see above)\"",
+  "exit_code": "0",
+  "stdout.log": "thefuck --help exit=0\n               [--enable-experimental-instant-mode] [-h] [-y | -r] [-d]\n  -y, --yes, --yeah, --hard\nparsed no-confirmation flag: {'--yeah': True, '-y': True, '--hard': True}\nVERDICT_LINE: PASS --yeah, -y and --hard are accepted and set the run-without-confirmation flag\n",
+  "stderr.log": "",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\n"
+ },
+ {
+  "probe": "p-c6",
+  "cmd.txt": "thefuck --help > /tmp/help.txt 2>&1; echo \"thefuck --help exit=$?\"; grep -E -- \"-r|repeat\" /tmp/help.txt | head -n 2 && python3 -c 'from thefuck.argument_parser import Parser; v=vars(Parser().parse([\"thefuck\", \"-r\"])); print(\"parsed:\", {k: v[k] for k in v if \"repeat\" in k}); assert v.get(\"repeat\") is True, v' && echo \"VERDICT_LINE: PASS -r is accepted and sets the repeat (fix-until-success) flag\" || echo \"VERDICT_LINE: FAIL -r not accepted / repeat flag not set (see above)\"",
+  "exit_code": "0",
+  "stdout.log": "thefuck --help exit=0\n               [--enable-experimental-instant-mode] [-h] [-y | -r] [-d]\n  -r, --repeat          repeat on failure\nparsed: {'repeat': True}\nVERDICT_LINE: PASS -r is accepted and sets the repeat (fix-until-success) flag\n",
+  "stderr.log": "",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\n"
+ },
+ {
+  "probe": "p-c7",
+  "cmd.txt": "pip instatl requests > /tmp/pip_out.txt 2>&1; echo \"pip instatl exit=$?\"; cat /tmp/pip_out.txt && python3 -c 'from thefuck.rules.pip_unknown_command import match, get_new_command; from thefuck.types import Command; o=open(\"/tmp/pip_out.txt\").read(); c=Command(\"pip instatl requests\", o); m=match(c); print(\"rule match:\", m); n=get_new_command(c) if m else None; print(\"suggested:\", n); assert n == \"pip install requests\" or n == [\"pip install requests\"], n' && echo \"VERDICT_LINE: PASS pip_unknown_command turns real 'pip instatl requests' output into 'pip install requests'\" || echo \"VERDICT_LINE: FAIL pip_unknown_command did not suggest 'pip install requests' for the real pip output (see above)\"",
+  "exit_code": "0",
+  "stdout.log": "pip instatl exit=1\nERROR: unknown command \"instatl\" - maybe you meant \"install\"\nrule match: True\nsuggested: pip install requests\nVERDICT_LINE: PASS pip_unknown_command turns real 'pip instatl requests' output into 'pip install requests'\n",
+  "stderr.log": "",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\n"
+ },
+ {
+  "probe": "p-c8",
+  "cmd.txt": "echo \"note: sandbox is root so apt-get cannot produce a real Permission denied; the README's exact error text is fed to the sudo rule\"; python3 -c 'from thefuck.rules.sudo import match, get_new_command; from thefuck.types import Command; c=Command(\"apt-get install vim\", \"E: Could not open lock file /var/lib/dpkg/lock - open (13: Permission denied)\\nE: Unable to lock the administration directory (/var/lib/dpkg/), are you root?\"); m=match(c); print(\"rule match:\", m); n=get_new_command(c) if m else None; print(\"suggested:\", n); assert n == \"sudo apt-get install vim\", n' && echo \"VERDICT_LINE: PASS sudo rule suggests 'sudo apt-get install vim' for the README's permission-denied output\" || echo \"VERDICT_LINE: FAIL sudo rule did not produce 'sudo apt-get install vim' (see above)\"",
+  "exit_code": "0",
+  "stdout.log": "note: sandbox is root so apt-get cannot produce a real Permission denied; the README's exact error text is fed to the sudo rule\nrule match: True\nsuggested: sudo apt-get install vim\nVERDICT_LINE: PASS sudo rule suggests 'sudo apt-get install vim' for the README's permission-denied output\n",
+  "stderr.log": "",
+  "phase_a.log": "[notice] To update, run: pip install --upgrade pip\n\n--stderr--\n"
+ },
+ {
+  "probe": "p-c9",
+  "cmd.txt": "python3 /tmp/p.py && echo \"VERDICT_LINE: PASS Tests badge renders passing and latest Tests workflow run succeeded (date on OBSERVED line)\" || echo \"VERDICT_LINE: FAIL Tests badge or latest Tests run is not passing (see OBSERVED line above)\"",
+  "exit_code": "0",
+  "stdout.log": "badge_url: https://github.com/nvbn/thefuck/workflows/Tests/badge.svg\nbadge_http: 200 badge_state: no status\ntests_run: action_required 2026-08-28T17:40:21Z https://github.com/nvbn/thefuck/actions/runs/33195755239\ntests_run: action_required 2026-08-05T19:43:22Z https://github.com/nvbn/thefuck/actions/runs/31040734221\ntests_run: failure 2025-07-14T14:09:07Z https://github.com/nvbn/thefuck/actions/runs/16269163459\nOBSERVED badge_state=no status latest_tests_conclusion=action_required latest_tests_date=2026-08-28T17:40:21Z\nVERDICT_LINE: FAIL Tests badge or latest Tests run is not passing (see OBSERVED line above)\n",
+  "stderr.log": "",
+  "phase_a.log": "\n--stderr--\n"
+ }
+]

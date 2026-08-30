@@ -1,1 +1,0 @@
-python3 --version && /tmp/v/bin/pip install PyInquirer > /tmp/pip.log 2>&1; rc=$?; tail -15 /tmp/pip.log; echo "pip exit: $rc"; /tmp/v/bin/pip list 2>/dev/null | grep -i -E 'pyinquirer|prompt|pygments'; test $rc -eq 0 && echo "VERDICT_LINE: PASS pip install PyInquirer exited 0 on $(python3 --version)" || echo "VERDICT_LINE: FAIL pip install PyInquirer exited $rc"

@@ -1,0 +1,25 @@
+  396 data/pennsmall/test.txt
+ 3225 data/pennsmall/train.txt
+  890 data/pennsmall/valid.txt
+ 4511 total
+main_exit=0
+-----------------------------------------------------------------------------------------
+Saving model (new best validation)
+=========================================================================================
+| End of training | test loss  7.10 | test ppl  1218.03 | test bpc   10.250
+=========================================================================================
+-rw-r--r-- 1 root root 83039388 Aug 30 02:13 PTB.pt
+finetune_exit=1
+  (module): LSTM(1150, 1150)
+), WeightDrop(
+  (module): LSTM(1150, 400)
+)]
+Args: Namespace(alpha=2, batch_size=20, beta=1, bptt=70, clip=0.25, cuda=False, data='data/pennsmall', dropout=0.4, dropoute=0.1, dropouth=0.25, dropouti=0.4, emsize=400, epochs=1, log_interval=1, lr=30, model='LSTM', nhid=1150, nlayers=3, nonmono=5, save='PTB.pt', seed=141, tied=True, wdecay=1.2e-06, wdrop=0.5)
+Model total parameters: 20749742
+Traceback (most recent call last):
+  File "finetune.py", line 182, in <module>
+    stored_loss = evaluate(val_data)
+  File "finetune.py", line 107, in evaluate
+    model.eval()
+AttributeError: 'list' object has no attribute 'eval'
+VERDICT_LINE: FAIL finetune.py failed in the documented env torch 0.4.1 (README: finetune unfinished after the 0.4 port): finetune_exit=1 AttributeError: 'list' object has no attribute 'eval'

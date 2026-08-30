@@ -1,0 +1,14 @@
+WT2 url -> ERROR (dead host or non-200)
+PTB url -> 200
+getdata_exit=0
+
+2026-08-30 02:07:39 (276 MB/s) - ‘enwik8.zip’ saved [36445475/36445475]
+
+python: can't open file '/enwik8/prep_enwik8.py': [Errno 2] No such file or directory
+- Downloading Penn Treebank (PTB)
+- Downloading Penn Treebank (Character)
+---
+Happy language modeling :)
+sizes {'data/penn/train.txt': -1, 'data/penn/valid.txt': -1, 'data/penn/test.txt': -1, 'data/wikitext-2/train.txt': -1, 'data/wikitext-2/valid.txt': -1, 'data/wikitext-2/test.txt': -1}
+missing: ['data/penn/train.txt', 'data/penn/valid.txt', 'data/penn/test.txt', 'data/wikitext-2/train.txt', 'data/wikitext-2/valid.txt', 'data/wikitext-2/test.txt']
+VERDICT_LINE: FAIL after getdata.sh (getdata_exit=0) these are missing/empty: data/penn/train.txt data/penn/valid.txt data/penn/test.txt data/wikitext-2/train.txt data/wikitext-2/valid.txt data/wikitext-2/test.txt

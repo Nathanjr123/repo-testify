@@ -1,0 +1,8 @@
+torch 0.4.1 cuda_available False cpus 4
+no_nvidia_device
+train_exit=124
+| epoch   1 |     2/  663 batches | lr 30.00000 | ms/batch 9002.80 | loss 15.01 | ppl 3286698.03 | bpc   21.648
+| epoch   1 |     4/  663 batches | lr 30.00000 | ms/batch 6256.28 | loss  8.46 | ppl  4726.95 | bpc   12.207
+| epoch   1 |     6/  663 batches | lr 30.00000 | ms/batch 6275.73 | loss  8.15 | ppl  3451.85 | bpc   11.753
+batches_logged 4 cpu_ms_per_batch_mean 6849 cpu_s_per_epoch_estimate 4548 claimed_GP100_s_per_epoch 65 =ms_per_batch 98
+VERDICT_LINE: FAIL UNTESTABLE-HERE: no GPU in sandbox, GP100 seconds/epoch and the LSTM:QRNN ratio cannot be measured (QRNN also needs uninstalled torchqrnn); CPU 2-core reference from the documented LSTM command under torch 0.4.1: batches_logged 4 cpu_ms_per_batch_mean 6849 cpu_s_per_epoch_estimate 4548 claimed_GP100_s_per_epoch 65 =ms_per_batch 98

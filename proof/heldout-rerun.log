@@ -1,0 +1,23 @@
+r12-awd-lstm-lm.json: ok wall=1261.33s
+r13-keyboard.json: ok wall=682.57s
+r14-simplejson.json: ok wall=508.94s
+{
+ "id": "advanced-v3-heldout-rerun-1788057575",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.531,
+   "confident_wrong": 0.617,
+   "evidence_valid": 1.0,
+   "score_error": 0.829
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 1.0
+  },
+  "raw": 0.687,
+  "n_cases": 3,
+  "settled_fraction": 0.939,
+  "capped": false
+ }
+}
+RERUN_DONE

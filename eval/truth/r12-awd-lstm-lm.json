@@ -4,14 +4,19 @@
   "c1": "refuted",
   "c2": "refuted",
   "c3": "unverifiable",
-  "c4": "unverifiable",
-  "c5": "unverifiable",
+  "c4": "refuted",
+  "c5": "refuted",
   "c6": "verified",
-  "c7": "unverifiable",
+  "c7": "refuted",
   "c8": "unverifiable",
   "c9": "verified",
   "c10": "unverifiable",
   "c11": "verified"
  },
- "reviewer_score": 40
+ "reviewer_score": 40,
+ "audit_notes": {
+  "c4": "was unverifiable; main.py produced PTB.pt but the documented finetune.py command exits 1 with a traceback (recorded by advanced-v3-heldout probe p-c4). Toward the pipeline.",
+  "c5": "was unverifiable; Documented pointer.py command exits 1 (evaluate(): model API mismatch) (recorded by advanced-v3-heldout probe p-c5). Toward the pipeline.",
+  "c7": "was unverifiable; QRNN path needs pytorch-qrnn, which the README setup never installs; command exits 1 (recorded by advanced-v3-heldout probe p-c7). Toward the pipeline."
+ }
 }

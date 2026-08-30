@@ -1,2 +1,0 @@
-results: <Result ('lo', 'ok') {}> <Result ('look at ', 'that') {}> <Result (4, 40) {}>
-VERDICT_LINE: PASS width/precision examples match README

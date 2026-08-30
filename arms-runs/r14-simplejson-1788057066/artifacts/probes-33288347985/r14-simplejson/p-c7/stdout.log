@@ -1,0 +1,4 @@
+C loaded: True
+C path:    {"status": "ok", "data": {"a": 1, "b": 2}} | {"data": {"a": 1, "b": 2}, "status": "ok"}
+pure path: {"status": "ok", "data": {"a": 1, "b": 2}} | {"data": {"a": 1, "b": 2}, "status": "ok"}
+VERDICT_LINE: PASS RawJSON output identical on C-extension and pure-Python encoder paths

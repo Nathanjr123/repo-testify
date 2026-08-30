@@ -1,0 +1,22 @@
+Collecting https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip
+  Downloading https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip
+     - 79.5 kB 2.3 MB/s 0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: keyboard
+  Building wheel for keyboard (pyproject.toml): started
+  Building wheel for keyboard (pyproject.toml): finished with status 'done'
+  Created wheel for keyboard: filename=keyboard-0.13.5-py3-none-any.whl size=60489 sha256=6375a1119cd53842a1cb0e56a65c53e2964237b1aa18190de576b13a13a12fba
+  Stored in directory: /tmp/pip-ephem-wheel-cache-ys43hnqe/wheels/62/8e/c7/e87caa0a904548cfef7d979c2b856282f4d5e88b5cb5acc751
+Successfully built keyboard
+Installing collected packages: keyboard
+Successfully installed keyboard-0.13.5
+
+--stderr--
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: python3 -m pip install --upgrade pip

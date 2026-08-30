@@ -1,0 +1,17 @@
+torch 0.4.1 cuda_available False cudnn_enabled_flag True
+15:        # We need to replace flatten_parameters with a nothing function
+24:            self.module.flatten_parameters = self.widget_demagnetizer_y2k_edition
+no explicit cudnn references (relies on PyTorch default backend selection)
+Applying weight drop of 0.5 to weight_hh_l0
+Applying weight drop of 0.5 to weight_hh_l0
+Applying weight drop of 0.5 to weight_hh_l0
+[WeightDrop(
+  (module): LSTM(400, 1150)
+), WeightDrop(
+  (module): LSTM(1150, 1150)
+), WeightDrop(
+  (module): LSTM(1150, 400)
+)]
+rnn_layers ['WeightDrop(LSTM)', 'WeightDrop(LSTM)', 'WeightDrop(LSTM)']
+all_layers_are_torch_nn_LSTM True cpu_forward_output_shape (10, 400)
+VERDICT_LINE: PASS structural-only: every recurrent layer is torch.nn.LSTM wrapped by WeightDrop (the cuDNN-eligible module), forward runs under torch 0.4.1; runtime cuDNN selection could not be observed because the sandbox has no CUDA device

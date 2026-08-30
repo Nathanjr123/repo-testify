@@ -1,3 +1,0 @@
-str(p): <Parser "It's {}, I love it!">
-repr: <Result ('spam',) {}>
-VERDICT_LINE: PASS compile() Parser str and parse result match README

@@ -1,1 +1,0 @@
-python3 -c "from parse import parse; r=parse(\"It's {}, I love it!\", \"It's spam, I love it!\"); print('repr:', repr(r)); assert repr(r)==\"<Result ('spam',) {}>\", repr(r); assert r[0]=='spam', r[0]; print('VERDICT_LINE: PASS repr and r[0] match README')" || echo "VERDICT_LINE: FAIL parse result differs from README"

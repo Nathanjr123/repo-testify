@@ -1,0 +1,144 @@
+{
+ "case_id": "r14-simplejson",
+ "repo": "https://github.com/simplejson/simplejson",
+ "commit": "fbc057f87cc0aade75752acbc1a6713fb18199c0",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.9-slim",
+   "network": "on",
+   "setup": [
+    "pip install simplejson"
+   ],
+   "commands": [
+    "( python3 -c 'import sys, simplejson; out = simplejson.dumps({\"a\": 1}); print(\"python\", sys.version.split()[0], \"simplejson\", simplejson.__version__, \"C ext loaded:\", simplejson._import_c_make_encoder() is not None); print(\"observed:\", out); assert out == \"{\\\"a\\\": 1}\", out' && echo \"VERDICT_LINE: PASS pip install simplejson and import/dumps work on python 3.9 (lower bound of 3.9+)\" ) || echo \"VERDICT_LINE: FAIL install or import/dumps failed on python 3.9\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install simplejson"
+   ],
+   "commands": [
+    "( printf '%b' 'import timeit, json, sys\\nimport simplejson as sj\\nhas_c = sj._import_c_make_encoder() is not None\\nprint(\"python\", sys.version.split()[0], \"simplejson\", sj.__version__, \"C loaded:\", has_c)\\nbig = {\"k\" + str(i): [i, str(i), i * 1.5, {\"n\": i, \"s\": \"x\" * 20, \"u\": chr(233) * 5}] for i in range(2000)}\\nsmall = {\"id\": 1, \"name\": \"two\", \"tags\": [\"a\", \"b\", \"c\"], \"ok\": True}\\ndef bench(dumps, loads, doc, n):\\n    s = dumps(doc)\\n    td = min(timeit.repeat(lambda: dumps(doc), number=n, repeat=3)) / n\\n    tl = min(timeit.repeat(lambda: loads(s), number=n, repeat=3)) / n\\n    return td, tl\\nres = {}\\nres[\"sj_c\"] = (bench(sj.dumps, sj.loads, big, 20), bench(sj.dumps, sj.loads, small, 20000))\\nsj._toggle_speedups(False)\\nassert sj.encoder.c_make_encoder is None\\nres[\"sj_py\"] = (bench(sj.dumps, sj.loads, big, 20), bench(sj.dumps, sj.loads, small, 20000))\\nres[\"json\"] = (bench(json.dumps, json.loads, big, 20), bench(json.dumps, json.loads, small, 20000))\\nfor k, v in res.items():\\n    print(k, \"big dumps/loads ms:\", round(v[0][0] * 1000, 3), round(v[0][1] * 1000, 3), \"| small dumps/loads us:\", round(v[1][0] * 1e6, 2), round(v[1][1] * 1e6, 2))\\nrd = res[\"sj_py\"][0][0] / res[\"sj_c\"][0][0]\\nrl = res[\"sj_py\"][0][1] / res[\"sj_c\"][0][1]\\njd = res[\"json\"][0][0] / res[\"sj_c\"][0][0]\\njl = res[\"json\"][0][1] / res[\"sj_c\"][0][1]\\nprint(\"C-vs-pure-simplejson speedup (big doc): dumps x\" + str(round(rd, 2)) + \" loads x\" + str(round(rl, 2)))\\nprint(\"stdlib-json-time / simplejson-C-time (big doc, >1 = simplejson faster): dumps x\" + str(round(jd, 2)) + \" loads x\" + str(round(jl, 2)))\\nassert has_c, \"C extension not loaded\"\\nassert rd >= 2 and rl >= 2, \"C vs pure boost below 2x\"\\n' > /tmp/p2.py && python3 /tmp/p2.py && echo \"VERDICT_LINE: PASS C extension loaded and >=2x faster than pure-Python simplejson on dumps and loads (stdlib json ratio printed above)\" ) || echo \"VERDICT_LINE: FAIL C extension missing or C-vs-pure speedup below 2x (see numbers above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "DISABLE_SPEEDUPS=1 pip install --no-binary simplejson simplejson"
+   ],
+   "commands": [
+    "( python3 -c 'import sys, subprocess, simplejson; from importlib import metadata; fr = subprocess.run([sys.executable, \"-m\", \"pip\", \"freeze\"], capture_output=True, text=True).stdout.split(); print(\"pip freeze:\", fr); print(\"Requires-Dist:\", metadata.requires(\"simplejson\")); has_c = simplejson._import_c_make_encoder() is not None; print(\"C ext loaded:\", has_c); doc = {\"a\": [1, 2.5, \"x\", None, True]}; rt = simplejson.loads(simplejson.dumps(doc)); print(\"pure-python roundtrip:\", rt); assert [l.split(\"==\")[0].lower() for l in fr] == [\"simplejson\"], \"extra distributions installed: \" + str(fr); assert not metadata.requires(\"simplejson\"), \"declares dependencies\"; assert not has_c, \"C extension present, pure-Python path not exercised\"; assert rt == doc' && echo \"VERDICT_LINE: PASS sdist install with speedups disabled pulls no dependencies and works without the C extension\" ) || echo \"VERDICT_LINE: FAIL extra dependencies installed or pure-Python path failed (see output)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.14-slim",
+   "network": "on",
+   "setup": [
+    "pip install simplejson"
+   ],
+   "commands": [
+    "( printf '%b' 'import json, sys, urllib.request\\nSHA = \"fbc057f87cc0aade75752acbc1a6713fb18199c0\"\\ndef get(url):\\n    req = urllib.request.Request(url, headers={\"User-Agent\": \"repo-probe\", \"Accept\": \"application/vnd.github+json\"})\\n    with urllib.request.urlopen(req, timeout=30) as r:\\n        return r.status, r.read().decode(\"utf-8\", \"replace\")\\nst, body = get(\"https://api.github.com/repos/simplejson/simplejson/contents/.github/workflows?ref=\" + SHA)\\nfiles = json.loads(body)\\nprint(\"workflow files at SHA:\", [f[\"name\"] for f in files])\\nhas314 = False\\nhasft = False\\nfor f in files:\\n    s, c = get(f[\"download_url\"])\\n    low = c.lower()\\n    hits = [ln.strip() for ln in c.splitlines() if \"3.14\" in ln or \"thread\" in ln.lower()]\\n    print(f[\"name\"], \"->\", hits[:12])\\n    if \"3.14\" in c:\\n        has314 = True\\n    if \"3.14t\" in low or \"cp314t\" in low or \"free-thread\" in low or \"free_thread\" in low or \"freethread\" in low:\\n        hasft = True\\nst, body = get(\"https://api.github.com/repos/simplejson/simplejson/actions/runs?head_sha=\" + SHA + \"&per_page=50\")\\nruns = json.loads(body).get(\"workflow_runs\", [])\\nprint(\"CI runs at pinned SHA:\", [(r[\"name\"], r[\"status\"], r[\"conclusion\"]) for r in runs])\\nprint(\"matrix has 3.14:\", has314, \"| free-threaded entry:\", hasft)\\nassert has314, \"no 3.14 in workflow files\"\\nassert hasft, \"no free-threaded (3.14t) entry in workflow files\"\\n' > /tmp/p4.py && python3 /tmp/p4.py && ( python3 -c 'import sys, simplejson; print(\"py\", sys.version.split()[0], \"gil enabled:\", getattr(sys, \"_is_gil_enabled\", lambda: True)(), \"C ext:\", simplejson._import_c_make_encoder() is not None); from simplejson.tests import main; main()' || python3 -m unittest discover -s $(python3 -c 'import os, simplejson.tests as t; print(os.path.dirname(t.__file__))') -p \"test_*.py\" ) && echo \"VERDICT_LINE: PASS workflows at pinned SHA include 3.14 and a free-threaded entry; bundled test suite passes on python 3.14\" ) || echo \"VERDICT_LINE: FAIL 3.14/free-threaded matrix entry missing or test suite failed on python 3.14 (see output)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "( printf '%b' 'import json, urllib.request\\nreq = urllib.request.Request(\"https://pypi.org/pypi/simplejson/json\", headers={\"User-Agent\": \"repo-probe\"})\\nwith urllib.request.urlopen(req, timeout=30) as r:\\n    st = r.status\\n    d = json.loads(r.read())\\nver = d[\"info\"][\"version\"]\\nnames = [u[\"filename\"] for u in d[\"urls\"]]\\npy2 = [n for n in names if \"cp27\" in n or \"-py2\" in n]\\nprint(\"status\", st, \"| latest release\", ver, \"| files in release:\", len(names))\\nprint(\"py2/cp27 wheel files in latest release:\", py2)\\nolder = [(v, u[\"filename\"]) for v, us in d[\"releases\"].items() for u in us if \"cp27\" in u[\"filename\"]]\\nprint(\"cp27 wheels across all releases (count):\", len(older), \"| sample:\", older[-5:])\\nassert py2, \"no Python 2.7 wheel in latest release \" + ver\\n' > /tmp/p5.py && python3 /tmp/p5.py && echo \"VERDICT_LINE: PASS latest PyPI release of simplejson includes a cp27/py2 wheel\" ) || echo \"VERDICT_LINE: FAIL no Python 2.7 wheel in the latest PyPI release (or PyPI unreachable)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install simplejson"
+   ],
+   "commands": [
+    "( printf '%b' 'from simplejson import dumps, RawJSON\\n\\npayload = {\\n    \"status\": \"ok\",\\n    \"data\": RawJSON(\\047{\"a\": 1, \"b\": 2}\\047)\\n}\\n\\nprint(dumps(payload))\\n' > /tmp/p6.py && cat /tmp/p6.py && python3 /tmp/p6.py > /tmp/out6.txt && python3 -c 'out = open(\"/tmp/out6.txt\").read(); print(\"observed:\", out.strip()); assert out == \"{\\\"status\\\": \\\"ok\\\", \\\"data\\\": {\\\"a\\\": 1, \\\"b\\\": 2}}\\n\", \"got \" + repr(out)' && echo \"VERDICT_LINE: PASS README RawJSON snippet prints exactly the documented output\" ) || echo \"VERDICT_LINE: FAIL RawJSON snippet output differs from README (or import failed)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install simplejson"
+   ],
+   "commands": [
+    "( printf '%b' 'import simplejson as sj\\nfrom simplejson import dumps, RawJSON\\npayload = {\"status\": \"ok\", \"data\": RawJSON(\\047{\"a\": 1, \"b\": 2}\\047)}\\nexpected = \\047{\"status\": \"ok\", \"data\": {\"a\": 1, \"b\": 2}}\\047\\nexpected_sorted = \\047{\"data\": {\"a\": 1, \"b\": 2}, \"status\": \"ok\"}\\047\\nhas_c = sj._import_c_make_encoder() is not None\\na = dumps(payload)\\na2 = dumps(payload, sort_keys=True)\\nsj._toggle_speedups(False)\\nassert sj.encoder.c_make_encoder is None\\nb = dumps(payload)\\nb2 = dumps(payload, sort_keys=True)\\nprint(\"C loaded:\", has_c)\\nprint(\"C path:   \", a, \"|\", a2)\\nprint(\"pure path:\", b, \"|\", b2)\\nassert a == expected, \"C path differs: \" + a\\nassert b == expected, \"pure path differs: \" + b\\nassert a2 == expected_sorted and b2 == expected_sorted, \"sort_keys outputs differ\"\\nassert has_c, \"C extension not loaded, C path untested\"\\n' > /tmp/p7.py && python3 /tmp/p7.py && echo \"VERDICT_LINE: PASS RawJSON output identical on C-extension and pure-Python encoder paths\" ) || echo \"VERDICT_LINE: FAIL RawJSON output differs between paths or C extension unavailable (see output)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install simplejson"
+   ],
+   "commands": [
+    "( python3 -c 'import simplejson; obj = type(\"Point\", (), {\"x\": 3, \"y\": 4})(); out = simplejson.dumps({\"p\": obj}, default=lambda o: {\"x\": o.x, \"y\": o.y}); print(\"C ext:\", simplejson._import_c_make_encoder() is not None, \"| observed:\", out); assert out == \"{\\\"p\\\": {\\\"x\\\": 3, \\\"y\\\": 4}}\", out; simplejson._toggle_speedups(False); out2 = simplejson.dumps({\"p\": obj}, default=lambda o: {\"x\": o.x, \"y\": o.y}); print(\"pure path:\", out2); assert out2 == out, out2' && echo \"VERDICT_LINE: PASS dumps(default=...) serializes a plain object with no cooperation, same on C and pure paths\" ) || echo \"VERDICT_LINE: FAIL default kwarg did not produce the expected serialization\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install simplejson"
+   ],
+   "commands": [
+    "( python3 -c 'import simplejson, collections; src = \"{\\\"a\\\": 1, \\\"b\\\": {\\\"c\\\": 2}}\"; d = simplejson.loads(src, object_pairs_hook=collections.OrderedDict); print(\"object_pairs_hook:\", type(d).__name__, d); assert isinstance(d, collections.OrderedDict) and isinstance(d[\"b\"], collections.OrderedDict), d; seen = []; h = simplejson.loads(src, object_hook=lambda o: (seen.append(dict(o)), o)[1]); print(\"object_hook calls:\", seen); assert seen == [{\"c\": 2}, {\"a\": 1, \"b\": {\"c\": 2}}], seen; pairs = simplejson.loads(src, object_pairs_hook=lambda p: (\"PAIRS\", list(p))); print(\"custom pairs hook:\", pairs); assert pairs[0] == \"PAIRS\", pairs' && echo \"VERDICT_LINE: PASS object_hook and object_pairs_hook post-process every decoded object\" ) || echo \"VERDICT_LINE: FAIL object_hook/object_pairs_hook did not behave as documented\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "( printf '%b' 'import re, urllib.request\\nreq = urllib.request.Request(\"https://simplejson.readthedocs.io/\", headers={\"User-Agent\": \"repo-probe\"})\\nwith urllib.request.urlopen(req, timeout=30) as r:\\n    st = r.status\\n    final = r.geturl()\\n    body = r.read().decode(\"utf-8\", \"replace\")\\nt = re.search(\"<title>(.*?)</title>\", body, re.S)\\nv = re.search(\"simplejson ([0-9][0-9A-Za-z.]*) documentation\", body)\\nprint(\"status\", st, \"| final url\", final, \"| title:\", t.group(1).strip() if t else None)\\nprint(\"doc version:\", v.group(1) if v else None, \"| pinned setup.py VERSION 4.1.2\")\\nassert st == 200 and \"simplejson\" in body.lower(), \"docs page not served\"\\n' > /tmp/p10.py && python3 /tmp/p10.py && echo \"VERDICT_LINE: PASS simplejson.readthedocs.io serves a simplejson docs page (version printed above)\" ) || echo \"VERDICT_LINE: FAIL docs URL not reachable or not a simplejson docs page\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "( printf '%b' 'import json, urllib.request\\ndef get(url):\\n    req = urllib.request.Request(url, headers={\"User-Agent\": \"repo-probe\"})\\n    with urllib.request.urlopen(req, timeout=30) as r:\\n        return r.status, r.read().decode(\"utf-8\", \"replace\")\\nst, body = get(\"https://api.github.com/repos/simplejson/simplejson/branches/python2.2\")\\nb = json.loads(body)\\nprint(\"api status\", st, \"| branch\", b.get(\"name\"), \"| head\", b[\"commit\"][\"sha\"][:12], \"| last commit date\", b[\"commit\"][\"commit\"][\"committer\"][\"date\"])\\nst2, html = get(\"https://github.com/simplejson/simplejson/tree/python2.2\")\\nprint(\"tree page status\", st2)\\nassert st == 200 and b.get(\"name\") == \"python2.2\" and st2 == 200\\n' > /tmp/p11.py && python3 /tmp/p11.py && echo \"VERDICT_LINE: PASS python2.2 branch exists on GitHub (last commit date printed above)\" ) || echo \"VERDICT_LINE: FAIL python2.2 branch not found (404) or GitHub unreachable\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}

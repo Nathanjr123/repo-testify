@@ -1,9 +1,0 @@
-Python 3.11.16
-prompt_toolkit itself does not import
-  File "/tmp/v/lib/python3.11/site-packages/prompt_toolkit/styles/__init__.py", line 8, in <module>
-    from .from_dict import *
-  File "/tmp/v/lib/python3.11/site-packages/prompt_toolkit/styles/from_dict.py", line 9, in <module>
-    from collections import Mapping
-ImportError: cannot import name 'Mapping' from 'collections' (/usr/local/lib/python3.11/collections/__init__.py)
-import exit: 1
-VERDICT_LINE: FAIL quickstart import failed on Python 3.11.16: ImportError: cannot import name 'Mapping' from 'collections' (/usr/local/lib/python3.11/collections/__init__.py)

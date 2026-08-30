@@ -1,0 +1,9 @@
+wt2_data_missing
+README copy-paste check, occurrences of 'trains a PTB model': 2 (one of them sits under the WT2 heading)
+train_exit=1
+Traceback (most recent call last):
+  File "main.py", line 4, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+batches_logged 0 ms_per_batch [] ppl [] epochs_required 750
+VERDICT_LINE: FAIL WT2 data unavailable: getdata.sh source s3.amazonaws.com/research.metamind.io did not deliver wikitext-2-v1.zip, recipe cannot be run as documented

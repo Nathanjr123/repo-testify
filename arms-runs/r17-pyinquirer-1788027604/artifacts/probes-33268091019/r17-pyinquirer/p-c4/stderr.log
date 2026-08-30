@@ -1,7 +1,0 @@
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "/repo/PyInquirer/__init__.py", line 8, in <module>
-    from .prompts.common import default_style
-  File "/repo/PyInquirer/prompts/common.py", line 74, in <module>
-    default_style = Style.from_dict({
-AttributeError: type object 'Style' has no attribute 'from_dict'
