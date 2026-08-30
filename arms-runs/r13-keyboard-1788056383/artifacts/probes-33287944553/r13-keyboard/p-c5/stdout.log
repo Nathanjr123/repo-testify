@@ -1,5 +1,0 @@
-downloaded artifact: ['keyboard-0.13.5-py3-none-any.whl']
-installed file extensions: ['', '.py', '.pyc', '.txt']
-compiled/native files: []
-universal pure-python wheel (none-any): True
-VERDICT_LINE: PASS wheel keyboard-0.13.5-py3-none-any.whl is none-any and installed files are ,.py,.pyc,.txt with no native modules

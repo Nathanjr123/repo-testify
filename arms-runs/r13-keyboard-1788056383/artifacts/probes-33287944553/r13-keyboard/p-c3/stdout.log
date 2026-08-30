@@ -1,5 +1,0 @@
-pip freeze after pip install keyboard: ['keyboard==0.13.5']
-Requires-Dist metadata: ['pyobjc ; sys_platform == "darwin"']
-dumpkeys binary (shelled out to by linux backend) on PATH: None
-extra python packages pulled in: []
-VERDICT_LINE: PASS pip install keyboard pulled no other python package on linux (metadata declares ['pyobjc ; sys_platform == "darwin"'] for darwin; linux backend needs external dumpkeys=None)

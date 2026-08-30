@@ -1,4 +1,0 @@
-status 200 | latest release 4.1.2 | files in release: 96
-py2/cp27 wheel files in latest release: ['simplejson-4.1.2-cp27-cp27m-manylinux1_x86_64.whl', 'simplejson-4.1.2-cp27-cp27m-manylinux2010_x86_64.whl', 'simplejson-4.1.2-cp27-cp27mu-manylinux1_x86_64.whl', 'simplejson-4.1.2-cp27-cp27mu-manylinux2010_x86_64.whl', 'simplejson-4.1.2-cp27-cp27m-win32.whl', 'simplejson-4.1.2-cp27-cp27m-win_amd64.whl']
-cp27 wheels across all releases (count): 183 | sample: [('4.1.2', 'simplejson-4.1.2-cp27-cp27m-manylinux2010_x86_64.whl'), ('4.1.2', 'simplejson-4.1.2-cp27-cp27mu-manylinux1_x86_64.whl'), ('4.1.2', 'simplejson-4.1.2-cp27-cp27mu-manylinux2010_x86_64.whl'), ('4.1.2', 'simplejson-4.1.2-cp27-cp27m-win32.whl'), ('4.1.2', 'simplejson-4.1.2-cp27-cp27m-win_amd64.whl')]
-VERDICT_LINE: PASS latest PyPI release of simplejson includes a cp27/py2 wheel

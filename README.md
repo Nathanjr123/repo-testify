@@ -137,6 +137,22 @@ We pointed the pipeline at this repository (case `eval/cases/self/r00-repo-testi
 
 The Docker claim (c6) is verified at low confidence: the sandbox cannot run Docker, so the probe checked the latest `repro` workflow run instead and said so. That is the escalation lane working as designed.
 
+**Second run, on the finished repository** (case `eval/cases/self/r00b-repo-testify-final.json`, commit `c93ba0da480f`, CI run 33298981599, 4 model calls, $3.15). Ten claims rewritten for the final README. Nine verified; one refuted at high confidence, and again the pipeline was right: the README says seven scorer tests pass, the probe counted six, because the seventh test had been added below the file's `__main__` runner block and never executed. Fixed in the same change (CHANGELOG iteration 17). The tool keeps finding exactly the kind of drift it was built for, in the repository that built it.
+
+| claim | what the README promises | verdict | confidence |
+|---|---|---|---|
+| c1 | From a clean clone, `./repro.sh` runs to completion with exit code 0 using only Python 3.10+ (no make, no dock | **verified** | high |
+| c2 | `python3 tests/test_scorer.py` passes all seven scorer contract tests. | **refuted** | high |
+| c3 | `python3 eval/validate_cases.py` reports 20 case files checked and all valid. | **verified** | high |
+| c4 | `python3 -m eval.replay --run <advanced-v2-rescored run id>` reproduces the stored raw score 0.836 exactly. | **verified** | high |
+| c5 | Regenerating RESULTS.md and the README tables from proof/ yields files byte-identical to the committed ones. | **verified** | high |
+| c6 | Every git hash cited in RESULTS.md rows exists in the repository history (rows marked 'rewritten' carry a note | **verified** | high |
+| c7 | The README's `repro` workflow badge asserts the latest run of that workflow on master succeeded. | **verified** | high |
+| c8 | `arms/PROMPTS.md` is generated from the arm sources: running `python3 tools/render_prompts.py` leaves it uncha | **verified** | high |
+| c9 | The repository's Releases contain a tag named submission-<sha> with a zip archive attached whose name contains | **verified** | high |
+| c10 | The README results table contains held-out rows scored on both the untouched draft truth and the evidence-corr | **verified** | high |
+
+
 ## What we did not attempt
 Claim discovery is not on the scored path. The baseline is deliberately the reading arm (one call, no execution), because the question this project asks is what execution adds; a tool-using single-agent baseline (one model call with a shell in the same sandbox) would be the fairer comparison for agent design and was not built in the time available, so the comparison here measures reading against executing, not one agent design against another. The claim list per repository is fixed so that two people scoring the same run get the same number; an extractor exists for real use but its recall is not evaluated here. No embedding retrieval, no agents talking to each other, no self-review passes without new evidence (DESIGN.md explains why). No Windows or macOS execution: these are Linux verdicts.
 
@@ -154,7 +170,7 @@ Every table row carries its proof id, git hash and UTC timestamp. `replay` re-sc
 
 Expected output of `./repro.sh` (last lines):
 ```
-ok test_perfect ... ok test_crashed_case_is_zero_not_hidden
+ok test_perfect ... ok test_url_evidence_must_be_in_recorded_context
 20 case files checked / all valid
 sanity cell ok: 1.0
 README results block rendered

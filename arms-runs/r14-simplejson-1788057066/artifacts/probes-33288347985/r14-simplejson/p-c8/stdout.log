@@ -1,3 +1,0 @@
-C ext: False | observed: {"p": {"x": 3, "y": 4}}
-pure path: {"p": {"x": 3, "y": 4}}
-VERDICT_LINE: PASS dumps(default=...) serializes a plain object with no cooperation, same on C and pure paths

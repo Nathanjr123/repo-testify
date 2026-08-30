@@ -1,7 +1,0 @@
-torch 0.4.1 cuda_available False
-train_exit=124
-Applying weight drop of 0.5 to weight_hh_l0
-Applying weight drop of 0.5 to weight_hh_l0
-Applying weight drop of 0.5 to weight_hh_l0
-batches_logged 3 ms_per_batch [9028.87, 6376.77, 6310.92] ppl [3286698.03, 4726.95, 3451.85] cpu_epoch_estimate_s 4807 epochs_required 500
-VERDICT_LINE: FAIL UNTESTABLE-HERE: the exact command trains under torch 0.4.1/py3.7 on CPU (--cuda is store_false in this argparse = CPU), but 500 epochs x ~65 s/epoch on a GP100 is ~9 GPU-hours; 61.2/58.8 ppl not checked in a 120 s CPU sandbox: batches_logged 3 ms_per_batch [9028.87, 6376.77, 6310.92] ppl [3286698.03, 4726.95, 3451.85] cpu_epoch_estimate_s 4807 epochs_required 500

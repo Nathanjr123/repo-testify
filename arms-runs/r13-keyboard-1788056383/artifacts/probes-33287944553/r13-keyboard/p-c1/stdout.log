@@ -1,5 +1,0 @@
-Name: keyboard
-Version: 0.13.5
-Summary: Hook and simulate keyboard events on Windows and Linux
-import ok: keyboard 0.13.5 on python 3.11.16
-VERDICT_LINE: PASS pip install keyboard exited 0 in a fresh venv and import keyboard succeeds

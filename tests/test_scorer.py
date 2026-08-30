@@ -26,10 +26,11 @@ def test_crashed_case_is_zero_not_hidden():
     from eval.scorer import WEIGHTS
     zero = {"rows": {k: 0.0 for k in WEIGHTS}, "gates": {"valid_report": False, "no_fabricated_evidence": True}}
     assert aggregate([score(CASE, rep("verified", "refuted")), zero])["raw"] < 1.0
-if __name__ == "__main__":
-    for n, f in list(globals().items()):
-        if n.startswith("test_"): f(); print("ok", n)
 
 def test_url_evidence_must_be_in_recorded_context():
     r = rep("verified", "refuted"); r["_evidence_index"]["readme_urls"] = ""
     assert score(CASE, r)["rows"]["evidence_valid"] == 0.0
+
+if __name__ == "__main__":
+    for n, f in list(globals().items()):
+        if n.startswith("test_"): f(); print("ok", n)

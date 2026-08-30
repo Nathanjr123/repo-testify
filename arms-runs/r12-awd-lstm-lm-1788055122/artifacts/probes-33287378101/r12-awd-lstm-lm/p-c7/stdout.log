@@ -1,7 +1,0 @@
-torchqrnn NOT installed: README setup lists only PyTorch 0.4, no pip install for pytorch-qrnn
-qrnn_exit=1
-    model = model.RNNModel(args.model, ntokens, args.emsize, args.nhid, args.nlayers, args.dropout, args.dropouth, args.dropouti, args.dropoute, args.wdrop, args.tied)
-  File "/repo/model.py", line 28, in __init__
-    from torchqrnn import QRNNLayer
-ModuleNotFoundError: No module named 'torchqrnn'
-VERDICT_LINE: FAIL QRNN option does not run in the documented env (README setup = PyTorch 0.4 only; installed torch 0.4.1): qrnn_exit=1 ModuleNotFoundError: No module named 'torchqrnn'

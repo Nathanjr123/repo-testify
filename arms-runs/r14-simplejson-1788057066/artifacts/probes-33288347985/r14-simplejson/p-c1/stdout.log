@@ -1,3 +1,0 @@
-python 3.9.25 simplejson 4.1.2 C ext loaded: False
-observed: {"a": 1}
-VERDICT_LINE: PASS pip install simplejson and import/dumps work on python 3.9 (lower bound of 3.9+)
