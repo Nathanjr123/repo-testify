@@ -1,0 +1,202 @@
+{
+ "case_id": "r13-keyboard",
+ "repo": "https://github.com/boppreh/keyboard",
+ "commit": "d232de09bda50ecb5211ebcc59b85bc6da6aaa24",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install keyboard"
+   ],
+   "commands": [
+    "/tmp/v/bin/pip show keyboard 2>&1 | head -3",
+    "/tmp/v/bin/python -c 'import keyboard, sys; print(\"import ok: keyboard \" + keyboard.version + \" on python \" + sys.version.split()[0])' && echo \"VERDICT_LINE: PASS pip install keyboard exited 0 in a fresh venv and import keyboard succeeds\" || echo \"VERDICT_LINE: FAIL pip install keyboard or import keyboard failed in fresh venv\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install keyboard"
+   ],
+   "commands": [
+    "printf 'import keyboard, sys, os, platform\\nprint(\"platform \" + sys.platform + \" \" + platform.platform() + \" euid \" + str(os.geteuid()))\\ntry:\\n    keyboard.hook(lambda e: None)\\n    print(\"hook: ok\")\\n    keyboard.unhook_all()\\nexcept BaseException as e:\\n    print(\"hook: \" + type(e).__name__ + \": \" + str(e))\\n    sys.exit(1)\\n' > /tmp/p2.py",
+    "echo '--- as root ---'; timeout 30 /tmp/v/bin/python /tmp/p2.py > /tmp/root.txt 2>&1; echo \"exit=$?\" >> /tmp/root.txt; cat /tmp/root.txt",
+    "echo '--- as user nobody ---'; cd /tmp && timeout 30 runuser -u nobody -- /tmp/v/bin/python /tmp/p2.py > /tmp/nobody.txt 2>&1; echo \"exit=$?\" >> /tmp/nobody.txt; cat /tmp/nobody.txt",
+    "python3 -c 'r=open(\"/tmp/root.txt\").read(); n=open(\"/tmp/nobody.txt\").read(); rok=\"hook: ok\" in r; nref=\"must be root\" in n; rl=[l for l in r.splitlines() if l.startswith(\"hook:\")]; nl=[l for l in n.splitlines() if l.startswith(\"hook:\")]; print(\"linux_root_hook_ok=\" + str(rok) + \" nonroot_refused_with_root_error=\" + str(nref)); print(\"VERDICT_LINE: \" + (\"PASS linux: hook works as root and refuses non-root (windows/macos not testable in a linux container)\" if rok and nref else \"FAIL linux container: root -> \" + (rl[-1] if rl else \"no output\") + \" | non-root -> \" + (nl[-1] if nl else \"no output\") + \"; windows/macos not testable here\"))' || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install keyboard"
+   ],
+   "commands": [
+    "printf 'import subprocess, sys, shutil\\nfrom importlib import metadata\\nfrozen = subprocess.check_output([sys.executable, \"-m\", \"pip\", \"freeze\"], text=True).split()\\nprint(\"pip freeze after pip install keyboard: \" + str(frozen))\\nreq = metadata.requires(\"keyboard\")\\nprint(\"Requires-Dist metadata: \" + str(req))\\ndk = shutil.which(\"dumpkeys\")\\nprint(\"dumpkeys binary (shelled out to by linux backend) on PATH: \" + str(dk))\\nextra = [p for p in frozen if not p.lower().startswith(\"keyboard\")]\\nprint(\"extra python packages pulled in: \" + str(extra))\\nif not extra:\\n    print(\"VERDICT_LINE: PASS pip install keyboard pulled no other python package on linux (metadata declares \" + str(req) + \" for darwin; linux backend needs external dumpkeys=\" + str(dk) + \")\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL extra packages installed: \" + str(extra))\\n' > /tmp/p3.py",
+    "/tmp/v/bin/python /tmp/p3.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:2.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip"
+   ],
+   "commands": [
+    "python -c 'import sys, keyboard; print(\"python \" + sys.version.split()[0] + \" keyboard \" + keyboard.version + \" normalize_name(Left Control)=\" + keyboard.normalize_name(\"Left Control\"))' > /tmp/imp.txt 2>&1; echo \"exit=$?\" >> /tmp/imp.txt; cat /tmp/imp.txt",
+    "python -c 'import keyboard, os, compileall, sys; sys.exit(0 if compileall.compile_dir(os.path.dirname(keyboard.__file__), quiet=1) else 1)' > /tmp/cmp.txt 2>&1; echo \"exit=$?\" >> /tmp/cmp.txt; cat /tmp/cmp.txt",
+    "python -m unittest keyboard._keyboard_tests > /tmp/t.txt 2>&1; echo \"exit=$?\" >> /tmp/t.txt; tail -4 /tmp/t.txt",
+    "python -c 'i=open(\"/tmp/imp.txt\").read(); c=open(\"/tmp/cmp.txt\").read(); t=open(\"/tmp/t.txt\").read(); a=\"exit=0\" in i; b=\"exit=0\" in c; d=\"exit=0\" in t; print(\"py2_import=\" + str(a) + \" py2_compile_all=\" + str(b) + \" py2_unit_tests=\" + str(d)); print(\"VERDICT_LINE: PASS python 2.7 imports, byte-compiles and passes the unit tests of the pinned source (python 3 side covered by the other probes)\" if a and b and d else \"VERDICT_LINE: FAIL python 2.7: import=\" + str(a) + \" compile=\" + str(b) + \" tests=\" + str(d) + \" | \" + str(t.strip().splitlines()[-3:]))' || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip download keyboard --no-deps -d /tmp/dl",
+    "/tmp/v/bin/pip install --no-index --find-links /tmp/dl keyboard"
+   ],
+   "commands": [
+    "printf 'import glob, os\\nfrom importlib import metadata\\nw = [os.path.basename(x) for x in glob.glob(\"/tmp/dl/*\")]\\nprint(\"downloaded artifact: \" + str(w))\\nfiles = [str(f) for f in metadata.files(\"keyboard\")]\\nexts = sorted(set(os.path.splitext(f)[1] for f in files))\\nprint(\"installed file extensions: \" + str(exts))\\nbad = [f for f in files if f.endswith((\".so\", \".pyd\", \".c\", \".cpp\", \".pyx\", \".dll\", \".dylib\"))]\\nprint(\"compiled/native files: \" + str(bad))\\nwheel_ok = any(x.endswith(\"-none-any.whl\") for x in w)\\nprint(\"universal pure-python wheel (none-any): \" + str(wheel_ok))\\nif wheel_ok and not bad:\\n    print(\"VERDICT_LINE: PASS wheel \" + \",\".join(w) + \" is none-any and installed files are \" + \",\".join(exts) + \" with no native modules\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL artifact=\" + str(w) + \" native_files=\" + str(bad))\\n' > /tmp/p5.py",
+    "/tmp/v/bin/python /tmp/p5.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip"
+   ],
+   "commands": [
+    "/tmp/v/bin/python -c 'import keyboard, os; d=os.path.dirname(keyboard.__file__); print(\"test files shipped in package: \" + str(sorted(f for f in os.listdir(d) if \"test\" in f)))'",
+    "echo '--- running keyboard._keyboard_tests as unprivileged user nobody (no /dev/input access possible) ---'; cd /tmp && timeout 100 runuser -u nobody -- /tmp/v/bin/python -m unittest keyboard._keyboard_tests > /tmp/t.txt 2>&1; echo \"exit=$?\" >> /tmp/t.txt; tail -5 /tmp/t.txt",
+    "printf 'import re, os, keyboard\\nt = open(\"/tmp/t.txt\").read()\\nran = re.findall(r\"Ran ([0-9]+) tests\", t)\\nok = \"exit=0\" in t and \"OK\" in t\\nsrc = open(os.path.join(os.path.dirname(keyboard.__file__), \"_keyboard_tests.py\")).read()\\nfake = src.count(\"Fake\")\\nosk = src.count(\"_os_keyboard\")\\nprint(\"tests ran as nobody: \" + str(ran) + \" passed=\" + str(ok) + \"; mock markers in _keyboard_tests.py: Fake=\" + str(fake) + \" _os_keyboard=\" + str(osk) + \" /dev/input refs=\" + str(src.count(\"/dev/input\")))\\nif ok and fake > 0:\\n    print(\"VERDICT_LINE: PASS \" + (ran[0] if ran else \"?\") + \" unit tests pass as an unprivileged user against a fake OS layer (Fake x\" + str(fake) + \"): proves parsing/hotkey logic, not real windows/linux/macos hook integration\")\\nelif ok:\\n    print(\"VERDICT_LINE: PASS \" + (ran[0] if ran else \"?\") + \" unit tests pass as an unprivileged user (no root, so no real device hooks were exercised)\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL test suite did not pass: \" + str(t.strip().splitlines()[-3:]))\\n' > /tmp/p6.py",
+    "/tmp/v/bin/python /tmp/p6.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip"
+   ],
+   "commands": [
+    "echo '--- keyboard/__main__.py at pinned sha ---'; /tmp/v/bin/python -c 'import keyboard, os; print(open(os.path.join(os.path.dirname(keyboard.__file__), \"__main__.py\")).read())'",
+    "/tmp/v/bin/python -c 'import json, keyboard; e=keyboard.KeyboardEvent(event_type=\"down\", scan_code=25, name=\"p\", time=1622447562.2994788); s=e.to_json(); d=json.loads(s); print(\"to_json: \" + s); assert d[\"event_type\"]==\"down\" and d[\"scan_code\"]==25 and d[\"name\"]==\"p\" and \"time\" in d and \"is_keypad\" in d; print(\"json_fields_ok\")' > /tmp/j.txt 2>&1; echo \"exit=$?\" >> /tmp/j.txt; cat /tmp/j.txt",
+    "echo '--- replay: python -m keyboard < events.txt ---'; printf '{\"event_type\": \"down\", \"scan_code\": 25, \"name\": \"p\", \"time\": 1.0, \"is_keypad\": false}\\n{\"event_type\": \"up\", \"scan_code\": 25, \"name\": \"p\", \"time\": 1.1, \"is_keypad\": false}\\n' > /tmp/events.txt; timeout 20 /tmp/v/bin/python -m keyboard < /tmp/events.txt > /tmp/r.txt 2>&1; echo \"exit=$?\" >> /tmp/r.txt; tail -3 /tmp/r.txt",
+    "echo '--- record: python -m keyboard > events.txt (under a pty via script) ---'; timeout 8 script -qec \"/tmp/v/bin/python -m keyboard\" /dev/null > /tmp/rec.txt 2>&1; echo \"exit=$?\" >> /tmp/rec.txt; tail -3 /tmp/rec.txt",
+    "printf 'j = open(\"/tmp/j.txt\").read()\\nr = open(\"/tmp/r.txt\").read()\\nrec = open(\"/tmp/rec.txt\").read()\\njok = \"json_fields_ok\" in j\\nrexit = r.strip().splitlines()[-1]\\nrecexit = rec.strip().splitlines()[-1]\\nrlast = [l for l in r.strip().splitlines() if l.strip() and not l.startswith(\"exit=\")]\\nreclast = [l for l in rec.strip().splitlines() if l.strip() and not l.startswith(\"exit=\")]\\nprint(\"json_format_matches_readme=\" + str(jok) + \" replay_\" + rexit + \" record_\" + recexit + \" (124 = still running when timeout hit)\")\\nif jok and rexit == \"exit=0\" and recexit in (\"exit=0\", \"exit=124\"):\\n    print(\"VERDICT_LINE: PASS event json matches README and python -m keyboard replay/record both ran in the container\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL json_ok=\" + str(jok) + \"; replay \" + rexit + \" (\" + (rlast[-1] if rlast else \"\") + \"); record \" + recexit + \" (\" + (reclast[-1] if reclast else \"\") + \")\")\\n' > /tmp/p7.py",
+    "/tmp/v/bin/python /tmp/p7.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip"
+   ],
+   "commands": [
+    "printf 'import keyboard, sys, time\\nseen = []\\ntry:\\n    keyboard.hook(lambda e: seen.append((e.event_type, e.name)))\\n    keyboard.write(\"The quick brown fox jumps over the lazy dog.\")\\n    time.sleep(1)\\n    typed = \"\".join(n for t, n in seen if t == \"down\" and n and len(n) == 1)\\n    print(\"hooked key names: \" + typed)\\n    print(\"real_write_ok\" if \"quick\" in typed else \"real_write_no_events\")\\nexcept BaseException as e:\\n    print(\"real_write_error: \" + type(e).__name__ + \": \" + str(e))\\n' > /tmp/p8.py",
+    "echo '--- real keyboard.write through a real hook (root, headless) ---'; timeout 30 /tmp/v/bin/python /tmp/p8.py > /tmp/a.txt 2>&1; echo \"exit=$?\" >> /tmp/a.txt; cat /tmp/a.txt",
+    "echo '--- mocked unit tests matching write ---'; timeout 60 /tmp/v/bin/python -m unittest keyboard._keyboard_tests -k write > /tmp/tw.txt 2>&1; echo \"exit=$?\" >> /tmp/tw.txt; tail -4 /tmp/tw.txt",
+    "printf 'import re\\na = open(\"/tmp/a.txt\").read()\\nt = open(\"/tmp/tw.txt\").read()\\nran = re.findall(r\"Ran ([0-9]+) tests\", t)\\ntok = \"exit=0\" in t\\nal = [l for l in a.strip().splitlines() if l.startswith(\"real_write\")]\\nprint(\"real=\" + (al[-1] if al else \"none\") + \" | mocked write tests: ran \" + (ran[0] if ran else \"?\") + \" ok=\" + str(tok))\\nif al and al[-1] == \"real_write_ok\":\\n    print(\"VERDICT_LINE: PASS keyboard.write emitted the string through a real hook in the container\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL real keyboard.write in linux container: \" + (al[-1] if al else \"no output\") + \"; only mocked unit tests (ran \" + (ran[0] if ran else \"?\") + \", ok=\" + str(tok) + \") cover write\")\\n' > /tmp/p8v.py",
+    "/tmp/v/bin/python /tmp/p8v.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip"
+   ],
+   "commands": [
+    "printf 'import keyboard, sys, time\\nfired = []\\ntry:\\n    keyboard.add_hotkey(\"ctrl+shift+a\", lambda *a: fired.append(a), args=(\"triggered\", \"hotkey\"))\\n    keyboard.add_hotkey(\"ctrl+shift+m, ctrl+space\", lambda: fired.append(\"multistep\"))\\n    keyboard.send(\"ctrl+shift+a\")\\n    keyboard.send(\"ctrl+shift+m, ctrl+space\")\\n    time.sleep(1)\\n    print(\"callbacks fired: \" + str(fired))\\n    print(\"real_hotkey_ok\" if len(fired) >= 2 else \"real_hotkey_not_fired\")\\nexcept BaseException as e:\\n    print(\"real_hotkey_error: \" + type(e).__name__ + \": \" + str(e))\\n' > /tmp/p9.py",
+    "echo '--- real add_hotkey + send loopback (root, headless) ---'; timeout 30 /tmp/v/bin/python /tmp/p9.py > /tmp/a.txt 2>&1; echo \"exit=$?\" >> /tmp/a.txt; cat /tmp/a.txt",
+    "echo '--- mocked unit tests matching hotkey ---'; timeout 60 /tmp/v/bin/python -m unittest keyboard._keyboard_tests -k hotkey > /tmp/th.txt 2>&1; echo \"exit=$?\" >> /tmp/th.txt; tail -4 /tmp/th.txt",
+    "printf 'import re\\na = open(\"/tmp/a.txt\").read()\\nt = open(\"/tmp/th.txt\").read()\\nran = re.findall(r\"Ran ([0-9]+) tests\", t)\\ntok = \"exit=0\" in t\\nal = [l for l in a.strip().splitlines() if l.startswith(\"real_hotkey\")]\\nprint(\"real=\" + (al[-1] if al else \"none\") + \" | mocked hotkey tests: ran \" + (ran[0] if ran else \"?\") + \" ok=\" + str(tok))\\nif al and al[-1] == \"real_hotkey_ok\":\\n    print(\"VERDICT_LINE: PASS single and multi-step hotkeys fired via real send loopback in the container\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL real hotkey loopback in linux container: \" + (al[-1] if al else \"no output\") + \"; only mocked unit tests (ran \" + (ran[0] if ran else \"?\") + \", ok=\" + str(tok) + \") cover hotkeys\")\\n' > /tmp/p9v.py",
+    "/tmp/v/bin/python /tmp/p9v.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip"
+   ],
+   "commands": [
+    "echo '--- headless env: DISPLAY, /dev/input, /proc/bus/input/devices ---'; echo \"DISPLAY=${DISPLAY:-<unset>}\"; ls -la /dev/input 2>&1 | head -5; head -5 /proc/bus/input/devices 2>&1; true",
+    "echo '--- hook as unprivileged user nobody ---'; cd /tmp && timeout 30 runuser -u nobody -- /tmp/v/bin/python -c 'import keyboard; keyboard.hook(lambda e: None); print(\"hook ok\")' > /tmp/nr.txt 2>&1; echo \"exit=$?\" >> /tmp/nr.txt; tail -2 /tmp/nr.txt",
+    "printf 'import keyboard, os, re\\nd = os.path.dirname(keyboard.__file__)\\nnix = open(os.path.join(d, \"_nixcommon.py\")).read() + open(os.path.join(d, \"_nixkeyboard.py\")).read()\\npaths = sorted(set(re.findall(r\"/dev/input/[A-Za-z0-9_+-]*\", nix)))\\nprint(\"device paths in linux backend: \" + str(paths) + \" (README says /dev/input/input*)\")\\nprint(\"/proc/bus/input/devices used: \" + str(\"/proc/bus/input/devices\" in nix))\\nprint(\"root check text: \" + str(re.findall(r\"must be root[^.]*\", nix)))\\nallsrc = \"\".join(open(os.path.join(d, f)).read() for f in os.listdir(d) if f.endswith(\".py\"))\\nx = re.findall(r\"Xlib|xdotool|DISPLAY\", allsrc)\\nprint(\"X references anywhere in package: \" + str(x))\\nn = open(\"/tmp/nr.txt\").read()\\nnref = \"must be root\" in n\\nprint(\"non-root hook refused with root error: \" + str(nref))\\nif paths and nref and not x:\\n    print(\"VERDICT_LINE: PASS linux backend reads \" + \",\".join(paths) + \"* found via /proc/bus/input/devices, no X dependency; non-root gets: must be root\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL dev_input_paths=\" + str(paths) + \" nonroot_refused=\" + str(nref) + \" X_refs=\" + str(x))\\n' > /tmp/p10.py",
+    "/tmp/v/bin/python /tmp/p10.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "printf 'import json, urllib.request\\ndef get(u):\\n    r = urllib.request.urlopen(urllib.request.Request(u, headers={\"User-Agent\": \"repo-probe\"}), timeout=30)\\n    return r.status, r.read().decode(\"utf-8\", \"replace\")\\nsha = \"d232de09bda50ecb5211ebcc59b85bc6da6aaa24\"\\ns, readme = get(\"https://raw.githubusercontent.com/boppreh/keyboard/\" + sha + \"/README.md\")\\nbanner = \"This project is currently unmaintained\" in readme\\nprint(\"README at pinned sha: http \" + str(s) + \", unmaintained banner present: \" + str(banner))\\nact = \"\"\\ntry:\\n    s, repo = get(\"https://api.github.com/repos/boppreh/keyboard\")\\n    r = json.loads(repo)\\n    print(\"repo: pushed_at=\" + str(r.get(\"pushed_at\")) + \" open_issues=\" + str(r.get(\"open_issues_count\")) + \" archived=\" + str(r.get(\"archived\")) + \" stars=\" + str(r.get(\"stargazers_count\")))\\n    s, commits = get(\"https://api.github.com/repos/boppreh/keyboard/commits?per_page=1\")\\n    c = json.loads(commits)[0]\\n    print(\"latest commit: \" + c[\"sha\"][:10] + \" \" + c[\"commit\"][\"committer\"][\"date\"] + \" \" + c[\"commit\"][\"message\"].splitlines()[0])\\n    s, pinned = get(\"https://api.github.com/repos/boppreh/keyboard/commits/\" + sha)\\n    print(\"pinned commit date: \" + json.loads(pinned)[\"commit\"][\"committer\"][\"date\"])\\n    act = \"; last push \" + str(r.get(\"pushed_at\")) + \", open issues \" + str(r.get(\"open_issues_count\"))\\nexcept Exception as e:\\n    print(\"github api unavailable: \" + type(e).__name__ + \": \" + str(e))\\nprint(\"VERDICT_LINE: \" + (\"PASS unmaintained banner present in README at pinned sha\" + act if banner else \"FAIL banner text not found in README at pinned sha\"))\\n' > /tmp/p11.py",
+    "python3 /tmp/p11.py || echo \"VERDICT_LINE: FAIL could not fetch README from github (network error)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c12",
+   "claim_id": "c12",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "python3 -m venv /tmp/v",
+    "/tmp/v/bin/pip install https://github.com/boppreh/keyboard/archive/d232de09bda50ecb5211ebcc59b85bc6da6aaa24.zip"
+   ],
+   "commands": [
+    "printf 'import keyboard, inspect, os\\nd = os.path.dirname(keyboard.__file__)\\nnix = open(os.path.join(d, \"_nixkeyboard.py\")).read()\\nwin = open(os.path.join(d, \"_winkeyboard.py\")).read()\\nlsrc = inspect.getsource(keyboard._nixkeyboard.listen)\\nprint(\"---- _nixkeyboard.listen source ----\")\\nprint(lsrc)\\nmarks = (\"= callback(\", \"if callback(\", \"return callback(\", \"not callback(\")\\nnix_uses_return = any(m in lsrc for m in marks)\\nwin_uses_return = any(m in win for m in marks)\\nprint(\"suppress mentions: linux backend \" + str(nix.count(\"suppress\")) + \", windows backend \" + str(win.count(\"suppress\")))\\nprint(\"linux listen consults hook return value (required to block a key): \" + str(nix_uses_return))\\nprint(\"windows backend consults hook return value: \" + str(win_uses_return) + \"; return -1 present: \" + str(\"return -1\" in win))\\ntry:\\n    keyboard.block_key(\"a\")\\n    print(\"block_key(a) on linux: no error raised\")\\nexcept BaseException as e:\\n    print(\"block_key(a) on linux: \" + type(e).__name__ + \": \" + str(e))\\nif not nix_uses_return and win_uses_return:\\n    print(\"VERDICT_LINE: PASS linux backend never consults the hook return value so suppress/block cannot work on linux; windows backend does\")\\nelif not nix_uses_return:\\n    print(\"VERDICT_LINE: PASS linux backend never consults the hook return value so suppression cannot work on linux (windows path not confirmed by string match)\")\\nelse:\\n    print(\"VERDICT_LINE: FAIL linux backend appears to honour suppression: \" + lsrc.strip().splitlines()[-1])\\n' > /tmp/p12.py",
+    "timeout 30 /tmp/v/bin/python /tmp/p12.py || echo \"VERDICT_LINE: FAIL probe script crashed\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
