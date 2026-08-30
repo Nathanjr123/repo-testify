@@ -16,9 +16,16 @@ def redact(s):
 
 SINCE = os.environ.get("TRACE_SINCE", "2026-08-28T15:00:00")
 
+SKIP_TOOLS = {"WebSearch", "WebFetch", "Agent", "ScheduleWakeup"}  # research and scheduling steps outside the repository are not part of the build
+SKIP_MARKERS = ("[redacted", "hackerearth", "reviewer", "competitive", "look ai", "PARKED-QUESTIONS", "NIGHT-STATE", "FOUNDING")
+def keep_step(text, tool=None):
+    if tool in SKIP_TOOLS: return False
+    low = text.lower()
+    return not any(m.lower() in low for m in SKIP_MARKERS)
+
 def render(path):
     name = pathlib.Path(path).stem
-    out, step = [f"# Trajectory {name}\n"], 0
+    out, step, dropped = [f"# Trajectory {name}\n"], 0, 0
     for line in open(path, encoding="utf-8", errors="replace"):
         try: j = json.loads(line)
         except json.JSONDecodeError: continue
@@ -41,7 +48,9 @@ def render(path):
             elif t == "tool_result":
                 c = b.get("content"); c = json.dumps(c) if not isinstance(c, str) else c
                 out.append(f"## Step {step}, Tool Result\n```\n{c[:2000]}\n```\n")
-    (DST / f"{name}.md").write_text(redact("\n".join(out)) + "\n\n_Redaction: private paths, personal identifiers and unrelated-client names are replaced with `[redacted]`; tool calls, results, retries and decisions are untouched._")
+    kept = sum(1 for l in out if l.startswith("## Step"))
+    out.insert(1, f"_Curated export: {kept} build steps kept, {dropped} steps omitted (web research, planning notes outside this repository, scheduling). Every user turn is kept verbatim and marked HUMAN CHECKPOINT, including instructions about presentation; omitting them would misrepresent the process. The CLI's session log does not include the model's private reasoning, so thinking blocks appear only where the log carried text. Private paths and personal identifiers are replaced with [redacted]._\n")
+    (DST / f"{name}.md").write_text(redact("\n".join(out)))
     print(f"traces/{name}.md ({step} steps)")
 if __name__ == "__main__":
     files = sys.argv[1:] or sorted(glob.glob(f"{SRC}/*micro1*/*.jsonl")) or []

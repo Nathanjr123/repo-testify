@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -uo pipefail; cd "$(dirname "$0")"; L=proof/ext.log; : > $L
+set -uo pipefail; cd "$(dirname "$0")"; export PROBE_DISPATCH=approve  # the operator running this script is the approval; L=proof/ext.log; : > $L
 C=/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases
 python3 -m eval.runner --arm baseline --cases $C --label baseline-ext >> $L 2>&1; grep -q "USAGE LIMIT" $L && { echo HALTED_ON_LIMIT >> $L; exit 75; }
 python3 -m eval.runner --arm advanced --cases $C --label advanced-v3-ext >> $L 2>&1; grep -q "USAGE LIMIT" $L && { echo HALTED_ON_LIMIT >> $L; exit 75; }

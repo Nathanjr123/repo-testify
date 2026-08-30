@@ -1,0 +1,16 @@
+{
+ "note": "verdicts as drafted BEFORE any probe ran (reconstructed from audit_notes); used for the 'draft truth' held-out rows",
+ "verdicts": {
+  "c1": "refuted",
+  "c2": "refuted",
+  "c3": "refuted",
+  "c4": "verified",
+  "c5": "verified",
+  "c6": "verified",
+  "c7": "verified",
+  "c8": "verified",
+  "c9": "refuted",
+  "c10": "verified"
+ },
+ "reviewer_score": 35
+}

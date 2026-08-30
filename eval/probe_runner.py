@@ -46,7 +46,7 @@ def run_probe(spec, repo, commit, out_root):
         return a.returncode
     sh(["docker", "commit", tag, tag + "-img"])
     sh(["docker", "rm", "-f", tag])
-    net = [] if spec.get("network") in ("on", "install-only") else ["--network=none"]  # "on": URL/badge/CI probes
+    net = [] if spec.get("network") in ("on", "install-only") else ["--network=none"]  # "on" (and the older spelling "install-only") keeps network for the probe phase; default is off
     cmd = " && ".join(spec["commands"])
     (out / "cmd.txt").write_text(cmd)
     t0 = time.monotonic()

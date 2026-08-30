@@ -38,7 +38,7 @@ def llm(prompt, model="claude-fable-5", retries=2, backoff=(60, 300)):
             if isinstance(env, dict) and "result" in env:
                 CALLS["cost_usd"] += float(env.get("total_cost_usd") or 0.0)
                 u = env.get("usage") or {}
-                CALLS["input_tokens"] += int(u.get("input_tokens") or 0); CALLS["output_tokens"] += int(u.get("output_tokens") or 0)
+                CALLS["input_tokens"] += int(u.get("input_tokens") or 0) + int(u.get("cache_read_input_tokens") or 0) + int(u.get("cache_creation_input_tokens") or 0); CALLS["output_tokens"] += int(u.get("output_tokens") or 0)
                 is_error = bool(env.get("is_error"))
                 out = str(env["result"]).strip()
         except (ValueError, TypeError):
@@ -53,7 +53,7 @@ def llm(prompt, model="claude-fable-5", retries=2, backoff=(60, 300)):
             limited = True
         if limited or r.returncode != 0:  # keep the raw envelope for diagnosis (outside the repo)
             try:
-                with open(os.path.expanduser("~/micro1-fec-research/llm-debug.log"), "a") as f:
+                with open(os.environ.get("LLM_DEBUG_LOG", os.devnull), "a") as f:  # opt-in diagnostics file
                     f.write(f"--- {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} try {i} rc={r.returncode} model={model} prompt_chars={len(prompt)}\nSTDOUT[:800]={r.stdout[:800]!r}\nSTDERR[:800]={r.stderr[:800]!r}\n")
             except OSError:
                 pass
