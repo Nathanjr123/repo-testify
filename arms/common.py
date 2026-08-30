@@ -47,7 +47,11 @@ def llm(prompt, model="claude-fable-5", retries=2, backoff=(60, 300)):
         # counts contain digit runs like "429" that produced false limit signals on 2026-08-29).
         blob = ((out if is_error else "") + " " + (r.stderr or "")).lower()
         limited = (not out) or any(m in blob for m in LIMIT_MARKERS)
-        if limited:  # keep the raw envelope for diagnosis (outside the repo)
+        # A non-zero exit with nothing useful on stderr is what the CLI produces when a usage window closes
+        # (seen 2026-08-30 on three consecutive plan calls); treat it as a limit and retry with backoff.
+        if r.returncode != 0 and not (r.stderr or "").strip():
+            limited = True
+        if limited or r.returncode != 0:  # keep the raw envelope for diagnosis (outside the repo)
             try:
                 with open(os.path.expanduser("~/micro1-fec-research/llm-debug.log"), "a") as f:
                     f.write(f"--- {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} try {i} rc={r.returncode} model={model} prompt_chars={len(prompt)}\nSTDOUT[:800]={r.stdout[:800]!r}\nSTDERR[:800]={r.stderr[:800]!r}\n")
