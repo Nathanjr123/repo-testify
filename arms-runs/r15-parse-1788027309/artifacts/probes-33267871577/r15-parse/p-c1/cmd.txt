@@ -1,1 +1,0 @@
-/tmp/v/bin/pip install parse && /tmp/v/bin/python -c 'import parse; print("installed parse version:", parse.__version__); print("VERDICT_LINE: PASS pip install parse succeeded and import parse works")' || echo "VERDICT_LINE: FAIL pip install parse or import parse failed"

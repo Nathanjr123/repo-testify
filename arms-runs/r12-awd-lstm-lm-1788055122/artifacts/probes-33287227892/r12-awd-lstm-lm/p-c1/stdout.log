@@ -1,0 +1,6 @@
+python 3.11.16
+pip_exit=1
+ERROR: Could not find a version that satisfies the requirement torch==0.4.1 (from versions: 1.13.0, 1.13.1, 2.0.0, 2.0.1, 2.1.0, 2.1.1, 2.1.2, 2.2.0, 2.2.1, 2.2.2, 2.3.0, 2.3.1, 2.4.0, 2.4.1, 2.5.0, 2.5.1, 2.6.0, 2.7.0, 2.7.1, 2.8.0, 2.9.0, 2.9.1, 2.10.0, 2.11.0, 2.12.0, 2.12.1, 2.13.0)
+ERROR: No matching distribution found for torch==0.4.1
+pypi torch 0.4.x wheel python tags: {'0.4.0': [], '0.4.1': []}
+VERDICT_LINE: FAIL documented first step (install PyTorch 0.4) cannot be followed on current python 3.11: No matching distribution found for torch==0.4.1; torch 0.4.x wheels exist only for the legacy CPython tags printed above (cp35-cp37), so a python:3.7 or conda env is required

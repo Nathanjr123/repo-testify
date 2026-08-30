@@ -1,0 +1,202 @@
+{
+ "case_id": "r12-awd-lstm-lm",
+ "repo": "https://github.com/salesforce/awd-lstm-lm",
+ "commit": "1d466ec5875675ca6b6f0caacbb741240a29da9e",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 -c 'import sys; print(\"python\", sys.version.split()[0])'",
+    "(pip install --no-cache-dir torch==0.4.1 > /tmp/pip.log 2>&1; echo pip_exit=$? > /tmp/pip_exit); cat /tmp/pip_exit; grep -m2 -E 'ERROR|No matching|Successfully' /tmp/pip.log || tail -n 3 /tmp/pip.log",
+    "python3 -c 'import json,urllib.request; rel=json.load(urllib.request.urlopen(\"https://pypi.org/pypi/torch/json\"))[\"releases\"]; print(\"pypi torch 0.4.x wheel python tags:\", {v: sorted({f[\"python_version\"] for f in rel.get(v, [])}) for v in (\"0.4.0\",\"0.4.1\")})' || echo pypi_query_failed",
+    "python3 -c 'import torch; print(\"torch\", torch.__version__)' && echo \"VERDICT_LINE: PASS torch 0.4 installed on python 3.11\" || echo \"VERDICT_LINE: FAIL documented first step (install PyTorch 0.4) cannot be followed on current python 3.11: $(grep -m1 -o 'No matching distribution[^)]*' /tmp/pip.log); torch 0.4.x wheels exist only for the legacy CPython tags printed above (cp35-cp37), so a python:3.7 or conda env is required\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "apt-get update -qq > /dev/null && apt-get install -y -qq wget unzip > /dev/null && echo installed wget unzip for getdata.sh"
+   ],
+   "commands": [
+    "python3 -c 'import urllib.request; u=\"https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip\"; r=urllib.request.urlopen(urllib.request.Request(u, method=\"HEAD\"), timeout=20); print(\"WT2 url ->\", r.status)' || echo 'WT2 url -> ERROR (dead host or non-200)'",
+    "python3 -c 'import urllib.request; u=\"http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz\"; r=urllib.request.urlopen(urllib.request.Request(u, method=\"HEAD\"), timeout=20); print(\"PTB url ->\", r.status)' || echo 'PTB url -> ERROR (dead host or non-200)'",
+    "(timeout 95 bash getdata.sh > /tmp/getdata.log 2>&1; echo getdata_exit=$? > /tmp/gd_exit); cat /tmp/gd_exit; tail -n 8 /tmp/getdata.log",
+    "python3 -c 'import os; fs=[\"data/penn/train.txt\",\"data/penn/valid.txt\",\"data/penn/test.txt\",\"data/wikitext-2/train.txt\",\"data/wikitext-2/valid.txt\",\"data/wikitext-2/test.txt\"]; s={f:(os.path.getsize(f) if os.path.exists(f) else -1) for f in fs}; print(\"sizes\", s); m=[f for f,v in s.items() if v<=0]; open(\"/tmp/missing\",\"w\").write(\" \".join(m)); print(\"missing:\", m)' || echo CHECK_CRASHED > /tmp/missing",
+    "if [ ! -s /tmp/missing ]; then echo \"VERDICT_LINE: PASS getdata.sh produced non-empty data/penn and data/wikitext-2 train/valid/test (wget+unzip were apt-installed; script also fetches WT103+enwik8, exit=124 means it was cut at 95 s after PTB/WT2 landed)\"; else echo \"VERDICT_LINE: FAIL after getdata.sh ($(cat /tmp/gd_exit)) these are missing/empty: $(cat /tmp/missing)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2",
+    "python3 -c 'import torch, numpy; print(\"torch\", torch.__version__, \"numpy\", numpy.__version__, \"cuda_available\", torch.cuda.is_available())'",
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz\", \"/tmp/se.tgz\"); print(\"ptb tgz fetched\")'",
+    "mkdir -p data/penn && tar -xzf /tmp/se.tgz -C /tmp && cp /tmp/simple-examples/data/ptb.train.txt data/penn/train.txt && cp /tmp/simple-examples/data/ptb.valid.txt data/penn/valid.txt && cp /tmp/simple-examples/data/ptb.test.txt data/penn/test.txt && wc -l data/penn/*.txt"
+   ],
+   "commands": [
+    "python3 -c 'import torch; print(\"torch\", torch.__version__, \"cuda_available\", torch.cuda.is_available())'",
+    "(timeout 60 python -u main.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt --cuda --log-interval 2 > /tmp/train.log 2>&1; echo train_exit=$? > /tmp/train_exit); cat /tmp/train_exit; grep -m3 'ppl' /tmp/train.log || tail -n 12 /tmp/train.log",
+    "python3 -c 'import re; t=open(\"/tmp/train.log\").read(); ms=[float(x) for x in re.findall(r\"ms/batch +([0-9.]+)\", t)]; pp=[float(x) for x in re.findall(r\"ppl +([0-9.]+)\", t)]; print(\"batches_logged\", len(ms), \"ms_per_batch\", ms[:4], \"ppl\", pp[:4], \"cpu_epoch_estimate_s\", round(sum(ms)/len(ms)*664/1000) if ms else None, \"epochs_required\", 500)' > /tmp/summary.txt 2>&1 || echo summary_failed > /tmp/summary.txt; cat /tmp/summary.txt",
+    "if grep -q 'ppl' /tmp/train.log; then echo \"VERDICT_LINE: FAIL UNTESTABLE-HERE: the exact command trains under torch 0.4.1/py3.7 on CPU (--cuda is store_false in this argparse = CPU), but 500 epochs x ~65 s/epoch on a GP100 is ~9 GPU-hours; 61.2/58.8 ppl not checked in a 120 s CPU sandbox: $(cat /tmp/summary.txt)\"; else echo \"VERDICT_LINE: FAIL documented training command did not start in the documented env: $(cat /tmp/train_exit) $(grep -m1 -E 'Error' /tmp/train.log | tail -c 200)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2",
+    "python3 -c 'import torch, numpy; print(\"torch\", torch.__version__, \"numpy\", numpy.__version__, \"cuda_available\", torch.cuda.is_available())'",
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz\", \"/tmp/se.tgz\"); print(\"ptb tgz fetched\")'",
+    "mkdir -p data/penn && tar -xzf /tmp/se.tgz -C /tmp && cp /tmp/simple-examples/data/ptb.train.txt data/penn/train.txt && cp /tmp/simple-examples/data/ptb.valid.txt data/penn/valid.txt && cp /tmp/simple-examples/data/ptb.test.txt data/penn/test.txt && wc -l data/penn/*.txt"
+   ],
+   "commands": [
+    "mkdir -p data/pennsmall && head -n 150 data/penn/train.txt > data/pennsmall/train.txt && head -n 40 data/penn/valid.txt > data/pennsmall/valid.txt && head -n 20 data/penn/test.txt > data/pennsmall/test.txt && wc -w data/pennsmall/*.txt",
+    "(timeout 50 python -u main.py --batch_size 20 --data data/pennsmall --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 1 --save PTB.pt --cuda --log-interval 1 > /tmp/main.log 2>&1; echo main_exit=$? > /tmp/main_exit); cat /tmp/main_exit; tail -n 5 /tmp/main.log; ls -la PTB.pt || echo no_PTB.pt_produced",
+    "(timeout 45 python -u finetune.py --batch_size 20 --data data/pennsmall --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 1 --save PTB.pt --cuda --log-interval 1 > /tmp/ft.log 2>&1; echo finetune_exit=$? > /tmp/ft_exit); cat /tmp/ft_exit; tail -n 12 /tmp/ft.log",
+    "if [ ! -f PTB.pt ]; then echo \"VERDICT_LINE: FAIL no model produced in budget: main.py 1 epoch on a 150-line PTB slice did not finish ($(cat /tmp/main_exit 2>/dev/null))\"; elif grep -q 'ppl' /tmp/ft.log && grep -q 'finetune_exit=0' /tmp/ft_exit; then echo \"VERDICT_LINE: FAIL UNTESTABLE-HERE: finetune.py runs end-to-end under torch 0.4.1/py3.7 (CPU) with the documented flags on a 150-line PTB slice; 58.8/56.5 needs the converged 500-epoch GPU model plus 500 finetune epochs, not checked\"; else echo \"VERDICT_LINE: FAIL finetune.py failed in the documented env (README: finetune unfinished after the 0.4 port): $(cat /tmp/ft_exit 2>/dev/null) $(grep -m1 -E 'Error' /tmp/ft.log | tail -c 200)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2",
+    "python3 -c 'import torch, numpy; print(\"torch\", torch.__version__, \"numpy\", numpy.__version__, \"cuda_available\", torch.cuda.is_available())'",
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz\", \"/tmp/se.tgz\"); print(\"ptb tgz fetched\")'",
+    "mkdir -p data/penn && tar -xzf /tmp/se.tgz -C /tmp && cp /tmp/simple-examples/data/ptb.train.txt data/penn/train.txt && cp /tmp/simple-examples/data/ptb.valid.txt data/penn/valid.txt && cp /tmp/simple-examples/data/ptb.test.txt data/penn/test.txt && wc -l data/penn/*.txt"
+   ],
+   "commands": [
+    "mkdir -p data/pennsmall && head -n 150 data/penn/train.txt > data/pennsmall/train.txt && head -n 40 data/penn/valid.txt > data/pennsmall/valid.txt && head -n 20 data/penn/test.txt > data/pennsmall/test.txt && wc -w data/pennsmall/*.txt",
+    "(timeout 50 python -u main.py --batch_size 20 --data data/pennsmall --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 1 --save PTB.pt --cuda --log-interval 1 > /tmp/main.log 2>&1; echo main_exit=$? > /tmp/main_exit); cat /tmp/main_exit; tail -n 4 /tmp/main.log; ls -la PTB.pt || echo no_PTB.pt_produced",
+    "(timeout 45 python -u pointer.py --data data/pennsmall --save PTB.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000 --cuda > /tmp/ptr.log 2>&1; echo pointer_exit=$? > /tmp/ptr_exit); cat /tmp/ptr_exit; tail -n 12 /tmp/ptr.log",
+    "if [ ! -f PTB.pt ]; then echo \"VERDICT_LINE: FAIL no model produced in budget: main.py 1 epoch on a 150-line PTB slice did not finish ($(cat /tmp/main_exit 2>/dev/null))\"; elif grep -q -i 'ppl' /tmp/ptr.log && grep -q 'pointer_exit=0' /tmp/ptr_exit; then echo \"VERDICT_LINE: FAIL UNTESTABLE-HERE: pointer.py runs end-to-end under torch 0.4.1/py3.7 (CPU) with the documented flags on a 1-epoch slice model; 53.2/52.5 needs the converged 500-epoch GPU model, not checked\"; else echo \"VERDICT_LINE: FAIL pointer.py failed in the documented env (README: pointer unfinished after the 0.4 port): $(cat /tmp/ptr_exit 2>/dev/null) $(grep -m1 -E 'Error' /tmp/ptr.log | tail -c 200)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [],
+   "commands": [
+    "grep -n -F 'preventing exact reproduction due to minor differences in random seeds' README.md || echo MISSING_seed_disclaimer",
+    "grep -n -F 'exact reproduction numbers change when changing underlying GPU' README.md || echo MISSING_gpu_disclaimer",
+    "grep -n -F 'largely similar to the numbers reported' README.md || echo MISSING_largely_similar",
+    "echo \"count of 'approximately' in README: $(grep -o -F 'approximately' README.md | wc -l); numeric tolerance stated: $(grep -c -E 'within|tolerance|\\+/-' README.md)\"",
+    "if grep -q -F 'preventing exact reproduction' README.md && grep -q -F 'largely similar to the numbers reported' README.md; then echo \"VERDICT_LINE: PASS README carries both disclaimers verbatim and states no numeric tolerance; buyer must set a band (we read approximately as +/-1.5 ppl for c3-c5, c10)\"; else echo \"VERDICT_LINE: FAIL disclaimer wording not found in README.md at this commit\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2",
+    "python3 -c 'import torch, numpy; print(\"torch\", torch.__version__, \"numpy\", numpy.__version__, \"cuda_available\", torch.cuda.is_available())'",
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz\", \"/tmp/se.tgz\"); print(\"ptb tgz fetched\")'",
+    "mkdir -p data/penn && tar -xzf /tmp/se.tgz -C /tmp && cp /tmp/simple-examples/data/ptb.train.txt data/penn/train.txt && cp /tmp/simple-examples/data/ptb.valid.txt data/penn/valid.txt && cp /tmp/simple-examples/data/ptb.test.txt data/penn/test.txt && wc -l data/penn/*.txt"
+   ],
+   "commands": [
+    "mkdir -p data/pennsmall && head -n 150 data/penn/train.txt > data/pennsmall/train.txt && head -n 40 data/penn/valid.txt > data/pennsmall/valid.txt && head -n 20 data/penn/test.txt > data/pennsmall/test.txt",
+    "python3 -c 'import torchqrnn; print(\"torchqrnn present\")' || echo 'torchqrnn NOT installed: README setup lists only PyTorch 0.4, no pip install for pytorch-qrnn'",
+    "(timeout 45 python -u main.py --model QRNN --batch_size 20 --clip 0.2 --wdrop 0.1 --nhid 1550 --nlayers 4 --emsize 400 --dropouth 0.3 --seed 9001 --dropouti 0.4 --epochs 1 --save PTBQ.pt --data data/pennsmall --cuda --log-interval 1 > /tmp/q.log 2>&1; echo qrnn_exit=$? > /tmp/q_exit); cat /tmp/q_exit; grep -m2 'ppl' /tmp/q.log || tail -n 4 /tmp/q.log",
+    "if grep -q 'ppl' /tmp/q.log; then (timeout 40 python -u main.py --batch_size 20 --data data/pennsmall --dropouti 0.4 --dropouth 0.25 --seed 141 --epochs 1 --save PTBL.pt --cuda --log-interval 1 > /tmp/l.log 2>&1; true); grep -m2 'ppl' /tmp/l.log || true; fi",
+    "if grep -q 'ppl' /tmp/q.log; then echo \"VERDICT_LINE: FAIL UNTESTABLE-HERE: no GPU so QRNN-vs-cuDNN-LSTM speed cannot be measured; CPU reference QRNN $(grep -m1 -o 'ms/batch *[0-9.]*' /tmp/q.log) vs LSTM $(grep -m1 -o 'ms/batch *[0-9.]*' /tmp/l.log)\"; else echo \"VERDICT_LINE: FAIL QRNN option does not run in the documented env (README setup = PyTorch 0.4 only): $(cat /tmp/q_exit) $(grep -m1 -E 'Error' /tmp/q.log | tail -c 200)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2",
+    "python3 -c 'import torch, numpy; print(\"torch\", torch.__version__, \"numpy\", numpy.__version__, \"cuda_available\", torch.cuda.is_available())'",
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz\", \"/tmp/se.tgz\"); print(\"ptb tgz fetched\")'",
+    "mkdir -p data/penn && tar -xzf /tmp/se.tgz -C /tmp && cp /tmp/simple-examples/data/ptb.train.txt data/penn/train.txt && cp /tmp/simple-examples/data/ptb.valid.txt data/penn/valid.txt && cp /tmp/simple-examples/data/ptb.test.txt data/penn/test.txt && wc -l data/penn/*.txt"
+   ],
+   "commands": [
+    "python3 -c 'import torch, os; print(\"cuda_available\", torch.cuda.is_available(), \"cpus\", os.cpu_count())'; ls /dev/nvidia* 2>/dev/null || echo no_nvidia_device",
+    "(timeout 60 python -u main.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt --cuda --log-interval 2 > /tmp/train.log 2>&1; echo train_exit=$? > /tmp/train_exit); cat /tmp/train_exit; grep -m3 'ms/batch' /tmp/train.log || tail -n 8 /tmp/train.log",
+    "python3 -c 'import re; t=open(\"/tmp/train.log\").read(); ms=[float(x) for x in re.findall(r\"ms/batch +([0-9.]+)\", t)]; print(\"batches_logged\", len(ms), \"cpu_ms_per_batch_mean\", round(sum(ms)/len(ms)) if ms else None, \"cpu_s_per_epoch_estimate\", round(sum(ms)/len(ms)*664/1000) if ms else None, \"claimed_GP100_s_per_epoch\", 65, \"=ms_per_batch\", 98)' > /tmp/summary.txt 2>&1 || echo summary_failed > /tmp/summary.txt; cat /tmp/summary.txt",
+    "echo \"VERDICT_LINE: FAIL UNTESTABLE-HERE: no GPU in sandbox, GP100 seconds/epoch and the LSTM:QRNN ratio cannot be measured (QRNN also needs uninstalled torchqrnn); CPU 2-core reference from the documented LSTM command: $(cat /tmp/summary.txt)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "grep -n -F 'still working on `pointer`, `finetune` and `generate`' README.md || echo README_caveat_missing",
+    "grep -n -F 'PyTorch==0.1.12' README.md | head -n 3; ls -la finetune.py pointer.py generate.py",
+    "python3 -c 'import urllib.request; r=urllib.request.urlopen(urllib.request.Request(\"https://github.com/salesforce/awd-lstm-lm/tree/PyTorch%3D%3D0.1.12\", headers={\"User-Agent\":\"Mozilla/5.0\"}), timeout=30); b=r.read().decode(\"utf-8\",\"ignore\"); print(\"tag_tree_url_status\", r.status, \"page_mentions_tag\", (\"PyTorch==0.1.12\" in b) or (\"PyTorch%3D%3D0.1.12\" in b)); open(\"/tmp/tag_ok\",\"w\").write(\"1\" if r.status==200 else \"0\")' || echo 'tag_tree_url_status ERROR (404 or unreachable)'",
+    "python3 -c 'import urllib.request; b=urllib.request.urlopen(urllib.request.Request(\"https://github.com/salesforce/awd-lstm-lm\", headers={\"User-Agent\":\"Mozilla/5.0\"}), timeout=30).read().decode(\"utf-8\",\"ignore\"); print(\"repo_archived_banner_present\", \"has been archived by the owner\" in b)' || echo archive_check_failed",
+    "if [ \"$(cat /tmp/tag_ok 2>/dev/null)\" = \"1\" ] && grep -q -F 'still working on' README.md; then echo \"VERDICT_LINE: PASS the PyTorch==0.1.12 release tree resolves on GitHub (HTTP 200) and the README at this commit says pointer/finetune/generate are unfinished under 0.4; what actually breaks is recorded by probes c4/c5\"; else echo \"VERDICT_LINE: FAIL tag_ok=$(cat /tmp/tag_ok 2>/dev/null) readme_caveat_lines=$(grep -c -F 'still working on' README.md)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2",
+    "python3 -c 'import torch, numpy; print(\"torch\", torch.__version__, \"numpy\", numpy.__version__, \"cuda_available\", torch.cuda.is_available())'",
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"https://s3.amazonaws.com/research.metamind.io/wikitext/wikitext-2-v1.zip\", \"/tmp/wt2.zip\"); print(\"wt2 zip fetched\")' || echo WT2_DOWNLOAD_FAILED_from_getdata.sh_URL",
+    "python3 -c 'import zipfile, shutil, os; zipfile.ZipFile(\"/tmp/wt2.zip\").extractall(\"data\"); [shutil.move(\"data/wikitext-2/wiki.%s.tokens\" % s, \"data/wikitext-2/%s.txt\" % s) for s in (\"train\",\"valid\",\"test\")]; print(os.listdir(\"data/wikitext-2\"))' || echo WT2_EXTRACT_FAILED",
+    "ls -la data/wikitext-2 || true"
+   ],
+   "commands": [
+    "test -s data/wikitext-2/train.txt && echo wt2_data_present || echo wt2_data_missing",
+    "echo \"README copy-paste check, occurrences of 'trains a PTB model': $(grep -c -F 'trains a PTB model' README.md) (one of them sits under the WT2 heading)\"",
+    "(timeout 60 python -u main.py --epochs 750 --data data/wikitext-2 --save WT2.pt --dropouth 0.2 --seed 1882 --cuda --log-interval 1 > /tmp/train.log 2>&1; echo train_exit=$? > /tmp/train_exit); cat /tmp/train_exit; grep -m3 'ppl' /tmp/train.log || tail -n 8 /tmp/train.log",
+    "python3 -c 'import re; t=open(\"/tmp/train.log\").read(); ms=[float(x) for x in re.findall(r\"ms/batch +([0-9.]+)\", t)]; pp=[float(x) for x in re.findall(r\"ppl +([0-9.]+)\", t)]; print(\"batches_logged\", len(ms), \"ms_per_batch\", ms[:3], \"ppl\", pp[:3], \"epochs_required\", 750)' > /tmp/summary.txt 2>&1 || echo summary_failed > /tmp/summary.txt; cat /tmp/summary.txt",
+    "if [ ! -s data/wikitext-2/train.txt ]; then echo \"VERDICT_LINE: FAIL WT2 data unavailable: getdata.sh source s3.amazonaws.com/research.metamind.io did not deliver wikitext-2-v1.zip, recipe cannot be run as documented\"; elif grep -q 'ppl' /tmp/train.log; then echo \"VERDICT_LINE: FAIL UNTESTABLE-HERE: the exact WT2 command trains under torch 0.4.1/py3.7 on CPU, but 750 epochs x ~180 s/epoch on a GP100 is ~37 GPU-hours; 68.7/65.6 and pointer 52.2/50.6 not checked: $(cat /tmp/summary.txt)\"; else echo \"VERDICT_LINE: FAIL documented WT2 command did not start in the documented env: $(cat /tmp/train_exit) $(grep -m1 -E 'Error' /tmp/train.log | tail -c 200)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.7-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2",
+    "python3 -c 'import torch, numpy; print(\"torch\", torch.__version__, \"numpy\", numpy.__version__, \"cuda_available\", torch.cuda.is_available())'"
+   ],
+   "commands": [
+    "python3 -c 'import torch; print(\"cuda_available\", torch.cuda.is_available(), \"cudnn_enabled_flag\", torch.backends.cudnn.enabled)'",
+    "grep -n -F 'flatten_parameters' weight_drop.py | head -n 3; grep -n -F 'cudnn' main.py model.py weight_drop.py || echo 'no explicit cudnn references (relies on PyTorch default backend selection)'",
+    "python3 -c 'import torch, model as m; net=m.RNNModel(\"LSTM\", 10000, 400, 1150, 3, 0.4, 0.25, 0.4, 0.1, 0.5, True); kinds=[type(r).__name__ + \"(\" + type(getattr(r, \"module\", r)).__name__ + \")\" for r in net.rnns]; print(\"rnn_layers\", kinds); ok=all(isinstance(getattr(r, \"module\", r), torch.nn.LSTM) for r in net.rnns); x=torch.randint(0, 10000, (5, 2)).long(); h=net.init_hidden(2); out=net(x, h); print(\"all_layers_are_torch_nn_LSTM\", ok, \"cpu_forward_output_shape\", tuple(out[0].shape)); open(\"/tmp/ok\",\"w\").write(\"1\" if ok else \"0\")' || echo model_construction_failed",
+    "if [ \"$(cat /tmp/ok 2>/dev/null)\" = \"1\" ]; then echo \"VERDICT_LINE: PASS structural-only: every recurrent layer is torch.nn.LSTM wrapped by WeightDrop (the cuDNN-eligible module), forward runs under torch 0.4.1; runtime cuDNN selection could not be observed because the sandbox has no CUDA device\"; else echo \"VERDICT_LINE: FAIL model construction failed or layers are not torch.nn.LSTM under torch 0.4.1\"; fi"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}

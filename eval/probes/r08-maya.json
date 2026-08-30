@@ -1,0 +1,146 @@
+{
+ "case_id": "r08-maya",
+ "repo": "https://github.com/kennethreitz/maya",
+ "commit": "9766619d007caf553357db6dba5485fb36ed4edd",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 --version && ( pip install maya > /tmp/pip.log 2>&1 || (tail -n 40 /tmp/pip.log; false) ) && pip show maya | head -n 2 && python3 -c 'import maya; print(\"import_ok maya_version:\", maya.__version__)' && echo \"VERDICT_LINE: PASS pip install maya resolved its dependencies and import maya works\" || echo \"VERDICT_LINE: FAIL pip install maya or import maya failed (see log above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "printf '%b' 'import urllib.request, json\\ndef get(u):\\n    try:\\n        r = urllib.request.urlopen(urllib.request.Request(u, headers={\"User-Agent\": \"probe\", \"Accept\": \"application/vnd.github+json\"}), timeout=30)\\n        return r.status, r.read().decode(\"utf-8\", \"replace\"), r.geturl()\\n    except Exception as e:\\n        return getattr(e, \"code\", -1), str(e), u\\ns, body, final = get(\"https://github.com/timofurrer/maya/workflows/Continuous%20Integration%20and%20Deployment/badge.svg\")\\nbadge = \"passing\" if \"passing\" in body else (\"failing\" if \"failing\" in body else (\"no status\" if \"no status\" in body else \"unknown\"))\\nprint(\"badge_http:\", s, \"badge_text:\", badge, \"final_url:\", final)\\ns2, b2, f2 = get(\"https://api.github.com/repos/kennethreitz/maya/actions/runs?per_page=3\")\\nruns = json.loads(b2).get(\"workflow_runs\", []) if s2 == 200 else []\\nlatest = [(r.get(\"name\"), r.get(\"conclusion\"), r.get(\"created_at\")) for r in runs]\\nprint(\"kennethreitz_maya_runs_http:\", s2, \"latest:\", latest)\\ns3, b3, f3 = get(\"https://api.github.com/repos/timofurrer/maya\")\\nprint(\"timofurrer_maya_repo_http:\", s3, \"resolves_to:\", json.loads(b3).get(\"full_name\") if s3 == 200 else b3[:120])\\nok = s == 200 and badge == \"passing\" and len(latest) > 0 and latest[0][1] == \"success\"\\nprint(\"VERDICT_LINE: \" + (\"PASS badge shows passing and latest kennethreitz/maya workflow run succeeded\" if ok else \"FAIL badge=\" + badge + \" badge_http=\" + str(s) + \" latest_kennethreitz_run=\" + str(latest[:1])))\\n' > /tmp/p.py && python3 /tmp/p.py || echo \"VERDICT_LINE: FAIL probe crashed before reaching a verdict\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya; print(\"maya_version:\", maya.__version__); now = maya.now(); print(\"now_repr:\", repr(now)); assert type(now).__name__ == \"MayaDT\", repr(now); assert repr(now).startswith(\"<MayaDT epoch=\"), repr(now)' && echo \"VERDICT_LINE: PASS maya.now() returned a MayaDT with <MayaDT epoch=...> repr\" || echo \"VERDICT_LINE: FAIL maya.now() did not return a MayaDT (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya; print(\"maya_version:\", maya.__version__); tomorrow = maya.when(\"tomorrow\"); now = maya.now(); days = (tomorrow.epoch - now.epoch) / 86400.0; slang = tomorrow.slang_date(); print(\"tomorrow_repr:\", repr(tomorrow), \"days_ahead:\", round(days, 3), \"slang_date:\", repr(slang)); assert type(tomorrow).__name__ == \"MayaDT\", repr(tomorrow); assert 0.5 < days < 1.5, days; assert slang == \"tomorrow\", slang' && echo \"VERDICT_LINE: PASS maya.when(tomorrow) is ~1 day ahead and slang_date() == tomorrow\" || echo \"VERDICT_LINE: FAIL maya.when(tomorrow) or slang_date() did not match README (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya, re; print(\"maya_version:\", maya.__version__); n = maya.now(); i = n.iso8601(); r = n.rfc2822(); print(\"iso8601:\", i, \"rfc2822:\", r); assert re.match(r\"^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$\", i), i; assert re.match(r\"^[A-Z][a-z]{2}, \\d{2} [A-Z][a-z]{2} \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$\", r), r; a = maya.MayaDT.from_iso8601(i); b = maya.MayaDT.from_rfc2822(r); print(\"roundtrip_iso_delta_s:\", abs(a.epoch - n.epoch), \"roundtrip_rfc_delta_s:\", abs(b.epoch - n.epoch)); assert abs(a.epoch - n.epoch) < 0.01, repr(a); assert abs(b.epoch - n.epoch) < 1, repr(b)' && echo \"VERDICT_LINE: PASS iso8601/rfc2822 export match README formats and from_iso8601/from_rfc2822 round-trip\" || echo \"VERDICT_LINE: FAIL ISO 8601 / RFC 2822 export or import did not behave as claimed (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya, datetime; print(\"maya_version:\", maya.__version__); scraped = \"2016-12-16 18:23:45.423992+00:00\"; d = maya.parse(scraped).datetime(to_timezone=\"US/Eastern\", naive=True); print(\"result:\", repr(d)); assert d == datetime.datetime(2016, 12, 16, 13, 23, 45, 423992), repr(d); assert d.tzinfo is None, repr(d.tzinfo)' && echo \"VERDICT_LINE: PASS maya.parse(...).datetime(to_timezone=US/Eastern, naive=True) == datetime(2016,12,16,13,23,45,423992)\" || echo \"VERDICT_LINE: FAIL parsed/converted datetime differs from README (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya; print(\"maya_version:\", maya.__version__); import importlib.util; print(\"snaptime_installed:\", importlib.util.find_spec(\"snaptime\") is not None); dt = maya.when(\"Mon, 21 Feb 1994 21:21:42 GMT\"); r = dt.snap(\"@d+3h\").rfc2822(); print(\"snap_result:\", repr(r)); assert r == \"Mon, 21 Feb 1994 03:00:00 GMT\", r' && echo \"VERDICT_LINE: PASS dt.snap(@d+3h).rfc2822() == Mon, 21 Feb 1994 03:00:00 GMT\" || echo \"VERDICT_LINE: FAIL snap modifier result differs from README or snaptime missing (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya; print(\"maya_version:\", maya.__version__); dt = maya.when(\"Mon, 21 Feb 1994 21:21:42 GMT\"); r = dt.snap_tz(\"+3h@d\", \"Australia/Perth\").rfc2822(); print(\"snap_tz_result:\", repr(r)); assert r == \"Mon, 21 Feb 1994 16:00:00 GMT\", r' && echo \"VERDICT_LINE: PASS dt.snap_tz(+3h@d, Australia/Perth).rfc2822() == Mon, 21 Feb 1994 16:00:00 GMT\" || echo \"VERDICT_LINE: FAIL snap_tz result differs from README (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya; print(\"maya_version:\", maya.__version__); m = maya.MayaDT(-86400); print(\"repr:\", repr(m), \"ymd:\", (m.year, m.month, m.day), \"iso8601:\", m.iso8601(), \"datetime:\", repr(m.datetime())); assert (m.year, m.month, m.day) == (1969, 12, 31), (m.year, m.month, m.day); assert m.epoch == -86400, m.epoch' && echo \"VERDICT_LINE: PASS MayaDT(-86400) is 1969-12-31 (pre-1970 negative epoch supported)\" || echo \"VERDICT_LINE: FAIL MayaDT(-86400) did not yield Dec 31 1969 (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install maya"
+   ],
+   "commands": [
+    "python3 -c 'import maya; from maya import MayaInterval; print(\"maya_version:\", maya.__version__); event_start = maya.now(); event_end = event_start.add(hours=1); event = MayaInterval(start=event_start, end=event_end); secs = event.end.epoch - event.start.epoch; print(\"interval:\", repr(event), \"seconds:\", secs, \"duration_attr:\", getattr(event, \"duration\", None)); assert type(event).__name__ == \"MayaInterval\", repr(event); assert event.start == event_start and event.end == event_end, repr(event); assert abs(secs - 3600) < 1, secs' && echo \"VERDICT_LINE: PASS MayaInterval(start=now, end=now+1h) constructs a one-hour interval\" || echo \"VERDICT_LINE: FAIL MayaInterval import or construction did not behave as claimed (see output above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c11",
+   "claim_id": "c11",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "printf '%b' 'import urllib.request, json\\ndef get(u):\\n    try:\\n        r = urllib.request.urlopen(urllib.request.Request(u, headers={\"User-Agent\": \"probe\"}), timeout=30)\\n        return r.status, r.read().decode(\"utf-8\", \"replace\")\\n    except Exception as e:\\n        return getattr(e, \"code\", -1), str(e)\\ns, body = get(\"https://pypi.org/pypi/maya/json\")\\ninfo = json.loads(body).get(\"info\", {}) if s == 200 else {}\\nver = info.get(\"version\")\\nprint(\"pypi_json_http:\", s, \"name:\", info.get(\"name\"), \"latest_version:\", ver)\\nbs, bb = get(\"https://img.shields.io/pypi/v/maya.svg\")\\nprint(\"badge_http:\", bs, \"badge_svg_contains_latest_version:\", (ver in bb) if ver else None)\\nif s == 200 and str(info.get(\"name\", \"\")).lower() == \"maya\":\\n    print(\"VERDICT_LINE: PASS maya is published on PyPI, latest \" + str(ver) + (\" (matches claimed 0.6.1)\" if ver == \"0.6.1\" else \" (claim said 0.6.1, differs)\"))\\nelse:\\n    print(\"VERDICT_LINE: FAIL pypi.org/pypi/maya/json returned HTTP \" + str(s))\\n' > /tmp/p.py && python3 /tmp/p.py || echo \"VERDICT_LINE: FAIL probe crashed before reaching a verdict\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}

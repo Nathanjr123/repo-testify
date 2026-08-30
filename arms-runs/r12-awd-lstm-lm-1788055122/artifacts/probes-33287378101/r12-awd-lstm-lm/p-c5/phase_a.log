@@ -1,0 +1,10 @@
+pip_exit=0
+Successfully installed numpy-1.21.6 torch-0.4.1
+torch 0.4.1 numpy 1.21.6 cuda_available False
+ptb tgz fetched
+   3761 data/penn/test.txt
+  42068 data/penn/train.txt
+   3370 data/penn/valid.txt
+  49199 total
+
+--stderr--

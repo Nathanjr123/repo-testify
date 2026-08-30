@@ -1,0 +1,7 @@
+python 3.11.16 simplejson 4.1.2 C loaded: True
+sj_c big dumps/loads ms: 3.779 1.759 | small dumps/loads us: 3.34 1.81
+sj_py big dumps/loads ms: 27.378 31.117 | small dumps/loads us: 13.1 10.08
+json big dumps/loads ms: 2.211 1.469 | small dumps/loads us: 2.24 1.59
+C-vs-pure-simplejson speedup (big doc): dumps x7.24 loads x17.69
+stdlib-json-time / simplejson-C-time (big doc, >1 = simplejson faster): dumps x0.59 loads x0.84
+VERDICT_LINE: PASS C extension loaded and >=2x faster than pure-Python simplejson on dumps and loads (stdlib json ratio printed above)

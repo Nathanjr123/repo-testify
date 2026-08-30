@@ -1,0 +1,33 @@
+[notice] A new release of pip is available: 23.0.1 -> 24.0
+[notice] To update, run: pip install --upgrade pip
+
+--stderr--
+Unable to find image 'python:3.7-slim' locally
+3.7-slim: Pulling from library/python
+a803e7c4b030: Pulling fs layer
+bf3336e84c8e: Pulling fs layer
+8973eb85275f: Pulling fs layer
+f9afc3cc0135: Pulling fs layer
+39312d8b4ab7: Pulling fs layer
+f9afc3cc0135: Waiting
+39312d8b4ab7: Waiting
+bf3336e84c8e: Verifying Checksum
+bf3336e84c8e: Download complete
+f9afc3cc0135: Verifying Checksum
+f9afc3cc0135: Download complete
+8973eb85275f: Verifying Checksum
+8973eb85275f: Download complete
+a803e7c4b030: Verifying Checksum
+a803e7c4b030: Download complete
+39312d8b4ab7: Verifying Checksum
+39312d8b4ab7: Download complete
+a803e7c4b030: Pull complete
+bf3336e84c8e: Pull complete
+8973eb85275f: Pull complete
+f9afc3cc0135: Pull complete
+39312d8b4ab7: Pull complete
+Digest: sha256:b53f496ca43e5af6994f8e316cf03af31050bf7944e0e4a308ad86c001cf028b
+Status: Downloaded newer image for python:3.7-slim
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'torch'

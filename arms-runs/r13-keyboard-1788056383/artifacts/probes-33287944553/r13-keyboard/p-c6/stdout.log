@@ -1,0 +1,9 @@
+test files shipped in package: ['_keyboard_tests.py', '_mouse_tests.py']
+--- running keyboard._keyboard_tests as unprivileged user nobody (no /dev/input access possible) ---
+----------------------------------------------------------------------
+Ran 148 tests in 0.350s
+
+OK
+exit=0
+tests ran as nobody: ['148'] passed=True; mock markers in _keyboard_tests.py: Fake=2 _os_keyboard=7 /dev/input refs=0
+VERDICT_LINE: PASS 148 unit tests pass as an unprivileged user against a fake OS layer (Fake x2): proves parsing/hotkey logic, not real windows/linux/macos hook integration

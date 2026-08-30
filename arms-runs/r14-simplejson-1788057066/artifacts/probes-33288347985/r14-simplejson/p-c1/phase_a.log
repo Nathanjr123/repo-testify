@@ -1,0 +1,31 @@
+Collecting simplejson
+  Downloading simplejson-4.1.2-cp39-cp39-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (175 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 175.5/175.5 kB 11.7 MB/s eta 0:00:00
+Installing collected packages: simplejson
+Successfully installed simplejson-4.1.2
+
+--stderr--
+Unable to find image 'python:3.9-slim' locally
+3.9-slim: Pulling from library/python
+38513bd72563: Pulling fs layer
+b3ec39b36ae8: Pulling fs layer
+fc7443084902: Pulling fs layer
+ea56f685404a: Pulling fs layer
+b3ec39b36ae8: Verifying Checksum
+b3ec39b36ae8: Download complete
+ea56f685404a: Verifying Checksum
+ea56f685404a: Download complete
+fc7443084902: Verifying Checksum
+fc7443084902: Download complete
+38513bd72563: Verifying Checksum
+38513bd72563: Download complete
+38513bd72563: Pull complete
+b3ec39b36ae8: Pull complete
+fc7443084902: Pull complete
+ea56f685404a: Pull complete
+Digest: sha256:2d97f6910b16bd338d3060f261f53f144965f755599aab1acda1e13cf1731b1b
+Status: Downloaded newer image for python:3.9-slim
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.0.1 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip

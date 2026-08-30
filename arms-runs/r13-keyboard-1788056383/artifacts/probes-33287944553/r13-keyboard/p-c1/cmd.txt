@@ -1,0 +1,1 @@
+/tmp/v/bin/pip show keyboard 2>&1 | head -3 && /tmp/v/bin/python -c 'import keyboard, sys; print("import ok: keyboard " + keyboard.version + " on python " + sys.version.split()[0])' && echo "VERDICT_LINE: PASS pip install keyboard exited 0 in a fresh venv and import keyboard succeeds" || echo "VERDICT_LINE: FAIL pip install keyboard or import keyboard failed in fresh venv"

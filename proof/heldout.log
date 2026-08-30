@@ -1,0 +1,27 @@
+r03-funcy.json: ok wall=267.8s
+r06-thefuck.json: ok wall=402.87s
+r08-maya.json: ok wall=304.05s
+r10-requests-html.json: ok wall=413.88s
+r12-awd-lstm-lm.json: arm_error wall=12.06s
+r13-keyboard.json: arm_error wall=3.81s
+r14-simplejson.json: arm_error wall=9.85s
+{
+ "id": "advanced-v3-heldout-1788030650",
+ "agg": {
+  "rows": {
+   "verdict_acc": 0.211,
+   "confident_wrong": 0.242,
+   "evidence_valid": 0.308,
+   "score_error": 0.207
+  },
+  "gates": {
+   "no_fabricated_evidence": 1.0,
+   "valid_report": 0.5714285714285714
+  },
+  "raw": 0.135,
+  "n_cases": 7,
+  "settled_fraction": 0.557,
+  "capped": false
+ }
+}
+HELDOUT_DONE

@@ -21,7 +21,7 @@ rows = [row("baseline-v2-n1-rescored", "baseline (run 1)"), row("baseline-v2-n2-
         row("advanced-v1-rescored", "pipeline v1"), row("advanced-v2-rescored", "pipeline v2 (public, tuned)"),
         row("ablate-k1", "ablation: k=1 votes"), row("ablate-no-execution-rescored", "ablation: no execution"),
         row("baseline-ext2-rescored", "baseline (extension, 6 repos, v3 code)"), row("advanced-v3-ext-rescored", "pipeline v3 (extension, 6 repos)"),
-        row("baseline-heldout", "baseline (held-out, run once; provisional truth, audit pending)"), row("advanced-v3-heldout", "pipeline v3 (held-out, run once; provisional truth, audit pending)")]
+        row("baseline-heldout-rescored", "baseline (held-out, 7 repos, run once; provisional truth)"), row("advanced-v3-heldout-rescored", "pipeline v3 (held-out, 7 repos, run once; provisional truth)")]
 b = [latest[l]["agg"]["raw"] for l in ("baseline-v2-n1-rescored", "baseline-v2-n2-rescored") if l in latest]
 floor = f"Baseline-vs-baseline spread (noise floor): **{max(b)-min(b):.3f}** composite; claim-accuracy spread {abs(latest['baseline-v2-n1-rescored']['agg']['rows']['verdict_acc']-latest['baseline-v2-n2-rescored']['agg']['rows']['verdict_acc']):.3f}." if len(b) == 2 else ""
 b1, adv = latest.get("baseline-v2-n1-rescored"), latest.get("advanced-v2-rescored")

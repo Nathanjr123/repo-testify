@@ -1,0 +1,15 @@
+[notice] A new release of pip is available: 23.0.1 -> 24.0
+[notice] To update, run: pip install --upgrade pip
+WT2_DOWNLOAD_FAILED_from_getdata.sh_URL
+WT2_EXTRACT_FAILED
+
+--stderr--
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'torch'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/local/lib/python3.7/zipfile.py", line 1240, in __init__
+    self.fp = io.open(file, filemode)
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/wt2.zip'
+ls: cannot access 'data/wikitext-2': No such file or directory

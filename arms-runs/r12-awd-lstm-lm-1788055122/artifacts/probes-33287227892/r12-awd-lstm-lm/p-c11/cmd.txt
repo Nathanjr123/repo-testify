@@ -1,0 +1,1 @@
+PHASE_A_FAILED: cp -r /repo-src /repo && cd /repo && pip install --no-cache-dir torch==0.4.1 numpy 2>&1 | tail -n 2 && python3 -c 'import torch, numpy; print("torch", torch.__version__, "numpy", numpy.__version__, "cuda_available", torch.cuda.is_available())'

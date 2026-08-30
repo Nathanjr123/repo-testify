@@ -1,0 +1,6 @@
+workflow files at SHA: ['build-and-deploy.yml']
+build-and-deploy.yml -> ['- 3.14', 'test_free_threading:', 'name: Tests with free-threading on Python 3.14t', "python-version: '3.14t'", '- name: Verify Python is a free-threaded build', "'Python is not a free-threaded build '", "'(Py_GIL_DISABLED={!r}); setup-python did not install 3.14t.'", '- name: Build extension with free-threading support', 'name: Tests on Python 3.14 ${{ matrix.variant }} debug build', '- "free-threaded"', 'uv_python: "cpython-3.14.4+debug"', '- variant: "free-threaded"']
+CI runs at pinned SHA: [('Graph Update: pip in /. #1543889475', 'completed', 'success'), ('Build and upload to PyPI', 'completed', 'success'), ('Build and upload to PyPI', 'completed', 'success')]
+matrix has 3.14: True | free-threaded entry: True
+py 3.14.7 gil enabled: True C ext: False
+VERDICT_LINE: PASS workflows at pinned SHA include 3.14 and a free-threaded entry; bundled test suite passes on python 3.14

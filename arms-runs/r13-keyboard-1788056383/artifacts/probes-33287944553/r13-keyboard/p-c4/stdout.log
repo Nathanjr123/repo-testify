@@ -1,0 +1,9 @@
+python 2.7.18 keyboard 0.13.5 normalize_name(Left Control)=left ctrl
+exit=0
+exit=0
+Ran 148 tests in 0.381s
+
+OK
+exit=0
+py2_import=True py2_compile_all=True py2_unit_tests=True
+VERDICT_LINE: PASS python 2.7 imports, byte-compiles and passes the unit tests of the pinned source (python 3 side covered by the other probes)

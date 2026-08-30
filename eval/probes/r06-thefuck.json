@@ -1,0 +1,150 @@
+{
+ "case_id": "r06-thefuck",
+ "repo": "https://github.com/nvbn/thefuck",
+ "commit": "c7e7e1d884d3bb241ea6448f72a989434c2a35ec",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.12-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "python3 --version; thefuck --version > /tmp/out.txt 2>&1; rc=$?; echo \"thefuck --version exit=$rc\"; tail -n 2 /tmp/out.txt; python3 -c 'import sys; o=open(\"/tmp/out.txt\").read(); sys.exit(0 if (\"3.32\" in o and \"Traceback\" not in o) else 1)' && echo \"VERDICT_LINE: PASS thefuck --version runs on Python 3.12\" || echo \"VERDICT_LINE: FAIL thefuck 3.32 does not run on Python 3.12 (exit=$rc, see last output line above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "python3 --version; which thefuck || echo \"thefuck not on PATH\"; thefuck --version > /tmp/out.txt 2>&1; rc=$?; echo \"thefuck --version exit=$rc\"; tail -n 2 /tmp/out.txt; python3 -c 'import sys; o=open(\"/tmp/out.txt\").read(); sys.exit(0 if (\"3.32\" in o and \"Traceback\" not in o) else 1)' && echo \"VERDICT_LINE: PASS pip install thefuck gives a working thefuck executable on Python 3.11\" || echo \"VERDICT_LINE: FAIL thefuck --version failed after pip install (exit=$rc, see above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "ubuntu:24.04",
+   "network": "on",
+   "setup": [
+    "apt update > /tmp/apt.log 2>&1 && DEBIAN_FRONTEND=noninteractive apt install -y python3-dev python3-pip python3-setuptools >> /tmp/apt.log 2>&1 || (tail -n 5 /tmp/apt.log; echo \"SETUP: apt step failed\")",
+    "python3 --version; pip3 --version | head -c 120; echo"
+   ],
+   "commands": [
+    "echo \"note: container is root so sudo is omitted; README step run verbatim: pip3 install thefuck --user\"; pip3 install thefuck --user > /tmp/pip.log 2>&1; rc=$?; echo \"pip3 install thefuck --user exit=$rc\"; grep -m1 -E \"externally-managed-environment|Successfully installed|ERROR\" /tmp/pip.log || tail -n 1 /tmp/pip.log; export PATH=\"$HOME/.local/bin:$PATH\"; thefuck --version > /tmp/out.txt 2>&1; rc2=$?; echo \"thefuck --version exit=$rc2\"; tail -n 1 /tmp/out.txt; python3 -c 'import sys; o=open(\"/tmp/out.txt\").read(); sys.exit(0 if (\"3.32\" in o and \"Traceback\" not in o) else 1)' && echo \"VERDICT_LINE: PASS Ubuntu 24.04 apt + pip3 --user install yields a working thefuck\" || echo \"VERDICT_LINE: FAIL on Ubuntu 24.04 (python 3.12): pip3 --user exit=$rc, thefuck --version exit=$rc2 (see lines above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "thefuck --alias > /tmp/alias.sh 2>&1; echo \"thefuck --alias exit=$?\"; head -c 200 /tmp/alias.sh; echo",
+    "bash -c 'eval $(thefuck --alias); type fuck' > /tmp/type.txt 2>&1; head -n 1 /tmp/type.txt; bash -c 'eval $(thefuck --alias FUCK); type FUCK' > /tmp/type2.txt 2>&1; head -n 1 /tmp/type2.txt; grep -q \"fuck is a function\" /tmp/type.txt && grep -q \"FUCK is a function\" /tmp/type2.txt && echo \"VERDICT_LINE: PASS eval \\$(thefuck --alias) defines a fuck shell function in bash (FUCK variant too)\" || echo \"VERDICT_LINE: FAIL fuck function not defined after eval \\$(thefuck --alias) (see lines above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "thefuck --help > /tmp/help.txt 2>&1; echo \"thefuck --help exit=$?\"; grep -E -- \"-y|--yeah|--hard\" /tmp/help.txt | head -n 2",
+    "python3 -c 'from thefuck.argument_parser import Parser; r={a: vars(Parser().parse([\"thefuck\", a])) for a in [\"--yeah\", \"-y\", \"--hard\"]}; f={a: bool(v.get(\"yes\") or v.get(\"yeah\")) for a, v in r.items()}; print(\"parsed no-confirmation flag:\", f); assert all(f.values()), f' && echo \"VERDICT_LINE: PASS --yeah, -y and --hard are accepted and set the run-without-confirmation flag\" || echo \"VERDICT_LINE: FAIL one of --yeah/-y/--hard is not accepted by the thefuck argument parser (see above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "thefuck --help > /tmp/help.txt 2>&1; echo \"thefuck --help exit=$?\"; grep -E -- \"-r|repeat\" /tmp/help.txt | head -n 2",
+    "python3 -c 'from thefuck.argument_parser import Parser; v=vars(Parser().parse([\"thefuck\", \"-r\"])); print(\"parsed:\", {k: v[k] for k in v if \"repeat\" in k}); assert v.get(\"repeat\") is True, v' && echo \"VERDICT_LINE: PASS -r is accepted and sets the repeat (fix-until-success) flag\" || echo \"VERDICT_LINE: FAIL -r not accepted / repeat flag not set (see above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "pip instatl requests > /tmp/pip_out.txt 2>&1; echo \"pip instatl exit=$?\"; cat /tmp/pip_out.txt",
+    "python3 -c 'from thefuck.rules.pip_unknown_command import match, get_new_command; from thefuck.types import Command; o=open(\"/tmp/pip_out.txt\").read(); c=Command(\"pip instatl requests\", o); m=match(c); print(\"rule match:\", m); n=get_new_command(c) if m else None; print(\"suggested:\", n); assert n == \"pip install requests\" or n == [\"pip install requests\"], n' && echo \"VERDICT_LINE: PASS pip_unknown_command turns real 'pip instatl requests' output into 'pip install requests'\" || echo \"VERDICT_LINE: FAIL pip_unknown_command did not suggest 'pip install requests' for the real pip output (see above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "echo \"note: sandbox is root so apt-get cannot produce a real Permission denied; the README's exact error text is fed to the sudo rule\"; python3 -c 'from thefuck.rules.sudo import match, get_new_command; from thefuck.types import Command; c=Command(\"apt-get install vim\", \"E: Could not open lock file /var/lib/dpkg/lock - open (13: Permission denied)\\nE: Unable to lock the administration directory (/var/lib/dpkg/), are you root?\"); m=match(c); print(\"rule match:\", m); n=get_new_command(c) if m else None; print(\"suggested:\", n); assert n == \"sudo apt-get install vim\", n' && echo \"VERDICT_LINE: PASS sudo rule suggests 'sudo apt-get install vim' for the README's permission-denied output\" || echo \"VERDICT_LINE: FAIL sudo rule did not produce 'sudo apt-get install vim' (see above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "printf '%s\\n' 'import re, json, urllib.request as u' 'def get(url):' '    r = u.urlopen(u.Request(url, headers={\"User-Agent\": \"probe\", \"Accept\": \"*/*\"}), timeout=30); return r.status, r.read().decode(\"utf-8\", \"replace\")' 'st, readme = get(\"https://raw.githubusercontent.com/nvbn/thefuck/c7e7e1d884d3bb241ea6448f72a989434c2a35ec/README.md\")' 'm = re.search(r\"\\[workflow-badge\\]:\\s*(\\S+)\", readme)' 'badge = m.group(1) if m else \"https://github.com/nvbn/thefuck/workflows/Tests/badge.svg\"' 'print(\"badge_url:\", badge)' 'try:' '    bs, svg = get(badge)' 'except Exception as e:' '    bs, svg = 0, str(e)' 'state = \"passing\" if \"passing\" in svg else \"failing\" if \"failing\" in svg else \"no status\" if \"no status\" in svg else \"unknown\"' 'print(\"badge_http:\", bs, \"badge_state:\", state)' 'try:' '    rs, body = get(\"https://api.github.com/repos/nvbn/thefuck/actions/runs?per_page=30\")' 'except Exception as e:' '    rs, body = 0, \"{}\"; print(\"api_error:\", e)' 'runs = json.loads(body).get(\"workflow_runs\", []) if rs == 200 else []' 'tests = [w for w in runs if w.get(\"name\") == \"Tests\"]' 'for w in tests[:3]: print(\"tests_run:\", w.get(\"conclusion\"), w.get(\"created_at\"), w.get(\"html_url\"))' 'latest = tests[0] if tests else None' 'ok = state == \"passing\" and (latest is None or latest.get(\"conclusion\") == \"success\")' 'print(\"OBSERVED badge_state=%s latest_tests_conclusion=%s latest_tests_date=%s\" % (state, latest and latest.get(\"conclusion\"), latest and latest.get(\"created_at\")))' 'raise SystemExit(0 if ok else 1)' > /tmp/p.py"
+   ],
+   "commands": [
+    "python3 /tmp/p.py && echo \"VERDICT_LINE: PASS Tests badge renders passing and latest Tests workflow run succeeded (date on OBSERVED line)\" || echo \"VERDICT_LINE: FAIL Tests badge or latest Tests run is not passing (see OBSERVED line above)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install thefuck > /tmp/pip.log 2>&1 || (tail -n 5 /tmp/pip.log; echo \"SETUP: pip install thefuck failed\")",
+    "tail -n 1 /tmp/pip.log"
+   ],
+   "commands": [
+    "pip3 install thefuck --upgrade > /tmp/up.log 2>&1; rc=$?; echo \"pip3 install thefuck --upgrade exit=$rc\"; tail -n 1 /tmp/up.log; thefuck --version 2>&1 | tail -n 1; python3 -c 'import json, urllib.request as u; d=json.load(u.urlopen(\"https://pypi.org/pypi/thefuck/json\", timeout=30)); v=d[\"info\"][\"version\"]; t=max(f[\"upload_time\"] for f in d[\"releases\"][v]); print(\"pypi_latest:\", v, \"uploaded:\", t); assert v == \"3.32\" and t.startswith(\"2021\"), (v, t)' && [ \"$rc\" -eq 0 ] && echo \"VERDICT_LINE: PASS pip3 install thefuck --upgrade succeeds; PyPI latest is 3.32 uploaded 2021\" || echo \"VERDICT_LINE: FAIL upgrade exit=$rc or PyPI latest version/date differs from 3.32/2021 (see pypi_latest line)\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}

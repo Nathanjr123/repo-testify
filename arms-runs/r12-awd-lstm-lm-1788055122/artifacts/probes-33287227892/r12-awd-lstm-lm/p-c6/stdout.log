@@ -1,0 +1,5 @@
+56:The codebase was modified during the writing of the paper, preventing exact reproduction due to minor differences in random seeds or similar.
+57:We have also seen exact reproduction numbers change when changing underlying GPU.
+58:The guide below produces results largely similar to the numbers reported.
+count of 'approximately' in README: 13; numeric tolerance stated: 0
+VERDICT_LINE: PASS README carries both disclaimers verbatim and states no numeric tolerance; buyer must set a band (we read approximately as +/-1.5 ppl for c3-c5, c10)

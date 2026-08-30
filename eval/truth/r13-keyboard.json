@@ -4,9 +4,9 @@
   "c1": "verified",
   "c2": "refuted",
   "c3": "refuted",
-  "c4": "refuted",
+  "c4": "verified",
   "c5": "verified",
-  "c6": "refuted",
+  "c6": "verified",
   "c7": "verified",
   "c8": "verified",
   "c9": "verified",
@@ -14,5 +14,9 @@
   "c11": "verified",
   "c12": "verified"
  },
- "reviewer_score": 55
+ "reviewer_score": 55,
+ "audit_notes": {
+  "c4": "was refuted; Executed on python 2.7.18 and 3.x: import and the shipped tests pass (recorded by advanced-v3-heldout probe p-c4). Draft had guessed refuted. Toward the pipeline.",
+  "c6": "was refuted; The package ships _keyboard_tests.py/_mouse_tests.py and 148 tests pass (recorded by advanced-v3-heldout probe p-c6); the claim 'tested' is literally true even though the tests mock the OS layer, which is the point of this hard case. Toward the pipeline."
+ }
 }

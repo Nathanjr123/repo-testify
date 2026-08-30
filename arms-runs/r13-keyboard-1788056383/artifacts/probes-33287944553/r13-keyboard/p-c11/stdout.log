@@ -1,0 +1,3 @@
+README at pinned sha: http 200, unmaintained banner present: True
+github api unavailable: HTTPError: HTTP Error 403: rate limit exceeded
+VERDICT_LINE: PASS unmaintained banner present in README at pinned sha

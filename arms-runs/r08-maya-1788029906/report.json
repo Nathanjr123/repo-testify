@@ -1,0 +1,318 @@
+{
+ "repo": "https://github.com/kennethreitz/maya",
+ "overall_score": 82,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "Version: 0.6.1 / import_ok maya_version: 0.6.1 / VERDICT_LINE: PASS pip install maya resolved its dependencies and import maya works; snaptime wheel built 'done'; exit_code 0 (stderr BrokenPipe is from `pip show | head`, not the install)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "badge_http: 404 badge_text: unknown; kennethreitz_maya_runs_http: 200 latest: []; timofurrer_maya_repo_http: 200 resolves_to: kennethreitz/maya; VERDICT_LINE: FAIL badge=unknown badge_http=404 latest_kennethreitz_run=[]; exit_code 0 (script exit, probe verdict is FAIL: the badge URL returns 404 and the repo has no workflow runs, so it asserts no passing CI)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "now_repr: <MayaDT epoch=1788030084.272883> / VERDICT_LINE: PASS maya.now() returned a MayaDT with <MayaDT epoch=...> repr; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "days_ahead: 1.0 slang_date: 'tomorrow' / VERDICT_LINE: PASS maya.when(tomorrow) is ~1 day ahead and slang_date() == tomorrow; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "iso8601: 2026-08-29T19:01:37.360155Z rfc2822: Sat, 29 Aug 2026 19:01:37 GMT / roundtrip_iso_delta_s: 0 roundtrip_rfc_delta_s: 0 / VERDICT_LINE: PASS; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "result: datetime.datetime(2016, 12, 16, 13, 23, 45, 423992) / VERDICT_LINE: PASS maya.parse(...).datetime(to_timezone=US/Eastern, naive=True) == datetime(2016,12,16,13,23,45,423992); exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "snaptime_installed: True / snap_result: 'Mon, 21 Feb 1994 03:00:00 GMT' / VERDICT_LINE: PASS dt.snap(@d+3h).rfc2822() == Mon, 21 Feb 1994 03:00:00 GMT; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "stderr: AttributeError: 'MayaDT' object has no attribute 'snap_tz' / VERDICT_LINE: FAIL snap_tz result differs from README; maya 0.6.1 as installed from PyPI has no snap_tz method; exit_code 0 is the echo fallback, the python command itself failed"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "repr: <MayaDT epoch=-86400> ymd: (1969, 12, 31) iso8601: 1969-12-31T00:00:00Z / VERDICT_LINE: PASS MayaDT(-86400) is 1969-12-31; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "interval: <MayaInterval start=<MayaDT epoch=1788030129.9431705> end=<MayaDT epoch=1788033729.943171>> seconds: 3600 duration_attr: 3600.0 / VERDICT_LINE: PASS; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "verified",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "pypi_json_http: 200 name: maya latest_version: 0.6.1 / badge_http: 200 badge_svg_contains_latest_version: True / VERDICT_LINE: PASS maya is published on PyPI, latest 0.6.1; exit_code 0"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    },
+    {
+     "verdict": "verified",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [],
+ "run_id": "33269764627",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r08-maya-1788029906",
+ "_evidence_index": {
+  "probes": [
+   "p-c1",
+   "p-c10",
+   "p-c11",
+   "p-c2",
+   "p-c3",
+   "p-c4",
+   "p-c5",
+   "p-c6",
+   "p-c7",
+   "p-c8",
+   "p-c9"
+  ],
+  "text": "p-c1 python3 --version && ( pip install maya > /tmp/pip.log 2>&1 || (tail -n 40 /tmp/pip.log; false) ) && pip show maya | head -n 2 && python3 -c 'import maya; print(\"import_ok maya_version:\", maya.__version__)' && echo \"VERDICT_LINE: PASS pip install maya resolved its dependencies and import maya works\" || echo \"VERDICT_LINE: FAIL pip install maya or import maya failed (see log above)\"\nSTDOUT Python 3.11.16\nName: maya\nVersion: 0.6.1\nimport_ok maya_version: 0.6.1\nVERDICT_LINE: PASS pip install maya resolved its dependencies and import maya works\n\nSTDERR ERROR: Pipe to stdout was broken\nException ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>\nBrokenPipeError: [Errno 32] Broken pipe\n\nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 72.8 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 114.2 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 85.8 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=3c96a3b3db9a987e6fe5dd39c4492c0fa4eec8d\nEXIT 0\np-c10 python3 -c 'import maya; from maya import MayaInterval; print(\"maya_version:\", maya.__version__); event_start = maya.now(); event_end = event_start.add(hours=1); event = MayaInterval(start=event_start, end=event_end); secs = event.end.epoch - event.start.epoch; print(\"interval:\", repr(event), \"seconds:\", secs, \"duration_attr:\", getattr(event, \"duration\", None)); assert type(event).__name__ == \"MayaInterval\", repr(event); assert event.start == event_start and event.end == event_end, repr(event); assert abs(secs - 3600) < 1, secs' && echo \"VERDICT_LINE: PASS MayaInterval(start=now, end=now+1h) c\nSTDOUT maya_version: 0.6.1\ninterval: <MayaInterval start=<MayaDT epoch=1788030129.9431705> end=<MayaDT epoch=1788033729.943171>> seconds: 3600 duration_attr: 3600.0\nVERDICT_LINE: PASS MayaInterval(start=now, end=now+1h) constructs a one-hour interval\n\nSTDERR \nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 71.5 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 120.1 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 89.3 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=4a9f85bc73295128f0044d2d4da92cbeec9b64e\nEXIT 0\np-c11 printf '%b' 'import urllib.request, json\\ndef get(u):\\n    try:\\n        r = urllib.request.urlopen(urllib.request.Request(u, headers={\"User-Agent\": \"probe\"}), timeout=30)\\n        return r.status, r.read().decode(\"utf-8\", \"replace\")\\n    except Exception as e:\\n        return getattr(e, \"code\", -1), str(e)\\ns, body = get(\"https://pypi.org/pypi/maya/json\")\\ninfo = json.loads(body).get(\"info\", {}) if s == 200 else {}\\nver = info.get(\"version\")\\nprint(\"pypi_json_http:\", s, \"name:\", info.get(\"name\"), \"latest_version:\", ver)\\nbs, bb = get(\"https://img.shields.io/pypi/v/maya.svg\")\\nprint(\"badge_htt\nSTDOUT pypi_json_http: 200 name: maya latest_version: 0.6.1\nbadge_http: 200 badge_svg_contains_latest_version: True\nVERDICT_LINE: PASS maya is published on PyPI, latest 0.6.1 (matches claimed 0.6.1)\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c2 printf '%b' 'import urllib.request, json\\ndef get(u):\\n    try:\\n        r = urllib.request.urlopen(urllib.request.Request(u, headers={\"User-Agent\": \"probe\", \"Accept\": \"application/vnd.github+json\"}), timeout=30)\\n        return r.status, r.read().decode(\"utf-8\", \"replace\"), r.geturl()\\n    except Exception as e:\\n        return getattr(e, \"code\", -1), str(e), u\\ns, body, final = get(\"https://github.com/timofurrer/maya/workflows/Continuous%20Integration%20and%20Deployment/badge.svg\")\\nbadge = \"passing\" if \"passing\" in body else (\"failing\" if \"failing\" in body else (\"no status\" if \"no status\" i\nSTDOUT badge_http: 404 badge_text: unknown final_url: https://github.com/timofurrer/maya/workflows/Continuous%20Integration%20and%20Deployment/badge.svg\nkennethreitz_maya_runs_http: 200 latest: []\ntimofurrer_maya_repo_http: 200 resolves_to: kennethreitz/maya\nVERDICT_LINE: FAIL badge=unknown badge_http=404 latest_kennethreitz_run=[]\n\nSTDERR \nPHASE_A \n--stderr--\n\nEXIT 0\np-c3 python3 -c 'import maya; print(\"maya_version:\", maya.__version__); now = maya.now(); print(\"now_repr:\", repr(now)); assert type(now).__name__ == \"MayaDT\", repr(now); assert repr(now).startswith(\"<MayaDT epoch=\"), repr(now)' && echo \"VERDICT_LINE: PASS maya.now() returned a MayaDT with <MayaDT epoch=...> repr\" || echo \"VERDICT_LINE: FAIL maya.now() did not return a MayaDT (see output above)\"\nSTDOUT maya_version: 0.6.1\nnow_repr: <MayaDT epoch=1788030084.272883>\nVERDICT_LINE: PASS maya.now() returned a MayaDT with <MayaDT epoch=...> repr\n\nSTDERR \nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 75.8 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 122.2 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 87.3 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=83f8c882820c841cc03b3b0e31fe9083d313540\nEXIT 0\np-c4 python3 -c 'import maya; print(\"maya_version:\", maya.__version__); tomorrow = maya.when(\"tomorrow\"); now = maya.now(); days = (tomorrow.epoch - now.epoch) / 86400.0; slang = tomorrow.slang_date(); print(\"tomorrow_repr:\", repr(tomorrow), \"days_ahead:\", round(days, 3), \"slang_date:\", repr(slang)); assert type(tomorrow).__name__ == \"MayaDT\", repr(tomorrow); assert 0.5 < days < 1.5, days; assert slang == \"tomorrow\", slang' && echo \"VERDICT_LINE: PASS maya.when(tomorrow) is ~1 day ahead and slang_date() == tomorrow\" || echo \"VERDICT_LINE: FAIL maya.when(tomorrow) or slang_date() did not match READM\nSTDOUT maya_version: 0.6.1\ntomorrow_repr: <MayaDT epoch=1788116490.806905> days_ahead: 1.0 slang_date: 'tomorrow'\nVERDICT_LINE: PASS maya.when(tomorrow) is ~1 day ahead and slang_date() == tomorrow\n\nSTDERR \nPHASE_A st0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 71.9 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 114.2 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 89.9 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=d035ece5ac8db1b65e64a5fbeef95c1a8fc4ca82\nEXIT 0\np-c5 python3 -c 'import maya, re; print(\"maya_version:\", maya.__version__); n = maya.now(); i = n.iso8601(); r = n.rfc2822(); print(\"iso8601:\", i, \"rfc2822:\", r); assert re.match(r\"^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$\", i), i; assert re.match(r\"^[A-Z][a-z]{2}, \\d{2} [A-Z][a-z]{2} \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$\", r), r; a = maya.MayaDT.from_iso8601(i); b = maya.MayaDT.from_rfc2822(r); print(\"roundtrip_iso_delta_s:\", abs(a.epoch - n.epoch), \"roundtrip_rfc_delta_s:\", abs(b.epoch - n.epoch)); assert abs(a.epoch - n.epoch) < 0.01, repr(a); assert abs(b.epoch - n.epoch) < 1, repr(b)' && echo \"VER\nSTDOUT maya_version: 0.6.1\niso8601: 2026-08-29T19:01:37.360155Z rfc2822: Sat, 29 Aug 2026 19:01:37 GMT\nroundtrip_iso_delta_s: 0 roundtrip_rfc_delta_s: 0\nVERDICT_LINE: PASS iso8601/rfc2822 export match README formats and from_iso8601/from_rfc2822 round-trip\n\nSTDERR \nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 75.8 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 105.3 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 92.1 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=7f5fb8b40d557a2e594efbee847a0dec709d5a2\nEXIT 0\np-c6 python3 -c 'import maya, datetime; print(\"maya_version:\", maya.__version__); scraped = \"2016-12-16 18:23:45.423992+00:00\"; d = maya.parse(scraped).datetime(to_timezone=\"US/Eastern\", naive=True); print(\"result:\", repr(d)); assert d == datetime.datetime(2016, 12, 16, 13, 23, 45, 423992), repr(d); assert d.tzinfo is None, repr(d.tzinfo)' && echo \"VERDICT_LINE: PASS maya.parse(...).datetime(to_timezone=US/Eastern, naive=True) == datetime(2016,12,16,13,23,45,423992)\" || echo \"VERDICT_LINE: FAIL parsed/converted datetime differs from README (see output above)\"\nSTDOUT maya_version: 0.6.1\nresult: datetime.datetime(2016, 12, 16, 13, 23, 45, 423992)\nVERDICT_LINE: PASS maya.parse(...).datetime(to_timezone=US/Eastern, naive=True) == datetime(2016,12,16,13,23,45,423992)\n\nSTDERR \nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 68.5 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 77.0 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 86.0 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=70c54a8e82556e3b5159a7eb667a6b20d868451\nEXIT 0\np-c7 python3 -c 'import maya; print(\"maya_version:\", maya.__version__); import importlib.util; print(\"snaptime_installed:\", importlib.util.find_spec(\"snaptime\") is not None); dt = maya.when(\"Mon, 21 Feb 1994 21:21:42 GMT\"); r = dt.snap(\"@d+3h\").rfc2822(); print(\"snap_result:\", repr(r)); assert r == \"Mon, 21 Feb 1994 03:00:00 GMT\", r' && echo \"VERDICT_LINE: PASS dt.snap(@d+3h).rfc2822() == Mon, 21 Feb 1994 03:00:00 GMT\" || echo \"VERDICT_LINE: FAIL snap modifier result differs from README or snaptime missing (see output above)\"\nSTDOUT maya_version: 0.6.1\nsnaptime_installed: True\nsnap_result: 'Mon, 21 Feb 1994 03:00:00 GMT'\nVERDICT_LINE: PASS dt.snap(@d+3h).rfc2822() == Mon, 21 Feb 1994 03:00:00 GMT\n\nSTDERR \nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 71.5 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 123.9 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 95.6 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=71d31651d4e2d66d93997ea88c723e46d3d6b9d\nEXIT 0\np-c8 python3 -c 'import maya; print(\"maya_version:\", maya.__version__); dt = maya.when(\"Mon, 21 Feb 1994 21:21:42 GMT\"); r = dt.snap_tz(\"+3h@d\", \"Australia/Perth\").rfc2822(); print(\"snap_tz_result:\", repr(r)); assert r == \"Mon, 21 Feb 1994 16:00:00 GMT\", r' && echo \"VERDICT_LINE: PASS dt.snap_tz(+3h@d, Australia/Perth).rfc2822() == Mon, 21 Feb 1994 16:00:00 GMT\" || echo \"VERDICT_LINE: FAIL snap_tz result differs from README (see output above)\"\nSTDOUT maya_version: 0.6.1\nVERDICT_LINE: FAIL snap_tz result differs from README (see output above)\n\nSTDERR Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAttributeError: 'MayaDT' object has no attribute 'snap_tz'\n\nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 74.6 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 120.2 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 87.0 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=2b0682699f7e03403a900dabed67215c9363071\nEXIT 0\np-c9 python3 -c 'import maya; print(\"maya_version:\", maya.__version__); m = maya.MayaDT(-86400); print(\"repr:\", repr(m), \"ymd:\", (m.year, m.month, m.day), \"iso8601:\", m.iso8601(), \"datetime:\", repr(m.datetime())); assert (m.year, m.month, m.day) == (1969, 12, 31), (m.year, m.month, m.day); assert m.epoch == -86400, m.epoch' && echo \"VERDICT_LINE: PASS MayaDT(-86400) is 1969-12-31 (pre-1970 negative epoch supported)\" || echo \"VERDICT_LINE: FAIL MayaDT(-86400) did not yield Dec 31 1969 (see output above)\"\nSTDOUT maya_version: 0.6.1\nrepr: <MayaDT epoch=-86400> ymd: (1969, 12, 31) iso8601: 1969-12-31T00:00:00Z datetime: datetime.datetime(1969, 12, 31, 0, 0, tzinfo=<UTC>)\nVERDICT_LINE: PASS MayaDT(-86400) is 1969-12-31 (pre-1970 negative epoch supported)\n\nSTDERR \nPHASE_A ost0-py2.py3-none-any.whl (229 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 229.9/229.9 kB 74.3 MB/s eta 0:00:00\nDownloading regex-2026.7.19-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 801.4/801.4 kB 115.6 MB/s eta 0:00:00\nDownloading tzdata-2026.3-py2.py3-none-any.whl (348 kB)\n   \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 348.2/348.2 kB 96.7 MB/s eta 0:00:00\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nBuilding wheels for collected packages: snaptime\n  Building wheel for snaptime (setup.py): started\n  Building wheel for snaptime (setup.py): finished with status 'done'\n  Created wheel for snaptime: filename=snaptime-0.2.4-py3-none-any.whl size=3605 sha256=ee44b49bbed3b93389900321aed3f74aa10ea5c\nEXIT 0"
+ },
+ "llm_calls": 4,
+ "usage": {
+  "cost_usd": 2.689366,
+  "input_tokens": 8,
+  "output_tokens": 19825
+ },
+ "memo_md": "# Due-diligence memo: https://github.com/kennethreitz/maya @ 9766619d007c\nQuestion: A codebase we are buying uses maya for all datetime handling \u2014 does it still install on a modern Python given its pinned dependencies, is its CI badge trustworthy, and do the documented examples behave as shown?\n\n**Bottom line.** 9 of 11 README claims held under execution, 2 were refuted, 0 could not be settled in the sandbox and need a human. Rubric score 82/100.\n\n## Refuted (negotiate on these)\n- **c2** The maya README's GitHub Actions badge ('Continuous Integration and Deployment', pointing at github.com/timofurrer/maya) asserts passing CI for the maya project hosted at kennethreitz/maya.\n  Evidence: `p-c2` badge_http: 404 badge_text: unknown; kennethreitz_maya_runs_http: 200 latest: []; timofurrer_maya_repo_http: 200 resolves_to: kennethreitz/maya; VERDICT_LINE: FAIL badge=unknown badge_http=404 latest_kennethreitz_run=[];\n- **c8** In Python with 'maya' installed, timezone-aware snapping works: `maya.when('Mon, 21 Feb 1994 21:21:42 GMT').snap_tz('+3h@d', 'Australia/Perth').rfc2822()` returns 'Mon, 21 Feb 1994 16:00:00 GMT'.\n  Evidence: `p-c8` stderr: AttributeError: 'MayaDT' object has no attribute 'snap_tz' / VERDICT_LINE: FAIL snap_tz result differs from README; maya 0.6.1 as installed from PyPI has no snap_tz method; exit_code 0 is the echo fallback, the p\n\n## Verified as written\n- **c1** The package 'maya' installs successfully with `pip install maya` on a current Python (its dependency set \u2014 humanize, pytz, dateparser, tzloc\n- **c3** In Python with 'maya' installed, `maya.now()` returns a MayaDT object (repr like <MayaDT epoch=...>).\n- **c4** In Python with 'maya' installed, `maya.when('tomorrow')` parses the human phrase and returns a MayaDT roughly one day in the future, and `.s\n- **c5** In Python with 'maya' installed, a MayaDT exposes symmetric ISO 8601 and RFC 2822 export: `.iso8601()` returns a string like '2017-02-10T22:\n- **c6** In Python with 'maya' installed, `maya.parse('2016-12-16 18:23:45.423992+00:00').datetime(to_timezone='US/Eastern', naive=True)` returns the\n- **c7** In Python with 'maya' installed, snap modifiers work: `maya.when('Mon, 21 Feb 1994 21:21:42 GMT').snap('@d+3h').rfc2822()` returns 'Mon, 21 \n- **c9** In Python with 'maya' installed, MayaDT supports dates before Jan 1 1970 via negative epoch integers: `maya.MayaDT(-86400)` yields a MayaDT \n- **c10** In Python with 'maya' installed, `from maya import MayaInterval` works and MayaInterval(start=maya.now(), end=maya.now().add(hours=1)) const\n- **c11** The maya README's PyPI badge asserts that 'maya' is published on PyPI (latest release 0.6.1).\n\nEvery verdict above cites a recorded probe (command, exit code, output) from the CI run named in the report."
+}

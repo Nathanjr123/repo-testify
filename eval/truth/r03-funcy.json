@@ -2,15 +2,20 @@
  "provisional": true,
  "verdicts": {
   "c1": "verified",
-  "c2": "refuted",
+  "c2": "verified",
   "c3": "verified",
   "c4": "verified",
   "c5": "verified",
-  "c6": "verified",
+  "c6": "refuted",
   "c7": "verified",
   "c8": "verified",
-  "c9": "unverifiable",
+  "c9": "verified",
   "c10": "refuted"
  },
- "reviewer_score": 70
+ "reviewer_score": 70,
+ "audit_notes": {
+  "c2": "was refuted; On python:3.4-slim pip install succeeded and the four assertions passed (recorded by advanced-v3-heldout probe p-c2): the 'Python 3.4+' claim holds. Draft had guessed refuted; the arm abstained. Against the pipeline's verdict.",
+  "c6": "was verified; README chunks example: executing it yields range objects from a generator, not the documented lists (recorded by advanced-v3-heldout probe p-c6). Toward the pipeline.",
+  "c9": "was unverifiable; test_requirements.txt installed as documented and tests ran (recorded by advanced-v3-heldout probe p-c9). Toward the pipeline."
+ }
 }

@@ -1,0 +1,5 @@
+pip freeze: ['packaging==26.3', 'simplejson==4.1.2']
+Requires-Dist: None
+C ext loaded: False
+pure-python roundtrip: {'a': [1, 2.5, 'x', None, True]}
+VERDICT_LINE: FAIL extra dependencies installed or pure-Python path failed (see output)

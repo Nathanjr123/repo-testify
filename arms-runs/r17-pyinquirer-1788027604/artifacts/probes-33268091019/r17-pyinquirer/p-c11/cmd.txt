@@ -1,1 +1,0 @@
-python3 /tmp/rel.py && echo 'VERDICT_LINE: PASS GitHub release 1.0.3 exists and PyPI latest is 1.0.3' || echo 'VERDICT_LINE: FAIL release 1.0.3 missing on GitHub or PyPI latest differs (see values above)'

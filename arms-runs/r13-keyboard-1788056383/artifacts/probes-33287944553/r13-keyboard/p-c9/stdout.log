@@ -1,0 +1,17 @@
+--- real add_hotkey + send loopback (root, headless) ---
+/tmp/v/lib/python3.11/site-packages/keyboard/_nixkeyboard.py:122: UserWarning: Failed to create a device file using `uinput` module. Sending of events may be limited or unavailable depending on plugged-in devices.
+  device = aggregate_devices('kbd')
+Exception in thread Thread-1 (start_reading):
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/threading.py", line 1045, in _bootstrap_inner
+    self.run()
+  File "/usr/local/lib/python3.11/threading.py", line 982, in run
+real_hotkey_error: FileNotFoundError: [Errno 2] No such file or directory: 'dumpkeys'
+exit=0
+--- mocked unit tests matching hotkey ---
+Ran 69 tests in 0.160s
+
+OK
+exit=0
+real=real_hotkey_error: FileNotFoundError: [Errno 2] No such file or directory: 'dumpkeys' | mocked hotkey tests: ran 69 ok=True
+VERDICT_LINE: FAIL real hotkey loopback in linux container: real_hotkey_error: FileNotFoundError: [Errno 2] No such file or directory: 'dumpkeys'; only mocked unit tests (ran 69, ok=True) cover hotkeys

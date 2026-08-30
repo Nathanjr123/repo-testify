@@ -1,0 +1,318 @@
+{
+ "repo": "https://github.com/psf/requests-html",
+ "overall_score": 0,
+ "claims": [
+  {
+   "id": "c1",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c1",
+     "excerpt": "pip show: 'Name: requests-html / Version: 0.10.0' but 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL pip install requests-html failed or import requests_html raised (pipenv form not exercised; pip equivalent used)'; shell exit_code 0 via the || echo branch. Package installs but is unusable as installed from the documented command; pipenv form itself not exercised."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c2",
+     "excerpt": "'Python 3.13.15' ... 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL install or import of pinned commit failed on current Python (see traceback above for the stale dependency)'; shell exit_code 0 via || echo. Import fails on a current release (3.13) and on 3.11 (p-c1), contradicting 'Python >= 3.6 including current releases'."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c3",
+     "excerpt": "'File \"/tmp/c3.py\", line 1, in <module> from requests_html import HTMLSession' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL render() did not produce JS-rendered content'; shell exit_code 0 via || echo. Documented install prerequisite fails as written (v3 rule b), render() never reachable."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c4",
+     "excerpt": "'download_folder: /root/.local/share/pyppeteer/local-chromium' / 'folder_is_home_dot_pyppeteer: False' / 'AssertionError: download folder is /root/.local/share/pyppeteer/local-chromium, not ~/.pyppeteer/' -> 'VERDICT_LINE: FAIL ... folder is not ~/.pyppeteer/'; shell exit_code 0 via || echo. (chromium_url_status: 200, so the download URL itself is alive; the stated location is wrong.)"
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c5",
+     "excerpt": "'badge_status: 404' / 'body_head: file not found' / 'AssertionError: badge HTTP 404' -> 'VERDICT_LINE: FAIL travis badge unreachable or does not report passing for master'; shell exit_code 0 via || echo. The badge does not report a passing master build."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c6",
+     "excerpt": "'File \"/repo/requests_html.py\", line 15, in <module> from lxml.html.clean import Cleaner' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL r.html.links did not match authored hrefs or request failed'; shell exit_code 0 via || echo. Import prerequisite fails as written (v3 rule b)."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c7",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c7",
+     "excerpt": "'from requests_html import HTMLSession' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL search() on python.org did not return programming'; shell exit_code 0 via || echo. Import prerequisite fails as written (v3 rule b); python.org content itself was never reached."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c8",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c8",
+     "excerpt": "'File \"/tmp/c8.py\", line 1, in <module> from requests_html import AsyncHTMLSession' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL AsyncHTMLSession.run did not return 3 successful responses or raised'; shell exit_code 0 via || echo. Import prerequisite fails as written (v3 rule b)."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c9",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c9",
+     "excerpt": "'from requests_html import HTML' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL HTML(html=doc).links did not equal {https://httpbin.org} or raised'; shell exit_code 0 via || echo. The no-Requests path still requires importing the module, which fails as installed (v3 rule b)."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c10",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c10",
+     "excerpt": "'File \"/repo/requests_html.py\", line 15, in <module> from lxml.html.clean import Cleaner' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL xpath() did not return the expected Element list or raised'; shell exit_code 0 via || echo. Import prerequisite fails as written (v3 rule b)."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "c11",
+   "verdict": "refuted",
+   "confidence": "high",
+   "evidence": [
+    {
+     "kind": "command",
+     "ref": "p-c11",
+     "excerpt": "'File \"/repo/requests_html.py\", line 15, in <module> from lxml.html.clean import Cleaner' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL find(#about) or its .text/.attrs/.absolute_links did not match authored HTML'; shell exit_code 0 via || echo. Import prerequisite fails as written (v3 rule b)."
+    }
+   ],
+   "votes": [
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    },
+    {
+     "verdict": "refuted",
+     "confidence": "high"
+    }
+   ]
+  }
+ ],
+ "escalations": [],
+ "run_id": "33270014892",
+ "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r10-requests-html-1788030211",
+ "_evidence_index": {
+  "probes": [
+   "p-c1",
+   "p-c10",
+   "p-c11",
+   "p-c2",
+   "p-c3",
+   "p-c4",
+   "p-c5",
+   "p-c6",
+   "p-c7",
+   "p-c8",
+   "p-c9"
+  ],
+  "text": "p-c1 pip show requests-html | head -3 && python3 -c 'import requests_html; print(\"import_ok:\", requests_html.__file__); print(\"VERDICT_LINE: PASS pip install requests-html succeeded and import requests_html works\")' || echo \"VERDICT_LINE: FAIL pip install requests-html failed or import requests_html raised (pipenv form not exercised; pip equivalent used)\"\nSTDOUT Name: requests-html\nVersion: 0.10.0\nSummary: HTML Parsing for Humans.\nVERDICT_LINE: FAIL pip install requests-html failed or import requests_html raised (pipenv form not exercised; pip equivalent used)\n\nSTDERR ERROR: Pipe to stdout was broken\nException ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>\nBrokenPipeError: [Errno 32] Broken pipe\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/repo/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A  layer\na14578096eda: Waiting\n87e1b7cce023: Verifying Checksum\n87e1b7cce023: Download complete\nc86306e32cd0: Verifying Checksum\nc86306e32cd0: Download complete\n6310eb16bf42: Download complete\na14578096eda: Download complete\n6310eb16bf42: Pull complete\n87e1b7cce023: Pull complete\nc86306e32cd0: Pull complete\na14578096eda: Pull complete\nDigest: sha256:1042b61448fef4ba92d16a8c7eb4996d027568ce64792a7877fd88511e0af7c6\nStatus: Downloaded newer image for python:3.11-slim\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c10 mkdir -p /tmp/site && printf '%s' '<html><head><title>T</title></head><body><div><a href=\"/about/\">About</a><a href=\"https://example.com/x\">X</a><a href=\"//cdn.example.com/y\">Y</a><a href=\"#top\">Top</a></div><ul><li id=\"about\" class=\"tier-1 element-1\" aria-haspopup=\"true\"><a href=\"/about/\">About</a><a href=\"/about/apps/\">Applications</a></li></ul></body></html>' > /tmp/site/index.html && (python3 -m http.server 8765 --directory /tmp/site >/tmp/srv.log 2>&1 &) && sleep 2 && python3 -c 'from requests_html import HTMLSession, Element; r = HTMLSession().get(\"http://127.0.0.1:8765/\"); els = r.html.\nSTDOUT VERDICT_LINE: FAIL xpath() did not return the expected Element list or raised\n\nSTDERR Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/repo/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c11 mkdir -p /tmp/site && printf '%s' '<html><head><title>T</title></head><body><div><a href=\"/about/\">About</a></div><ul><li id=\"about\" class=\"tier-1 element-1\" aria-haspopup=\"true\"><a href=\"/about/\">About</a><a href=\"/about/apps/\">Applications</a></li></ul></body></html>' > /tmp/site/index.html && (python3 -m http.server 8765 --directory /tmp/site >/tmp/srv.log 2>&1 &) && sleep 2 && python3 -c 'from requests_html import HTMLSession; r = HTMLSession().get(\"http://127.0.0.1:8765/\"); about = r.html.find(\"#about\", first=True); print(\"element:\", about); print(\"text:\", repr(about.text)); print(\"attrs:\nSTDOUT VERDICT_LINE: FAIL find(#about) or its .text/.attrs/.absolute_links did not match authored HTML\n\nSTDERR Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/repo/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c2 python3 --version && (pip show requests-html | head -3 || true) && python3 -c 'import sys, requests_html; print(\"python:\", sys.version.split()[0]); print(\"import_ok:\", requests_html.__file__); print(\"VERDICT_LINE: PASS pinned commit installs and imports on current Python \" + sys.version.split()[0])' || echo \"VERDICT_LINE: FAIL install or import of pinned commit failed on current Python (see traceback above for the stale dependency)\"\nSTDOUT Python 3.13.15\nName: requests-html\nVersion: 0.10.0\nSummary: HTML Parsing for Humans.\nVERDICT_LINE: FAIL install or import of pinned commit failed on current Python (see traceback above for the stale dependency)\n\nSTDERR ERROR: Pipe to stdout was broken\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import sys, requests_html; print(\"python:\", sys.version.split()[0]); print(\"import_ok:\", requests_html.__file__); print(\"VERDICT_LINE: PASS pinned commit installs and imports on current Python \" + sys.version.split()[0])\n    ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/repo/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.13/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\n    ...<2 lines>...\n    ) from None\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A 7e6efa7cd: Pulling fs layer\n357a46282089: Pulling fs layer\nd64904dff413: Pulling fs layer\n64c7e6efa7cd: Verifying Checksum\n64c7e6efa7cd: Download complete\n357a46282089: Verifying Checksum\n357a46282089: Download complete\n64c7e6efa7cd: Pull complete\n357a46282089: Pull complete\nd64904dff413: Pull complete\nDigest: sha256:7ce4b6dfe35e55397b7cda544f8a13f191b7ae28dc5aad71fe664dbc9bc2623f\nStatus: Downloaded newer image for python:3.13-slim\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n\nEXIT 0\np-c3 mkdir -p /tmp/site && printf '%s' '<html><body><div id=\"clock\">NOT_RENDERED</div><script>document.getElementById(\"clock\").innerHTML=\"RENDERED_BY_JS\";</script></body></html>' > /tmp/site/js.html && (python3 -m http.server 8765 --directory /tmp/site >/tmp/srv.log 2>&1 &) && sleep 2 && printf '%b' 'from requests_html import HTMLSession\\nr = HTMLSession().get(\"http://127.0.0.1:8765/js.html\")\\nbefore = r.html.find(\"#clock\", first=True).text\\nprint(\"before_render:\", before)\\nr.html.render()\\nafter = r.html.find(\"#clock\", first=True).text\\nprint(\"after_render:\", after)\\nassert after == \"RENDERED_BY_J\nSTDOUT VERDICT_LINE: FAIL render() did not produce JS-rendered content (exit 1; Chromium download/launch failed or exceeded 100s, see above)\n\nSTDERR Traceback (most recent call last):\n  File \"/tmp/c3.py\", line 1, in <module>\n    from requests_html import HTMLSession\n  File \"/usr/local/lib/python3.11/site-packages/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c4 printf '%b' 'import os, urllib.request, urllib.error\\nfrom pyppeteer import chromium_downloader as cd\\nhome = os.path.expanduser(\"~\")\\nprint(\"home:\", home)\\nprint(\"home_dot_pyppeteer_exists_before:\", os.path.exists(os.path.join(home, \".pyppeteer\")))\\nfolder = str(getattr(cd, \"DOWNLOADS_FOLDER\", \"<no DOWNLOADS_FOLDER attr>\"))\\nprint(\"download_folder:\", folder)\\nurl = cd.get_url()\\nprint(\"chromium_url:\", url)\\nreq = urllib.request.Request(url, method=\"HEAD\", headers={\"User-Agent\": \"probe\"})\\ntry:\\n    status = urllib.request.urlopen(req, timeout=30).status\\nexcept urllib.error.HTTPError as e:\\n \nSTDOUT home: /root\nhome_dot_pyppeteer_exists_before: False\ndownload_folder: /root/.local/share/pyppeteer/local-chromium\nchromium_url: https://storage.googleapis.com/chromium-browser-snapshots/Linux_x64/1181205/chrome-linux.zip\nchromium_url_status: 200\nfolder_is_home_dot_pyppeteer: False\nVERDICT_LINE: FAIL Chromium download URL dead, download failed/timed out, or folder is not ~/.pyppeteer/ (see values above)\n\nSTDERR Traceback (most recent call last):\n  File \"/tmp/c4.py\", line 21, in <module>\n    assert in_home, \"download folder is %s, not ~/.pyppeteer/\" % folder\n           ^^^^^^^\nAssertionError: download folder is /root/.local/share/pyppeteer/local-chromium, not ~/.pyppeteer/\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c5 printf '%b' 'import re, urllib.request, urllib.error\\nu = \"https://travis-ci.com/psf/requests-html.svg?branch=master\"\\nreq = urllib.request.Request(u, headers={\"User-Agent\": \"probe\"})\\ntry:\\n    r = urllib.request.urlopen(req, timeout=30)\\n    status, body, final = r.status, r.read().decode(\"utf-8\", \"replace\"), r.url\\nexcept urllib.error.HTTPError as e:\\n    status, body, final = e.code, e.read().decode(\"utf-8\", \"replace\"), u\\nprint(\"badge_status:\", status)\\nprint(\"badge_final_url:\", final)\\ntexts = re.findall(r\"<text[^>]*>([^<]*)</text>\", body)\\nprint(\"badge_texts:\", texts)\\nprint(\"body_head:\nSTDOUT badge_status: 404\nbadge_final_url: https://travis-ci.com/psf/requests-html.svg?branch=master\nbadge_texts: []\nbody_head: file not found\nVERDICT_LINE: FAIL travis badge unreachable or does not report passing for master (see badge_status/badge_texts above)\n\nSTDERR Traceback (most recent call last):\n  File \"/tmp/c5.py\", line 14, in <module>\n    assert status == 200, \"badge HTTP %s\" % status\n           ^^^^^^^^^^^^^\nAssertionError: badge HTTP 404\n\nPHASE_A \n--stderr--\n\nEXIT 0\np-c6 mkdir -p /tmp/site && printf '%s' '<html><head><title>T</title></head><body><div><a href=\"/about/\">About</a><a href=\"https://example.com/x\">X</a><a href=\"//cdn.example.com/y\">Y</a><a href=\"#top\">Top</a></div><ul><li id=\"about\" class=\"tier-1 element-1\" aria-haspopup=\"true\"><a href=\"/about/\">About</a><a href=\"/about/apps/\">Applications</a></li></ul><p>Python is a programming language that lets you work quickly.</p></body></html>' > /tmp/site/index.html && (python3 -m http.server 8765 --directory /tmp/site >/tmp/srv.log 2>&1 &) && sleep 2 && python3 -c 'from requests_html import HTMLSession; r = \nSTDOUT VERDICT_LINE: FAIL r.html.links did not match authored hrefs or request failed\n\nSTDERR Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/repo/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c7 python3 -c 'from requests_html import HTMLSession; session = HTMLSession(); r = session.get(\"https://python.org/\"); print(\"status:\", r.status_code, \"url:\", r.html.url); res = r.html.search(\"Python is a {} language\"); print(\"search_result:\", res); v = res[0]; print(\"captured:\", repr(v)); assert v == \"programming\", v; print(\"VERDICT_LINE: PASS search on python.org homepage captured programming\")' || echo \"VERDICT_LINE: FAIL search() on python.org did not return programming (page changed, no match, or request failed)\"\nSTDOUT VERDICT_LINE: FAIL search() on python.org did not return programming (page changed, no match, or request failed)\n\nSTDERR Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/repo/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c8 mkdir -p /tmp/site && printf '%s' '<html><body><p>index</p></body></html>' > /tmp/site/index.html && printf '%s' '<html><body><p>a</p></body></html>' > /tmp/site/a.html && printf '%s' '<html><body><p>b</p></body></html>' > /tmp/site/b.html && (python3 -m http.server 8765 --directory /tmp/site >/tmp/srv.log 2>&1 &) && sleep 2 && printf '%b' 'from requests_html import AsyncHTMLSession\\nasession = AsyncHTMLSession()\\nasync def get_a():\\n    r = await asession.get(\"http://127.0.0.1:8765/a.html\")\\n    return r\\nasync def get_b():\\n    r = await asession.get(\"http://127.0.0.1:8765/b.html\")\\n    retu\nSTDOUT VERDICT_LINE: FAIL AsyncHTMLSession.run did not return 3 successful responses or raised\n\nSTDERR Traceback (most recent call last):\n  File \"/tmp/c8.py\", line 1, in <module>\n    from requests_html import AsyncHTMLSession\n  File \"/usr/local/lib/python3.11/site-packages/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0\np-c9 python3 -c 'from requests_html import HTML; doc = \"\"\"<a href=\\x27https://httpbin.org\\x27>\"\"\"; html = HTML(html=doc); l = html.links; print(\"links:\", l); assert l == {\"https://httpbin.org\"}, l; print(\"VERDICT_LINE: PASS HTML(html=doc).links == {https://httpbin.org} without Requests\")' || echo \"VERDICT_LINE: FAIL HTML(html=doc).links did not equal {https://httpbin.org} or raised\"\nSTDOUT VERDICT_LINE: FAIL HTML(html=doc).links did not equal {https://httpbin.org} or raised\n\nSTDERR Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/repo/requests_html.py\", line 15, in <module>\n    from lxml.html.clean import Cleaner\n  File \"/usr/local/lib/python3.11/site-packages/lxml/html/clean.py\", line 18, in <module>\n    raise ImportError(\nImportError: lxml.html.clean module is now a separate project lxml_html_clean.\nInstall lxml[html-clean] or lxml_html_clean directly.\n\nPHASE_A \n--stderr--\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\n\n[notice] A new release of pip is available: 24.0 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n\nEXIT 0"
+ },
+ "llm_calls": 4,
+ "usage": {
+  "cost_usd": 3.0499540000000005,
+  "input_tokens": 8,
+  "output_tokens": 26238
+ },
+ "memo_md": "# Due-diligence memo: https://github.com/psf/requests-html @ 075ac162dc62\nQuestion: We are considering requests-html for scraping JavaScript-heavy pages. Does the advertised 'Full JavaScript support' via render() actually work today on a supported Python, and is the project's CI alive?\n\n**Bottom line.** 0 of 11 README claims held under execution, 11 were refuted, 0 could not be settled in the sandbox and need a human. Rubric score 0/100.\n\n## Refuted (negotiate on these)\n- **c1** The package requests-html can be installed with the exact command `pipenv install requests-html` (equivalently `pip install requests-html`).\n  Evidence: `p-c1` pip show: 'Name: requests-html / Version: 0.10.0' but 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL pip install requests-html failed or import requests_html raise\n- **c2** requests-html supports Python 3.6 and above (i.e. it installs and imports on any Python >= 3.6, including current releases).\n  Evidence: `p-c2` 'Python 3.13.15' ... 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL install or import of pinned commit failed on current Python (see traceback above for the stale \n- **c3** The library provides full JavaScript support: calling `r.html.render()` downloads Chromium (via pyppeteer) and renders the page's dynamic JavaScript content.\n  Evidence: `p-c3` 'File \"/tmp/c3.py\", line 1, in <module> from requests_html import HTMLSession' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL render() did not produce JS-render\n- **c4** The first time `render()` is run it downloads Chromium into the user's home directory (~/.pyppeteer/), and this happens only once.\n  Evidence: `p-c4` 'download_folder: /root/.local/share/pyppeteer/local-chromium' / 'folder_is_home_dot_pyppeteer: False' / 'AssertionError: download folder is /root/.local/share/pyppeteer/local-chromium, not ~/.pyppeteer/' -> 'VERDICT_LIN\n- **c5** The Travis CI badge asserts the master branch currently builds and passes on travis-ci.com.\n  Evidence: `p-c5` 'badge_status: 404' / 'body_head: file not found' / 'AssertionError: badge HTTP 404' -> 'VERDICT_LINE: FAIL travis badge unreachable or does not report passing for master'; shell exit_code 0 via || echo. The badge does n\n- **c6** A GET request via `HTMLSession` exposes `r.html.links`, which returns the set of all links on the page (anchors excluded).\n  Evidence: `p-c6` 'File \"/repo/requests_html.py\", line 15, in <module> from lxml.html.clean import Cleaner' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL r.html.links did not ma\n- **c7** `r.html.search('Python is a {} language')[0]` on the python.org homepage returns the string 'programming'.\n  Evidence: `p-c7` 'from requests_html import HTMLSession' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL search() on python.org did not return programming'; shell exit_code 0 via\n- **c8** Async is supported: `AsyncHTMLSession().run(coro1, coro2, coro3)` executes multiple async GET requests and returns a list of Response objects.\n  Evidence: `p-c8` 'File \"/tmp/c8.py\", line 1, in <module> from requests_html import AsyncHTMLSession' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL AsyncHTMLSession.run did not \n- **c9** The library works without Requests: `HTML(html=\"<a href='https://httpbin.org'>\").links` returns `{'https://httpbin.org'}`.\n  Evidence: `p-c9` 'from requests_html import HTML' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL HTML(html=doc).links did not equal {https://httpbin.org} or raised'; shell exit_\n- **c10** XPath selectors are supported via `r.html.xpath(...)`, returning matching Element objects.\n  Evidence: `p-c10` 'File \"/repo/requests_html.py\", line 15, in <module> from lxml.html.clean import Cleaner' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL xpath() did not return \n- **c11** CSS selectors are supported via `r.html.find(selector, first=True)`, and element `.text`, `.attrs`, and `.absolute_links` work as shown.\n  Evidence: `p-c11` 'File \"/repo/requests_html.py\", line 15, in <module> from lxml.html.clean import Cleaner' -> 'ImportError: lxml.html.clean module is now a separate project lxml_html_clean.' -> 'VERDICT_LINE: FAIL find(#about) or its .te\n\nEvery verdict above cites a recorded probe (command, exit code, output) from the CI run named in the report."
+}
