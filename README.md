@@ -150,7 +150,7 @@ git clone https://github.com/Nathanjr123/repo-testify.git && cd repo-testify
                # from proof/, then replay one run and assert byte-identical output. Exit 0 means reproduced.
 python3 -m eval.replay --run <id>      # re-score any run id's persisted outputs through the current scorer
 ```
-Every table row carries its proof id, git hash and UTC timestamp. `replay` re-scores persisted arm outputs through the current scorer and fails loudly on drift.
+Every table row carries its proof id, git hash and UTC timestamp. `replay` re-scores persisted arm outputs through the current scorer and fails loudly on drift. The submitted commit is tagged `submission-<sha>` under Releases, with a `git archive` zip of exactly that commit attached; the tag name is the commit.
 
 Expected output of `./repro.sh` (last lines):
 ```
