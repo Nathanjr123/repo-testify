@@ -1,0 +1,153 @@
+{
+ "case_id": "r00b-repo-testify-final",
+ "repo": "https://github.com/Nathanjr123/repo-testify",
+ "commit": "c93ba0da480f5f400eb1476eb62b136a844205f1",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.10-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && python3 --version && ls -la repro.sh && (command -v make docker || echo \"no make/docker on PATH\") && ls -la ~/.aws ~/.config 2>/dev/null; echo \"credentials: none provided\"",
+    "cd /w && chmod +x repro.sh; timeout 110 ./repro.sh > /tmp/repro.log 2>&1; rc=$?; tail -20 /tmp/repro.log; echo \"repro_exit=$rc\"; if [ $rc -eq 0 ]; then echo \"VERDICT_LINE: PASS ./repro.sh exit 0 on python 3.10-slim with no make/docker/credentials\"; elif [ $rc -eq 124 ]; then echo \"VERDICT_LINE: FAIL ./repro.sh did not finish within 110s\"; else echo \"VERDICT_LINE: FAIL ./repro.sh exit $rc (see log tail above)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && python3 tests/test_scorer.py > /tmp/t.log 2>&1; rc=$?; cat /tmp/t.log; n=$(grep -c \"^ok\" /tmp/t.log); echo \"exit=$rc ok_lines=$n\"; if [ \"$rc\" -eq 0 ] && [ \"$n\" -eq 7 ]; then echo \"VERDICT_LINE: PASS 7 ok lines and exit 0\"; else echo \"VERDICT_LINE: FAIL exit=$rc ok_lines=$n (expected 7 and exit 0)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && ls eval/cases | wc -l; python3 eval/validate_cases.py > /tmp/v.log 2>&1; rc=$?; cat /tmp/v.log; echo \"exit=$rc\"; if [ \"$rc\" -eq 0 ] && grep -q \"20 case files checked\" /tmp/v.log && grep -q \"all valid\" /tmp/v.log; then echo \"VERDICT_LINE: PASS output has '20 case files checked' and 'all valid', exit 0\"; else echo \"VERDICT_LINE: FAIL exit=$rc or output lacks '20 case files checked' / 'all valid'\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && ls proof | head -40",
+    "cd /w && pat=\"advanced-v2-rescored-[0-9A-Za-z_.:-]+\"; { grep -rhoE \"$pat\" proof RESULTS.md README.md CHANGELOG.md 2>/dev/null; find proof -maxdepth 3 2>/dev/null | grep -oE \"$pat\"; } | sed -E \"s/\\.(json|md|txt)$//\" | sort -u | tee /tmp/ids.txt; echo \"candidates=$(wc -l < /tmp/ids.txt)\"",
+    "cd /w && ok=0; hit=\"\"; for id in $(cat /tmp/ids.txt); do echo \"== $id\"; out=$(python3 -m eval.replay --run \"$id\" 2>&1); rc=$?; echo \"$out\" | tail -3; echo \"exit=$rc\"; if [ $rc -eq 0 ] && echo \"$out\" | grep -qE \"raw 0\\.836\"; then ok=1; hit=\"$id\"; fi; done; echo \"matched_id=${hit:-none}\"; if [ $ok -eq 1 ]; then echo \"VERDICT_LINE: PASS replay of $hit prints raw 0.836\"; else echo \"VERDICT_LINE: FAIL no advanced-v2-rescored run replayed to raw 0.836 (candidates: $(tr \"\\n\" \" \" < /tmp/ids.txt))\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && git status --short | head -5; sha256sum README.md RESULTS.md",
+    "cd /w && python3 -m eval.report > RESULTS.md 2>/tmp/rep.err; r1=$?; python3 eval/render_readme.py > /tmp/rr.log 2>&1; r2=$?; tail -3 /tmp/rep.err /tmp/rr.log; sha256sum README.md RESULTS.md; git diff --stat -- README.md RESULTS.md; git diff --quiet -- README.md RESULTS.md; d=$?; echo \"report_exit=$r1 render_exit=$r2 diff_exit=$d\"; if [ $r1 -eq 0 ] && [ $r2 -eq 0 ] && [ $d -eq 0 ]; then echo \"VERDICT_LINE: PASS README.md and RESULTS.md regenerate byte-identically from proof/\"; else echo \"VERDICT_LINE: FAIL report_exit=$r1 render_exit=$r2 diff_exit=$d (files differ or generator failed)\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline && git rev-list --count HEAD"
+   ],
+   "commands": [
+    "cd /w && grep -oE '\\| [0-9a-f]{7} \\|' RESULTS.md | tr -d '| ' | sort -u | tr '\\n' ' '; echo; grep -c rewritten RESULTS.md",
+    "cd /w && python3 -c 'import re,subprocess; t=open(\"RESULTS.md\").read(); hs=sorted(set(h for h in re.findall(r\"(?<![0-9A-Za-z])[0-9a-f]{7,40}(?![0-9A-Za-z])\",t) if re.search(\"[a-f]\",h))); missing=[h for h in hs if subprocess.run([\"git\",\"cat-file\",\"-e\",h+\"^{commit}\"],capture_output=True).returncode!=0]; print(\"hashes_found=%d rewritten_mentions=%d missing=%s\"%(len(hs),t.count(\"rewritten\"),missing or \"none\")); print((\"VERDICT_LINE: PASS all %d cited hashes exist in history\"%len(hs)) if hs and not missing else (\"VERDICT_LINE: FAIL found=%d missing=%s\"%(len(hs),missing)))' || echo \"VERDICT_LINE: FAIL probe error reading RESULTS.md or git\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [],
+   "commands": [
+    "python3 -c 'import json,urllib.request; u=\"https://api.github.com/repos/Nathanjr123/repo-testify/actions/workflows/repro.yml/runs?branch=master&per_page=1\"; r=urllib.request.urlopen(urllib.request.Request(u,headers={\"User-Agent\":\"probe\",\"Accept\":\"application/vnd.github+json\"}),timeout=30); d=json.load(r); runs=d.get(\"workflow_runs\",[]); run=runs[0] if runs else {}; print(\"api_status=%d total=%s conclusion=%s status=%s head_sha=%s updated=%s\"%(r.status,d.get(\"total_count\"),run.get(\"conclusion\"),run.get(\"status\"),str(run.get(\"head_sha\"))[:7],run.get(\"updated_at\"))); b=urllib.request.urlopen(urllib.request.Request(\"https://github.com/Nathanjr123/repo-testify/actions/workflows/repro.yml/badge.svg\",headers={\"User-Agent\":\"probe\"}),timeout=30); s=b.read().decode(); print(\"badge_status=%d badge_says_passing=%s badge_says_failing=%s\"%(b.status,\"passing\" in s,\"failing\" in s)); print(\"VERDICT_LINE: PASS latest repro run on master concluded success and badge says passing\" if run.get(\"conclusion\")==\"success\" and \"passing\" in s else \"VERDICT_LINE: FAIL latest repro run conclusion=%s badge_passing=%s\"%(run.get(\"conclusion\"),\"passing\" in s))' || echo \"VERDICT_LINE: FAIL GitHub API or badge request failed (see traceback)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && head -3 arms/PROMPTS.md; sha256sum arms/PROMPTS.md",
+    "cd /w && python3 tools/render_prompts.py > /tmp/rp.log 2>&1; rc=$?; tail -3 /tmp/rp.log; sha256sum arms/PROMPTS.md; git diff --stat -- arms/PROMPTS.md; git diff --quiet -- arms/PROMPTS.md; d=$?; echo \"render_exit=$rc diff_exit=$d\"; if [ $rc -eq 0 ] && [ $d -eq 0 ]; then echo \"VERDICT_LINE: PASS render_prompts.py exit 0 and arms/PROMPTS.md unchanged\"; else echo \"VERDICT_LINE: FAIL render_exit=$rc diff_exit=$d\"; fi"
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && echo \"local tags:\" && (git tag -l \"submission-*\" || true) && for t in $(git tag -l \"submission-*\"); do echo \"$t -> $(git rev-parse \"$t^{commit}\")\"; done; true",
+    "python3 -c 'import json,urllib.request; d=json.load(urllib.request.urlopen(urllib.request.Request(\"https://api.github.com/repos/Nathanjr123/repo-testify/releases\",headers={\"User-Agent\":\"probe\",\"Accept\":\"application/vnd.github+json\"}),timeout=30)); rel=[r for r in d if str(r.get(\"tag_name\",\"\")).startswith(\"submission-\")]; print(\"releases=%d submission_tags=%s\"%(len(d),[r[\"tag_name\"] for r in rel])); r0=rel[0] if rel else {}; sha=str(r0.get(\"tag_name\",\"submission-\"))[len(\"submission-\"):]; names=[a[\"name\"] for a in r0.get(\"assets\",[])]; print(\"tag=%s sha=%s target=%s assets=%s\"%(r0.get(\"tag_name\"),sha,r0.get(\"target_commitish\"),names)); ok=bool(sha) and any(sha in n and n.endswith(\".zip\") for n in names); print(\"VERDICT_LINE: PASS release %s has a zip asset whose name contains the sha\"%r0.get(\"tag_name\") if ok else \"VERDICT_LINE: FAIL submission tag=%s assets=%s\"%(r0.get(\"tag_name\"),names))' || echo \"VERDICT_LINE: FAIL releases API request failed (see traceback)\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "apt-get update -qq >/dev/null 2>&1 && apt-get install -y -qq git ca-certificates >/dev/null 2>&1",
+    "git clone -q https://github.com/Nathanjr123/repo-testify /w && cd /w && git checkout -q c93ba0da480f5f400eb1476eb62b136a844205f1 && git log -1 --oneline"
+   ],
+   "commands": [
+    "cd /w && echo \"truth-draft files: $(ls eval/truth-draft 2>/dev/null | wc -l)\"; echo \"truth files: $(ls eval/truth 2>/dev/null | wc -l)\"; grep -n \"scored on the untouched draft truth\\|scored on evidence-corrected truth\" README.md | head",
+    "cd /w && pat=\"[A-Za-z0-9_.:-]*baseline[A-Za-z0-9_.:-]*held-?out[A-Za-z0-9_.:-]*|[A-Za-z0-9_.:-]*held-?out[A-Za-z0-9_.:-]*baseline[A-Za-z0-9_.:-]*\"; { grep -rhoE \"$pat\" proof RESULTS.md CHANGELOG.md 2>/dev/null; find proof -maxdepth 3 2>/dev/null | grep -oE \"$pat\"; } | sed -E \"s/\\.(json|md|txt)$//\" | sort -u | tee /tmp/hid.txt; echo \"candidates=$(wc -l < /tmp/hid.txt)\"",
+    "cd /w && g1=$(grep -c \"scored on the untouched draft truth\" README.md); g2=$(grep -c \"scored on evidence-corrected truth\" README.md); ok=0; hit=\"\"; for id in $(cat /tmp/hid.txt); do echo \"== $id\"; out=$(TRUTH_DIR=truth-draft python3 -m eval.replay --run \"$id\" 2>&1); rc=$?; echo \"$out\" | tail -3; echo \"exit=$rc\"; if [ $rc -eq 0 ]; then ok=1; hit=\"$id\"; fi; done; echo \"readme_draft_rows=$g1 readme_corrected_rows=$g2 replay_ok_id=${hit:-none}\"; if [ \"$g1\" -ge 1 ] && [ \"$g2\" -ge 1 ] && [ $ok -eq 1 ] && [ -d eval/truth-draft ]; then echo \"VERDICT_LINE: PASS README has both held-out row kinds and TRUTH_DIR=truth-draft replay of $hit exited 0\"; else echo \"VERDICT_LINE: FAIL draft_rows=$g1 corrected_rows=$g2 replay_ok=$ok (candidates: $(tr \"\\n\" \" \" < /tmp/hid.txt))\"; fi"
+   ],
+   "timeout_s": 120
+  }
+ ]
+}

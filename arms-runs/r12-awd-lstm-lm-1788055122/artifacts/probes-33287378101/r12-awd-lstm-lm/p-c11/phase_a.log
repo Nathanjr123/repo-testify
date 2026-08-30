@@ -1,5 +1,0 @@
-pip_exit=0
-Successfully installed numpy-1.21.6 torch-0.4.1
-torch 0.4.1 numpy 1.21.6 cuda_available False
-
---stderr--

@@ -1,7 +1,0 @@
-include *.py
-include *.txt
-include *.rst
-include *.toml
-include scripts/*.py
-include MANIFEST.in
-include simplejson/*.h

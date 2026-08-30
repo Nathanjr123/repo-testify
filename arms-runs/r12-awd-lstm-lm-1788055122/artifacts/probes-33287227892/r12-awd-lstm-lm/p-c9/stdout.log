@@ -1,8 +1,0 @@
-42:The codebase is now PyTorch 0.4 compatible for most use cases (a big shoutout to https://github.com/shawntan for a fairly comprehensive PR https://github.com/salesforce/awd-lstm-lm/pull/43). Mild readjustments to hyperparameters may be necessary to obtain quoted performance. If you desire exact reproducibility (or wish to run on PyTorch 0.3 or lower), we suggest using an older commit of this repository. We are still working on `pointer`, `finetune` and `generate` functionalities.
-50:If you need to use an earlier version of the codebase, the original code and hyper parameters accessible at the [PyTorch==0.1.12](https://github.com/salesforce/awd-lstm-lm/tree/PyTorch%3D%3D0.1.12) release, with Python 3 and PyTorch 0.1.12 are required.
--rw-r--r-- 1 root root 10068 Aug 30 02:07 finetune.py
--rw-r--r-- 1 root root  2760 Aug 30 02:07 generate.py
--rw-r--r-- 1 root root  5676 Aug 30 02:07 pointer.py
-tag_tree_url_status 200 page_mentions_tag True
-repo_archived_banner_present False
-VERDICT_LINE: PASS the PyTorch==0.1.12 release tree resolves on GitHub (HTTP 200) and the README at this commit says pointer/finetune/generate are unfinished under 0.4; what actually breaks is recorded by probes c4/c5

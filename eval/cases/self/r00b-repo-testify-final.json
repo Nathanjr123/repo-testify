@@ -1,0 +1,80 @@
+{
+ "id": "r00b-repo-testify-final",
+ "repo": "https://github.com/Nathanjr123/repo-testify",
+ "commit": "c93ba0da480f5f400eb1476eb62b136a844205f1",
+ "license": "MIT",
+ "bucket": "SELF",
+ "buyer_question": "A hackathon judge asks: does the finished repository do what its README claims, from a clean clone, with no credentials?",
+ "claims": [
+  {
+   "id": "c1",
+   "type": "install",
+   "text": "From a clean clone, `./repro.sh` runs to completion with exit code 0 using only Python 3.10+ (no make, no docker, no credentials).",
+   "source_quote": "Level 1 needs only Python 3.10+ and reproduces every number in this README from the shipped proof.",
+   "probe_hint": "git clone; ./repro.sh; echo $?"
+  },
+  {
+   "id": "c2",
+   "type": "test_ci",
+   "text": "`python3 tests/test_scorer.py` passes all seven scorer contract tests.",
+   "source_quote": "ok test_perfect ... ok test_crashed_case_is_zero_not_hidden",
+   "probe_hint": "python3 tests/test_scorer.py | grep -c '^ok' -> 7"
+  },
+  {
+   "id": "c3",
+   "type": "quickstart",
+   "text": "`python3 eval/validate_cases.py` reports 20 case files checked and all valid.",
+   "source_quote": "20 case files checked / all valid",
+   "probe_hint": "python3 eval/validate_cases.py"
+  },
+  {
+   "id": "c4",
+   "type": "quickstart",
+   "text": "`python3 -m eval.replay --run <advanced-v2-rescored run id>` reproduces the stored raw score 0.836 exactly.",
+   "source_quote": "replay ok: advanced-v2-rescored-<ts> raw 0.836",
+   "probe_hint": "ID from proof; python3 -m eval.replay --run $ID"
+  },
+  {
+   "id": "c5",
+   "type": "quickstart",
+   "text": "Regenerating RESULTS.md and the README tables from proof/ yields files byte-identical to the committed ones.",
+   "source_quote": "REPRO OK: README/RESULTS regenerate byte-identically from proof",
+   "probe_hint": "python3 -m eval.report > RESULTS.md; python3 eval/render_readme.py; git diff --quiet -- README.md RESULTS.md"
+  },
+  {
+   "id": "c6",
+   "type": "interface",
+   "text": "Every git hash cited in RESULTS.md rows exists in the repository history (rows marked 'rewritten' carry a note instead of a hash).",
+   "source_quote": "Every table row carries its proof id, git hash and UTC timestamp",
+   "probe_hint": "for h in $(grep -oE '\\| [0-9a-f]{7} \\|' RESULTS.md | tr -d '| ' | sort -u); do git cat-file -e $h^{commit}; done"
+  },
+  {
+   "id": "c7",
+   "type": "test_ci",
+   "text": "The README's `repro` workflow badge asserts the latest run of that workflow on master succeeded.",
+   "source_quote": "[![repro](.../actions/workflows/repro.yml/badge.svg)]",
+   "probe_hint": "GitHub API: actions/workflows/repro.yml/runs?branch=master&per_page=1 -> conclusion success (network on)"
+  },
+  {
+   "id": "c8",
+   "type": "interface",
+   "text": "`arms/PROMPTS.md` is generated from the arm sources: running `python3 tools/render_prompts.py` leaves it unchanged.",
+   "source_quote": "rendered from source by tools/render_prompts.py, do not edit by hand",
+   "probe_hint": "python3 tools/render_prompts.py; git diff --quiet -- arms/PROMPTS.md"
+  },
+  {
+   "id": "c9",
+   "type": "interface",
+   "text": "The repository's Releases contain a tag named submission-<sha> with a zip archive attached whose name contains the same sha.",
+   "source_quote": "The submitted commit is tagged `submission-<sha>` under Releases, with a `git archive` zip of exactly that commit attached",
+   "probe_hint": "GitHub API: releases -> tag_name starts with submission-, assets[0].name contains the sha (network on)"
+  },
+  {
+   "id": "c10",
+   "type": "quickstart",
+   "text": "The README results table contains held-out rows scored on both the untouched draft truth and the evidence-corrected truth, and `TRUTH_DIR=truth-draft python3 -m eval.replay --run <baseline-heldout run id>` runs successfully against `eval/truth-draft/`.",
+   "source_quote": "`TRUTH_DIR=truth-draft python3 -m eval.replay --run <id>` scores a run against the drafts",
+   "probe_hint": "grep 'scored on the untouched draft truth' README.md; TRUTH_DIR=truth-draft python3 -m eval.replay --run <baseline-heldout id>"
+  }
+ ]
+}

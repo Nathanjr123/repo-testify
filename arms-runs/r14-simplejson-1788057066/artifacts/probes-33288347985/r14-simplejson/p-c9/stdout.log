@@ -1,4 +1,0 @@
-object_pairs_hook: OrderedDict OrderedDict([('a', 1), ('b', OrderedDict([('c', 2)]))])
-object_hook calls: [{'c': 2}, {'a': 1, 'b': {'c': 2}}]
-custom pairs hook: ('PAIRS', [('a', 1), ('b', ('PAIRS', [('c', 2)]))])
-VERDICT_LINE: PASS object_hook and object_pairs_hook post-process every decoded object
