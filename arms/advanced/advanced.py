@@ -67,6 +67,8 @@ def stage_execute(case, probes, run_dir):
     put = gh(args)
     if put.returncode != 0:
         raise RuntimeError("probe spec upload failed: " + put.stderr[:300])
+    if os.environ.get("PROBE_DISPATCH") != "approve":  # consequential action: running someone else's code on CI. The operator approves a sweep by setting this.
+        raise RuntimeError("refusing to dispatch probes: set PROBE_DISPATCH=approve to authorise running the repository's code on CI")
     for attempt in range(4):  # GitHub returned 504 on dispatch once; transient, retry
         r = gh(["workflow", "run", "probe.yml", "--ref", branch, "-f", f"probes_path={path}", "--repo", GHREPO])
         if r.returncode == 0:

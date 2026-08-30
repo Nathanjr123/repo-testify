@@ -25,7 +25,8 @@ SETTLED_MIN, SETTLED_CAP = 0.50, 0.35  # objective = settle claims. If < half ar
                                        # an arm that abstains on everything must not out-score one that tries (incomplete-objective cap)
 BANDS = {}  # set after first distribution measurement, no dead/saturated/crushed rows
 
-TRUTH_DIR = pathlib.Path(__file__).resolve().parent / "truth"
+import os
+TRUTH_DIR = pathlib.Path(__file__).resolve().parent / os.environ.get("TRUTH_DIR", "truth")  # TRUTH_DIR=truth-draft scores against pre-execution drafts
 
 def _macro_f1(pred: dict, truth: dict) -> float:
     classes = ("verified", "refuted", "unverifiable")
@@ -73,8 +74,8 @@ def score(case: dict, output: dict) -> dict:
                 ev_ok += bool(ref_ok and excerpt_supported(e))
             elif kind == "file":
                 ev_ok += bool(ref and (ref in tree_text or ref in idx_text))
-            else:
-                ev_ok += bool(ref.startswith("http"))
+            else:  # url refs count only if the URL appears in something the arm recorded (probe output or the tree/README context it was given)
+                ev_ok += bool(ref.startswith("http") and (ref in idx_text or ref in tree_text or ref in idx.get("readme_urls", "")))
     # Fabrication = evidence asserted but NONE of it resolves to a recorded artifact.
     # Imprecise pointers are penalised through the evidence_valid row, not zeroed by the gate.
     fabricated = ev_total > 0 and ev_ok == 0
@@ -102,6 +103,6 @@ SANITY_CASE = (
     {"repo": "x", "overall_score": 80,
      "claims": [{"id": "c1", "verdict": "verified", "confidence": "high", "evidence": [{"kind": "url", "ref": "http://x", "excerpt": ""}]},
                 {"id": "c2", "verdict": "refuted", "confidence": "low", "evidence": [{"kind": "url", "ref": "http://y", "excerpt": ""}]}],
-     "escalations": [], "memo_md": "m"},
+     "escalations": [], "memo_md": "m", "_evidence_index": {"probes": [], "text": "", "tree": "", "readme_urls": "http://x http://y"}},
     1.0,
 )

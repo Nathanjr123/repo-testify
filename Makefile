@@ -6,8 +6,8 @@ sanity:
 	$(PY) -m eval.runner --arm baseline --cases eval/cases/public --sanity
 baseline:
 	$(PY) -m eval.runner --arm baseline --cases eval/cases/public
-advanced:
-	$(PY) -m eval.runner --arm advanced --cases eval/cases/public
+advanced:  # dispatching probes runs the repository's code on CI; running this target is the approval
+	PROBE_DISPATCH=approve $(PY) -m eval.runner --arm advanced --cases eval/cases/public
 eval:
 	$(PY) -m eval.runner --arm baseline --cases eval/cases/heldout
 	$(PY) -m eval.runner --arm advanced --cases eval/cases/heldout

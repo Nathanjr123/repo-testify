@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Held-out run: arms run ONCE. Scoring uses whatever truth is in eval/truth (provisional until the human audit);
 # after the audit, `python3 -m eval.replay --run <id> --rescore` re-scores the persisted outputs for free.
-set -uo pipefail; cd "$(dirname "$0")"
+set -uo pipefail; cd "$(dirname "$0")"; export PROBE_DISPATCH=approve  # the operator running this script is the approval
 for c in eval/cases/heldout/r*.json; do id=$(basename $c .json); test -f eval/truth/$id.json || { echo "MISSING TRUTH $id"; exit 2; }; done
 L=proof/heldout.log; : > $L
 python3 -m eval.runner --arm baseline --cases eval/cases/heldout --label baseline-heldout >> $L 2>&1

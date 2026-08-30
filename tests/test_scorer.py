@@ -9,7 +9,8 @@ CASE = {"id": "_sanity", "repo": "x", "commit": "0", "buyer_question": "q",
 def rep(v1, v2, conf="high", ev=True):
     e = [{"kind": "url", "ref": "http://x", "excerpt": ""}] if ev else []
     return {"repo": "x", "overall_score": 80, "claims": [{"id": "c1", "verdict": v1, "confidence": conf, "evidence": e},
-                                                         {"id": "c2", "verdict": v2, "confidence": conf, "evidence": e}], "escalations": []}
+                                                         {"id": "c2", "verdict": v2, "confidence": conf, "evidence": e}], "escalations": [],
+            "_evidence_index": {"probes": [], "text": "", "tree": "", "readme_urls": "http://x"}}
 def test_perfect(): assert aggregate([score(CASE, rep("verified", "refuted"))])["raw"] == 1.0
 def test_wrong_high_confidence_is_penalised():
     s = score(CASE, rep("refuted", "verified"))
@@ -28,3 +29,7 @@ def test_crashed_case_is_zero_not_hidden():
 if __name__ == "__main__":
     for n, f in list(globals().items()):
         if n.startswith("test_"): f(); print("ok", n)
+
+def test_url_evidence_must_be_in_recorded_context():
+    r = rep("verified", "refuted"); r["_evidence_index"]["readme_urls"] = ""
+    assert score(CASE, r)["rows"]["evidence_valid"] == 0.0

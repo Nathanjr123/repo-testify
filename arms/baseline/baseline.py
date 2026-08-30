@@ -1,7 +1,7 @@
 """Baseline arm: fetch README + tree via GitHub API (no clone, local disk is tight),
 one claude -p call, emit the report schema. This is the honest 'reasonable basic way':
 what an engineer does today = read the README and skim the tree, then judge."""
-import json, pathlib, subprocess, sys
+import json, pathlib, re, subprocess, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from common import llm, exit_if_limited, CALLS
 
@@ -32,7 +32,7 @@ def main():
     start, end = out.find("{"), out.rfind("}")
     report = json.loads(out[start:end + 1])
     report["usage"] = {"cost_usd": CALLS["cost_usd"], "input_tokens": CALLS["input_tokens"], "output_tokens": CALLS["output_tokens"]}; report["llm_calls"] = CALLS["n"]
-    report["_evidence_index"] = {"probes": [], "text": "", "tree": "\n".join(paths)}
+    report["_evidence_index"] = {"probes": [], "text": "", "tree": "\n".join(paths), "readme_urls": " ".join(re.findall(r"https?://\S+", readme_text))}
     print(json.dumps(report))
 
 exit_if_limited(main)
