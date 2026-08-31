@@ -44768,10 +44768,10 @@
   "arm": "single_shot",
   "label": "single-shot-baseline",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ss-cases",
+  "cases_dir": "<scratch>/ss-cases",
   "git": "5eaa80c",
   "ts": "2026-08-31T09:09:34Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm single_shot --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ss-cases --label single-shot-baseline",
+  "cmd": "<repo-root>/eval/runner.py --arm single_shot --cases <scratch>/ss-cases --label single-shot-baseline",
   "agg": {
    "rows": {
     "verdict_acc": 0.25,
@@ -44948,7 +44948,7 @@
       "c11"
      ],
      "run_id": "33375644144",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/ss-r01-humanize-1788166838",
+     "_run_dir": "<repo-root>/arms-runs/ss-r01-humanize-1788166838",
      "_evidence_index": {
       "probes": [
        "ss"
@@ -45126,7 +45126,7 @@
       "c9"
      ],
      "run_id": "33375945834",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/ss-r05-records-1788166963",
+     "_run_dir": "<repo-root>/arms-runs/ss-r05-records-1788166963",
      "_evidence_index": {
       "probes": [
        "ss"
@@ -45295,7 +45295,7 @@
       "c6"
      ],
      "run_id": "33376136249",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/ss-r07-newspaper3k-1788167206",
+     "_run_dir": "<repo-root>/arms-runs/ss-r07-newspaper3k-1788167206",
      "_evidence_index": {
       "probes": [
        "ss"
