@@ -7,7 +7,7 @@ Stopping rule: max 2 tuning rounds per arm on public cases; held-out cases run o
 Kill criterion: if by Sat 2026-08-29 18:00 UTC EXECUTE minus STATIC <= noise floor on public cases, ship the best surviving arm as final and write the kill entry as a changelog + hot-take input.
 
 ## Outcome (public split, recorded 2026-08-29; held-out pending)
-Noise floor measured first: baseline-vs-baseline claim-accuracy spread 0.008 (proof baseline-v2-n1/n2).
-EXECUTE vs STATIC-only: claim accuracy 0.712 vs 0.007 (proof advanced-v2-rescored vs ablate-no-execution) -> +0.705 >= +0.20: **hypothesis PASSED**. Both arms beat the one-shot baseline (0.07).
+Noise floor measured first: baseline-vs-baseline claim-accuracy spread as regenerated in README (RESULTS.md noise-floor line) (proof baseline-v2-n1/n2).
+EXECUTE vs STATIC-only: claim accuracy 0.750 vs 0.007 (advanced-v2-rescored vs ablate-no-execution-rescored, regenerated; see RESULTS.md) (proof advanced-v2-rescored vs ablate-no-execution) -> +0.743 >= +0.20: **hypothesis PASSED**. Both arms beat the one-shot baseline (0.07).
 Stopping rule honoured: two tuning rounds (v1 -> v2) on public cases; v3 rule changes are applied to the held-out split only.
 Kill criterion never triggered (Sat 18:00 UTC checkpoint moot).

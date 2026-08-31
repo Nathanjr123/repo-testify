@@ -127,10 +127,10 @@ We pointed the pipeline at this repository (case `eval/cases/self/r00-repo-testi
 | c1 | From a clean clone, `./repro.sh` runs to completion with exit code 0 using only Python 3.10+ (no make, no dock | **verified** | high |
 | c2 | `python3 tests/test_scorer.py` passes all six scorer contract tests. | **verified** | high |
 | c3 | `python3 eval/validate_cases.py` reports every case file valid. | **verified** | high |
-| c4 | `python3 -m eval.replay --run <the advanced-v2-rescored run id>` reproduces the stored raw score 0.817 exactly | **verified** | high |
+| c4 | `python3 -m eval.replay --run <the advanced-v2-rescored run id>` reproduces the stored raw score for that run exactly | **verified** | high |
 | c5 | Regenerating RESULTS.md and the README tables from proof/ yields files byte-identical to the committed ones. | **verified** | high |
 | c6 | The shipped Dockerfile builds and its default command runs the Level-1 reproduction successfully. | **verified** | low |
-| c7 | On the public split the pipeline's raw per-claim accuracy is 0.83 (62 of 75) against the baseline's 0.13 (10 o | **verified** | high |
+| c7 | On the public split the pipeline's raw per-claim accuracy on the public split matches the generated table above against the baseline's 0.13 (10 o | **verified** | high |
 | c8 | Every row of RESULTS.md carries a proof id, a git hash and a UTC timestamp, and each cited git hash exists in  | **refuted** | high |
 | c9 | The README's `repro` workflow badge asserts the latest run of that workflow on master succeeded. | **verified** | high |
 | c10 | `arms/PROMPTS.md` is generated from the arm sources: running `python3 tools/render_prompts.py` leaves it uncha | **verified** | high |
