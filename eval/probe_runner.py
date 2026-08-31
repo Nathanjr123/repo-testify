@@ -46,7 +46,9 @@ def run_probe(spec, repo, commit, out_root):
         return a.returncode
     sh(["docker", "commit", tag, tag + "-img"])
     sh(["docker", "rm", "-f", tag])
-    net = [] if spec.get("network") in ("on", "install-only") else ["--network=none"]  # "on" (and the older spelling "install-only") keeps network for the probe phase; default is off
+    _n = spec.get("network")
+    _n = _n.lower() if isinstance(_n, str) else ("on" if _n is True else _n)
+    net = [] if _n in ("on", "install-only", "full", "yes", "true") else ["--network=none"]  # keep network for the probe phase on any affirmative synonym; default off. (Earlier runs accepted only "on"/"install-only", so a single-shot agent that said "full" was silently denied network — see the decomposition caveat.)
     cmd = " && ".join(spec["commands"])
     (out / "cmd.txt").write_text(cmd)
     t0 = time.monotonic()

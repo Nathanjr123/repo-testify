@@ -64,29 +64,44 @@ def human_block():
             "the loop without losing accuracy, which is what makes auditing a hundred repositories tractable.\n")
 
 def ladder_table():
-    SHARED = ["r01-humanize.json", "r05-records.json", "r07-newspaper3k.json"]
-    arms = [("baseline-v2-n1-rescored", "Reading only (baseline)", "reads the README, cannot run code"),
-            ("single-shot-baseline", "Single-shot execution", "one agent, one bash script, one judgment \u2014 executes, but no per-claim structure"),
-            ("advanced-v2-rescored", "Full pipeline", "one probe per claim, VERDICT_LINE contract, three-vote adjudication, escalation")]
-    def mean_acc(label):
+    SHARED = [("r01-humanize.json", "r01-humanize"), ("r05-records.json", "r05-records"), ("r07-newspaper3k.json", "r07-newspaper3k")]
+    def acc(label, cn):
         e = latest.get(label)
-        if not e: return None
-        vs = [e["per_case"][k]["rows"]["verdict_acc"] for k in SHARED
-              if e["per_case"].get(k, {}).get("status") == "ok"]
-        return sum(vs) / len(vs) if len(vs) == len(SHARED) else None
-    accs = {l: mean_acc(l) for l, _, _ in arms}
-    if any(v is None for v in accs.values()): return ""
-    body = "\n".join(f"| {name} | {accs[l]:.3f} | {note} |" for l, name, note in arms)
-    b, s, p = accs["baseline-v2-n1-rescored"], accs["single-shot-baseline"], accs["advanced-v2-rescored"]
+        pc = e["per_case"].get(cn) if e else None
+        return pc["rows"]["verdict_acc"] if pc and pc.get("status") == "ok" else None
+    arms = [("baseline-v2-n1-rescored", "reading"), ("single-shot-baseline", "single-shot"), ("advanced-v2-rescored", "pipeline")]
+    grid = {cn: {lbl: acc(lbl, cn) for lbl, _ in arms} for cn, _ in SHARED}
+    if any(v is None for row in grid.values() for v in row.values()):
+        return ""
+    rows = []
+    for cn, name in SHARED:
+        g = grid[cn]
+        mark = " \u26a0" if cn == "r01-humanize.json" else ""
+        rows.append(f"| {name}{mark} | {g['baseline-v2-n1-rescored']:.2f} | {g['single-shot-baseline']:.2f} | {g['advanced-v2-rescored']:.2f} |")
+    # clean subset = repos where the single-shot agent's network was honored (r05, r07)
+    clean = ["r05-records.json", "r07-newspaper3k.json"]
+    ss_clean = sum(grid[c]["single-shot-baseline"] for c in clean) / len(clean)
+    pi_clean = sum(grid[c]["advanced-v2-rescored"] for c in clean) / len(clean)
     return ("\n### Execution or structure: which half does the work?\n\n"
-            "The reading baseline is easy to beat, so a fair execution baseline isolates the two contributions on the "
-            f"same three repositories (r01, r05, r07). Mean per-claim accuracy:\n\n"
-            "| arm | mean claim accuracy | what it has |\n|---|---|---|\n" + body + "\n\n"
-            f"Execution alone lifts accuracy by **+{s-b:.2f}** (reading \u2192 single-shot); the pipeline's structure lifts it "
-            f"another **+{p-s:.2f}** on top (single-shot \u2192 full). Both halves carry roughly equal weight, so the answer to "
-            "\"isn't this just executing the README?\" is no: raw execution gets about half way, and the per-claim contract, "
-            "adjudication and escalation get the rest. Regenerated from the proof; the single-shot arm ran on three repositories, "
-            "so it is kept out of the seven-repository table above to avoid comparing different repo sets.\n")
+            "The reading baseline is easy to beat, so a fair *execution* baseline (arms/single_shot: one agent, one bash "
+            "script, one judgment) isolates what the pipeline's structure adds on top of raw execution. Per-repository "
+            "claim accuracy on the three shared repositories:\n\n"
+            "| repository | reading | single-shot | pipeline |\n|---|---|---|---|\n" + "\n".join(rows) + "\n\n\u26a0 r01-humanize: the single-shot install was denied network on a keyword mismatch (see below); r01 is excluded from the structure attribution.\n\n"
+            "Read this honestly, because it does not say what the first draft claimed. **Execution is the load-bearing "
+            "half**: every arm that runs code is far above reading, and the no-execution ablation collapses to the reading "
+            "baseline. **The pipeline's structure adds only a modest, repo-dependent increment.** It clearly helps on "
+            "r07-newspaper3k (the monolithic single-shot script mishandled a claim the per-claim pipeline caught), it is "
+            "actually *beaten* by single-shot on r05-records, and on r01-humanize the single-shot number is not a fair "
+            "measurement at all: that agent requested network with the keyword `full`, which the probe runner recognised "
+            "only as `on`/`install-only`, so its install was silently denied network and every claim failed. That is a "
+            "harness fragility (now fixed in `eval/probe_runner.py` to accept the synonyms), not a structure win, so r01 is "
+            f"excluded from the attribution. On the two repositories where the single-shot agent's network was honored, the "
+            f"pipeline's structure adds **+{pi_clean - ss_clean:.2f}** (single-shot {ss_clean:.2f} \u2192 pipeline {pi_clean:.2f}) "
+            "\u2014 real but small, and consistent with the ablations (voting is +0.03, k=1 is inside the noise floor). The "
+            "defensible conclusion is the narrow one: an execution result the model cannot argue with is the cheapest "
+            "reliable component; the per-claim contract and adjudication add a modest, sometimes decisive refinement on top, "
+            "not a second equal half. Regenerated from the proof.\n")
+
 
 def pdf_table():
     if not (b1 and adv): return ""
