@@ -1,10 +1,13 @@
 # Agent trajectories
-One coding agent was used: **Claude Code (claude-fable-5)**, driven by Nathan Obiekwe. The pipeline's own model calls (`claude -p`) are recorded per run in `proof/build_proof.json` (`per_case.*.output`, with per-claim votes) and are not agent trajectories in the PDF's sense; the trajectories below are the authoring sessions.
+One coding agent was used: **Claude Code (claude-fable-5)**, driven by Nathan Obiekwe. The pipeline's own model calls (`claude -p`) are recorded per run in `proof/build_proof.json` (`per_case.*.output`, with per-claim votes) and are not agent trajectories in the PDF's sense; the trajectories below are the pipeline runs, the single-shot baseline, and the authoring sessions.
 
 Format: `Step NN — Model Thinking / Tool Call: <tool> / Tool Result`, exported by `tools/export_traces.py` from the session log. The export starts at kickoff, keeps failures and dead ends, and omits only steps that were not about building this repository (the count is stated in the file). Private paths and personal identifiers are redacted.
 
 ## Pipeline agent — one trajectory per repository
 `traces/pipeline/<case>.md`, one per repository across the public, extension and held-out splits plus the self-run (rendered from persisted data by `tools/render_pipeline_traces.py`): the instructions (`arms/PROMPTS.md`), the probes the PLAN stage wrote, the GitHub Actions run that executed them, the transcript index, the three adjudication votes per claim, and the final verdict with its cited artifact. Retries appear as `-r1` probe files; escalations are listed in the report.
+
+## Single-shot agent — the fair execution baseline
+`traces/single_shot/<case>.md`, one per shared repository (rendered from persisted data by `tools/render_single_shot_traces.py`): the instructions, the **one** bash script this agent wrote, the recorded per-claim output of running it once, and its single adjudication. This is the agent-vs-agent control (arms/single_shot) behind the execution-vs-structure decomposition. The r01-humanize trace is instructive: the agent requested network with the keyword `full`, which the probe runner recognised only as `on`, so its install was denied network and every claim failed — a fragility of the unstructured approach (and a harness bug, since fixed) that the per-claim pipeline's fixed contract avoids.
 
 ## Authoring agent — sessions
 | file | purpose | steps | outcome |
