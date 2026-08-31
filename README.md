@@ -43,6 +43,20 @@ Baseline-vs-baseline spread (noise floor): **0.013** composite; claim-accuracy s
 \* nominal call count per repository (plan, at most one repair, three votes; baseline 1). Exact counts are persisted for runs from v3 onward.
 <!-- RESULTS:END -->
 
+## Run it (60 seconds)
+```bash
+git clone https://github.com/Nathanjr123/repo-testify.git && cd repo-testify
+./run.sh --demo                       # renders report.html from the shipped results — no network, no cost
+```
+Then open `report.html` (double-click, or the path the command prints). It shows the arm comparison and, for the bundled self-run, every claim's verdict with its recorded evidence; refuted claims are expanded first.
+
+Audit any public repository yourself (executes its README's claims on CI, ~$3, a few minutes):
+```bash
+./run.sh https://github.com/pallets/flask      # extract claims -> execute -> open the report
+./run.sh path/to/your-case.json                # or run a claim list you wrote
+```
+`./repro.sh` re-derives every published number from `proof/` and is what CI runs on each push.
+
 ## Where to find each judging criterion
 | Criterion | Where it lives |
 |---|---|

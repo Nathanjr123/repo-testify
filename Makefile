@@ -24,3 +24,6 @@ test:
 	$(PY) -m eval.selftest && $(PY) eval/validate_cases.py
 video-check:
 	@test -f video.mp4 && test $$(stat -c%s video.mp4) -gt 500000 && ffprobe -v error -show_entries format=duration video.mp4 || echo "video.mp4 missing/too small"
+
+html:  ## build the self-contained report.html from proof/
+	$(PY) eval/render_html.py
