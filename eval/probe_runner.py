@@ -1,10 +1,12 @@
 """Deterministic probe executor, NO LLM in this loop (DESIGN.md stage 4).
 Input: a probes JSON file: {"case_id": str, "repo": str, "commit": str,
   "probes": [{"id": str, "claim_id": str, "image": "python:3.11-slim",
-              "network": "install-only|none", "setup": [cmds], "commands": [cmds],
+              "network": "on|none" (affirmative synonyms on/install-only/full keep network in phase B), "setup": [cmds], "commands": [cmds],
               "timeout_s": 120}]}
-Each probe runs in a FRESH container: phase A (setup, network on: clone+install),
-docker commit snapshot, phase B (commands, --network=none). Artifacts per probe:
+Each probe runs in a FRESH container: phase A (setup, network ON: clone+install),
+docker commit snapshot, phase B (commands). Phase B networking is per the probe's `network`
+field: default OFF (`--network=none`); an affirmative value (on/install-only/full) KEEPS it on
+for phase B too (used for badge/URL/CI-status checks). Artifacts per probe:
 probes_out/<probe_id>/{cmd.txt, stdout.log, stderr.log, exit_code, phase_a.log}.
 Runs anywhere docker exists (GH Actions ubuntu runner, or any Linux box)."""
 import json, pathlib, shlex, subprocess, sys, time
