@@ -94,8 +94,8 @@ Full numbers regenerate from <code>proof/build_proof.json</code>; this page is a
 {live}
 </div>
 <script>
-function gen(){var v=document.getElementById('repo').value.trim();var o=document.getElementById('cmd');if(!/^https?:\/\/github\.com\//.test(v)){o.style.display='block';o.textContent='Enter a full https://github.com/owner/repo URL.';return}o.style.display='block';o.textContent='./run.sh '+v;}
-function flt(){{let q=document.getElementById('q').value.toLowerCase();document.querySelectorAll('details.row').forEach(d=>{{d.style.display=d.textContent.toLowerCase().includes(q)?'':'none'}})}}
+function gen(){{var v=document.getElementById('repo').value.trim();var o=document.getElementById('cmd');if(!/^https?:\/\/github\.com\//.test(v)){{o.style.display='block';o.textContent='Enter a full https://github.com/owner/repo URL.';return}}o.style.display='block';o.textContent='./run.sh '+v;}}
+function flt(){{{let q=document.getElementById('q').value.toLowerCase();document.querySelectorAll('details.row').forEach(d=>{{d.style.display=d.textContent.toLowerCase().includes(q)?'':'none'}})}}
 function only(v){{document.querySelectorAll('details.row').forEach(d=>{{d.style.display=(!v||d.dataset.v===v)?'':'none';if(v&&d.dataset.v===v)d.open=true}})}}
 </script></body></html>"""
     (ROOT / "report.html").write_text(page)
