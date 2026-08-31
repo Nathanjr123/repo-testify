@@ -48,13 +48,17 @@ def claim_page(report):
 <div class="memo"><b>Memo</b><pre>{esc(r.get('memo_md','')[:2500])}</pre></div></section>"""
 
 def main():
-    live = ""
+    runs_dir = ROOT / "runs"; runs_dir.mkdir(exist_ok=True)
     if "--report" in sys.argv:
         rp = json.loads(pathlib.Path(sys.argv[sys.argv.index("--report")+1]).read_text())
-        live = claim_page(rp)
-    # bundled example: the committed self-run that refuted a claim
-    ex = ROOT / "eval/cases/self/report-run33298981599.json"
-    if ex.exists() and not live: live = claim_page(json.loads(ex.read_text()))
+        slug = "".join(ch if ch.isalnum() else "-" for ch in rp["repo"].split("github.com/")[-1])[:60]
+        (runs_dir / f"{slug}.json").write_text(json.dumps(rp))  # accumulate every audited repo
+    saved = sorted(runs_dir.glob("*.json"))
+    if saved:
+        live = "".join(claim_page(json.loads(f.read_text())) for f in saved)
+    else:
+        ex = ROOT / "eval/cases/self/report-run33298981599.json"
+        live = claim_page(json.loads(ex.read_text())) if ex.exists() else ""
     b = latest("baseline-v2-n1-rescored"); a = latest("advanced-v2-rescored")
     ba = b["agg"]["rows"]["verdict_acc"] if b else 0; aa = a["agg"]["rows"]["verdict_acc"] if a else 0
     page = f"""<!doctype html><html><head><meta charset=utf-8><title>repo-testify report</title>
@@ -81,10 +85,16 @@ Full numbers regenerate from <code>proof/build_proof.json</code>; this page is a
 <h2>Arms compared</h2>
 <table><tr><th>arm</th><th class=num>claim accuracy</th><th class=num>composite</th><th class=num>settled</th><th class=num>cost/repo</th></tr>
 {arm_rows()}</table>
+<div class="paste"><b>Audit your own repositories</b> — paste a public GitHub URL for the command (execution runs sandboxed on CI, not in the browser):
+<div style="display:flex;gap:8px;margin-top:8px"><input id="repo" placeholder="https://github.com/owner/repo" style="flex:1;background:#0f1115;border:1px solid #333;color:#eee;padding:7px 9px;border-radius:6px;font-family:monospace">
+<button onclick="gen()" style="background:#37c2c4;color:#001416;border:0;border-radius:6px;padding:7px 12px;font-weight:700;cursor:pointer">command</button></div>
+<div id="cmd" style="display:none;font-family:monospace;background:#0d1017;border:1px solid #262b36;border-radius:6px;padding:9px;margin-top:8px;white-space:pre-wrap;word-break:break-word"></div>
+<div style="color:#8a95a6;font-size:12px;margin-top:6px">Each run you do is collected on this page — many repos, one view.</div></div>
 <p style="color:#9aa4b2">Reproduce every number: <code>./repro.sh</code>. Run it yourself: <code>./run.sh https://github.com/owner/repo</code> or <code>./run.sh --demo</code>.</p>
 {live}
 </div>
 <script>
+function gen(){var v=document.getElementById('repo').value.trim();var o=document.getElementById('cmd');if(!/^https?:\/\/github\.com\//.test(v)){o.style.display='block';o.textContent='Enter a full https://github.com/owner/repo URL.';return}o.style.display='block';o.textContent='./run.sh '+v;}
 function flt(){{let q=document.getElementById('q').value.toLowerCase();document.querySelectorAll('details.row').forEach(d=>{{d.style.display=d.textContent.toLowerCase().includes(q)?'':'none'}})}}
 function only(v){{document.querySelectorAll('details.row').forEach(d=>{{d.style.display=(!v||d.dataset.v===v)?'':'none';if(v&&d.dataset.v===v)d.open=true}})}}
 </script></body></html>"""

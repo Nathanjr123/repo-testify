@@ -8,3 +8,4 @@ traces/*.md
 !traces/authoring-*.md
 arms-runs/
 report.html
+runs/
