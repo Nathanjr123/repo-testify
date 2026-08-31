@@ -20,6 +20,8 @@ hdr = "| arm | claim accuracy (worst-case weighted) | not confidently wrong | ev
 rows = [row("baseline-v2-n1-rescored", "baseline (run 1)"), row("baseline-v2-n2-rescored", "baseline (run 2)"),
         row("advanced-v1-rescored", "pipeline v1"), row("advanced-v2-rescored", "pipeline v2 (public, tuned)"),
         row("ablate-k1", "ablation: k=1 votes"), row("ablate-no-execution-rescored", "ablation: no execution"),
+        row("ablate-crosscheck", "ablation: no evidence cross-check"),
+        row("single-shot-baseline", "baseline: single-shot execution (agent-vs-agent)"),
         row("baseline-ext2-rescored", "baseline (extension, 6 repos, v3 code)"), row("advanced-v3-ext-rescored", "pipeline v3 (extension, 6 repos)"),
         row("baseline-heldout-drafttruth", "baseline (held-out, scored on the untouched draft truth)"), row("advanced-v3-heldout-drafttruth", "pipeline v3 (held-out, scored on the untouched draft truth)"),
         row("baseline-heldout-rescored", "baseline (held-out, scored on evidence-corrected truth)"), row("advanced-v3-heldout-rescored", "pipeline v3 (held-out, scored on evidence-corrected truth)")]

@@ -2,6 +2,7 @@
 
 | run | cases | raw | rows | gates | cost $ | wall s | git | ts |
 |---|---|---|---|---|---|---|---|---|
+| ablate-crosscheck | public | **0.804** | verdict_acc=0.75 confident_wrong=0.75 evidence_valid=1.0 score_error=0.777 | no_fabricated_evidence=1.00 valid_report=1.00 | 0 | 5554.0 | b8f4af6 | 2026-08-28T21:29:06Z |
 | ablate-k1 | public | **0.82** | verdict_acc=0.729 confident_wrong=0.876 evidence_valid=1.0 score_error=0.777 | no_fabricated_evidence=1.00 valid_report=1.00 | 0 | 5554.0 | b8f4af6 | 2026-08-28T21:29:06Z |
 | ablate-no-execution | public | **0.044** | verdict_acc=0.007 confident_wrong=1.0 evidence_valid=0.0 score_error=0.712 | no_fabricated_evidence=0.14 valid_report=1.00 | 0 | 232.9 | rewritten | 2026-08-28T21:35:39Z |
 | ablate-no-execution-rescored | public | **0.044** | verdict_acc=0.007 confident_wrong=1.0 evidence_valid=0.0 score_error=0.712 | no_fabricated_evidence=0.14 valid_report=1.00 | 0 | 232.9 | rewritten | 2026-08-28T21:35:39Z |

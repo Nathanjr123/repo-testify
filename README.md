@@ -31,6 +31,7 @@ Full table:
 | pipeline v2 (public, tuned) | 0.750 | 0.910 | 1.000 | 0.777 | 0.90 | **0.836** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: k=1 votes | 0.729 | 0.876 | 1.000 | 0.777 | 0.92 | **0.820** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: no execution | 0.007 | 1.000 | 0.000 | 0.712 | 0.00 | **0.044** | 3* | 0.6 min | pending audit | 7/7 |
+| ablation: no evidence cross-check | 0.750 | 0.750 | 1.000 | 0.777 | 0.90 | **0.804** | 4* | 13.2 min | pending audit | 0/7 |
 | baseline (extension, 6 repos, v3 code) | 0.094 | 0.373 | 1.000 | 0.739 | 0.09 | **0.350** (capped) | 1.0, $0.62 | 0.8 min | pending audit | 6/6 |
 | pipeline v3 (extension, 6 repos) | 0.802 | 0.964 | 1.000 | 0.701 | 0.89 | **0.859** | 4.0, $3.47 | 7.5 min | pending audit | 6/6 |
 | baseline (held-out, scored on the untouched draft truth) | 0.160 | 0.431 | 0.903 | 0.829 | 0.13 | **0.350** (capped) | 1.0, $0.63 | 0.8 min | pending audit | 7/7 |
