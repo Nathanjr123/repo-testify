@@ -186,5 +186,8 @@ Level 3, re-run the arms: `python3 -m eval.runner --arm baseline|advanced --case
 
 Data: `eval/cases/{public,heldout}/*.json` (claims and pinned commits; public GitHub repositories only), `eval/truth/*.json` (verdicts corrected from recorded execution, each correction noted with its probe; `provisional: true` until the blind audit closes) and `eval/truth-draft/*.json` (the held-out verdicts as drafted before any probe ran). `TRUTH_DIR=truth-draft python3 -m eval.replay --run <id>` scores a run against the drafts. Versions: Python 3.12 locally, `python:3.11-slim`, `3.12-slim` and `3.13-slim` in probes, ubuntu-latest runners, Claude Code 2.1.250.
 
+
+**Final submission:** commit `0605ad3`, tree `ae28bd7e0e04`. `./repro.sh` reproduces every number in this file from `proof/` and CI runs the same inside the shipped Docker image on every push.
+
 ## Agents, tools, provenance
 Coding agent used for authoring: Claude Code (claude-fable-5). The pipeline's own model calls use the same model through `claude -p`. Trajectories are in traces/, failures included, with human checkpoints marked. What existed before kickoff: the problem-agnostic harness (Makefile, the eval/ skeleton, the trace exporter). Everything else was built during the competition.
