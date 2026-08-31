@@ -44617,5 +44617,129 @@
   "rerun_note": "r12, r13, r14 re-run (proof advanced-v3-heldout-rerun-1788057575) after the original PLAN calls failed when a usage window closed (CHANGELOG iteration 15); the other four cases are from the original run",
   "rescored_from": "advanced-v3-heldout-1788030650",
   "truth": "eval/truth-draft (pre-execution verdicts)"
+ },
+ {
+  "id": "ablate-crosscheck-1788166891",
+  "arm": "advanced",
+  "label": "ablate-crosscheck",
+  "disable": null,
+  "cases_dir": "eval/cases/public",
+  "git": "b8f4af6",
+  "ts": "2026-08-28T21:29:06Z",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.75,
+    "confident_wrong": 0.75,
+    "evidence_valid": 1.0,
+    "score_error": 0.777
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.804,
+   "n_cases": 7,
+   "settled_fraction": 0.904,
+   "capped": false
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "wall_total_s": 5554.0,
+  "per_case": {
+   "r01-humanize.json": {
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.99
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0
+   },
+   "r02-python-tabulate.json": {
+    "rows": {
+     "verdict_acc": 0.818,
+     "confident_wrong": 0.818,
+     "evidence_valid": 1.0,
+     "score_error": 0.97
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0
+   },
+   "r04-schedule.json": {
+    "rows": {
+     "verdict_acc": 0.9,
+     "confident_wrong": 0.9,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.9
+   },
+   "r05-records.json": {
+    "rows": {
+     "verdict_acc": 0.818,
+     "confident_wrong": 0.818,
+     "evidence_valid": 1.0,
+     "score_error": 0.67
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.818
+   },
+   "r07-newspaper3k.json": {
+    "rows": {
+     "verdict_acc": 0.727,
+     "confident_wrong": 0.727,
+     "evidence_valid": 1.0,
+     "score_error": 0.79
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.909
+   },
+   "r09-pydub.json": {
+    "rows": {
+     "verdict_acc": 1.0,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 1.0
+   },
+   "r11-gpt-2.json": {
+    "rows": {
+     "verdict_acc": 0.6,
+     "confident_wrong": 0.6,
+     "evidence_valid": 1.0,
+     "score_error": 0.8
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.7
+   }
+  },
+  "limit_blocked": false,
+  "partial": false
  }
 ]
