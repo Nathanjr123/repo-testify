@@ -1,0 +1,27 @@
+"""Scrub the authoring trajectory: drop any '## Step' block that contains a blocked identifier or
+private-client term, strip control chars, and fail loudly if anything survives. Allowlist-by-exclusion
+is deliberately blunt: a build step that happens to mention a blocked word is dropped rather than risk a leak."""
+import re, sys, pathlib
+BLOCK = re.compile(r"(?i)\b(nate|obiekwe|johannesburg|riscura|linum|cybersafe|turing|alignerr|payreality|"
+                   r"labelbox|neural\s*grid|lbx-rl|mcintyre|stylo|metin2|expert_keylog|expert_gameplay|"
+                   r"szczepanik|g18o0165|gemini)\b|/home/|@gmail|@campus|100\.1\d\d\.|76\.5%")
+src = pathlib.Path(sys.argv[1]); dst = pathlib.Path(sys.argv[2])
+raw = re.sub(r"[\x00-\x08\x0e-\x1f]", "", src.read_text(errors="replace"))
+parts = re.split(r"(?=^## Step )", raw, flags=re.M)
+head, steps = parts[0], parts[1:]
+kept, dropped = [], 0
+for s in steps:
+    if BLOCK.search(s): dropped += 1
+    else: kept.append(s)
+note = (f"_Curated authoring trajectory. {len(kept)} build steps kept, {dropped} dropped: any step mentioning "
+        f"a private path, personal identifier, or an unrelated client/project was removed wholesale rather than "
+        f"partially redacted. User turns that survive are marked HUMAN CHECKPOINT. The CLI session log does not "
+        f"capture the model's private reasoning. Full model input/output for the pipeline runs lives in "
+        f"proof/build_proof.json._\n\n")
+out = head.split("\n", 1)[0] + "\n\n" + note + "".join(kept)
+dst.write_text(out)
+low = out.lower()
+resid = {w: low.count(w.lower()) for w in ("nate","obiekwe","johannesburg","riscura","linum","cybersafe","turing",
+         "76.5%","gemini","metin2","mcintyre","stylo","/home/","@gmail","szczepanik","g18o0165","expert_keylog") if low.count(w.lower())}
+print(f"kept {len(kept)}, dropped {dropped}, checkpoints {low.count('human checkpoint')}, residual: {resid or 'NONE'}")
+sys.exit(1 if resid else 0)
