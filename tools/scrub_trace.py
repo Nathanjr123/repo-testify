@@ -25,7 +25,7 @@ out = head.split("\n", 1)[0] + "\n\n" + note + "".join(kept)
 dst.write_text(out)
 low = out.lower()
 _check = ["nate", "/home/", "@gmail", "@campus"] + [l.strip() for l in (open(_f) if os.path.exists(_f) else []) if l.strip() and not l.startswith("#")]
-    _check = [re.sub(r"[^a-z0-9]", "", w.lower()) for w in _check if len(re.sub(r"[^a-z0-9]", "", w)) >= 4]
-    resid = {w: low.count(w) for w in _check if low.count(w)}
+_check = [re.sub(r"[^a-z0-9]", "", w.lower()) for w in _check if len(re.sub(r"[^a-z0-9]", "", w)) >= 4]
+resid = {w: low.count(w) for w in _check if low.count(w)}
 print(f"kept {len(kept)}, dropped {dropped}, checkpoints {low.count('human checkpoint')}, residual: {resid or 'NONE'}")
 sys.exit(1 if resid else 0)
