@@ -44741,5 +44741,564 @@
   },
   "limit_blocked": false,
   "partial": false
+ },
+ {
+  "id": "single-shot-baseline-1788167374",
+  "arm": "single_shot",
+  "label": "single-shot-baseline",
+  "disable": null,
+  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ss-cases",
+  "git": "5eaa80c",
+  "ts": "2026-08-31T09:09:34Z",
+  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm single_shot --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ss-cases --label single-shot-baseline",
+  "agg": {
+   "rows": {
+    "verdict_acc": 0.25,
+    "confident_wrong": 0.267,
+    "evidence_valid": 0.942,
+    "score_error": 0.593
+   },
+   "gates": {
+    "no_fabricated_evidence": 1.0,
+    "valid_report": 1.0
+   },
+   "raw": 0.443,
+   "n_cases": 3,
+   "settled_fraction": 0.576,
+   "capped": false
+  },
+  "human_time_s": null,
+  "cost_usd": 0,
+  "llm_calls": 2.0,
+  "wall_total_s": 536.1,
+  "per_case": {
+   "r01-humanize.json": {
+    "status": "ok",
+    "wall_s": 125.32,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/python-humanize/humanize",
+     "overall_score": 50,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c1: FAIL pip install from PyPI or import failed: ERROR: No matching distribution found for humanize"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c2: FAIL clone or editable install failed: fatal: unable to access 'https://github.com/python-humanize/humanize/': Could not resolve host: github.com"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c3: FAIL README pyversions badge present=False; pypi.org requires_python='unreachable:URLError'; installed metadata Requires-Python=None"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c4: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c5: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c6: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c7: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c8: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c9: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c10: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c11: FAIL Test workflow badge status=None (source: badge fetch error URLError(gaierror(-3, 'Temporary failure in name resolution')); api error URLError(gaierror(-3, 'Temporary failure in name resolution')))"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c11"
+     ],
+     "run_id": "33375644144",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/ss-r01-humanize-1788166838",
+     "_evidence_index": {
+      "probes": [
+       "ss"
+      ],
+      "text": "ss export PYTHONUTF8=1 LANG=C.UTF-8; mkdir -p /work; cd /work; if python3 -m pip install --upgrade humanize >/work/c1.log 2>&1 && python3 -c \"import humanize\" 2>>/work/c1.log; then echo \"CLAIM c1: PASS 'python3 -m pip install --upgrade humanize' from PyPI succeeded and import humanize works (version $(\nSTDOUT CLAIM c1: FAIL pip install from PyPI or import failed: ERROR: No matching distribution found for humanize\nCLAIM c2: FAIL clone or editable install failed: fatal: unable to access 'https://github.com/python-humanize/humanize/': Could not resolve host: github.com\nCLAIM c3: FAIL README pyversions badge present=False; pypi.org requires_python='unreachable:URLError'; installed metadata Requires-Python=None\nCLAIM c4: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")\nCLAIM c5: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")\nCLAIM c6: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")\nCLAIM c7: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")\nCLAIM c8: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")\nCLAIM c9: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")\nCLAIM c10: FAIL humanize not importable: ModuleNotFoundError(\"No module named 'humanize'\")\nCLAIM c11: FAIL Test workflow badge status=None (source: badge fetch error URLError(gaierror(-3, 'Temporary failure in name resolution')); api error URLError(gaierror(-3, 'Temporary failure in name resolution')))\n\nSTDERR \nEXIT 0"
+     },
+     "llm_calls": 2,
+     "usage": {},
+     "memo_md": "single-shot: 0 verified, 0 refuted, 11 escalated"
+    },
+    "rows": {
+     "verdict_acc": 0.0,
+     "confident_wrong": 0.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.58
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.0
+   },
+   "r05-records.json": {
+    "status": "ok",
+    "wall_s": 242.79,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/kennethreitz/records",
+     "overall_score": 68,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c1: PASS pip install records[pandas] ok; import records ok; records=0.6.0 pandas=3.0.5"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c2: FAIL postgres:// -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres | postgresql:// -> ModuleNotFoundError: No module named 'psycopg2' (no server; URL scheme resolution only)"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c3: PASS rows[0]=<Record {\"name\": \"Ada\", \"email\": \"ada@x.org\", \"active\": 0}> attr/key/idx=('Ada', 'Ada', 'Ada') iter=['Ada', 'Henry Ford']"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c4: FAIL INSERT via db.query/bulk_query raised: OperationalError: (sqlite3.OperationalError) database is locked"
+        },
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "INFO with db.transaction() as conn: INSERT persisted rows=0/1"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c5: FAIL t = db.transaction(); t.commit() -> AttributeError: '_GeneratorContextManager' object has no attribute 'commit' (db.transaction() returns _GeneratorContextManager)"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c6: PASS first()=<Record {\"name\": \"Ada\"}> (Record); all() -> list of 2 x Record"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c7: PASS export(csv) type=str header='name,email,active' data_rows=2"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c8: PASS export(df) -> DataFrame shape=(2, 3) cols=['name', 'email', 'active']"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "unverifiable",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c9: FAIL UNVERIFIABLE here (no MS-SQL server, no driver, network none) - escalate to human; mssql+pyodbc: dialect registered, records.Database -> ModuleNotFoundError: No module named 'pyodbc' | mssql+pymssql: dialect registered, records.Database -> ModuleNotFoundError: No module named 'pymssql'"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "low",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c10: PASS records resolved from PyPI by pip at version 0.6.0 (badge image not fetched: network none)"
+        },
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "Version: 0.6.0"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c11: PASS DATABASE_URL set: rc=0 stdout='2' stderr='' | unset: rc=1 stderr='ValueError: You must provide a db_url.'"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c9"
+     ],
+     "run_id": "33375945834",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/ss-r05-records-1788166963",
+     "_evidence_index": {
+      "probes": [
+       "ss"
+      ],
+      "text": "ss grep -iE \"does not provide the extra|pip_exit\" /tmp/audit/install.log; pip show records 2>/dev/null | grep -iE \"^(Name|Version|Requires)\" && printf '%s\\n' 'import os, sys, tempfile, sqlite3, subprocess, importlib.metadata' 'def out(cid, ok, reason):' '    print(\"CLAIM %s: %s %s\" % (cid, \"PASS\" if ok\nSTDOUT pip_exit=0\nName: records\nVersion: 0.6.0\nRequires: docopt, openpyxl, SQLAlchemy, tablib\nCLAIM c1: PASS pip install records[pandas] ok; import records ok; records=0.6.0 pandas=3.0.5\nINFO sqlalchemy=2.0.52 records=0.6.0 python=3.11.16\nCLAIM c2: FAIL postgres:// -> NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres | postgresql:// -> ModuleNotFoundError: No module named 'psycopg2' (no server; URL scheme resolution only)\nCLAIM c3: PASS rows[0]=<Record {\"name\": \"Ada\", \"email\": \"ada@x.org\", \"active\": 0}> attr/key/idx=('Ada', 'Ada', 'Ada') iter=['Ada', 'Henry Ford']\nCLAIM c4: FAIL INSERT via db.query/bulk_query raised: OperationalError: (sqlite3.OperationalError) database is locked\nCLAIM c5: FAIL t = db.transaction(); t.commit() -> AttributeError: '_GeneratorContextManager' object has no attribute 'commit' (db.transaction() returns _GeneratorContextManager)\nINFO with db.transaction() as conn: INSERT persisted rows=0/1\nCLAIM c6: PASS first()=<Record {\"name\": \"Ada\"}> (Record); all() -> list of 2 x Record\nCLAIM c7: PASS export(csv) type=str header='name,email,active' data_rows=2\nCLAIM c8: PASS export(df) -> DataFrame shape=(2, 3) cols=['name', 'email', 'active']\nCLAIM c9: FAIL UNVERIFIABLE here (no MS-SQL server, no driver, network none) - escalate to human; mssql+pyodbc: dialect registered, records.Database -> ModuleNotFoundError: No module named 'pyodbc' | mssql+pymssql: dialect registered, records.Database -> ModuleNotFoundError: No module named 'pymssql'\nCLAIM c10: PASS records resolved from PyPI by pip at version 0.6.0 (badge image not fetched: network none)\nCLAIM c11: PASS DATABASE_URL set: rc=0 stdout='2' stderr='' | unset: rc=1 stderr='ValueError: You must provide a db_url.'\n\nSTDERR \nEXIT 0"
+     },
+     "llm_calls": 2,
+     "usage": {},
+     "memo_md": "single-shot: 7 verified, 3 refuted, 1 escalated"
+    },
+    "rows": {
+     "verdict_acc": 0.909,
+     "confident_wrong": 1.0,
+     "evidence_valid": 1.0,
+     "score_error": 0.72
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.909
+   },
+   "r07-newspaper3k.json": {
+    "status": "ok",
+    "wall_s": 167.96,
+    "usage": {},
+    "output": {
+     "repo": "https://github.com/codelucas/newspaper",
+     "overall_score": 64,
+     "claims": [
+      {
+       "id": "c1",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c1: PASS import newspaper and from newspaper import Article succeed, version 0.2.8"
+        }
+       ]
+      },
+      {
+       "id": "c2",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c2: PASS newspaper3k imports on py3.11; PyPI newspaper (py2 legacy) exists at version 0.1.0.7; README marks python-2-head branch deprecated"
+        }
+       ]
+      },
+      {
+       "id": "c3",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c3: FAIL badge_in_readme=True travis-ci.org fetch=200 passing_svg=False (travis-ci.org shut down; badge is dead/unknown, not a live passing build)"
+        }
+       ]
+      },
+      {
+       "id": "c4",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c4: FAIL authors=['Cnn Wire'] publish_date=datetime.datetime(2013, 12, 30, 0, 0) html_len=102351 title='New Year, new laws: Obamacare, pot, guns and drones'"
+        }
+       ]
+      },
+      {
+       "id": "c5",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "File \"/tmp/c5.py\", line 2 ... SyntaxError: unexpected character after line continuation character"
+        }
+       ]
+      },
+      {
+       "id": "c6",
+       "verdict": "unverifiable",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "(no CLAIM c6 line in STDOUT; the download_corpora.py pipe was never run)"
+        }
+       ]
+      },
+      {
+       "id": "c7",
+       "verdict": "refuted",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c7: FAIL apt-get install as written fails on Debian GNU/Linux 13 (trixie): E: Package 'libpng12-dev' has no installation candidate (libpng12-dev was dropped after Ubuntu 16.04/Debian 9; current package is libpng-dev)"
+        }
+       ]
+      },
+      {
+       "id": "c8",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c8: PASS newspaper.languages() printed table with 41 lines incl. codes ['ar', 'be', 'bg', 'da', 'de', 'el', 'en', 'es']"
+        }
+       ]
+      },
+      {
+       "id": "c9",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c9: PASS from newspaper import news_pool works; has set()/join(); newspaper.mthreading uses threading"
+        }
+       ]
+      },
+      {
+       "id": "c10",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c10: PASS build returned Source with 359 Article objects; sample urls ['https://www.cnn.com/business/media', 'https://www.cnn.com/weather/video', 'https://www.cnn.com/audio/podcasts/all-there-is-with-anderson-cooper']"
+        }
+       ]
+      },
+      {
+       "id": "c11",
+       "verdict": "verified",
+       "confidence": "high",
+       "evidence": [
+        {
+         "kind": "command",
+         "ref": "ss",
+         "excerpt": "CLAIM c11: PASS README (cloned master) contains the Swiftproxy text verbatim: ['Swiftproxy', '80M+ residential IPs across 195+ countries', '99.89% success rate'] -- note this verifies the README makes the claim, not that the proxy figures are true"
+        }
+       ]
+      }
+     ],
+     "escalations": [
+      "c5",
+      "c6"
+     ],
+     "run_id": "33376136249",
+     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/ss-r07-newspaper3k-1788167206",
+     "_evidence_index": {
+      "probes": [
+       "ss"
+      ],
+      "text": "ss printf '%s\\n' 'import sys' 'try:' '    import newspaper' '    from newspaper import Article' '    print(\"CLAIM c1: PASS import newspaper and from newspaper import Article succeed, version\", getattr(newspaper,\"__version__\",\"?\"))' 'except Exception as e:' '    print(\"CLAIM c1: FAIL import failed:\", re\nSTDOUT CLAIM c1: PASS import newspaper and from newspaper import Article succeed, version 0.2.8\nCLAIM c2: PASS newspaper3k imports on py3.11; PyPI newspaper (py2 legacy) exists at version 0.1.0.7; README marks python-2-head branch deprecated\nCLAIM c3: FAIL badge_in_readme=True travis-ci.org fetch=200 passing_svg=False (travis-ci.org shut down; badge is dead/unknown, not a live passing build)\nCLAIM c4: FAIL authors=['Cnn Wire'] publish_date=datetime.datetime(2013, 12, 30, 0, 0) html_len=102351 title='New Year, new laws: Obamacare, pot, guns and drones'\nCLAIM c7: FAIL apt-get install as written fails on Debian GNU/Linux 13 (trixie): E: Package 'libpng12-dev' has no installation candidate (libpng12-dev was dropped after Ubuntu 16.04/Debian 9; current package is libpng-dev)\nCLAIM c8: PASS newspaper.languages() printed table with 41 lines incl. codes ['ar', 'be', 'bg', 'da', 'de', 'el', 'en', 'es']\nCLAIM c9: PASS from newspaper import news_pool works; has set()/join(); newspaper.mthreading uses threading\nCLAIM c10: PASS build returned Source with 359 Article objects; sample urls ['https://www.cnn.com/business/media', 'https://www.cnn.com/weather/video', 'https://www.cnn.com/audio/podcasts/all-there-is-with-anderson-cooper']\nCLAIM c11: PASS README (cloned master) contains the Swiftproxy text verbatim: ['Swiftproxy', '80M+ residential IPs across 195+ countries', '99.89% success rate'] -- note this verifies the README makes the claim, not that the proxy figures are true\n\nSTDERR   File \"/tmp/c5.py\", line 2\n    gher. The fee increases every year. Some new laws in 2014 are going to be about the states responding to the federal government, and the regulations that they are sending down to the states.</p></article></body></html>\"\n                                                                                                            ^\nSyntaxError: unexpected character after line continuation character\n\nEXIT 0"
+     },
+     "llm_calls": 2,
+     "usage": {},
+     "memo_md": "single-shot: 6 verified, 3 refuted, 2 escalated"
+    },
+    "rows": {
+     "verdict_acc": 0.455,
+     "confident_wrong": 0.455,
+     "evidence_valid": 0.909,
+     "score_error": 0.56
+    },
+    "gates": {
+     "valid_report": true,
+     "no_fabricated_evidence": true
+    },
+    "settled_fraction": 0.818
+   }
+  },
+  "limit_blocked": false,
+  "partial": false
  }
 ]

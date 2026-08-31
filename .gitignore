@@ -9,3 +9,4 @@ traces/*.md
 arms-runs/
 report.html
 runs/
+proof/*.log

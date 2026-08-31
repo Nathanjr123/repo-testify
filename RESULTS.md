@@ -27,5 +27,6 @@
 | baseline-v2-n1-rescored | public | **0.284** | verdict_acc=0.074 confident_wrong=0.771 evidence_valid=0.111 score_error=0.811 | no_fabricated_evidence=0.86 valid_report=1.00 | 0 | 371.8 | 993589e | 2026-08-28T18:56:17Z |
 | baseline-v2-n2 | public | **0.51** | verdict_acc=0.088 confident_wrong=0.783 evidence_valid=0.324 coverage=1.0 score_error=0.745 | no_fabricated_evidence=1.00 valid_report=1.00 | 0 | 360.4 | 993589e | 2026-08-28T19:02:18Z |
 | baseline-v2-n2-rescored | public | **0.271** | verdict_acc=0.074 confident_wrong=0.783 evidence_valid=0.07 score_error=0.745 | no_fabricated_evidence=0.86 valid_report=1.00 | 0 | 360.4 | 993589e | 2026-08-28T19:02:18Z |
+| single-shot-baseline | ss-cases | **0.443** | verdict_acc=0.25 confident_wrong=0.267 evidence_valid=0.942 score_error=0.593 | no_fabricated_evidence=1.00 valid_report=1.00 | 0 | 536.1 | 5eaa80c | 2026-08-31T09:09:34Z |
 
 Per-case detail lives in proof/build_proof.json (find the run id above).
