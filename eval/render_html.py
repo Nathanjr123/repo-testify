@@ -34,7 +34,8 @@ def arm_rows():
         a = e["agg"]
         acc = a["rows"].get("verdict_acc", 0)
         cap = " <span class='cap'>capped</span>" if a.get("capped") else ""
-        cost = ("$%.2f" % e["cost_usd"]) if e.get("cost_usd") else "&mdash;"
+        n_ok = max(1, sum(1 for r in e.get("per_case",{}).values() if r.get("status")=="ok"))
+        cost = ("$%.2f" % (e["cost_usd"]/n_ok)) if e.get("cost_usd") else "&mdash;"
         out.append("<tr><td>%s</td><td class='num'>%.3f</td><td class='num'><b>%.3f</b>%s</td>"
                    "<td class='num'>%.2f</td><td class='num'>%s</td></tr>"
                    % (esc(name), acc, a["raw"], cap, a.get("settled_fraction", 0), cost))

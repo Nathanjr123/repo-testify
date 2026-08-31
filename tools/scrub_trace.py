@@ -2,9 +2,12 @@
 private-client term, strip control chars, and fail loudly if anything survives. Allowlist-by-exclusion
 is deliberately blunt: a build step that happens to mention a blocked word is dropped rather than risk a leak."""
 import re, sys, pathlib
-BLOCK = re.compile(r"(?i)\b(nate|obiekwe|johannesburg|riscura|linum|cybersafe|turing|alignerr|payreality|"
-                   r"labelbox|neural\s*grid|lbx-rl|mcintyre|stylo|metin2|expert_keylog|expert_gameplay|"
-                   r"szczepanik|g18o0165|gemini)\b|/home/|@gmail|@campus|100\.1\d\d\.|76\.5%")
+import os
+_terms = [r"/home/[a-z0-9_-]+", r"\S+@\S+\.\S+"]  # generic only; the real denylist stays OUT of tracked source
+_f = os.environ.get("REDACT_FILE", os.path.expanduser("~/.repo-testify-redact"))
+if os.path.exists(_f):
+    _terms += [l.strip() for l in open(_f) if l.strip() and not l.startswith("#")]
+BLOCK = re.compile("|".join(_terms), re.I)
 src = pathlib.Path(sys.argv[1]); dst = pathlib.Path(sys.argv[2])
 raw = re.sub(r"[\x00-\x08\x0e-\x1f]", "", src.read_text(errors="replace"))
 parts = re.split(r"(?=^## Step )", raw, flags=re.M)
