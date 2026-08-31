@@ -320,7 +320,7 @@ Local disk is critical — **412MB free (98%)**. You were right; everything heav
 
 ## Step 65, Tool Call: Bash
 ```json
-{"command": "ssh -i ~/.ssh/id_lbx_gpu -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new [redacted: private path/identity] \"ver & echo --- & wmic logicaldisk get caption,freespace,size 2>nul & echo --- & python --version 2>&1 & py --version 2>&1 & git --version 2>&1 & docker --version 2>&1 & wsl --status 2>&1 & where claude 2>&1\" 2>&1 | head -40", "description": "Probe box OS, disk, and tooling over SSH"}
+{"command": "ssh -i [redacted: ssh key] -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new [redacted: private path/identity] \"ver & echo --- & wmic logicaldisk get caption,freespace,size 2>nul & echo --- & python --version 2>&1 & py --version 2>&1 & git --version 2>&1 & docker --version 2>&1 & wsl --status 2>&1 & where claude 2>&1\" 2>&1 | head -40", "description": "Probe box OS, disk, and tooling over SSH"}
 ```
 
 ## Step 66, Tool Result
@@ -357,7 +357,7 @@ INFO: Could not find files for the given pattern(s).
 
 ## Step 70, Tool Call: Bash
 ```json
-{"command": "ssh -i ~/.ssh/id_lbx_gpu -o BatchMode=yes -o ConnectTimeout=8 [redacted: private path/identity] \"powershell -NoProfile -Command \\\"Get-PSDrive -PSProvider FileSystem | Select [redacted: private path/identity] | Format-Table; winget --version\\\"\" 2>&1 | head -15", "description": "Box disk space and winget availability"}
+{"command": "ssh -i [redacted: ssh key] -o BatchMode=yes -o ConnectTimeout=8 [redacted: private path/identity] \"powershell -NoProfile -Command \\\"Get-PSDrive -PSProvider FileSystem | Select [redacted: private path/identity] | Format-Table; winget --version\\\"\" 2>&1 | head -15", "description": "Box disk space and winget availability"}
 ```
 
 ## Step 71, Tool Result
