@@ -7,7 +7,7 @@
   "cases_dir": "eval/cases/public",
   "git": "3ea61e7",
   "ts": "2026-08-28T16:53:31Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
   "agg": {
    "rows": {
     "verdict_acc": 0.0,
@@ -26,37 +26,37 @@
   "per_case": {
    "r01-humanize.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.34
    },
    "r02-python-tabulate.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.33
    },
    "r04-schedule.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.02
    },
    "r05-records.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.26
    },
    "r07-newspaper3k.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.23
    },
    "r09-pydub.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.01
    },
    "r11-gpt-2.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.04
    }
   },
@@ -70,7 +70,7 @@
   "cases_dir": "eval/cases/public",
   "git": "3ea61e7",
   "ts": "2026-08-28T16:53:40Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
   "agg": {
    "rows": {
     "verdict_acc": 0.0,
@@ -89,37 +89,37 @@
   "per_case": {
    "r01-humanize.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.09
    },
    "r02-python-tabulate.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.78
    },
    "r04-schedule.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.31
    },
    "r05-records.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.42
    },
    "r07-newspaper3k.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.29
    },
    "r09-pydub.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.07
    },
    "r11-gpt-2.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.11
    }
   },
@@ -133,7 +133,7 @@
   "cases_dir": "eval/cases/public",
   "git": "3ea61e7",
   "ts": "2026-08-28T16:53:49Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
   "agg": {
    "rows": {
     "verdict_acc": 0.0,
@@ -152,37 +152,37 @@
   "per_case": {
    "r01-humanize.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.17
    },
    "r02-python-tabulate.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.5
    },
    "r04-schedule.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.22
    },
    "r05-records.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.47
    },
    "r07-newspaper3k.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.18
    },
    "r09-pydub.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.11
    },
    "r11-gpt-2.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 28, in <module>\n    r = subprocess.run([\"claude\", \"-p\", prompt, \"--model\", \"claude-fable-5\"],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'claude'\n",
     "wall_s": 1.13
    }
   },
@@ -196,7 +196,7 @@
   "cases_dir": "eval/cases/public",
   "git": "87eb825",
   "ts": "2026-08-28T17:02:24Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n1",
   "agg": {
    "rows": {
     "verdict_acc": 0.086,
@@ -339,7 +339,7 @@
   "cases_dir": "eval/cases/public",
   "git": "02cdc9c",
   "ts": "2026-08-28T17:08:00Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n2",
   "agg": {
    "rows": {
     "verdict_acc": 0.101,
@@ -482,7 +482,7 @@
   "cases_dir": "eval/cases/public",
   "git": "02cdc9c",
   "ts": "2026-08-28T17:11:03Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-n3",
   "agg": {
    "rows": {
     "verdict_acc": 0.025,
@@ -568,17 +568,17 @@
    },
    "r07-newspaper3k.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
     "wall_s": 3.59
    },
    "r09-pydub.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
     "wall_s": 3.51
    },
    "r11-gpt-2.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/baseline/baseline.py\", line 35, in <module>\n    report = json.loads(out[start:end + 1])\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 337, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 355, in raw_decode\n    raise JSONDecodeError(\"Expecting value\", s, err.value) from None\njson.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n",
     "wall_s": 4.18
    }
   },
@@ -592,7 +592,7 @@
   "cases_dir": "eval/cases/public",
   "git": "993589e",
   "ts": "2026-08-28T18:56:17Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
   "agg": {
    "rows": {
     "verdict_acc": 0.095,
@@ -2003,7 +2003,7 @@
   "cases_dir": "eval/cases/public",
   "git": "993589e",
   "ts": "2026-08-28T19:02:18Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
   "agg": {
    "rows": {
     "verdict_acc": 0.088,
@@ -3406,7 +3406,7 @@
   "cases_dir": "eval/cases/public",
   "git": "fa0e62b",
   "ts": "2026-08-28T19:50:12Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
   "agg": {
    "rows": {
     "verdict_acc": 0.408,
@@ -3723,7 +3723,7 @@
      ],
      "escalations": [],
      "run_id": "33202107062",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787943738",
+     "_run_dir": "<repo-root>/arms-runs/r01-humanize-1787943738",
      "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -4055,7 +4055,7 @@
       "c10"
      ],
      "run_id": "33202457520",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787943942",
+     "_run_dir": "<repo-root>/arms-runs/r02-python-tabulate-1787943942",
      "memo_md": "6 verified, 2 refuted, 3 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -4369,7 +4369,7 @@
       "c2"
      ],
      "run_id": "33202898441",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787944311",
+     "_run_dir": "<repo-root>/arms-runs/r04-schedule-1787944311",
      "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -4401,7 +4401,7 @@
    },
    "r05-records.json": {
     "status": "arm_error",
-    "stderr": "Traceback (most recent call last):\n  File \"/home/nate/micro1-fec-2026/arms/advanced/advanced.py\", line 187, in <module>\n    exit_if_limited(main)\n  File \"/home/nate/micro1-fec-2026/arms/common.py\", line 46, in exit_if_limited\n    return fn()\n           ^^^^\n  File \"/home/nate/micro1-fec-2026/arms/advanced/advanced.py\", line 171, in main\n    probe_log, rid = stage_execute(case, probes, run_dir)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/nate/micro1-fec-2026/arms/advanced/advanced.py\", line 58, in stage_execute\n    raise RuntimeError(\"dispatch failed: \" + r.stderr[:300])\nRuntimeError: dispatch failed: could not create workflow dispatch event: HTTP 504: We couldn't respond to your request in time. Sorry about that. Please try resubmitting your request and contact us if the problem persists. (https://api.github.com/repos/Nathanjr123/repo-testify/actions/workflows/344776429/dispatches)\n\n",
+    "stderr": "Traceback (most recent call last):\n  File \"<repo-root>/arms/advanced/advanced.py\", line 187, in <module>\n    exit_if_limited(main)\n  File \"<repo-root>/arms/common.py\", line 46, in exit_if_limited\n    return fn()\n           ^^^^\n  File \"<repo-root>/arms/advanced/advanced.py\", line 171, in main\n    probe_log, rid = stage_execute(case, probes, run_dir)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<repo-root>/arms/advanced/advanced.py\", line 58, in stage_execute\n    raise RuntimeError(\"dispatch failed: \" + r.stderr[:300])\nRuntimeError: dispatch failed: could not create workflow dispatch event: HTTP 504: We couldn't respond to your request in time. Sorry about that. Please try resubmitting your request and contact us if the problem persists. (https://api.github.com/repos/Nathanjr123/repo-testify/actions/workflows/344776429/dispatches)\n\n",
     "wall_s": 172.07
    },
    "r07-newspaper3k.json": {
@@ -4703,7 +4703,7 @@
       "c11"
      ],
      "run_id": "33203577178",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787944799",
+     "_run_dir": "<repo-root>/arms-runs/r07-newspaper3k-1787944799",
      "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -5035,7 +5035,7 @@
       "c6"
      ],
      "run_id": "33204543093",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787945625",
+     "_run_dir": "<repo-root>/arms-runs/r09-pydub-1787945625",
      "memo_md": "7 verified, 1 refuted, 3 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -5345,7 +5345,7 @@
       "c6"
      ],
      "run_id": "33205117828",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787946003",
+     "_run_dir": "<repo-root>/arms-runs/r11-gpt-2-1787946003",
      "memo_md": "6 verified, 2 refuted, 2 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -5387,7 +5387,7 @@
   "cases_dir": "eval/cases/public",
   "git": "b8f4af6",
   "ts": "2026-08-28T21:29:06Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
   "agg": {
    "rows": {
     "verdict_acc": 0.698,
@@ -5705,7 +5705,7 @@
      ],
      "escalations": [],
      "run_id": "33206171217",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787946992",
+     "_run_dir": "<repo-root>/arms-runs/r01-humanize-1787946992",
      "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -6033,7 +6033,7 @@
      ],
      "escalations": [],
      "run_id": "33207614025",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787948164",
+     "_run_dir": "<repo-root>/arms-runs/r02-python-tabulate-1787948164",
      "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -6337,7 +6337,7 @@
       "c2"
      ],
      "run_id": "33207924062",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787948448",
+     "_run_dir": "<repo-root>/arms-runs/r04-schedule-1787948448",
      "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -6667,7 +6667,7 @@
       "c9"
      ],
      "run_id": "33209465292",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787949693",
+     "_run_dir": "<repo-root>/arms-runs/r05-records-1787949693",
      "memo_md": "7 verified, 2 refuted, 2 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -6997,7 +6997,7 @@
       "c11"
      ],
      "run_id": "33209972786",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787950142",
+     "_run_dir": "<repo-root>/arms-runs/r07-newspaper3k-1787950142",
      "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -7325,7 +7325,7 @@
      ],
      "escalations": [],
      "run_id": "33212005473",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787951776",
+     "_run_dir": "<repo-root>/arms-runs/r09-pydub-1787951776",
      "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -7631,7 +7631,7 @@
       "c6"
      ],
      "run_id": "33212514162",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952223",
+     "_run_dir": "<repo-root>/arms-runs/r11-gpt-2-1787952223",
      "memo_md": "5 verified, 2 refuted, 3 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -7673,7 +7673,7 @@
   "cases_dir": "eval/cases/public",
   "git": "rewritten",
   "ts": "2026-08-28T21:35:39Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label ablate-no-execution",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/public --label ablate-no-execution",
   "agg": {
    "rows": {
     "verdict_acc": 0.007,
@@ -8003,7 +8003,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787952706",
+     "_run_dir": "<repo-root>/arms-runs/r01-humanize-1787952706",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "rows": {
@@ -8327,7 +8327,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787952735",
+     "_run_dir": "<repo-root>/arms-runs/r02-python-tabulate-1787952735",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "rows": {
@@ -8564,7 +8564,7 @@
       "c10"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787952772",
+     "_run_dir": "<repo-root>/arms-runs/r04-schedule-1787952772",
      "memo_md": "0 verified, 0 refuted, 10 escalated of 10 claims."
     },
     "rows": {
@@ -8888,7 +8888,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787952803",
+     "_run_dir": "<repo-root>/arms-runs/r05-records-1787952803",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "rows": {
@@ -9212,7 +9212,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787952837",
+     "_run_dir": "<repo-root>/arms-runs/r07-newspaper3k-1787952837",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "rows": {
@@ -9536,7 +9536,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787952877",
+     "_run_dir": "<repo-root>/arms-runs/r09-pydub-1787952877",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "rows": {
@@ -9833,7 +9833,7 @@
       "c10"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952909",
+     "_run_dir": "<repo-root>/arms-runs/r11-gpt-2-1787952909",
      "memo_md": "0 verified, 0 refuted, 10 escalated of 10 claims."
     },
     "rows": {
@@ -9861,7 +9861,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
   "git": "be44d3a",
   "ts": "2026-08-29T15:43:37Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.023,
@@ -10385,7 +10385,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
   "git": "be44d3a",
   "ts": "2026-08-29T16:30:26Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.023,
@@ -10875,7 +10875,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
   "git": "d968bcb",
   "ts": "2026-08-29T17:03:18Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.079,
@@ -12080,7 +12080,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T17:48:27Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label advanced-v3-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label advanced-v3-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.774,
@@ -12429,7 +12429,7 @@
      ],
      "escalations": [],
      "run_id": "33267871577",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r15-parse-1788027309",
+     "_run_dir": "<repo-root>/arms-runs/r15-parse-1788027309",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -12794,7 +12794,7 @@
      ],
      "escalations": [],
      "run_id": "33265035896",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r16-python-slugify-1788023257",
+     "_run_dir": "<repo-root>/arms-runs/r16-python-slugify-1788023257",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -13136,7 +13136,7 @@
       "c3"
      ],
      "run_id": "33268091019",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r17-pyinquirer-1788027604",
+     "_run_dir": "<repo-root>/arms-runs/r17-pyinquirer-1788027604",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -13500,7 +13500,7 @@
      ],
      "escalations": [],
      "run_id": "33265623435",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r18-docopt-1788024007",
+     "_run_dir": "<repo-root>/arms-runs/r18-docopt-1788024007",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -13877,7 +13877,7 @@
       "c10"
      ],
      "run_id": "33265940112",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r19-nanogpt-1788024570",
+     "_run_dir": "<repo-root>/arms-runs/r19-nanogpt-1788024570",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -14164,7 +14164,7 @@
      ],
      "escalations": [],
      "run_id": "33266463031",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r20-pyinotify-1788025416",
+     "_run_dir": "<repo-root>/arms-runs/r20-pyinotify-1788025416",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -14212,7 +14212,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T18:13:44Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext2",
   "agg": {
    "rows": {
     "verdict_acc": 0.087,
@@ -15766,7 +15766,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-rerun",
   "git": "cb34764",
   "ts": "2026-08-29T18:27:26Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-rerun --label advanced-v3-ext-rerun",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-rerun --label advanced-v3-ext-rerun",
   "agg": {
    "rows": {
     "verdict_acc": 0.67,
@@ -16115,7 +16115,7 @@
      ],
      "escalations": [],
      "run_id": "33267871577",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r15-parse-1788027309",
+     "_run_dir": "<repo-root>/arms-runs/r15-parse-1788027309",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -16457,7 +16457,7 @@
       "c3"
      ],
      "run_id": "33268091019",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r17-pyinquirer-1788027604",
+     "_run_dir": "<repo-root>/arms-runs/r17-pyinquirer-1788027604",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -16506,7 +16506,7 @@
   "cases_dir": "eval/cases/heldout",
   "git": "adc5e50",
   "ts": "2026-08-29T18:47:16Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/heldout --label baseline-heldout",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/heldout --label baseline-heldout",
   "agg": {
    "rows": {
     "verdict_acc": 0.16,
@@ -18089,7 +18089,7 @@
   "cases_dir": "eval/cases/heldout",
   "git": "adc5e50",
   "ts": "2026-08-29T19:10:50Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/heldout --label advanced-v3-heldout",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/heldout --label advanced-v3-heldout",
   "agg": {
    "rows": {
     "verdict_acc": 0.551,
@@ -18398,7 +18398,7 @@
       "c2"
      ],
      "run_id": "33269255643",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r03-funcy-1788029236",
+     "_run_dir": "<repo-root>/arms-runs/r03-funcy-1788029236",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -18709,7 +18709,7 @@
      ],
      "escalations": [],
      "run_id": "33269527170",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r06-thefuck-1788029504",
+     "_run_dir": "<repo-root>/arms-runs/r06-thefuck-1788029504",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -19046,7 +19046,7 @@
      ],
      "escalations": [],
      "run_id": "33269764627",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r08-maya-1788029906",
+     "_run_dir": "<repo-root>/arms-runs/r08-maya-1788029906",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -19384,7 +19384,7 @@
      ],
      "escalations": [],
      "run_id": "33270014892",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r10-requests-html-1788030211",
+     "_run_dir": "<repo-root>/arms-runs/r10-requests-html-1788030211",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -19725,7 +19725,7 @@
       "c8"
      ],
      "run_id": "33287227892+33287378101",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r12-awd-lstm-lm-1788055122",
+     "_run_dir": "<repo-root>/arms-runs/r12-awd-lstm-lm-1788055122",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -20099,7 +20099,7 @@
      ],
      "escalations": [],
      "run_id": "33287944553",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r13-keyboard-1788056383",
+     "_run_dir": "<repo-root>/arms-runs/r13-keyboard-1788056383",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -20453,7 +20453,7 @@
      ],
      "escalations": [],
      "run_id": "33288347985",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r14-simplejson-1788057066",
+     "_run_dir": "<repo-root>/arms-runs/r14-simplejson-1788057066",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -20503,7 +20503,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/heldout-rerun",
   "git": "2b25f32",
   "ts": "2026-08-30T02:39:35Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/heldout-rerun --label advanced-v3-heldout-rerun",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/heldout-rerun --label advanced-v3-heldout-rerun",
   "agg": {
    "rows": {
     "verdict_acc": 0.531,
@@ -20829,7 +20829,7 @@
       "c8"
      ],
      "run_id": "33287227892+33287378101",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r12-awd-lstm-lm-1788055122",
+     "_run_dir": "<repo-root>/arms-runs/r12-awd-lstm-lm-1788055122",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -21203,7 +21203,7 @@
      ],
      "escalations": [],
      "run_id": "33287944553",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r13-keyboard-1788056383",
+     "_run_dir": "<repo-root>/arms-runs/r13-keyboard-1788056383",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -21557,7 +21557,7 @@
      ],
      "escalations": [],
      "run_id": "33288347985",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r14-simplejson-1788057066",
+     "_run_dir": "<repo-root>/arms-runs/r14-simplejson-1788057066",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -21606,7 +21606,7 @@
   "cases_dir": "eval/cases/public",
   "git": "993589e",
   "ts": "2026-08-28T18:56:17Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n1",
   "agg": {
    "rows": {
     "verdict_acc": 0.074,
@@ -23012,7 +23012,7 @@
   "cases_dir": "eval/cases/public",
   "git": "993589e",
   "ts": "2026-08-28T19:02:18Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/public --label baseline-v2-n2",
   "agg": {
    "rows": {
     "verdict_acc": 0.074,
@@ -24410,7 +24410,7 @@
   "cases_dir": "eval/cases/public",
   "git": "fa0e62b",
   "ts": "2026-08-28T19:50:12Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v1",
   "agg": {
    "rows": {
     "verdict_acc": 0.493,
@@ -24736,7 +24736,7 @@
      ],
      "escalations": [],
      "run_id": "33202107062",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787943738",
+     "_run_dir": "<repo-root>/arms-runs/r01-humanize-1787943738",
      "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -25067,7 +25067,7 @@
       "c10"
      ],
      "run_id": "33202457520",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787943942",
+     "_run_dir": "<repo-root>/arms-runs/r02-python-tabulate-1787943942",
      "memo_md": "6 verified, 2 refuted, 3 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -25380,7 +25380,7 @@
       "c2"
      ],
      "run_id": "33202898441",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787944311",
+     "_run_dir": "<repo-root>/arms-runs/r04-schedule-1787944311",
      "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -25722,7 +25722,7 @@
       "c11"
      ],
      "run_id": "33203577178",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787944799",
+     "_run_dir": "<repo-root>/arms-runs/r07-newspaper3k-1787944799",
      "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -26053,7 +26053,7 @@
       "c6"
      ],
      "run_id": "33204543093",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787945625",
+     "_run_dir": "<repo-root>/arms-runs/r09-pydub-1787945625",
      "memo_md": "7 verified, 1 refuted, 3 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -26362,7 +26362,7 @@
       "c6"
      ],
      "run_id": "33205117828",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787946003",
+     "_run_dir": "<repo-root>/arms-runs/r11-gpt-2-1787946003",
      "memo_md": "6 verified, 2 refuted, 2 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -26396,7 +26396,7 @@
   "cases_dir": "eval/cases/public",
   "git": "b8f4af6",
   "ts": "2026-08-28T21:29:06Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/public --label advanced-v2",
   "agg": {
    "rows": {
     "verdict_acc": 0.75,
@@ -26722,7 +26722,7 @@
      ],
      "escalations": [],
      "run_id": "33206171217",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787946992",
+     "_run_dir": "<repo-root>/arms-runs/r01-humanize-1787946992",
      "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -27049,7 +27049,7 @@
      ],
      "escalations": [],
      "run_id": "33207614025",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787948164",
+     "_run_dir": "<repo-root>/arms-runs/r02-python-tabulate-1787948164",
      "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -27352,7 +27352,7 @@
       "c2"
      ],
      "run_id": "33207924062",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787948448",
+     "_run_dir": "<repo-root>/arms-runs/r04-schedule-1787948448",
      "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -27681,7 +27681,7 @@
       "c9"
      ],
      "run_id": "33209465292",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787949693",
+     "_run_dir": "<repo-root>/arms-runs/r05-records-1787949693",
      "memo_md": "7 verified, 2 refuted, 2 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -28010,7 +28010,7 @@
       "c11"
      ],
      "run_id": "33209972786",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787950142",
+     "_run_dir": "<repo-root>/arms-runs/r07-newspaper3k-1787950142",
      "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -28337,7 +28337,7 @@
      ],
      "escalations": [],
      "run_id": "33212005473",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787951776",
+     "_run_dir": "<repo-root>/arms-runs/r09-pydub-1787951776",
      "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -28642,7 +28642,7 @@
       "c6"
      ],
      "run_id": "33212514162",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952223",
+     "_run_dir": "<repo-root>/arms-runs/r11-gpt-2-1787952223",
      "memo_md": "5 verified, 2 refuted, 3 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -28676,7 +28676,7 @@
   "cases_dir": "eval/cases/public",
   "git": "rewritten",
   "ts": "2026-08-28T21:35:39Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/public --label ablate-no-execution",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/public --label ablate-no-execution",
   "agg": {
    "rows": {
     "verdict_acc": 0.007,
@@ -29014,7 +29014,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787952706",
+     "_run_dir": "<repo-root>/arms-runs/r01-humanize-1787952706",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "status": "ok",
@@ -29337,7 +29337,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787952735",
+     "_run_dir": "<repo-root>/arms-runs/r02-python-tabulate-1787952735",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "status": "ok",
@@ -29573,7 +29573,7 @@
       "c10"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787952772",
+     "_run_dir": "<repo-root>/arms-runs/r04-schedule-1787952772",
      "memo_md": "0 verified, 0 refuted, 10 escalated of 10 claims."
     },
     "status": "ok",
@@ -29896,7 +29896,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787952803",
+     "_run_dir": "<repo-root>/arms-runs/r05-records-1787952803",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "status": "ok",
@@ -30219,7 +30219,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787952837",
+     "_run_dir": "<repo-root>/arms-runs/r07-newspaper3k-1787952837",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "status": "ok",
@@ -30542,7 +30542,7 @@
       "c11"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787952877",
+     "_run_dir": "<repo-root>/arms-runs/r09-pydub-1787952877",
      "memo_md": "0 verified, 0 refuted, 11 escalated of 11 claims."
     },
     "status": "ok",
@@ -30838,7 +30838,7 @@
       "c10"
      ],
      "run_id": "none",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952909",
+     "_run_dir": "<repo-root>/arms-runs/r11-gpt-2-1787952909",
      "memo_md": "0 verified, 0 refuted, 10 escalated of 10 claims."
     },
     "status": "ok",
@@ -30858,7 +30858,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T18:13:44Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext2",
   "agg": {
    "rows": {
     "verdict_acc": 0.094,
@@ -32383,7 +32383,7 @@
   "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T17:48:27Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label advanced-v3-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label advanced-v3-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.802,
@@ -32736,7 +32736,7 @@
      ],
      "escalations": [],
      "run_id": "33267871577",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r15-parse-1788027309",
+     "_run_dir": "<repo-root>/arms-runs/r15-parse-1788027309",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -33096,7 +33096,7 @@
      ],
      "escalations": [],
      "run_id": "33265035896",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r16-python-slugify-1788023257",
+     "_run_dir": "<repo-root>/arms-runs/r16-python-slugify-1788023257",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -33433,7 +33433,7 @@
       "c3"
      ],
      "run_id": "33268091019",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r17-pyinquirer-1788027604",
+     "_run_dir": "<repo-root>/arms-runs/r17-pyinquirer-1788027604",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -33792,7 +33792,7 @@
      ],
      "escalations": [],
      "run_id": "33265623435",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r18-docopt-1788024007",
+     "_run_dir": "<repo-root>/arms-runs/r18-docopt-1788024007",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -34164,7 +34164,7 @@
       "c10"
      ],
      "run_id": "33265940112",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r19-nanogpt-1788024570",
+     "_run_dir": "<repo-root>/arms-runs/r19-nanogpt-1788024570",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -34446,7 +34446,7 @@
      ],
      "escalations": [],
      "run_id": "33266463031",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r20-pyinotify-1788025416",
+     "_run_dir": "<repo-root>/arms-runs/r20-pyinotify-1788025416",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -34486,7 +34486,7 @@
   "cases_dir": "eval/cases/heldout",
   "git": "adc5e50",
   "ts": "2026-08-29T18:47:16Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/heldout --label baseline-heldout",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/heldout --label baseline-heldout",
   "agg": {
    "rows": {
     "verdict_acc": 0.087,
@@ -36035,7 +36035,7 @@
   "cases_dir": "eval/cases/heldout",
   "git": "adc5e50",
   "ts": "2026-08-29T19:10:50Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/heldout --label advanced-v3-heldout",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/heldout --label advanced-v3-heldout",
   "agg": {
    "rows": {
     "verdict_acc": 0.774,
@@ -36348,7 +36348,7 @@
       "c2"
      ],
      "run_id": "33269255643",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r03-funcy-1788029236",
+     "_run_dir": "<repo-root>/arms-runs/r03-funcy-1788029236",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -36654,7 +36654,7 @@
      ],
      "escalations": [],
      "run_id": "33269527170",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r06-thefuck-1788029504",
+     "_run_dir": "<repo-root>/arms-runs/r06-thefuck-1788029504",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -36986,7 +36986,7 @@
      ],
      "escalations": [],
      "run_id": "33269764627",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r08-maya-1788029906",
+     "_run_dir": "<repo-root>/arms-runs/r08-maya-1788029906",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -37319,7 +37319,7 @@
      ],
      "escalations": [],
      "run_id": "33270014892",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r10-requests-html-1788030211",
+     "_run_dir": "<repo-root>/arms-runs/r10-requests-html-1788030211",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -37655,7 +37655,7 @@
       "c8"
      ],
      "run_id": "33287227892+33287378101",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r12-awd-lstm-lm-1788055122",
+     "_run_dir": "<repo-root>/arms-runs/r12-awd-lstm-lm-1788055122",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -38024,7 +38024,7 @@
      ],
      "escalations": [],
      "run_id": "33287944553",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r13-keyboard-1788056383",
+     "_run_dir": "<repo-root>/arms-runs/r13-keyboard-1788056383",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -38373,7 +38373,7 @@
      ],
      "escalations": [],
      "run_id": "33288347985",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r14-simplejson-1788057066",
+     "_run_dir": "<repo-root>/arms-runs/r14-simplejson-1788057066",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -38742,7 +38742,7 @@
      ],
      "escalations": [],
      "run_id": "33206171217",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r01-humanize-1787946992",
+     "_run_dir": "<repo-root>/arms-runs/r01-humanize-1787946992",
      "memo_md": "10 verified, 1 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -39069,7 +39069,7 @@
      ],
      "escalations": [],
      "run_id": "33207614025",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r02-python-tabulate-1787948164",
+     "_run_dir": "<repo-root>/arms-runs/r02-python-tabulate-1787948164",
      "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -39372,7 +39372,7 @@
       "c2"
      ],
      "run_id": "33207924062",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r04-schedule-1787948448",
+     "_run_dir": "<repo-root>/arms-runs/r04-schedule-1787948448",
      "memo_md": "7 verified, 2 refuted, 1 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -39701,7 +39701,7 @@
       "c9"
      ],
      "run_id": "33209465292",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r05-records-1787949693",
+     "_run_dir": "<repo-root>/arms-runs/r05-records-1787949693",
      "memo_md": "7 verified, 2 refuted, 2 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -40030,7 +40030,7 @@
       "c11"
      ],
      "run_id": "33209972786",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r07-newspaper3k-1787950142",
+     "_run_dir": "<repo-root>/arms-runs/r07-newspaper3k-1787950142",
      "memo_md": "4 verified, 6 refuted, 1 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -40357,7 +40357,7 @@
      ],
      "escalations": [],
      "run_id": "33212005473",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r09-pydub-1787951776",
+     "_run_dir": "<repo-root>/arms-runs/r09-pydub-1787951776",
      "memo_md": "9 verified, 2 refuted, 0 escalated of 11 claims.",
      "_evidence_index": {
       "probes": [
@@ -40662,7 +40662,7 @@
       "c6"
      ],
      "run_id": "33212514162",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r11-gpt-2-1787952223",
+     "_run_dir": "<repo-root>/arms-runs/r11-gpt-2-1787952223",
      "memo_md": "5 verified, 2 refuted, 3 escalated of 10 claims.",
      "_evidence_index": {
       "probes": [
@@ -40695,7 +40695,7 @@
   "cases_dir": "eval/cases/heldout",
   "git": "adc5e50",
   "ts": "2026-08-29T18:47:16Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm baseline --cases eval/cases/heldout --label baseline-heldout",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases eval/cases/heldout --label baseline-heldout",
   "agg": {
    "rows": {
     "verdict_acc": 0.16,
@@ -42245,7 +42245,7 @@
   "cases_dir": "eval/cases/heldout",
   "git": "adc5e50",
   "ts": "2026-08-29T19:10:50Z",
-  "cmd": "/home/nate/micro1-fec-2026/eval/runner.py --arm advanced --cases eval/cases/heldout --label advanced-v3-heldout",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases eval/cases/heldout --label advanced-v3-heldout",
   "agg": {
    "rows": {
     "verdict_acc": 0.551,
@@ -42558,7 +42558,7 @@
       "c2"
      ],
      "run_id": "33269255643",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r03-funcy-1788029236",
+     "_run_dir": "<repo-root>/arms-runs/r03-funcy-1788029236",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -42864,7 +42864,7 @@
      ],
      "escalations": [],
      "run_id": "33269527170",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r06-thefuck-1788029504",
+     "_run_dir": "<repo-root>/arms-runs/r06-thefuck-1788029504",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -43196,7 +43196,7 @@
      ],
      "escalations": [],
      "run_id": "33269764627",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r08-maya-1788029906",
+     "_run_dir": "<repo-root>/arms-runs/r08-maya-1788029906",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -43529,7 +43529,7 @@
      ],
      "escalations": [],
      "run_id": "33270014892",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r10-requests-html-1788030211",
+     "_run_dir": "<repo-root>/arms-runs/r10-requests-html-1788030211",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -43865,7 +43865,7 @@
       "c8"
      ],
      "run_id": "33287227892+33287378101",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r12-awd-lstm-lm-1788055122",
+     "_run_dir": "<repo-root>/arms-runs/r12-awd-lstm-lm-1788055122",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -44234,7 +44234,7 @@
      ],
      "escalations": [],
      "run_id": "33287944553",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r13-keyboard-1788056383",
+     "_run_dir": "<repo-root>/arms-runs/r13-keyboard-1788056383",
      "_evidence_index": {
       "probes": [
        "p-c1",
@@ -44583,7 +44583,7 @@
      ],
      "escalations": [],
      "run_id": "33288347985",
-     "_run_dir": "/home/nate/micro1-fec-2026/arms-runs/r14-simplejson-1788057066",
+     "_run_dir": "<repo-root>/arms-runs/r14-simplejson-1788057066",
      "_evidence_index": {
       "probes": [
        "p-c1",

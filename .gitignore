@@ -6,3 +6,4 @@ traces/*.md
 !traces/pipeline/*.md
 !traces/README.md
 !traces/authoring-*.md
+arms-runs/
