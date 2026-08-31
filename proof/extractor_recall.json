@@ -1,0 +1,85 @@
+{
+ "per_repo": [
+  {
+   "id": "r01-humanize",
+   "matched": 9,
+   "total": 11,
+   "extracted": 12
+  },
+  {
+   "id": "r02-python-tabulate",
+   "matched": 7,
+   "total": 11,
+   "extracted": 12
+  },
+  {
+   "id": "r04-schedule",
+   "matched": 8,
+   "total": 10,
+   "extracted": 12
+  },
+  {
+   "id": "r05-records",
+   "matched": 7,
+   "total": 11,
+   "extracted": 12
+  },
+  {
+   "id": "r07-newspaper3k",
+   "matched": 7,
+   "total": 11,
+   "extracted": 12
+  },
+  {
+   "id": "r09-pydub",
+   "matched": 10,
+   "total": 11,
+   "extracted": 12
+  },
+  {
+   "id": "r11-gpt-2",
+   "matched": 6,
+   "total": 10,
+   "extracted": 12
+  },
+  {
+   "id": "r15-parse",
+   "matched": 10,
+   "total": 12,
+   "extracted": 12
+  },
+  {
+   "id": "r16-python-slugify",
+   "matched": 7,
+   "total": 12,
+   "extracted": 12
+  },
+  {
+   "id": "r17-pyinquirer",
+   "matched": 9,
+   "total": 11,
+   "extracted": 12
+  },
+  {
+   "id": "r18-docopt",
+   "matched": 12,
+   "total": 12,
+   "extracted": 12
+  },
+  {
+   "id": "r19-nanogpt",
+   "matched": 7,
+   "total": 12,
+   "extracted": 12
+  },
+  {
+   "id": "r20-pyinotify",
+   "matched": 7,
+   "total": 9,
+   "extracted": 11
+  }
+ ],
+ "recall": 0.741,
+ "matched": 106,
+ "hand_total": 143
+}
