@@ -1,0 +1,145 @@
+{
+ "case_id": "flask",
+ "repo": "https://github.com/pallets/flask",
+ "commit": "d318b683471101618febed18996405ad26462110",
+ "probes": [
+  {
+   "id": "p-c1",
+   "claim_id": "c1",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "pip install --no-cache-dir -q Flask"
+   ],
+   "commands": [
+    "( python3 -c 'import flask, importlib.metadata as m; print(\"flask version:\", m.version(\"Flask\"), \"file:\", flask.__file__)' ) && echo \"VERDICT_LINE: PASS pip install Flask from PyPI succeeded and import flask works\" || echo \"VERDICT_LINE: FAIL import flask failed after pip install Flask\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c2",
+   "claim_id": "c2",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"https://github.com/pallets/flask/archive/d318b683471101618febed18996405ad26462110.tar.gz\", \"/tmp/src.tgz\")'",
+    "mkdir -p /tmp/src && tar -xzf /tmp/src.tgz -C /tmp/src --strip-components=1",
+    "cd /tmp/src && pip install --no-cache-dir -q -e ."
+   ],
+   "commands": [
+    "( cd / && python3 -c 'import flask, importlib.metadata as m; print(\"version:\", m.version(\"Flask\"), \"file:\", flask.__file__); assert \"/tmp/src/src/flask\" in flask.__file__, \"not the editable checkout\"' ) && echo \"VERDICT_LINE: PASS pip install -e . from pinned checkout succeeded, editable import resolves to /tmp/src\" || echo \"VERDICT_LINE: FAIL editable install of pinned checkout did not import from source tree\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c3",
+   "claim_id": "c3",
+   "image": "python:3.10-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"https://github.com/pallets/flask/archive/d318b683471101618febed18996405ad26462110.tar.gz\", \"/tmp/src.tgz\")'",
+    "mkdir -p /tmp/src && tar -xzf /tmp/src.tgz -C /tmp/src --strip-components=1",
+    "cd /tmp/src && pip install --no-cache-dir -q ."
+   ],
+   "commands": [
+    "( cd / && python3 -c 'import sys, flask, importlib.metadata as m; rp=m.metadata(\"Flask\")[\"Requires-Python\"]; print(\"python:\", sys.version.split()[0], \"Requires-Python:\", rp); assert sys.version_info[:2]==(3,10); assert rp==\">=3.10\", rp' ) && echo \"VERDICT_LINE: PASS installs and imports on Python 3.10; metadata Requires-Python is >=3.10\" || echo \"VERDICT_LINE: FAIL install/import on Python 3.10 or Requires-Python metadata mismatch\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c4",
+   "claim_id": "c4",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir -q Flask",
+    "mkdir -p /tmp/w && printf '%s\\n' '# save this as app.py' 'from flask import Flask' '' 'app = Flask(__name__)' '' '@app.route(\"/\")' 'def hello():' '    return \"Hello, World!\"' > /tmp/w/app.py"
+   ],
+   "commands": [
+    "( cd /tmp/w && python3 -c 'from app import app; r=app.test_client().get(\"/\"); b=r.get_data(as_text=True); print(\"status:\", r.status_code, \"body:\", repr(b)); assert r.status_code==200; assert b==\"Hello, World!\"' ) && echo \"VERDICT_LINE: PASS README app.py imports and GET / returns 200 'Hello, World!'\" || echo \"VERDICT_LINE: FAIL README app.py did not import or GET / body was not 'Hello, World!'\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c5",
+   "claim_id": "c5",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir -q Flask"
+   ],
+   "commands": [
+    "( which flask && flask --help > /tmp/help.txt 2>&1 && head -n 3 /tmp/help.txt && python3 -c 'h=open(\"/tmp/help.txt\").read(); print(\"has run subcommand:\", \"run\" in h); assert \"Usage: flask\" in h and \"run\" in h' ) && echo \"VERDICT_LINE: PASS flask entry point exists on PATH and flask --help lists run\" || echo \"VERDICT_LINE: FAIL flask command missing or flask --help failed\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c6",
+   "claim_id": "c6",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir -q Flask"
+   ],
+   "commands": [
+    "( python3 -c 'import werkzeug, jinja2, importlib.metadata as m; print(\"werkzeug:\", m.version(\"werkzeug\"), \"jinja2:\", m.version(\"jinja2\")); reqs=[r.split(\">\")[0].split(\"<\")[0].split(\"=\")[0].strip().lower() for r in m.requires(\"Flask\")]; print(\"flask requires:\", reqs); assert \"werkzeug\" in reqs and \"jinja2\" in reqs' ) && echo \"VERDICT_LINE: PASS werkzeug and jinja2 import after Flask install and are declared Flask dependencies\" || echo \"VERDICT_LINE: FAIL werkzeug/jinja2 not importable or not declared as Flask dependencies\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c7",
+   "claim_id": "c7",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"https://github.com/pallets/flask/archive/d318b683471101618febed18996405ad26462110.tar.gz\", \"/tmp/src.tgz\")'",
+    "mkdir -p /tmp/src && tar -xzf /tmp/src.tgz -C /tmp/src --strip-components=1",
+    "cd /tmp/src && pip install --no-cache-dir -q ."
+   ],
+   "commands": [
+    "( cd / && python3 -c 'import importlib.metadata as m; from packaging.requirements import Requirement; from packaging.version import Version; reqs=[Requirement(r) for r in m.requires(\"Flask\") if \"extra\" not in r]; names={r.name.lower(): r for r in reqs}; print(\"declared:\", sorted(str(r) for r in reqs)); want={\"blinker\":\">=1.9.0\",\"click\":\">=8.1.3\",\"itsdangerous\":\">=2.2.0\",\"jinja2\":None,\"werkzeug\":None}; [print(n, \"installed:\", m.version(n)) for n in want]; assert set(want)<=set(names), set(want)-set(names); [ (lambda n,s: None if s is None else (str(names[n].specifier)==s or (_ for _ in ()).throw(AssertionError((n, str(names[n].specifier), s)))))(n,s) for n,s in want.items()]; [ (Version(m.version(n)) in names[n].specifier) or (_ for _ in ()).throw(AssertionError(n)) for n in want]' ) && echo \"VERDICT_LINE: PASS blinker>=1.9.0 click>=8.1.3 itsdangerous>=2.2.0 jinja2 werkzeug declared and all installed satisfying specifiers\" || echo \"VERDICT_LINE: FAIL declared dependency set or installed versions differ from claim\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c8",
+   "claim_id": "c8",
+   "image": "python:3.11-slim",
+   "network": "on",
+   "setup": [
+    "python3 -c 'import urllib.request; urllib.request.urlretrieve(\"https://github.com/pallets/flask/archive/d318b683471101618febed18996405ad26462110.tar.gz\", \"/tmp/src.tgz\")'",
+    "mkdir -p /tmp/src && tar -xzf /tmp/src.tgz -C /tmp/src --strip-components=1",
+    "cd /tmp/src && pip install --no-cache-dir -q -e . && pip install --no-cache-dir -q pytest asgiref python-dotenv"
+   ],
+   "commands": [
+    "( cd /tmp/src && test -f .github/workflows/tests.yaml && echo \"workflow present: .github/workflows/tests.yaml\" && test -d tests && ls tests | head -n 5 && pytest -q -p no:cacheprovider tests/ 2>&1 | tail -n 5 > /tmp/pt.txt; cat /tmp/pt.txt; python3 -c 'import re; t=open(\"/tmp/pt.txt\").read(); mm=re.search(r\"(\\d+) passed\", t); print(\"passed:\", mm.group(1) if mm else None); assert mm and \"failed\" not in t and \"error\" not in t.lower()' ) && echo \"VERDICT_LINE: PASS tests.yaml workflow present and pytest suite passes at pinned commit with the pyproject tests group deps\" || echo \"VERDICT_LINE: FAIL workflow missing or pytest suite did not fully pass\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c9",
+   "claim_id": "c9",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [],
+   "commands": [
+    "echo \"observed: claim 'one of the most popular Python web application frameworks' has no threshold, metric, or comparison set\" && echo \"VERDICT_LINE: FAIL unquantified popularity claim is not settleable by execution; escalate to human reviewer\""
+   ],
+   "timeout_s": 120
+  },
+  {
+   "id": "p-c10",
+   "claim_id": "c10",
+   "image": "python:3.11-slim",
+   "network": "none",
+   "setup": [
+    "pip install --no-cache-dir -q Flask",
+    "mkdir -p /tmp/w && printf '%s\\n' '# save this as app.py' 'from flask import Flask' '' 'app = Flask(__name__)' '' '@app.route(\"/\")' 'def hello():' '    return \"Hello, World!\"' > /tmp/w/app.py"
+   ],
+   "commands": [
+    "( cd /tmp/w && (flask run > /tmp/w/server.log 2>&1 &) && sleep 5 && cat /tmp/w/server.log && python3 -c 'import urllib.request; b=urllib.request.urlopen(\"http://127.0.0.1:5000/\", timeout=5).read().decode(); print(\"body:\", repr(b)); assert b==\"Hello, World!\"; log=open(\"/tmp/w/server.log\").read(); assert \"Running on http://127.0.0.1:5000\" in log, \"missing Running on line\"' ) && echo \"VERDICT_LINE: PASS flask run served Hello, World! and logged Running on http://127.0.0.1:5000\" || echo \"VERDICT_LINE: FAIL flask run did not start, did not log Running on 127.0.0.1:5000, or did not respond\""
+   ],
+   "timeout_s": 120
+  }
+ ]
+}
