@@ -1,8 +1,8 @@
 # Submission notes
 
-**Status:** ready. Commit `0605ad3`, tree `ae28bd7e0e04`. Reproduction verified from a clean clone; CI green. Archive attached to the release below. The only thing outstanding is the video link. (what to paste into the HackerEarth form)
+**Status:** ready. Commit `0605ad3`, tree `ae28bd7e0e04`. Reproduction verified from a clean clone; CI green; archive attached to the release below. Only the video link is outstanding.
 
-**Status: FINAL for the Sunday submission.** Revisions before Monday 18:00 UTC will appear as later commits; the Releases page names the exact submitted commit.
+Revisions before Monday 18:00 UTC appear as later commits; the Releases page names the exact submitted commit.
 
 **Project:** repo-testify: make the repository testify
 **Repository (public):** https://github.com/Nathanjr123/repo-testify
