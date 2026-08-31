@@ -9858,10 +9858,10 @@
   "arm": "baseline",
   "label": "baseline-ext",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "cases_dir": "<scratch>/ext-cases",
   "git": "be44d3a",
   "ts": "2026-08-29T15:43:37Z",
-  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases <scratch>/ext-cases --label baseline-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.023,
@@ -10382,10 +10382,10 @@
   "arm": "baseline",
   "label": "baseline-ext",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "cases_dir": "<scratch>/ext-cases",
   "git": "be44d3a",
   "ts": "2026-08-29T16:30:26Z",
-  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases <scratch>/ext-cases --label baseline-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.023,
@@ -10872,10 +10872,10 @@
   "arm": "baseline",
   "label": "baseline-ext",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "cases_dir": "<scratch>/ext-cases",
   "git": "d968bcb",
   "ts": "2026-08-29T17:03:18Z",
-  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases <scratch>/ext-cases --label baseline-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.079,
@@ -12077,10 +12077,10 @@
   "arm": "advanced",
   "label": "advanced-v3-ext",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "cases_dir": "<scratch>/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T17:48:27Z",
-  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label advanced-v3-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases <scratch>/ext-cases --label advanced-v3-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.774,
@@ -14209,10 +14209,10 @@
   "arm": "baseline",
   "label": "baseline-ext2",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "cases_dir": "<scratch>/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T18:13:44Z",
-  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases <scratch>/ext-cases --label baseline-ext2",
   "agg": {
    "rows": {
     "verdict_acc": 0.087,
@@ -15763,10 +15763,10 @@
   "arm": "advanced",
   "label": "advanced-v3-ext-rerun",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-rerun",
+  "cases_dir": "<scratch>/ext-rerun",
   "git": "cb34764",
   "ts": "2026-08-29T18:27:26Z",
-  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-rerun --label advanced-v3-ext-rerun",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases <scratch>/ext-rerun --label advanced-v3-ext-rerun",
   "agg": {
    "rows": {
     "verdict_acc": 0.67,
@@ -20500,10 +20500,10 @@
   "arm": "advanced",
   "label": "advanced-v3-heldout-rerun",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/heldout-rerun",
+  "cases_dir": "<scratch>/heldout-rerun",
   "git": "2b25f32",
   "ts": "2026-08-30T02:39:35Z",
-  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/heldout-rerun --label advanced-v3-heldout-rerun",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases <scratch>/heldout-rerun --label advanced-v3-heldout-rerun",
   "agg": {
    "rows": {
     "verdict_acc": 0.531,
@@ -30855,10 +30855,10 @@
   "arm": "baseline",
   "label": "baseline-ext2-rescored",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "cases_dir": "<scratch>/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T18:13:44Z",
-  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label baseline-ext2",
+  "cmd": "<repo-root>/eval/runner.py --arm baseline --cases <scratch>/ext-cases --label baseline-ext2",
   "agg": {
    "rows": {
     "verdict_acc": 0.094,
@@ -32380,10 +32380,10 @@
   "arm": "advanced",
   "label": "advanced-v3-ext-rescored",
   "disable": null,
-  "cases_dir": "/tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases",
+  "cases_dir": "<scratch>/ext-cases",
   "git": "cb34764",
   "ts": "2026-08-29T17:48:27Z",
-  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases /tmp/claude-1000/-home-nate-lbx-rl-tasks-template/ddf39f00-2ebe-4b74-9147-5303458caa78/scratchpad/ext-cases --label advanced-v3-ext",
+  "cmd": "<repo-root>/eval/runner.py --arm advanced --cases <scratch>/ext-cases --label advanced-v3-ext",
   "agg": {
    "rows": {
     "verdict_acc": 0.802,
