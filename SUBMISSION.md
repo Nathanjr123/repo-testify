@@ -1,10 +1,12 @@
-# Submission notes (what to paste into the HackerEarth form)
+# Submission notes
+
+**Status:** ready. Commit `0605ad3`, tree `ae28bd7e0e04`. Reproduction verified from a clean clone; CI green. Archive attached to the release below. The only thing outstanding is the video link. (what to paste into the HackerEarth form)
 
 **Status: FINAL for the Sunday submission.** Revisions before Monday 18:00 UTC will appear as later commits; the Releases page names the exact submitted commit.
 
 **Project:** repo-testify: make the repository testify
 **Repository (public):** https://github.com/Nathanjr123/repo-testify
-**Video:** _link goes here after recording (VIDEO-SCRIPT.md, under 5 minutes)_
+**Video:** _paste the recording link here before you submit (script in VIDEO-SCRIPT.md, under 5 minutes)_
 
 **One paragraph.** An engineer doing due diligence on a repository they did not write has to check a README's promises by hand, and two reviewers reading the same signals reach different conclusions. repo-testify takes the README's own claims (install command, quickstart snippet, supported Python versions, features, benchmarks), executes each one in a clean container on GitHub Actions, and returns a verdict per claim with the recorded evidence attached; anything the sandbox cannot settle is escalated to a human instead of guessed. Against a fair baseline (one model call over the README and file tree, same claims, same schema) per-claim accuracy went from 0.15 to 0.87 across 13 public repositories (143 claims, 95% intervals 0.10 to 0.22 versus 0.81 to 0.92), with every number regenerated from a proof file by `./repro.sh` and checked by CI inside the shipped Docker image on every push. A held-out split of 7 repositories was run once and is reported on both its untouched draft truth and its evidence-corrected truth. Along the way the tool refuted stale examples in "honest" repositories (humanize, tabulate, docopt) and one of our own README claims, which we kept in the write-up.
 
