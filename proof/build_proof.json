@@ -28666,7 +28666,28 @@
   },
   "limit_blocked": false,
   "partial": false,
-  "rescored_from": "advanced-v2-1787952546"
+  "rescored_from": "advanced-v2-1787952546",
+  "human_min_per_repo": 5.0,
+  "human_audit": {
+   "repos": {
+    "r01-humanize": {
+     "min": 3.5,
+     "acc": 0.9090909090909091,
+     "correct": 10,
+     "n": 11
+    },
+    "r05-records": {
+     "min": 6.6,
+     "acc": 0.7272727272727273,
+     "correct": 8,
+     "n": 11
+    }
+   },
+   "mean_min": 5.0,
+   "human_acc": 0.818,
+   "tool_acc_same2": 0.909,
+   "note": "active verdict time with per-claim commands pre-provided; a floor, not full from-scratch audit time"
+  }
  },
  {
   "id": "ablate-no-execution-rescored-1788058984",

@@ -18,7 +18,7 @@ The format the challenge asks for, public split:
 | Same metric, worst-case weighted per repository (0.55 mean, 0.30 worst 30%, 0.15 worst) | 0.07 | 0.75 | +0.68 |
 | Same, public + extension (13 repositories, 143 claims) | 0.15 (22/143; 0.10 to 0.22) | 0.87 (125/143; 0.81 to 0.92) | +0.72 |
 | Composite score (published rubric) | 0.284 | 0.836 | +0.552 |
-| Human time per task | pending audit (manual audit datum) | 13.2 min unattended wall time | see held-out rows |
+| Human time per task | 5.0 min active attention, 0.82 verdict accuracy (2 repos, commands pre-provided — a floor) | 13.2 min unattended wall time, 0.91 accuracy on the same 2 | tool removes the human, keeps accuracy |
 | Cost per task | 1 model call, 0.9 min, $0.62 of subscription usage (measured on the extension set) | 4 model calls, 13.2 min, $3.47 of subscription usage (measured on the extension set) | +3 calls |
 
 Full table:
@@ -28,7 +28,7 @@ Full table:
 | baseline (run 1) | 0.074 | 0.771 | 0.111 | 0.811 | 0.16 | **0.284** | 1* | 0.9 min | pending audit | 7/7 |
 | baseline (run 2) | 0.074 | 0.783 | 0.070 | 0.745 | 0.15 | **0.271** | 1* | 0.9 min | pending audit | 7/7 |
 | pipeline v1 | 0.493 | 0.580 | 0.580 | 0.506 | 0.72 | **0.454** | 4* | 6.8 min | pending audit | 6/7 |
-| pipeline v2 (public, tuned) | 0.750 | 0.910 | 1.000 | 0.777 | 0.90 | **0.836** | 4* | 13.2 min | pending audit | 7/7 |
+| pipeline v2 (public, tuned) | 0.750 | 0.910 | 1.000 | 0.777 | 0.90 | **0.836** | 4* | 13.2 min | 5.0 | 7/7 |
 | ablation: k=1 votes | 0.729 | 0.876 | 1.000 | 0.777 | 0.92 | **0.820** | 4* | 13.2 min | pending audit | 7/7 |
 | ablation: no execution | 0.007 | 1.000 | 0.000 | 0.712 | 0.00 | **0.044** | 3* | 0.6 min | pending audit | 7/7 |
 | ablation: no evidence cross-check | 0.750 | 0.750 | 1.000 | 0.777 | 0.90 | **0.804** | 4* | 13.2 min | pending audit | 0/7 |
@@ -51,6 +51,17 @@ The reading baseline is easy to beat, so a fair execution baseline isolates the 
 | Full pipeline | 0.848 | one probe per claim, VERDICT_LINE contract, three-vote adjudication, escalation |
 
 Execution alone lifts accuracy by **+0.36** (reading → single-shot); the pipeline's structure lifts it another **+0.39** on top (single-shot → full). Both halves carry roughly equal weight, so the answer to "isn't this just executing the README?" is no: raw execution gets about half way, and the per-claim contract, adjudication and escalation get the rest. Regenerated from the proof; the single-shot arm ran on three repositories, so it is kept out of the seven-repository table above to avoid comparing different repo sets.
+
+### Human baseline: what does a person cost per repository?
+
+The author audited two public repositories by hand, end to end, timed — the same fixed claim lists the tool was scored on:
+
+| repository | active human time | human verdict accuracy |
+|---|---|---|
+| r01-humanize | 3.5 min | 10/11 = 0.91 |
+| r05-records | 6.6 min | 8/11 = 0.73 |
+
+Mean **5.0 active minutes per repository at 0.82 verdict accuracy**. Two caveats point opposite ways and both matter. This is a *floor*: the auditor was handed the exact command for each claim, so it times reading-the-output-and-deciding, not the read-the-README-and-write-the-probe work a from-scratch review also pays. And it is *active, hands-on-keyboard* attention, whereas the pipeline's wall time is unattended. So the honest comparison is not "13 vs 5 minutes": it is five minutes of a person's attention for **every** repository versus fire-and-forget machine time — and on these same two repositories the pipeline still matched or beat the human (0.91 vs 0.82 accuracy). The value is not that the tool is faster in wall time; it is that it takes the human out of the loop without losing accuracy, which is what makes auditing a hundred repositories tractable.
 
 
 \* nominal call count per repository (plan, at most one repair, three votes; baseline 1). Exact counts are persisted for runs from v3 onward.
@@ -120,7 +131,7 @@ How ground truth was made, since it decides every number here: each claim's verd
 
 The primary metric is per-claim verdict accuracy against audited ground truth, reported as a raw count with a 95% Wilson interval. The full table weights the same metric toward the worst repositories (0.55 mean, 0.30 mean of the worst 30%, 0.15 single worst) so that one bad repository cannot hide behind six good ones; both views are shown. It was pre-registered as macro-F1 and changed to accuracy in iteration 3, because per-case macro-F1 is degenerate on repositories where every claim has the same verdict. The change is disclosed in CHANGELOG.md. Secondary rows: not confidently wrong (abstaining is the honest exit), evidence validity (every cited artifact must exist), and agreement with the reviewer's rubric score.
 
-Cost per task is model calls per repository (baseline 1; pipeline 4 to 5: plan, at most one repair, three votes) plus wall time. CI compute is free on public runners. Human time per task is measured during the human audit, on two repositories timed end to end, and is reported once the audit closes. The held-out split (7 repositories, including two hard cases built for this) was run once and its rows are in the table; its truth files are marked provisional because the author's blind audit of them is still open, and re-scoring after that audit is free (persisted outputs).
+Cost per task is model calls per repository (baseline 1; pipeline 4 to 5: plan, at most one repair, three votes) plus wall time. CI compute is free on public runners. Human time per task was measured on two repositories audited by hand, end to end and timed (see the human-baseline table below): a mean of 5.0 active minutes per repository at 0.82 verdict accuracy, which the pipeline matched or beat unattended. The held-out split (7 repositories, including two hard cases built for this) was run once and its rows are in the table; its truth files are marked provisional because the author's blind audit of them is still open, and re-scoring after that audit is free (persisted outputs).
 
 ### The extension set
 Six more public repositories (r15 to r20) were added on Saturday, chosen the same way (bucket-balanced: honest, overclaiming, abandoned, badge mirage, research code) and run with the v3 code. Their rows appear in the full table as "extension", and the challenge-format table carries a combined interval over all 13 public repositories. The extension exposed a planner defect (here-documents inside command chains, so probes never ran) that the public split had only hinted at; the fix and the re-run are in CHANGELOG iteration 14.
