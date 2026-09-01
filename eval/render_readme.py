@@ -21,7 +21,7 @@ rows = [row("baseline-v2-n1-rescored", "baseline (run 1)"), row("baseline-v2-n2-
         row("ablate-k1", "ablation: k=1 votes"), row("ablate-no-execution-rescored", "ablation: no execution"),
         row("ablate-crosscheck", "ablation: no evidence cross-check"),
         row("baseline-ext2-rescored", "baseline (extension, 6 repos, v3 code)"), row("advanced-v3-ext-rescored", "pipeline v3 (extension, 6 repos)"),
-        row("baseline-heldout-drafttruth", "baseline (held-out, scored on the untouched draft truth)"), row("advanced-v3-heldout-drafttruth", "pipeline v3 (held-out, scored on the untouched draft truth)"),
+        row("baseline-heldout-drafttruth", "baseline (held-out, scored on the reconstructed pre-correction draft truth)"), row("advanced-v3-heldout-drafttruth", "pipeline v3 (held-out, scored on the reconstructed pre-correction draft truth)"),
         row("baseline-heldout-rescored", "baseline (held-out, scored on evidence-corrected truth)"), row("advanced-v3-heldout-rescored", "pipeline v3 (held-out, scored on evidence-corrected truth)")]
 b = [latest[l]["agg"]["raw"] for l in ("baseline-v2-n1-rescored", "baseline-v2-n2-rescored") if l in latest]
 floor = f"Baseline-vs-baseline spread (noise floor): **{max(b)-min(b):.3f}** composite; claim-accuracy spread {abs(latest['baseline-v2-n1-rescored']['agg']['rows']['verdict_acc']-latest['baseline-v2-n2-rescored']['agg']['rows']['verdict_acc']):.3f}." if len(b) == 2 else ""
