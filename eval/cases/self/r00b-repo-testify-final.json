@@ -72,9 +72,9 @@
   {
    "id": "c10",
    "type": "quickstart",
-   "text": "The README results table contains held-out rows scored on both the untouched draft truth and the evidence-corrected truth, and `TRUTH_DIR=truth-draft python3 -m eval.replay --run <baseline-heldout run id>` runs successfully against `eval/truth-draft/`.",
+   "text": "The README results table contains held-out rows scored on both the reconstructed pre-correction draft truth and the evidence-corrected truth, and `TRUTH_DIR=truth-draft python3 -m eval.replay --run <baseline-heldout run id>` runs successfully against `eval/truth-draft/`.",
    "source_quote": "`TRUTH_DIR=truth-draft python3 -m eval.replay --run <id>` scores a run against the drafts",
-   "probe_hint": "grep 'scored on the untouched draft truth' README.md; TRUTH_DIR=truth-draft python3 -m eval.replay --run <baseline-heldout id>"
+   "probe_hint": "grep 'reconstructed pre-correction draft truth' README.md; TRUTH_DIR=truth-draft python3 -m eval.replay --run <baseline-heldout id>"
   }
  ]
 }
